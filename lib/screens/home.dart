@@ -26,6 +26,7 @@ class HomeScreen extends StatefulWidget {
 
 class _HomeScreenState extends State<HomeScreen> {
   Map<String, dynamic>? data;
+  List<Map<String, dynamic>> weeklyData = [];
 
   final String userId = FirebaseAuth.instance.currentUser!.uid;
   User? user = FirebaseAuth.instance.currentUser;
@@ -208,7 +209,7 @@ void _onDaySelected(DateTime selectedDay, DateTime focusedDay) async {
     double baseFontSize = 18;
     double responsiveFontSize = baseFontSize * (screenWidth / 375);
     bool isSelected = _selectedIndex == index;
-    if (index == 1) StatsticsScreen();
+    if (index == 1) StatsticsScreen(weeklyData: weeklyData,);
     if (index == 2) ProfileScreen();
     return Expanded(
       child: GestureDetector(
@@ -261,12 +262,13 @@ void _onDaySelected(DateTime selectedDay, DateTime focusedDay) async {
     final Size screenSize = MediaQuery.of(context).size;
     final double screenHeight = screenSize.height;
     final double screenWidth = screenSize.width;
+     
 
     return Scaffold(
       backgroundColor: Colors.white,
       body: SafeArea(
         child: _selectedIndex == 1
-            ? StatsticsScreen()
+            ? StatsticsScreen(weeklyData:weeklyData,)
             : _selectedIndex == 2
                 ? ProfileScreen()
                 : SingleChildScrollView(

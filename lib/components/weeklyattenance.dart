@@ -1,5 +1,7 @@
 // ignore_for_file: prefer_const_constructors, prefer_const_literals_to_create_immutables, use_super_parameters, unnecessary_string_interpolations, unused_element, depend_on_referenced_packages, curly_braces_in_flow_control_structures
 
+import 'dart:developer';
+
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
@@ -8,11 +10,13 @@ import 'package:intl/intl.dart';
 
 class WeeklyAttendance extends StatefulWidget {
   final Color color;
+   final List<Map<String, dynamic>> weeklyData;
 
 
   const WeeklyAttendance({
     Key? key,
     required this.color,
+    required this.weeklyData,
       
   }) : super(key: key);
 
@@ -26,14 +30,14 @@ class _WeeklyAttendanceState extends State<WeeklyAttendance> {
   Future<void> _getWeeklyAttendance(String uid) async {
     DateTime today = DateTime.now();
     DateTime startOfWeek = today
-        .subtract(Duration(days: today.weekday - 1)); // Get Monday of this week
-    // Get Sunday of this week
+        .subtract(Duration(days: today.weekday - 1)); 
+  
 
-    // Loop through the days of the week
+
     for (int i = 0; i < 5; i++) {
       DateTime day = startOfWeek.add(Duration(days: i));
       String formattedDate = DateFormat('yMMMd').format(day);
-      String formattedDay = DateFormat('EEE').format(day); // Format the day
+      String formattedDay = DateFormat('EEE').format(day); 
 
       final DocumentSnapshot<Map<String, dynamic>> snapshot =
           await FirebaseFirestore.instance
@@ -50,7 +54,7 @@ class _WeeklyAttendanceState extends State<WeeklyAttendance> {
           data['formattedDate'] = formattedDate;
           data['formattedDay'] = formattedDay;
         } else {
-          // If no data for the day, add a default leave status
+          
           weeklyData.add({
             "checkIn": null,
             "checkOut": null,
@@ -73,18 +77,17 @@ class _WeeklyAttendanceState extends State<WeeklyAttendance> {
 
   String _calculateTotalHours(Timestamp? checkIn, Timestamp? checkOut) {
     if (checkIn == null || checkOut == null)
-      return '0:00'; // No hours if either is null
+      return '0:00';
 
     DateTime checkInTime = checkIn.toDate();
     DateTime checkOutTime = checkOut.toDate();
 
     Duration duration = checkOutTime.difference(checkInTime);
 
-    // Format total hours and minutes
     int hours = duration.inHours;
-    int minutes = duration.inMinutes % 60; // Get remaining minutes
+    int minutes = duration.inMinutes % 60; 
 
-    return '${hours.toString().padLeft(2, '0')}:${minutes.toString().padLeft(2, '0')}'; // Format as HH:mm
+    return '${hours.toString().padLeft(2, '0')}:${minutes.toString().padLeft(2, '0')}';
   }
 
   String _getAttendanceStatus(Map<String, dynamic> data) {
@@ -136,6 +139,7 @@ class _WeeklyAttendanceState extends State<WeeklyAttendance> {
               itemBuilder: (context, index) {
                 Map<String, dynamic> data = weeklyData[index];
                 _getAttendanceStatus(data);
+                log('--------------data---------------------------$weeklyData');
                 final DateTime date = DateTime.now().subtract(
                     Duration(days: DateTime.now().weekday - 1 - index));
                 final String day = DateFormat('EE').format(date);

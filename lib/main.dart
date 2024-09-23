@@ -33,6 +33,8 @@ class MyApp extends StatefulWidget {
 class _MyAppState extends State<MyApp> {
   @override
   Widget build(BuildContext context) {
+      List<Map<String, dynamic>> weeklyData = [];
+    
     return MaterialApp(
       debugShowCheckedModeBanner: false,
       theme: ThemeData(fontFamily: "KumbhSans"),
@@ -47,7 +49,7 @@ class _MyAppState extends State<MyApp> {
         'checkout': (context) => const CheckoutScreen(),
         'notification': (context) => const NotificationScreen(),
          'profile': (context) => const ProfileScreen(),
-         'stat': (context) => const StatsticsScreen(),
+         'stat': (context) => StatsticsScreen(weeklyData: weeklyData,),
          'adminh': (context) => const AdminHomeScreen(),
           'splash': (context) => const Splashscreen(),
       },
