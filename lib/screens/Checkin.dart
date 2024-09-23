@@ -673,7 +673,7 @@ class _CheckinScreenState extends State<CheckinScreen> {
                                             fontWeight: FontWeight.bold),
                                       ),
                                       Text(
-                                        'Total Hrs',
+                                        'Total Hours',
                                         style: TextStyle(
                                             fontSize: 16,
                                             fontWeight: FontWeight.w800),
