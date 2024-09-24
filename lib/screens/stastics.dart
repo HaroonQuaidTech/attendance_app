@@ -11,11 +11,10 @@ import 'package:quaidtech/screens/home.dart';
 import 'package:quaidtech/screens/notification.dart';
 
 class StatsticsScreen extends StatefulWidget {
-    final List<Map<String, dynamic>> weeklyData;
+  
   
   const StatsticsScreen({super.key,
-      required this.weeklyData,
-
+   
   
   
   
@@ -33,7 +32,7 @@ class _StatsticsScreenState extends State<StatsticsScreen> {
 
 //----------------------------------------------------------------------------
 
-  Widget _buildWeeklyAttendance(String text, Color color,List<Map<String, dynamic>> weeklyData) {
+  Widget _buildWeeklyAttendance(String text, Color color) {
     return Container(
         padding: EdgeInsets.all(12),
 
@@ -60,7 +59,7 @@ class _StatsticsScreenState extends State<StatsticsScreen> {
             height: 10,
           ),
           //----------------------------------------
-          WeeklyAttendance( color: color,weeklyData: weeklyData),
+          WeeklyAttendance( color: color),
         ]));
   }
 
@@ -304,21 +303,21 @@ class _StatsticsScreenState extends State<StatsticsScreen> {
 
 
                 if (dropdownValue2 == 'Late Arrival' && _selectedIndex != 1)
-                  _buildWeeklyAttendance('Late Arrival Details', Color(0xffF6C15B),widget.weeklyData),
+                  _buildWeeklyAttendance('Late Arrival Details', Color(0xffF6C15B)),
 
                 if (dropdownValue2 == 'Absent' && _selectedIndex != 1)
-                  _buildWeeklyAttendance('Absent Details', Color(0xffEC5851),widget.weeklyData),
+                  _buildWeeklyAttendance('Absent Details', Color(0xffEC5851)),
 
                 if (dropdownValue2 == 'On Time' && _selectedIndex != 1)
-                  _buildWeeklyAttendance('On Time Details', Color(0xff22AF41),widget.weeklyData),
+                  _buildWeeklyAttendance('On Time Details', Color(0xff22AF41),),
 
                 if (dropdownValue2 == 'Early Out' && _selectedIndex != 1)
                   _buildWeeklyAttendance(
-                      'Early Out Details', Color(0xffF07E25),widget.weeklyData),
+                      'Early Out Details', Color(0xffF07E25)),
                 if (dropdownValue2 == 'Present' && _selectedIndex != 1)
                   _buildWeeklyAttendance(
                     'Present Details',
-                    Color(0xff8E71DF),widget.weeklyData
+                    Color(0xff8E71DF)
                   ),
 
                 //------------------------------------ygrt----------------------------------------------------

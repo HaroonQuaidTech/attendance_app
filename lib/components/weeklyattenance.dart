@@ -9,13 +9,13 @@ import 'package:intl/intl.dart';
 
 class WeeklyAttendance extends StatefulWidget {
   final Color color;
-   final List<Map<String, dynamic>> weeklyData;
+
 
 
   const WeeklyAttendance({
     Key? key,
     required this.color,
-    required this.weeklyData,
+
       
   }) : super(key: key);
 

@@ -209,7 +209,7 @@ void _onDaySelected(DateTime selectedDay, DateTime focusedDay) async {
     double baseFontSize = 18;
     double responsiveFontSize = baseFontSize * (screenWidth / 375);
     bool isSelected = _selectedIndex == index;
-    if (index == 1) StatsticsScreen(weeklyData: weeklyData,);
+    if (index == 1) StatsticsScreen();
     if (index == 2) ProfileScreen();
     return Expanded(
       child: GestureDetector(
@@ -268,7 +268,7 @@ void _onDaySelected(DateTime selectedDay, DateTime focusedDay) async {
       backgroundColor: Colors.white,
       body: SafeArea(
         child: _selectedIndex == 1
-            ? StatsticsScreen(weeklyData:weeklyData,)
+            ? StatsticsScreen()
             : _selectedIndex == 2
                 ? ProfileScreen()
                 : SingleChildScrollView(
