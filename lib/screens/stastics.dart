@@ -98,6 +98,7 @@ class _StatsticsScreenState extends State<StatsticsScreen> {
 
   @override
   Widget build(BuildContext context) {
+  
  
 
     return Scaffold(
@@ -295,36 +296,13 @@ class _StatsticsScreenState extends State<StatsticsScreen> {
                           ]),
                     ),
                   ),
-                // if (dropdownValue1 == 'Weekly')
-                // StatusBuilderWeekly(),
+            
 
                 SizedBox(
                   height: 20,
                 ),
 
-  //    Builder(builder: (context) {
-  //                                  if (dropdownValue2 == 'Late Arrival' && _selectedIndex != 1)
-  // List<Map<String, dynamic>> lateArrivals = weeklyData.where((data) {
-  //   return _getAttendanceStatus(data) == 'Late Arrival';
-  // }).toList();
-  //                 _buildWeeklyAttendance('Late Arrival Details', Color(0xffF6C15B),lateArrivals);
-  
 
-  //               if (dropdownValue2 == 'Absent' && _selectedIndex != 1)
-  //                 _buildWeeklyAttendance('Absent Details', Color(0xffEC5851)),
-
-  //               if (dropdownValue2 == 'On Time' && _selectedIndex != 1)
-  //                 _buildWeeklyAttendance('On Time Details', Color(0xff22AF41)),
-
-  //               if (dropdownValue2 == 'Early Out' && _selectedIndex != 1)
-  //                 _buildWeeklyAttendance(
-  //                     'Early Out Details', Color(0xffF07E25)),
-  //               if (dropdownValue2 == 'Present' && _selectedIndex != 1)
-  //                 _buildWeeklyAttendance(
-  //                   'Present Details',
-  //                   Color(0xff8E71DF),
-  //                 ),
-  //                                   }),
                 if (dropdownValue2 == 'Late Arrival' && _selectedIndex != 1)
                   _buildWeeklyAttendance('Late Arrival Details', Color(0xffF6C15B),widget.weeklyData),
 

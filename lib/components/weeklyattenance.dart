@@ -1,6 +1,5 @@
 // ignore_for_file: prefer_const_constructors, prefer_const_literals_to_create_immutables, use_super_parameters, unnecessary_string_interpolations, unused_element, depend_on_referenced_packages, curly_braces_in_flow_control_structures
 
-import 'dart:developer';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -64,7 +63,7 @@ class _WeeklyAttendanceState extends State<WeeklyAttendance> {
           });
         }
       } else {
-        // If no data for the day, add a default leave status
+    
         weeklyData.add({
           "checkIn": null,
           "checkOut": null,
@@ -90,34 +89,16 @@ class _WeeklyAttendanceState extends State<WeeklyAttendance> {
     return '${hours.toString().padLeft(2, '0')}:${minutes.toString().padLeft(2, '0')}';
   }
 
-  String _getAttendanceStatus(Map<String, dynamic> data) {
-    if (data['checkIn'] == null) {
-      return "Leave";
-    }
-    DateTime checkInTime = (data['checkIn'] as Timestamp).toDate();
-    DateTime checkOutTime = data['checkOut'] != null
-        ? (data['checkOut'] as Timestamp).toDate()
-        : DateTime.now();
-
-    if (checkInTime.isAfter(DateTime(
-        checkInTime.year, checkInTime.month, checkInTime.day, 8, 30))) {
-      return "Late Arrival"; // Late if after 8:30 AM
-    } else if (checkOutTime.isBefore(DateTime(
-        checkOutTime.year, checkOutTime.month, checkOutTime.day, 17, 0))) {
-      return "Early Out"; // Early if before 5:00 PM
-    } else {
-      return "On Time";
-    }
-  }
+  
 
   String _formatTime(Timestamp? timestamp) {
     if (timestamp == null) return "--:--";
     DateTime dateTime = timestamp.toDate();
-    return DateFormat('hh:mm a').format(dateTime); // Format as 'HH:mm AM/PM'
+    return DateFormat('hh:mm a').format(dateTime); 
   }
 
   String _formatDate(DateTime date) {
-    return DateFormat('EEE, MMM d').format(date); // Format as 'Day, Month Day'
+    return DateFormat('EEE, MMM d').format(date); 
   }
 
   @override
@@ -138,8 +119,6 @@ class _WeeklyAttendanceState extends State<WeeklyAttendance> {
               itemCount: weeklyData.length,
               itemBuilder: (context, index) {
                 Map<String, dynamic> data = weeklyData[index];
-                _getAttendanceStatus(data);
-                log('--------------data---------------------------$weeklyData');
                 final DateTime date = DateTime.now().subtract(
                     Duration(days: DateTime.now().weekday - 1 - index));
                 final String day = DateFormat('EE').format(date);
