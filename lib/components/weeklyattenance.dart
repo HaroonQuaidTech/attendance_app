@@ -23,17 +23,17 @@ class WeeklyAttendance extends StatefulWidget {
 class _WeeklyAttendanceState extends State<WeeklyAttendance> {
   final String userId = FirebaseAuth.instance.currentUser!.uid;
   List<Map<String, dynamic>> weeklyData = [];
-  Future<void> _getWeeklyAttendance(String uid) async {
+   Future<void> _getWeeklyAttendance(String uid) async {
     DateTime today = DateTime.now();
     DateTime startOfWeek = today
-        .subtract(Duration(days: today.weekday - 1)); // Get Monday of this week
-    // Get Sunday of this week
+        .subtract(Duration(days: today.weekday - 1)); 
+  
 
-    // Loop through the days of the week
+
     for (int i = 0; i < 5; i++) {
       DateTime day = startOfWeek.add(Duration(days: i));
       String formattedDate = DateFormat('yMMMd').format(day);
-      String formattedDay = DateFormat('EEE').format(day); // Format the day
+      String formattedDay = DateFormat('EEE').format(day); 
 
       final DocumentSnapshot<Map<String, dynamic>> snapshot =
           await FirebaseFirestore.instance
@@ -50,7 +50,7 @@ class _WeeklyAttendanceState extends State<WeeklyAttendance> {
           data['formattedDate'] = formattedDate;
           data['formattedDay'] = formattedDay;
         } else {
-          // If no data for the day, add a default leave status
+          
           weeklyData.add({
             "checkIn": null,
             "checkOut": null,
@@ -70,6 +70,7 @@ class _WeeklyAttendanceState extends State<WeeklyAttendance> {
     }
     setState(() {});
   }
+
 
   String _calculateTotalHours(Timestamp? checkIn, Timestamp? checkOut) {
     if (checkIn == null || checkOut == null)

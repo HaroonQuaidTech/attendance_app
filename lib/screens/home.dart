@@ -72,49 +72,40 @@ class _HomeScreenState extends State<HomeScreen> {
         : 'N/A';
 
     String tatFormatted;
-    if (checkInTime != null && checkOutTime != null) {
+    if (checkOutTime != null && checkInTime != null) {
       Duration tat = checkOutTime.difference(checkInTime);
       tatFormatted = "${tat.inHours}h ${tat.inMinutes.remainder(60)}m";
     } else {
       tatFormatted = "N/A"; // If check-in or check-out is null
     }
-
-  
   }
 
+  void _showNoDataMessage() {}
 
-  void _showNoDataMessage() {
-  
-  }
-
-
-void _onDaySelected(DateTime selectedDay, DateTime focusedDay) async {
-
-  setState(() {
-    _selectedDay = selectedDay;
-    _focusedDay = focusedDay;
-  });
-
-
-  String userId = FirebaseAuth.instance.currentUser!.uid;
-  try {
-    data = await _getAttendanceDetails(userId, selectedDay);
-
-   
+  void _onDaySelected(DateTime selectedDay, DateTime focusedDay) async {
     setState(() {
-      if (data != null) {
-        _showAttendanceDetails(data!);
-      } else {
-        _showNoDataMessage();
-      }
+      _selectedDay = selectedDay;
+      _focusedDay = focusedDay;
     });
-  } catch (e) {
+
+    String userId = FirebaseAuth.instance.currentUser!.uid;
+    try {
+      data = await _getAttendanceDetails(userId, selectedDay);
+
+      setState(() {
+        if (data != null) {
+          _showAttendanceDetails(data!);
+        } else {
+          _showNoDataMessage();
+        }
+      });
+    } catch (e) {
       log('Error fetching attendance details: $e');
-    setState(() {
-      _showNoDataMessage();
-    });
+      setState(() {
+        _showNoDataMessage();
+      });
+    }
   }
-}
 
   void _onItemTapped(int index) {
     setState(() {
@@ -140,72 +131,65 @@ void _onDaySelected(DateTime selectedDay, DateTime focusedDay) async {
   }
 
   Future<Map<String, int>> fetchMonthlyAttendance(String userId) async {
-  final now = DateTime.now();
-  final attendanceCollection = FirebaseFirestore.instance
-      .collection('AttendanceDetails')
-      .doc(userId)
-      .collection('dailyattendance');
+    final now = DateTime.now();
+    final attendanceCollection = FirebaseFirestore.instance
+        .collection('AttendanceDetails')
+        .doc(userId)
+        .collection('dailyattendance');
 
-  try {
-    final querySnapshot = await attendanceCollection.get();
+    try {
+      final querySnapshot = await attendanceCollection.get();
 
-    if (querySnapshot.docs.isEmpty) {
-      return {'present': 0, 'late': 0, 'absent': 0};
-    }
+      if (querySnapshot.docs.isEmpty) {
+        return {'present': 0, 'late': 0, 'absent': 0};
+      }
 
-    final lateThreshold = DateTime(now.year, now.month, now.day, 8, 15);
+      final lateThreshold = DateTime(now.year, now.month, now.day, 8, 15);
 
-    final counts = querySnapshot.docs.fold<Map<String, int>>(
-      {'present': 0, 'late': 0, 'absent': 0},
-      (Map<String, int> accumulator, doc) {
-        final data = doc.data();
-        final checkIn = (data['checkIn'] as Timestamp?)?.toDate();
-        final checkOut = (data['checkOut'] as Timestamp?)?.toDate();
+      final counts = querySnapshot.docs.fold<Map<String, int>>(
+        {'present': 0, 'late': 0, 'absent': 0},
+        (Map<String, int> accumulator, doc) {
+          final data = doc.data();
+          final checkIn = (data['checkIn'] as Timestamp?)?.toDate();
+          final checkOut = (data['checkOut'] as Timestamp?)?.toDate();
 
+          if (checkIn == null && checkOut == null) {
+            accumulator['absent'] = (accumulator['absent'] ?? 0) + 1;
+          } else if (checkIn != null) {
+            if (checkIn.isAfter(lateThreshold)) {
+              accumulator['present'] = (accumulator['present'] ?? 0) + 1;
+              accumulator['late'] = (accumulator['late'] ?? 0) + 1;
+            } else {
+              accumulator['present'] = (accumulator['present'] ?? 0) + 1;
+              accumulator['late'] = (accumulator['late'] ?? 0) + 1;
+            }
 
-       if (checkIn == null && checkOut == null) {
-          accumulator['absent'] = (accumulator['absent'] ?? 0) + 1;
-        } else if (checkIn != null) {
-  
-          if (checkIn.isAfter(lateThreshold)) {
-            
-            accumulator['present'] = (accumulator['present'] ?? 0) + 1;
-            accumulator['late'] = (accumulator['late'] ?? 0) + 1;
+            if (checkOut == null) {
+              accumulator['absent'] = (accumulator['absent'] ?? 0) + 1;
+            }
           } else {
-          
-            accumulator['present'] = (accumulator['present'] ?? 0) + 1;
-            accumulator['late'] = (accumulator['late'] ?? 0) + 1;
-          }
-
-     
-          if (checkOut == null) {
             accumulator['absent'] = (accumulator['absent'] ?? 0) + 1;
           }
-        } else {
-        
-          accumulator['absent'] = (accumulator['absent'] ?? 0) + 1;
-        }
 
-        return accumulator;
-      },
-    );
+          return accumulator;
+        },
+      );
 
-    return counts;
-  } catch (e) {
-    print('Error fetching monthly attendance: $e');
-    return {
-      'present': 0,
-      'late': 0,
-      'absent': 0,
-    };
+      return counts;
+    } catch (e) {
+      print('Error fetching monthly attendance: $e');
+      return {
+        'present': 0,
+        'late': 0,
+        'absent': 0,
+      };
+    }
   }
-}
-
 
   Widget _buildSegmentNavigator(String text, int index, Icon icon) {
     final Size screenSize = MediaQuery.of(context).size;
     final double screenWidth = screenSize.width;
-    double baseFontSize = 18;
+    double baseFontSize = 16;
     double responsiveFontSize = baseFontSize * (screenWidth / 375);
     bool isSelected = _selectedIndex == index;
     if (index == 1) StatsticsScreen();
@@ -451,7 +435,6 @@ void _onDaySelected(DateTime selectedDay, DateTime focusedDay) async {
                                   if (snapshot.hasData) {
                                     final data = snapshot.data!;
 
-                                  
                                     if (data['present'] == 0 &&
                                         data['late'] == 0 &&
                                         data['absent'] == 0) {
@@ -460,7 +443,6 @@ void _onDaySelected(DateTime selectedDay, DateTime focusedDay) async {
                                               'No attendance records available for this month.'));
                                     }
 
-                                  
                                     return Monthlyattendance(
                                       presentCount: data['present']!,
                                       lateCount: data['late']!,
@@ -468,7 +450,6 @@ void _onDaySelected(DateTime selectedDay, DateTime focusedDay) async {
                                     );
                                   }
 
-                                  
                                   return Center(
                                       child: Text('No data available.'));
                                 },
@@ -490,25 +471,25 @@ void _onDaySelected(DateTime selectedDay, DateTime focusedDay) async {
                             child: TableCalendar(
                               firstDay: DateTime.utc(2020, 10, 16),
                               lastDay: DateTime.utc(2030, 3, 14),
-                              focusedDay:_focusedDay, 
-                              calendarFormat:_calendarFormat, 
+                              focusedDay: _focusedDay,
+                              calendarFormat: _calendarFormat,
                               availableCalendarFormats: const {
                                 CalendarFormat.month: 'Month',
                               },
-                              headerVisible: true, 
+                              headerVisible: true,
                               selectedDayPredicate: (day) {
-                                return isSameDay(_selectedDay,day); 
+                                return isSameDay(_selectedDay, day);
                               },
-                              onDaySelected: _onDaySelected, 
+                              onDaySelected: _onDaySelected,
                               onFormatChanged: (format) {
                                 if (_calendarFormat != format) {
                                   setState(() {
-                                    _calendarFormat =format;
+                                    _calendarFormat = format;
                                   });
                                 }
                               },
                               onPageChanged: (focusedDay) {
-                                _focusedDay =focusedDay;
+                                _focusedDay = focusedDay;
                               },
                             ),
                           ),
@@ -547,11 +528,13 @@ void _onDaySelected(DateTime selectedDay, DateTime focusedDay) async {
                                     SizedBox(height: 6),
                                     Builder(builder: (context) {
                                       if (data == null) {
-                                    
-                                        return DailyEmptyAttendance(selectedDay: _selectedDay);
+                                        return DailyEmptyAttendance(
+                                            selectedDay: _selectedDay);
                                       }
 
-                                      return DailyAttendance(data: data,selectedDay:_selectedDay);
+                                      return DailyAttendance(
+                                          data: data,
+                                          selectedDay: _selectedDay);
                                     }),
                                   ],
                                 )),

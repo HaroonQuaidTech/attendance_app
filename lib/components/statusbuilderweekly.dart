@@ -124,7 +124,9 @@ class _StatusBuilerState extends State<StatusBuilderWeekly> {
     return totalMinutes / 60;
   }
 
-  Widget _buildEmptyAttendanceContainer(int index,) {
+  Widget _buildEmptyAttendanceContainer(
+    int index,
+  ) {
     final DateTime date = DateTime.now()
         .subtract(Duration(days: DateTime.now().weekday - 1 - index));
     final String day = DateFormat('EE').format(date);
@@ -148,8 +150,7 @@ class _StatusBuilerState extends State<StatusBuilderWeekly> {
                 width: 53,
                 height: 55,
                 decoration: BoxDecoration(
-                    color: Colors.red ,
-                    borderRadius: BorderRadius.circular(6)),
+                    color: Colors.red, borderRadius: BorderRadius.circular(6)),
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.center,
                   crossAxisAlignment: CrossAxisAlignment.center,
@@ -176,7 +177,7 @@ class _StatusBuilerState extends State<StatusBuilderWeekly> {
           Padding(
             padding: const EdgeInsets.only(left: 50.0),
             child: Text(
-              'Leave/Day off' ,
+              'Leave/Day off',
               style: TextStyle(fontSize: 22, fontWeight: FontWeight.bold),
             ),
           )
@@ -184,7 +185,10 @@ class _StatusBuilerState extends State<StatusBuilderWeekly> {
       ),
     );
   }
-  Widget _buildHNullAttendanceContainer(int index,) {
+
+  Widget _buildHNullAttendanceContainer(
+    int index,
+  ) {
     final DateTime date = DateTime.now()
         .subtract(Duration(days: DateTime.now().weekday - 1 - index));
     final String day = DateFormat('EE').format(date);
@@ -199,7 +203,7 @@ class _StatusBuilerState extends State<StatusBuilderWeekly> {
         color: Colors.white,
       ),
       child: Row(
-        crossAxisAlignment: CrossAxisAlignment.center,
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
           Column(
             mainAxisAlignment: MainAxisAlignment.center,
@@ -208,7 +212,7 @@ class _StatusBuilerState extends State<StatusBuilderWeekly> {
                 width: 53,
                 height: 55,
                 decoration: BoxDecoration(
-                    color: Color(0xff8E71DF) ,
+                    color: Color(0xff8E71DF),
                     borderRadius: BorderRadius.circular(6)),
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.center,
@@ -233,13 +237,15 @@ class _StatusBuilerState extends State<StatusBuilderWeekly> {
               ),
             ],
           ),
-          Padding(
-            padding: const EdgeInsets.only(left: 50.0),
-            child: Text(
-              'Data not Available' ,
-              style: TextStyle(fontSize: 22, fontWeight: FontWeight.bold),
+          Text(
+            'Data not Available',
+            style: TextStyle(
+              fontSize: 20,
+              fontWeight: FontWeight.bold,
+              height: 0,
             ),
-          )
+          ),
+          SizedBox(width: 0),
         ],
       ),
     );
@@ -270,7 +276,7 @@ class _StatusBuilerState extends State<StatusBuilderWeekly> {
         }
 
         final weeklyData = snapshot.data!;
-            final now = DateTime.now();
+        final now = DateTime.now();
         return Expanded(
           child: ListView.builder(
             itemCount: weeklyData.length,
@@ -285,21 +291,18 @@ class _StatusBuilerState extends State<StatusBuilderWeekly> {
               }
 
               final data = weeklyData[index];
-      final checkIn = (data?['checkIn'] as Timestamp?)?.toDate();
-            
+              final checkIn = (data?['checkIn'] as Timestamp?)?.toDate();
 
-          // Check if date is in the future
-                if (date.isAfter(now) && checkIn == null){
-            return   _buildHNullAttendanceContainer(index);
-          }
+              // Check if date is in the future
+              if (date.isAfter(now) && checkIn == null) {
+                return _buildHNullAttendanceContainer(index);
+              }
 
-          // Logic 1: If data is null, show it as "Leave"
-          if (data == null) {
-            return _buildEmptyAttendanceContainer(index);
-          }
+              // Logic 1: If data is null, show it as "Leave"
+              if (data == null) {
+                return _buildEmptyAttendanceContainer(index);
+              }
 
-
-            
               final checkOut = (data['checkOut'] as Timestamp?)?.toDate();
               final totalHours = _calculateTotalHours(checkIn, checkOut);
               Color containerColor;
@@ -419,7 +422,7 @@ class _StatusBuilerState extends State<StatusBuilderWeekly> {
                           checkIn != null ? _formatTime(checkIn) : 'N/A',
                           style: TextStyle(
                               fontSize: 14,
-                          fontWeight: FontWeight.bold,
+                              fontWeight: FontWeight.bold,
                               color: Colors.black),
                         ),
                         Text(
@@ -442,8 +445,8 @@ class _StatusBuilerState extends State<StatusBuilderWeekly> {
                         Text(
                           checkOut != null ? _formatTime(checkOut) : 'N/A',
                           style: TextStyle(
-                               fontSize: 14,
-                               fontWeight: FontWeight.bold,
+                              fontSize: 14,
+                              fontWeight: FontWeight.bold,
                               color: Colors.black),
                         ),
                         Text(
@@ -466,7 +469,7 @@ class _StatusBuilerState extends State<StatusBuilderWeekly> {
                         Text(
                           totalHours != null ? '$totalHours' : 'N/A',
                           style: TextStyle(
-                                fontSize: 14,
+                              fontSize: 14,
                               fontWeight: FontWeight.bold,
                               color: Colors.black),
                         ),
