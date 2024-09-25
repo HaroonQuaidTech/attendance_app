@@ -1,6 +1,7 @@
 // ignore_for_file: prefer_const_constructors, prefer_const_literals_to_create_immutables
 
 
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:pie_chart/pie_chart.dart';
 import 'package:fl_chart/fl_chart.dart' hide PieChart;
@@ -13,6 +14,58 @@ class Graphicalbuiler extends StatefulWidget {
 }
 
 class _GraphicalbuilerState extends State<Graphicalbuiler> {
+   Map<String, int> monthlyData = {
+    "Present": 0,
+    "Absent": 0,
+    "On Time": 0,
+    "Early Out": 0,
+    "Late Arrival": 0,
+  };
+ Future<Map<String, int>> fetchMonthlyAttendance() async {
+  Map<String, int> attendanceData = {
+    "Present": 0,
+    "Absent": 0,
+    "On Time": 0,
+    "Late Arrival": 0,
+    "Early Out": 0,
+  };
+
+  final QuerySnapshot attendanceSnapshot = await FirebaseFirestore.instance
+      .collection('attendance')
+      .where('month', isEqualTo: DateTime.now().month) // Fetching current month
+      .get();
+
+  for (var doc in attendanceSnapshot.docs) {
+    Map<String, dynamic> data = doc.data() as Map<String, dynamic>;
+
+    // Check attendance status
+    if (data['status'] == 'Present') {
+      attendanceData["Present"] = (attendanceData["Present"] ?? 0) + 1;
+    } else if (data['status'] == 'Absent') {
+      attendanceData["Absent"] = (attendanceData["Absent"] ?? 0) + 1;
+    }
+
+    // Check checkIn time for "On Time" and "Late Arrival"
+    if (data['checkIn'] != null) {
+      DateTime checkIn = (data['checkIn'] as Timestamp).toDate();
+      if (checkIn.hour == 8 && checkIn.minute <= 15) {
+        attendanceData["On Time"] = (attendanceData["On Time"] ?? 0) + 1;
+      } else if (checkIn.hour > 8) {
+        attendanceData["Late Arrival"] = (attendanceData["Late Arrival"] ?? 0) + 1;
+      }
+    }
+
+    // Check checkOut time for "Early Out"
+    if (data['checkOut'] != null) {
+      DateTime checkOut = (data['checkOut'] as Timestamp).toDate();
+      if (checkOut.hour < 17) {
+        attendanceData["Early Out"] = (attendanceData["Early Out"] ?? 0) + 1;
+      }
+    }
+  }
+
+  return attendanceData;
+}
   
   @override
   Widget build(BuildContext context) {
@@ -140,31 +193,43 @@ class _GraphicalbuilerState extends State<Graphicalbuiler> {
                         barGroups: [
                           BarChartGroupData(
                             x: 0,
-                            barRods: [
-                              BarChartRodData(
-                                  toY: 40, color: Color(0xff9478F7), width: 22),
-                            ],
+                        barRods: [
+    BarChartRodData(
+      toY: (monthlyData["Present"] ?? 0).toDouble(), // Null check
+      color: Color(0xff9478F7),
+      width: 22
+    ),
+  ],
                           ),
                           BarChartGroupData(
                             x: 1,
-                            barRods: [
-                              BarChartRodData(
-                                  toY: 35, color: Color(0xff9478F7), width: 22),
-                            ],
+                          barRods: [
+    BarChartRodData(
+      toY: (monthlyData["On Time"] ?? 0).toDouble(), // Null check
+      color: Color(0xff22AF41),
+      width: 22
+    ),
+  ],
                           ),
                           BarChartGroupData(
                             x: 2,
-                            barRods: [
-                              BarChartRodData(
-                                  toY: 30, color: Color(0xff9478F7), width: 22),
-                            ],
+                          barRods: [
+    BarChartRodData(
+      toY: (monthlyData["Late Arrival"] ?? 0).toDouble(), // Null check
+      color: Color(0xffF6C15B),
+      width: 22
+    ),
+  ],
                           ),
                           BarChartGroupData(
                             x: 3,
-                            barRods: [
-                              BarChartRodData(
-                                  toY: 38, color: Color(0xff9478F7), width: 22),
-                            ],
+                              barRods: [
+    BarChartRodData(
+      toY: (monthlyData["Early Out"] ?? 0).toDouble(), // Null check
+      color: Color(0xffF07E25),
+      width: 22
+    ),
+  ],
                           ),
                         
                        
@@ -211,13 +276,7 @@ class _GraphicalbuilerState extends State<Graphicalbuiler> {
               ),
               SizedBox(height: 20),
               PieChart(
-                dataMap: {
-                  "Present": 35,
-                  "Absent": 5,
-                  "On Time": 20,
-                  "Early Out": 15,
-                  "Late Arrival": 25,
-                },
+                dataMap: monthlyData.map((key, value) => MapEntry(key, value.toDouble())),
                 colorList: [
                   Color(0xff9478F7),
                   Color(0xffEC5851),
@@ -238,7 +297,7 @@ class _GraphicalbuilerState extends State<Graphicalbuiler> {
                 chartValuesOptions: ChartValuesOptions(
                   showChartValues: false,
                 ),
-                totalValue: 100,
+               totalValue: monthlyData.values.reduce((a, b) => a + b).toDouble(),
               ),
             ],
           ),
