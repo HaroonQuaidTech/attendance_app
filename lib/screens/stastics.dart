@@ -1,17 +1,16 @@
-// ignore_for_file: prefer_const_constructors, prefer_const_literals_to_create_immutables
-
 import 'package:flutter/material.dart';
 import 'package:quaidtech/components/graphicalbuiler.dart';
 import 'package:quaidtech/components/graphicalweekly.dart';
 import 'package:quaidtech/components/statusbuilderweekly.dart';
-
 import 'package:quaidtech/components/statusbuildermonthly.dart';
 import 'package:quaidtech/components/weeklyattenance.dart';
 import 'package:quaidtech/screens/home.dart';
 import 'package:quaidtech/screens/notification.dart';
 
 class StatsticsScreen extends StatefulWidget {
-  const StatsticsScreen({super.key});
+  const StatsticsScreen({
+    super.key,
+  });
 
   @override
   State<StatsticsScreen> createState() => _StatsticsScreenState();
@@ -25,33 +24,33 @@ class _StatsticsScreenState extends State<StatsticsScreen> {
 
 //----------------------------------------------------------------------------
 
-  Widget _buildWeeklyAttendance(String text, Color color, String filter) {
+  Widget _buildWeeklyAttendance(String text, Color color) {
     return Container(
-        padding: EdgeInsets.all(12),
+        padding: const EdgeInsets.all(12),
         height: 520,
         width: double.infinity,
         decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(20),
-          color: Color(0xffEFF1FF),
+          color: const Color(0xffEFF1FF),
           boxShadow: [
             BoxShadow(
               color: Colors.grey.withOpacity(0.2),
               spreadRadius: 2,
               blurRadius: 4,
-              offset: Offset(0, 2), // changes position of shadow
+              offset: const Offset(0, 2), // changes position of shadow
             ),
           ],
         ),
         child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
           Text(
             text,
-            style: TextStyle(fontWeight: FontWeight.w600, fontSize: 18),
+            style: const TextStyle(fontWeight: FontWeight.w600, fontSize: 18),
           ),
-          SizedBox(
+          const SizedBox(
             height: 10,
           ),
           //----------------------------------------
-          WeeklyAttendance(color: color, filter: filter),
+          WeeklyAttendance(color: color),
         ]));
   }
 
@@ -65,8 +64,8 @@ class _StatsticsScreenState extends State<StatsticsScreen> {
           });
         },
         child: Container(
-          padding: EdgeInsets.symmetric(vertical: 10.0),
-          margin: EdgeInsets.symmetric(vertical: 8.0, horizontal: 5.0),
+          padding: const EdgeInsets.symmetric(vertical: 10.0),
+          margin: const EdgeInsets.symmetric(vertical: 8.0, horizontal: 5.0),
           decoration: BoxDecoration(
             color: isSelected ? Colors.white : Colors.transparent,
             borderRadius: BorderRadius.circular(48.0),
@@ -84,8 +83,6 @@ class _StatsticsScreenState extends State<StatsticsScreen> {
       ),
     );
   }
-
-  //-------------------------------------------------------------------------------------------------
 
   @override
   Widget build(BuildContext context) {
@@ -108,7 +105,7 @@ class _StatsticsScreenState extends State<StatsticsScreen> {
                         decoration: BoxDecoration(
                           color: Colors.transparent,
                           borderRadius: BorderRadius.circular(12),
-                          boxShadow: [
+                          boxShadow: const [
                             BoxShadow(
                               color: Colors.transparent,
                               offset: Offset(2, 2),
@@ -121,16 +118,16 @@ class _StatsticsScreenState extends State<StatsticsScreen> {
                             Navigator.push(
                               context,
                               MaterialPageRoute(
-                                  builder: (context) => HomeScreen()),
+                                  builder: (context) => const HomeScreen()),
                             );
                           },
-                          child: Icon(
+                          child: const Icon(
                             Icons.arrow_back,
                             color: Colors.transparent,
                           ),
                         ),
                       ),
-                      Text(
+                      const Text(
                         'Statistics',
                         style: TextStyle(
                             fontSize: 22, fontWeight: FontWeight.w600),
@@ -141,7 +138,7 @@ class _StatsticsScreenState extends State<StatsticsScreen> {
                         decoration: BoxDecoration(
                           color: Colors.grey[200],
                           borderRadius: BorderRadius.circular(12),
-                          boxShadow: [
+                          boxShadow: const [
                             BoxShadow(
                               color: Colors.black12,
                               offset: Offset(2, 2),
@@ -154,10 +151,11 @@ class _StatsticsScreenState extends State<StatsticsScreen> {
                             Navigator.push(
                               context,
                               MaterialPageRoute(
-                                  builder: (context) => NotificationScreen()),
+                                  builder: (context) =>
+                                      const NotificationScreen()),
                             );
                           },
-                          child: Icon(
+                          child: const Icon(
                             Icons.notifications_none,
                             color: Colors.black,
                           ),
@@ -166,7 +164,7 @@ class _StatsticsScreenState extends State<StatsticsScreen> {
                     ],
                   ),
                 ),
-                SizedBox(height: 20),
+                const SizedBox(height: 20),
 
                 //-----------------------------Filter container-------------------------------------------
                 if (_selectedIndex != 1)
@@ -175,13 +173,14 @@ class _StatsticsScreenState extends State<StatsticsScreen> {
                     width: double.infinity,
                     decoration: BoxDecoration(
                       borderRadius: BorderRadius.circular(20),
-                      color: Color(0xffEFF1FF),
+                      color: const Color(0xffEFF1FF),
                       boxShadow: [
                         BoxShadow(
                           color: Colors.grey.withOpacity(0.2),
                           spreadRadius: 2,
                           blurRadius: 4,
-                          offset: Offset(0, 2), // changes position of shadow
+                          offset:
+                              const Offset(0, 2), // changes position of shadow
                         ),
                       ],
                     ),
@@ -191,12 +190,12 @@ class _StatsticsScreenState extends State<StatsticsScreen> {
                       child: Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
-                            Text(
+                            const Text(
                               'Filter',
                               style: TextStyle(
                                   fontWeight: FontWeight.w600, fontSize: 18),
                             ),
-                            SizedBox(height: 10),
+                            const SizedBox(height: 10),
                             Row(
                               mainAxisAlignment: MainAxisAlignment.spaceBetween,
                               children: [
@@ -204,21 +203,21 @@ class _StatsticsScreenState extends State<StatsticsScreen> {
                                 Expanded(
                                   child: Container(
                                     height: 50,
-                                    padding:
-                                        EdgeInsets.symmetric(horizontal: 10),
+                                    padding: const EdgeInsets.symmetric(
+                                        horizontal: 10),
                                     decoration: BoxDecoration(
                                       color: Colors.white,
                                       borderRadius: BorderRadius.circular(12),
                                     ),
                                     child: DropdownButton<String>(
                                       value: dropdownValue1,
-                                      icon: Icon(Icons.arrow_drop_down),
+                                      icon: const Icon(Icons.arrow_drop_down),
                                       iconSize: 24,
                                       elevation: 16,
                                       isExpanded: true,
-                                      style: TextStyle(
+                                      style: const TextStyle(
                                           color: Colors.black, fontSize: 16),
-                                      underline: SizedBox(),
+                                      underline: const SizedBox(),
                                       onChanged: (String? newValue) {
                                         setState(() {
                                           dropdownValue1 = newValue!;
@@ -237,26 +236,26 @@ class _StatsticsScreenState extends State<StatsticsScreen> {
                                     ),
                                   ),
                                 ),
-                                SizedBox(width: 16),
+                                const SizedBox(width: 16),
                                 // Second Dropdown
                                 Expanded(
                                   child: Container(
                                     height: 50,
-                                    padding:
-                                        EdgeInsets.symmetric(horizontal: 10),
+                                    padding: const EdgeInsets.symmetric(
+                                        horizontal: 10),
                                     decoration: BoxDecoration(
                                       color: Colors.white,
                                       borderRadius: BorderRadius.circular(12),
                                     ),
                                     child: DropdownButton<String>(
                                       value: dropdownValue2,
-                                      icon: Icon(Icons.arrow_drop_down),
+                                      icon: const Icon(Icons.arrow_drop_down),
                                       iconSize: 24,
                                       elevation: 16,
                                       isExpanded: true,
-                                      style: TextStyle(
+                                      style: const TextStyle(
                                           color: Colors.black, fontSize: 16),
-                                      underline: SizedBox(),
+                                      underline: const SizedBox(),
                                       onChanged: (String? newValue) {
                                         setState(() {
                                           dropdownValue2 = newValue!;
@@ -284,67 +283,32 @@ class _StatsticsScreenState extends State<StatsticsScreen> {
                           ]),
                     ),
                   ),
-                // if (dropdownValue1 == 'Weekly')
-                // StatusBuilderWeekly(),
-
-                SizedBox(
-                  height: 20,
-                ),
-
-                //    Builder(builder: (context) {
-                //                                  if (dropdownValue2 == 'Late Arrival' && _selectedIndex != 1)
-                // List<Map<String, dynamic>> lateArrivals = weeklyData.where((data) {
-                //   return _getAttendanceStatus(data) == 'Late Arrival';
-                // }).toList();
-                //                 _buildWeeklyAttendance('Late Arrival Details', Color(0xffF6C15B),lateArrivals);
-
-                //               if (dropdownValue2 == 'Absent' && _selectedIndex != 1)
-                //                 _buildWeeklyAttendance('Absent Details', Color(0xffEC5851)),
-
-                //               if (dropdownValue2 == 'On Time' && _selectedIndex != 1)
-                //                 _buildWeeklyAttendance('On Time Details', Color(0xff22AF41)),
-
-                //               if (dropdownValue2 == 'Early Out' && _selectedIndex != 1)
-                //                 _buildWeeklyAttendance(
-                //                     'Early Out Details', Color(0xffF07E25)),
-                //               if (dropdownValue2 == 'Present' && _selectedIndex != 1)
-                //                 _buildWeeklyAttendance(
-                //                   'Present Details',
-                //                   Color(0xff8E71DF),
-                //                 ),
-                //                                   }),
+                const SizedBox(height: 20),
                 if (dropdownValue2 == 'Late Arrival' && _selectedIndex != 1)
                   _buildWeeklyAttendance(
                     'Late Arrival Details',
-                    Color(0xffF6C15B),
-                    'Late Arrival',
+                    const Color(0xffF6C15B),
                   ),
-
                 if (dropdownValue2 == 'Absent' && _selectedIndex != 1)
                   _buildWeeklyAttendance(
-                      'Absent Details', Color(0xffEC5851), 'Absent'),
-
+                    'Absent Details',
+                    const Color(0xffEC5851),
+                  ),
                 if (dropdownValue2 == 'On Time' && _selectedIndex != 1)
                   _buildWeeklyAttendance(
                     'On Time Details',
-                    Color(0xff22AF41),
-                    'On Time',
+                    const Color(0xff22AF41),
                   ),
-
                 if (dropdownValue2 == 'Early Out' && _selectedIndex != 1)
                   _buildWeeklyAttendance(
                     'Early Out Details',
-                    Color(0xffF07E25),
-                    'Early Out',
+                    const Color(0xffF07E25),
                   ),
                 if (dropdownValue2 == 'Present' && _selectedIndex != 1)
                   _buildWeeklyAttendance(
                     'Present Details',
-                    Color(0xff8E71DF),
-                    'Present',
+                    const Color(0xff8E71DF),
                   ),
-
-                //------------------------------------ygrt----------------------------------------------------
                 if (dropdownValue2 != 'Present' &&
                     dropdownValue2 != 'On Time' &&
                     dropdownValue2 != 'Absent' &&
@@ -355,13 +319,14 @@ class _StatsticsScreenState extends State<StatsticsScreen> {
                     width: double.infinity,
                     decoration: BoxDecoration(
                       borderRadius: BorderRadius.circular(60),
-                      color: Color(0xffEFF1FF),
+                      color: const Color(0xffEFF1FF),
                       boxShadow: [
                         BoxShadow(
                           color: Colors.grey.withOpacity(0.2),
                           spreadRadius: 2,
                           blurRadius: 4,
-                          offset: Offset(0, 2), // changes position of shadow
+                          offset:
+                              const Offset(0, 2), // changes position of shadow
                         ),
                       ],
                     ),
@@ -379,19 +344,19 @@ class _StatsticsScreenState extends State<StatsticsScreen> {
                     dropdownValue2 != 'Early Out' &&
                     dropdownValue2 != 'Late Arrival')
                   if (dropdownValue1 == 'Weekly' && _selectedIndex == 0)
-                    StatusBuilderWeekly(),
+                    const StatusBuilderWeekly(),
                 if (dropdownValue2 != 'Present' &&
                     dropdownValue2 != 'On Time' &&
                     dropdownValue2 != 'Absent' &&
                     dropdownValue2 != 'Early Out' &&
                     dropdownValue2 != 'Late Arrival')
                   if (dropdownValue1 == 'Monthly' && _selectedIndex == 0)
-                    StatusBuiler(),
+                    const StatusBuiler(),
 
                 if (dropdownValue1 == 'Weekly' && _selectedIndex == 1)
-                  GraphicalbuilerWeekly(),
+                  const GraphicalbuilerWeekly(),
                 if (dropdownValue1 == 'Monthly' && _selectedIndex == 1)
-                  Graphicalbuiler()
+                  const Graphicalbuiler()
 
                 //-------------------------Weekly Log Times------------------------------------------
               ],
