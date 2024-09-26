@@ -1,7 +1,7 @@
 // ignore_for_file: prefer_const_constructors, prefer_const_literals_to_create_immutables
 
 import 'package:flutter/material.dart';
-import 'package:quaidtech/components/graphicalbuiler.dart';
+import 'package:quaidtech/components/graphicalbuildermonthly.dart';
 import 'package:quaidtech/components/graphicalweekly.dart';
 import 'package:quaidtech/components/statusbuilderweekly.dart';
 
@@ -372,7 +372,7 @@ class _StatsticsScreenState extends State<StatsticsScreen> {
                    if (dropdownValue1 == 'Weekly' && _selectedIndex == 1)
                 GraphicalbuilerWeekly(),
                        if (dropdownValue1 == 'Monthly' && _selectedIndex == 1)
-                Graphicalbuiler()
+              GraphicalbuilerMonthly()
 
                 //-------------------------Weekly Log Times------------------------------------------
               ],
