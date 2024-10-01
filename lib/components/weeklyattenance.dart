@@ -5,12 +5,10 @@ import 'package:intl/intl.dart';
 
 class WeeklyAttendance extends StatefulWidget {
   final Color color;
-
   const WeeklyAttendance({
     super.key,
     required this.color,
   });
-
   @override
   State<WeeklyAttendance> createState() => _WeeklyAttendanceState();
 }
@@ -21,12 +19,10 @@ class _WeeklyAttendanceState extends State<WeeklyAttendance> {
   Future<void> _getWeeklyAttendance(String uid) async {
     DateTime today = DateTime.now();
     DateTime startOfWeek = today.subtract(Duration(days: today.weekday - 1));
-
     for (int i = 0; i < 5; i++) {
       DateTime day = startOfWeek.add(Duration(days: i));
       String formattedDate = DateFormat('yMMMd').format(day);
       String formattedDay = DateFormat('EEE').format(day);
-
       final DocumentSnapshot<Map<String, dynamic>> snapshot =
           await FirebaseFirestore.instance
               .collection('AttendanceDetails')
@@ -34,7 +30,6 @@ class _WeeklyAttendanceState extends State<WeeklyAttendance> {
               .collection('dailyattendance')
               .doc(formattedDate)
               .get();
-
       if (snapshot.exists) {
         Map<String, dynamic>? data = snapshot.data();
         if (data != null) {
@@ -63,15 +58,11 @@ class _WeeklyAttendanceState extends State<WeeklyAttendance> {
 
   String _calculateTotalHours(Timestamp? checkIn, Timestamp? checkOut) {
     if (checkIn == null || checkOut == null) return '0:00';
-
     DateTime checkInTime = checkIn.toDate();
     DateTime checkOutTime = checkOut.toDate();
-
     Duration duration = checkOutTime.difference(checkInTime);
-
     int hours = duration.inHours;
     int minutes = duration.inMinutes % 60;
-
     return '${hours.toString().padLeft(2, '0')}:${minutes.toString().padLeft(2, '0')}';
   }
 
@@ -80,7 +71,6 @@ class _WeeklyAttendanceState extends State<WeeklyAttendance> {
     DateTime dateTime = timestamp.toDate();
     return DateFormat('hh:mm a').format(dateTime);
   }
-
 
   @override
   void initState() {
@@ -100,18 +90,16 @@ class _WeeklyAttendanceState extends State<WeeklyAttendance> {
               itemCount: weeklyData.length,
               itemBuilder: (context, index) {
                 Map<String, dynamic> data = weeklyData[index];
-                final DateTime date = DateTime.now().subtract(
+                DateTime date = DateTime.now().subtract(
                     Duration(days: DateTime.now().weekday - 1 - index));
-                final String day = DateFormat('EE').format(date);
-                final String formattedDate = DateFormat('dd').format(date);
-
+                String day = DateFormat('EE').format(date);
+                String formattedDate = DateFormat('dd').format(date);
                 String checkInTime = _formatTime(data['checkIn'] as Timestamp?);
                 String checkOutTime =
                     _formatTime(data['checkOut'] as Timestamp?);
                 String totalHours = _calculateTotalHours(
                     data['checkIn'] as Timestamp?,
                     data['checkOut'] as Timestamp?);
-
                 return Container(
                   padding: const EdgeInsets.all(12),
                   margin: const EdgeInsets.only(bottom: 10),
@@ -168,6 +156,7 @@ class _WeeklyAttendanceState extends State<WeeklyAttendance> {
                               fontSize: 14,
                               fontWeight: FontWeight.bold,
                               color: Colors.black,
+                              height: 0,
                             ),
                           ),
                           const Text(
@@ -199,9 +188,10 @@ class _WeeklyAttendanceState extends State<WeeklyAttendance> {
                           const Text(
                             'Check Out',
                             style: TextStyle(
-                                fontSize: 10,
-                                fontWeight: FontWeight.bold,
-                                color: Colors.black),
+                              fontSize: 10,
+                              fontWeight: FontWeight.bold,
+                              color: Colors.black,
+                            ),
                           ),
                         ],
                       ),

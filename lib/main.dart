@@ -39,7 +39,6 @@ class _MyAppState extends State<MyApp> {
       initialRoute: 'splash',
       routes: {
         'login': (context) => const LoginScreen(),
-         
         'signup': (context) => const SignUpScreen(),
         'nscreen': (context) => const Newscreen(),
         'home': (context) => const HomeScreen(),

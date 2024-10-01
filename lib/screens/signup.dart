@@ -6,7 +6,6 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
-
 import 'package:quaidtech/screens/login.dart';
 
 class SignUpScreen extends StatefulWidget {
@@ -41,8 +40,7 @@ class _LoginScreenState extends State<SignUpScreen> {
     // Show a progress dialog
     showDialog(
       context: context,
-      barrierDismissible:
-          false,
+      barrierDismissible: false,
       builder: (BuildContext context) {
         return Center(
           child: CircularProgressIndicator(),
@@ -51,11 +49,9 @@ class _LoginScreenState extends State<SignUpScreen> {
     );
 
     try {
-    
       UserCredential userCredential = await FirebaseAuth.instance
           .createUserWithEmailAndPassword(email: email, password: password);
 
-    
       Navigator.pop(context);
 
       try {
@@ -69,17 +65,14 @@ class _LoginScreenState extends State<SignUpScreen> {
       }
       showToastMessage('Account is created successfully');
 
-  
       Navigator.pushReplacement(
         context,
         MaterialPageRoute(builder: (context) => LoginScreen()),
       );
     } catch (e) {
-      
       Navigator.pop(context);
- 
+
       showToastMessage('Error: $e');
-   
     }
   }
 
@@ -134,8 +127,9 @@ class _LoginScreenState extends State<SignUpScreen> {
                     padding: EdgeInsets.symmetric(horizontal: 20, vertical: 20),
                     height: 500,
                     decoration: BoxDecoration(
-                        color: Color(0xffEFF1FF),
-                        borderRadius: BorderRadius.circular(20)),
+                      color: Color(0xffEFF1FF),
+                      borderRadius: BorderRadius.circular(20),
+                    ),
                     child: Column(
                       mainAxisAlignment: MainAxisAlignment.start,
                       crossAxisAlignment: CrossAxisAlignment.start,
