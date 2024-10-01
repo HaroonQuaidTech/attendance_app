@@ -32,7 +32,7 @@ class _StatusBuilerState extends State<StatusBuiler> {
     final formattedFirstDay = DateFormat('dd MMM').format(firstDayOfMonth);
     final formattedLastDay = DateFormat('dd MMM').format(lastDayOfMonth);
 
-    log("Fetching data for the period: $formattedFirstDay - $formattedLastDay");
+   
 
     for (int i = 0;
         i <= lastDayOfMonth.difference(firstDayOfMonth).inDays;
@@ -380,7 +380,7 @@ class _StatusBuilerState extends State<StatusBuiler> {
                       index); 
                 }
 
-                if (date.isAfter(now) ) {
+                if (date.isAfter(now) && checkIn==null) {
                   return _buildEmptyAttendanceContainer(index);
                 }
 
