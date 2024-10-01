@@ -28,23 +28,23 @@ Future<Map<String, int>> fetchMonthlyAttendance(String userId) async {
     final checkIn = (data['checkIn'] as Timestamp?)?.toDate();
     final checkOut = (data['checkOut'] as Timestamp?)?.toDate();
 
-       final lateThreshold = DateTime(now.year, now.month, now.day, 9, 0);
+    final lateThreshold = DateTime(now.year, now.month, now.day, 9, 0);
 
-      if (checkIn != null) {
-        if (checkOut != null) {
-          if (checkIn.isAfter(lateThreshold)) {
-            lateCount++;
-          } else {
-            presentCount++;
-          }
+    if (checkIn != null) {
+      if (checkOut != null) {
+        if (checkIn.isAfter(lateThreshold)) {
+          lateCount++;
         } else {
-          // Handle cases where check-out is null (could be considered absent for simplicity)
-          absentCount++;
+          presentCount++;
         }
       } else {
+        // Handle cases where check-out is null (could be considered absent for simplicity)
         absentCount++;
       }
+    } else {
+      absentCount++;
     }
+  }
 
   return {
     'present': presentCount,
@@ -52,7 +52,6 @@ Future<Map<String, int>> fetchMonthlyAttendance(String userId) async {
     'absent': absentCount,
   };
 }
-
 
 class Monthlyattendance extends StatelessWidget {
   final int presentCount;
@@ -73,21 +72,20 @@ class Monthlyattendance extends StatelessWidget {
     final double screenWidth = screenSize.width;
     double baseFontSize = 20;
     double responsiveFontSize = baseFontSize * (screenWidth / 375);
-      double baseFontSize1 = 14;
+    double baseFontSize1 = 14;
     double responsiveFontSize1 = baseFontSize1 * (screenWidth / 375);
-    
+
     return Row(
       children: [
         // ignore: sized_box_for_whitespace
         Container(
-      
-          height: 88,
+          height: 90,
           width: 90,
           child: PieChart(
             PieChartData(sections: [
               PieChartSectionData(
                 color: Colors.purple,
-                value:  presentCount.toDouble(),
+                value: presentCount.toDouble(),
                 title: '',
                 radius: 12,
               ),
@@ -106,12 +104,9 @@ class Monthlyattendance extends StatelessWidget {
             ], sectionsSpace: 0, centerSpaceRadius: 26),
           ),
         ),
-        SizedBox(width: 20,),
-        
-        
-        
+
         SizedBox(
-          width: screenWidth*0.57,
+          width: screenWidth * 0.57,
           child: Row(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
@@ -141,9 +136,9 @@ class Monthlyattendance extends StatelessWidget {
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
                     Text(
-                    lateCount.toString(),
+                      lateCount.toString(),
                       style: TextStyle(
-                         fontSize: responsiveFontSize,
+                          fontSize: responsiveFontSize,
                           fontWeight: FontWeight.w600,
                           color: Color(0xffF6C15B)),
                     ),

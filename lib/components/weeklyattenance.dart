@@ -4,7 +4,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-
 import 'package:intl/intl.dart';
 
 class WeeklyAttendance extends StatefulWidget {
@@ -13,7 +12,7 @@ class WeeklyAttendance extends StatefulWidget {
 
 
   const WeeklyAttendance({
-    Key? key,
+    super.key,
     required this.color,
 
       
@@ -45,7 +44,6 @@ class _WeeklyAttendanceState extends State<WeeklyAttendance> {
               .collection('dailyattendance')
               .doc(formattedDate)
               .get();
-
       if (snapshot.exists) {
         Map<String, dynamic>? data = snapshot.data();
         if (data != null) {
@@ -80,7 +78,6 @@ class _WeeklyAttendanceState extends State<WeeklyAttendance> {
 
     DateTime checkInTime = checkIn.toDate();
     DateTime checkOutTime = checkOut.toDate();
-
     Duration duration = checkOutTime.difference(checkInTime);
 
     int hours = duration.inHours;
@@ -121,19 +118,17 @@ class _WeeklyAttendanceState extends State<WeeklyAttendance> {
                 Map<String, dynamic> data = weeklyData[index];
                 final DateTime date = DateTime.now().subtract(
                     Duration(days: DateTime.now().weekday - 1 - index));
-                final String day = DateFormat('EE').format(date);
-                final String formattedDate = DateFormat('dd').format(date);
-
+                String day = DateFormat('EE').format(date);
+                String formattedDate = DateFormat('dd').format(date);
                 String checkInTime = _formatTime(data['checkIn'] as Timestamp?);
                 String checkOutTime =
                     _formatTime(data['checkOut'] as Timestamp?);
                 String totalHours = _calculateTotalHours(
                     data['checkIn'] as Timestamp?,
                     data['checkOut'] as Timestamp?);
-
                 return Container(
-                  padding: EdgeInsets.all(12),
-                  margin: EdgeInsets.only(bottom: 10),
+                  padding: const EdgeInsets.all(12),
+                  margin: const EdgeInsets.only(bottom: 10),
                   height: 82,
                   width: double.infinity,
                   decoration: BoxDecoration(
@@ -159,7 +154,7 @@ class _WeeklyAttendanceState extends State<WeeklyAttendance> {
                               children: [
                                 Text(
                                   formattedDate,
-                                  style: TextStyle(
+                                  style: const TextStyle(
                                     fontSize: 22,
                                     fontWeight: FontWeight.w600,
                                     color: Colors.white,
@@ -167,7 +162,7 @@ class _WeeklyAttendanceState extends State<WeeklyAttendance> {
                                 ),
                                 Text(
                                   day,
-                                  style: TextStyle(
+                                  style: const TextStyle(
                                     fontSize: 12,
                                     fontWeight: FontWeight.w400,
                                     color: Colors.white,
@@ -183,13 +178,14 @@ class _WeeklyAttendanceState extends State<WeeklyAttendance> {
                         children: [
                           Text(
                             checkInTime,
-                            style: TextStyle(
+                            style: const TextStyle(
                               fontSize: 14,
                               fontWeight: FontWeight.bold,
                               color: Colors.black,
+                              height: 0,
                             ),
                           ),
-                          Text(
+                          const Text(
                             'Check In',
                             style: TextStyle(
                               fontSize: 10,
@@ -202,45 +198,46 @@ class _WeeklyAttendanceState extends State<WeeklyAttendance> {
                       Container(
                         width: 1,
                         height: 50,
-                        decoration: BoxDecoration(color: Colors.black),
+                        decoration: const BoxDecoration(color: Colors.black),
                       ),
                       Column(
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
                           Text(
                             checkOutTime,
-                            style: TextStyle(
+                            style: const TextStyle(
                               fontSize: 14,
                               fontWeight: FontWeight.bold,
                               color: Colors.black,
                             ),
                           ),
-                          Text(
+                          const Text(
                             'Check Out',
                             style: TextStyle(
-                                fontSize: 10,
-                                fontWeight: FontWeight.bold,
-                                color: Colors.black),
+                              fontSize: 10,
+                              fontWeight: FontWeight.bold,
+                              color: Colors.black,
+                            ),
                           ),
                         ],
                       ),
                       Container(
                         width: 1,
                         height: 50,
-                        decoration: BoxDecoration(color: Colors.black),
+                        decoration: const BoxDecoration(color: Colors.black),
                       ),
                       Column(
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
                           Text(
                             totalHours,
-                            style: TextStyle(
+                            style: const TextStyle(
                               fontSize: 14,
                               fontWeight: FontWeight.bold,
                               color: Colors.black,
                             ),
                           ),
-                          Text(
+                          const Text(
                             'Total Hrs',
                             style: TextStyle(
                               fontSize: 10,

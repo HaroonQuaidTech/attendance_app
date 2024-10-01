@@ -1,12 +1,9 @@
-// ignore_for_file: unused_field, prefer_final_fields, avoid_print, body_might_complete_normally_nullable
-
 import 'dart:developer';
-
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 
 class FirebaseAuthServices {
-  FirebaseAuth _auth = FirebaseAuth.instance;
+  final FirebaseAuth _auth = FirebaseAuth.instance;
   final FirebaseFirestore _firestore = FirebaseFirestore.instance;
 
   Future<UserCredential> signUpwithEmailandPassword(
@@ -35,7 +32,6 @@ class FirebaseAuthServices {
     }
   }
 
-  //----------------------------------sign in-------------------------------------------------------
   Future<UserCredential> signInwithEmailandPassword(
       String email, password) async {
     try {

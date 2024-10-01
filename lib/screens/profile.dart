@@ -341,7 +341,7 @@ class _PrifileScreenState extends State<ProfileScreen> {
                     height: 30,
                   ),
                   Container(
-                    height: screenHeight * 0.48,
+                    // height: screenHeight * 0.48,
                     padding: EdgeInsets.symmetric(vertical: 20, horizontal: 10),
                     width: double.infinity,
                     decoration: BoxDecoration(
@@ -353,7 +353,10 @@ class _PrifileScreenState extends State<ProfileScreen> {
                         Text(
                           'Name',
                           style: TextStyle(
-                              fontSize: 16, fontWeight: FontWeight.w600),
+                            fontSize: 16,
+                            fontWeight: FontWeight.w600,
+                            height: 0,
+                          ),
                         ),
                         Container(
                           padding: EdgeInsets.symmetric(horizontal: 3),
