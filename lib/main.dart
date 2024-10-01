@@ -48,7 +48,7 @@ class _MyAppState extends State<MyApp> {
         'checkout': (context) => const CheckoutScreen(),
         'notification': (context) => const NotificationScreen(),
          'profile': (context) => const ProfileScreen(),
-         'stat': (context) =>const  StatsticsScreen(),
+         'stat': (context) =>  const StatsticsScreen(),
          'adminh': (context) => const AdminHomeScreen(),
           'splash': (context) => const Splashscreen(),
       },

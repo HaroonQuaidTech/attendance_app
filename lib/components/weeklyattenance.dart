@@ -12,7 +12,7 @@ class WeeklyAttendance extends StatefulWidget {
 
 
   const WeeklyAttendance({
-    super.key,
+    Key?key,
     required this.color,
 
       

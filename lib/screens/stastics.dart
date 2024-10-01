@@ -1,7 +1,8 @@
+// ignore_for_file: prefer_const_constructors
+
 import 'package:flutter/material.dart';
 import 'package:quaidtech/components/graphicalbuildermonthly.dart';
 import 'package:quaidtech/components/graphicalweekly.dart';
-import 'package:quaidtech/components/monthattendancce.dart';
 import 'package:quaidtech/components/statusbuilderweekly.dart';
 import 'package:quaidtech/components/statusbuildermonthly.dart';
 import 'package:quaidtech/components/weeklyattenance.dart';
@@ -90,37 +91,6 @@ class _StatsticsScreenState extends State<StatsticsScreen> {
           ),
           //----------------------------------------
           WeeklyAttendance( color: color),
-        ]));
-  }
-  Widget _buildMonthlyAttendance(String text, Color color, String dropdownValue2) {
-    
-    return Container(
-        padding: EdgeInsets.all(12),
-
-        height: 2850,
-        width: double.infinity,
-        decoration: BoxDecoration(
-          borderRadius: BorderRadius.circular(20),
-          color: Color(0xffEFF1FF),
-          boxShadow: [
-            BoxShadow(
-              color: Colors.grey.withOpacity(0.2),
-              spreadRadius: 2,
-              blurRadius: 4,
-              offset: Offset(0, 2), // changes position of shadow
-            ),
-          ],
-        ),
-        child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
-          Text(
-            text,
-            style: TextStyle(fontWeight: FontWeight.w600, fontSize: 18),
-          ),
-          SizedBox(
-            height: 10,
-          ),
-          //----------------------------------------
-          MonthlyAttendance( color: color,dropdownValue2: dropdownValue2,),
         ]));
   }
 
