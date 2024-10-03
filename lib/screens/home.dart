@@ -1,4 +1,4 @@
-// ignore_for_file: prefer_const_constructors, prefer_const_literals_to_create_immutables, unnecessary_new, avoid_print, sort_child_properties_last, unused_local_variable, unnecessary_string_interpolations, depend_on_referenced_packages, use_key_in_widget_constructors
+// ignore_for_file: prefer_const_constructors, prefer_const_literals_to_create_immutables, unnecessary_new, avoid_print, sort_child_properties_last, unused_local_variable, unnecessary_string_interpolations, depend_on_referenced_packages, use_key_in_widget_constructors, unnecessary_null_comparison
 import 'dart:developer';
 import 'dart:io';
 
@@ -134,19 +134,30 @@ class _HomeScreenState extends State<HomeScreen> {
 
   Future<Map<String, int>> fetchMonthlyAttendance(String userId) async {
     final now = DateTime.now();
+      final startOfMonth = DateTime(now.year, now.month, 1);
+  final endOfMonth = DateTime(now.year, now.month + 1, 0); 
     final attendanceCollection = FirebaseFirestore.instance
         .collection('AttendanceDetails')
         .doc(userId)
         .collection('dailyattendance');
 
     try {
-      final querySnapshot = await attendanceCollection.get();
+
+          final querySnapshot = await attendanceCollection
+        .where('checkIn', isGreaterThanOrEqualTo: startOfMonth)
+        .where('checkIn', isLessThanOrEqualTo: endOfMonth)
+        .get();
+
+    if (querySnapshot.docs.isEmpty) {
+      return {'present': 0, 'late': 0, 'absent': 0};
+    }
+
 
       if (querySnapshot.docs.isEmpty) {
         return {'present': 0, 'late': 0, 'absent': 0};
       }
 
-      final lateThreshold = DateTime(now.year, now.month, now.day, 8, 15);
+      final lateThreshold = DateTime(now.year, now.month, now.day, 8);
 
       final counts = querySnapshot.docs.fold<Map<String, int>>(
         {'present': 0, 'late': 0, 'absent': 0},
@@ -166,7 +177,7 @@ class _HomeScreenState extends State<HomeScreen> {
               accumulator['late'] = (accumulator['late'] ?? 0) + 1;
             }
 
-            if (checkOut == null) {
+            if (checkIn==null && checkOut== null) {
               accumulator['absent'] = (accumulator['absent'] ?? 0) + 1;
             }
           } else {
@@ -522,42 +533,49 @@ class _HomeScreenState extends State<HomeScreen> {
                                     ),
                                   ],
                                 ),
-                                child: FutureBuilder<Map<String, int>>(
-                                  future: fetchMonthlyAttendance(user!.uid),
-                                  builder: (context, snapshot) {
-                                    if (snapshot.connectionState ==
-                                        ConnectionState.waiting) {
-                                      return Center(
-                                          child: CircularProgressIndicator());
-                                    }
-
-                                    if (snapshot.hasError) {
-                                      return Center(
-                                          child:
-                                              Text('Error: ${snapshot.error}'));
-                                    }
-
-                                    if (snapshot.hasData) {
-                                      final data = snapshot.data!;
-
-                                      if (data['present'] == 0 &&
-                                          data['late'] == 0 &&
-                                          data['absent'] == 0) {
+                                child: Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    Text('Monthly Attendance',style: TextStyle(fontSize: 18,fontWeight: FontWeight.w600),),
+                                    SizedBox(height: 8),
+                                    FutureBuilder<Map<String, int>>(
+                                      future: fetchMonthlyAttendance(user!.uid),
+                                      builder: (context, snapshot) {
+                                        if (snapshot.connectionState ==
+                                            ConnectionState.waiting) {
+                                          return Center(
+                                              child: CircularProgressIndicator());
+                                        }
+                                    
+                                        if (snapshot.hasError) {
+                                          return Center(
+                                              child:
+                                                  Text('Error: ${snapshot.error}'));
+                                        }
+                                    
+                                        if (snapshot.hasData) {
+                                          final data = snapshot.data!;
+                                    
+                                          if (data['present'] == 0 &&
+                                              data['late'] == 0 &&
+                                              data['absent'] == 0) {
+                                            return Center(
+                                                child: Text(
+                                                    'No attendance records available for this month.'));
+                                          }
+                                    
+                                          return Monthlyattendance(
+                                            presentCount: data['present']!,
+                                            lateCount: data['late']!,
+                                            absentCount: data['absent']!,
+                                          );
+                                        }
+                                    
                                         return Center(
-                                            child: Text(
-                                                'No attendance records available for this month.'));
-                                      }
-
-                                      return Monthlyattendance(
-                                        presentCount: data['present']!,
-                                        lateCount: data['late']!,
-                                        absentCount: data['absent']!,
-                                      );
-                                    }
-
-                                    return Center(
-                                        child: Text('No data available.'));
-                                  },
+                                            child: Text('No data available.'));
+                                      },
+                                    ),
+                                  ],
                                 )),
                             SizedBox(
                               height: 20,

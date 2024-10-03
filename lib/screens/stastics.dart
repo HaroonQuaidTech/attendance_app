@@ -33,7 +33,7 @@ class _StatsticsScreenState extends State<StatsticsScreen> {
 
 //----------------------------------------------------------------------------
 
-  Widget _buildWeeklyAttendance(String text, Color color) {
+  Widget _buildWeeklyAttendance(String text, Color color,String dropdownValue2) {
     return Container(
         padding: const EdgeInsets.all(12),
         height: 520,
@@ -59,7 +59,7 @@ class _StatsticsScreenState extends State<StatsticsScreen> {
             height: 10,
           ),
           //----------------------------------------
-          WeeklyAttendance(color: color),
+          WeeklyAttendance(color: color,dropdownValue2: dropdownValue2,),
         ]));
   }
   Widget _buildMonthlyAttendance(String text, Color color, String dropdownValue2) {
@@ -90,9 +90,60 @@ class _StatsticsScreenState extends State<StatsticsScreen> {
             height: 10,
           ),
           //----------------------------------------
-          WeeklyAttendance( color: color),
+          WeeklyAttendance( color: color,dropdownValue2: dropdownValue2,),
         ]));
   }
+// void _buildAttendanceDetails() {
+//   // Define a function to build attendance based on dropdown values
+//   void _handleAttendanceDetails(String period, String status, Color color) {
+//     if (_selectedIndex != 1) {
+//       if (period == 'Weekly') {
+//         _buildWeeklyAttendance('$status Details', color, status);
+//       } else if (period == 'Monthly') {
+//         _buildMonthlyAttendance('$status Details', color, status);
+//       }
+//     }
+//   }
+
+//   // Check conditions and call the function
+//   if (dropdownValue1 == 'Weekly') {
+//     switch (dropdownValue2) {
+//       case 'Late Arrival':
+//         _handleAttendanceDetails('Weekly', 'Late Arrival', Color(0xffF6C15B));
+//         break;
+//       case 'Absent':
+//         _handleAttendanceDetails('Weekly', 'Absent', Color(0xffEC5851));
+//         break;
+//       case 'On Time':
+//         _handleAttendanceDetails('Weekly', 'On Time', Color(0xff22AF41));
+//         break;
+//       case 'Early Out':
+//         _handleAttendanceDetails('Weekly', 'Early Out', Color(0xffF07E25));
+//         break;
+//       case 'Present':
+//         _handleAttendanceDetails('Weekly', 'Present', Color(0xff8E71DF));
+//         break;
+//     }
+//   } else if (dropdownValue1 == 'Monthly') {
+//     switch (dropdownValue2) {
+//       case 'Late Arrival':
+//         _handleAttendanceDetails('Monthly', 'Late Arrival', Color(0xffF6C15B));
+//         break;
+//       case 'Absent':
+//         _handleAttendanceDetails('Monthly', 'Absent', Color(0xffEC5851));
+//         break;
+//       case 'On Time':
+//         _handleAttendanceDetails('Monthly', 'On Time', Color(0xff22AF41));
+//         break;
+//       case 'Early Out':
+//         _handleAttendanceDetails('Monthly', 'Early Out', Color(0xffF07E25));
+//         break;
+//       case 'Present':
+//         _handleAttendanceDetails('Monthly', 'Present', Color(0xff8E71DF));
+//         break;
+//     }
+//   }
+// }
 
 
   Widget _buildSegment(String text, int index) {
@@ -124,6 +175,7 @@ class _StatsticsScreenState extends State<StatsticsScreen> {
       ),
     );
   }
+  
 
   @override
   Widget build(BuildContext context) {
@@ -466,21 +518,21 @@ class _StatsticsScreenState extends State<StatsticsScreen> {
 
 
                 if (dropdownValue1 == 'Weekly' && dropdownValue2 == 'Late Arrival' && _selectedIndex != 1)
-                  _buildWeeklyAttendance('Late Arrival Details', Color(0xffF6C15B),),
+                  _buildWeeklyAttendance('Late Arrival Details', Color(0xffF6C15B),dropdownValue2),
 
                 if (dropdownValue1 == 'Weekly' && dropdownValue2 == 'Absent' && _selectedIndex != 1)
-                  _buildWeeklyAttendance('Absent Details', Color(0xffEC5851)),
+                  _buildWeeklyAttendance('Absent Details', Color(0xffEC5851),dropdownValue2),
 
                 if (dropdownValue1 == 'Weekly' && dropdownValue2 == 'On Time' && _selectedIndex != 1)
-                  _buildWeeklyAttendance('On Time Details', Color(0xff22AF41),),
+                  _buildWeeklyAttendance('On Time Details', Color(0xff22AF41),dropdownValue2),
 
                 if (dropdownValue1 == 'Weekly' && dropdownValue2 == 'Early Out' && _selectedIndex != 1)
                   _buildWeeklyAttendance(
-                      'Early Out Details', Color(0xffF07E25)),
+                      'Early Out Details', Color(0xffF07E25),dropdownValue2),
                 if (dropdownValue1 == 'Weekly' && dropdownValue2 == 'Present' && _selectedIndex != 1)
                   _buildWeeklyAttendance(
                     'Present Details',
-                    Color(0xff8E71DF)
+                    Color(0xff8E71DF),dropdownValue2
                   ),
                   
                 if (dropdownValue1 == 'Monthly' && dropdownValue2 == 'Late Arrival' && _selectedIndex != 1)
