@@ -1,7 +1,6 @@
 // ignore_for_file: prefer_const_constructors, prefer_const_literals_to_create_immutables, file_names, unnecessary_string_interpolations, depend_on_referenced_packages, unused_local_variable, unnecessary_null_comparison
 
 import 'dart:developer';
-
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
@@ -199,19 +198,15 @@ class _CheckinScreenState extends State<CheckinScreen> {
               //   return Center(child: Text('No attendance data found.'));
               // }
 
-              
               DateTime? checkIn;
               DateTime? checkOut;
-              
-              if(!(!snapshot.hasData || snapshot.data == null))
-              {
+
+              if (!(!snapshot.hasData || snapshot.data == null)) {
                 final data = snapshot.data!;
 
                 checkIn = (data['checkIn'] as Timestamp?)?.toDate();
                 checkOut = (data['checkOut'] as Timestamp?)?.toDate();
               }
-              
-             
 
               DateTime now = DateTime.now();
               DateTime currentDayStart = DateTime(now.year, now.month, now.day);
@@ -221,7 +216,8 @@ class _CheckinScreenState extends State<CheckinScreen> {
               }
 
               if (checkOut != null) {
-                DateTime nextDay7AM =DateTime(now.year, now.month, now.day, 7, 0);
+                DateTime nextDay7AM =
+                    DateTime(now.year, now.month, now.day, 7, 0);
                 if (now.isAfter(nextDay7AM)) {
                   checkIn != null;
                   checkOut != null;
@@ -359,12 +355,12 @@ class _CheckinScreenState extends State<CheckinScreen> {
                                 targetLatitude,
                                 targetLongitude,
                               );
-
                               log('Distance to target: $distanceInMeters meters');
-
                               // if (distanceInMeters <= 1) {
                               await _attendanceService.checkIn(userId);
                               showToastMessage('Checked In Successfully');
+                              // ignore: use_build_context_synchronously
+                              Navigator.pop(context);
                               // } else {
                               //   showToastMessage(
                               //       'You are too far from the check-in location.');
@@ -380,13 +376,13 @@ class _CheckinScreenState extends State<CheckinScreen> {
                                   decoration: BoxDecoration(
                                     color: Colors.white,
                                     shape: BoxShape.circle,
-                                         boxShadow: [
-                                        BoxShadow(
-                                          color: Colors.black12,
-                                          offset: Offset(2, 2),
-                                          blurRadius: 4,
-                                        ),
-                                      ],
+                                    boxShadow: [
+                                      BoxShadow(
+                                        color: Colors.black12,
+                                        offset: Offset(2, 2),
+                                        blurRadius: 4,
+                                      ),
+                                    ],
                                     border: Border.all(
                                         color: Color(0xff7647EB), width: 2),
                                   ),
@@ -398,13 +394,13 @@ class _CheckinScreenState extends State<CheckinScreen> {
                                   decoration: BoxDecoration(
                                     color: Colors.white,
                                     shape: BoxShape.circle,
-                                         boxShadow: [
-                                        BoxShadow(
-                                          color: Colors.black12,
-                                          offset: Offset(2, 2),
-                                          blurRadius: 4,
-                                        ),
-                                      ],
+                                    boxShadow: [
+                                      BoxShadow(
+                                        color: Colors.black12,
+                                        offset: Offset(2, 2),
+                                        blurRadius: 4,
+                                      ),
+                                    ],
                                     border: Border.all(
                                         color: Color(0xff7647EB), width: 2),
                                   ),
@@ -416,7 +412,6 @@ class _CheckinScreenState extends State<CheckinScreen> {
                                   decoration: BoxDecoration(
                                     shape: BoxShape.circle,
                                     color: Colors.white,
-                                    
                                     boxShadow: [
                                       BoxShadow(
                                         color: Colors.black12,
@@ -483,13 +478,13 @@ class _CheckinScreenState extends State<CheckinScreen> {
                                   decoration: BoxDecoration(
                                     color: Colors.white,
                                     shape: BoxShape.circle,
-                                         boxShadow: [
-                                        BoxShadow(
-                                          color: Colors.black12,
-                                          offset: Offset(12,12),
-                                          blurRadius: 1,
-                                        ),
-                                      ],
+                                    boxShadow: [
+                                      BoxShadow(
+                                        color: Colors.black12,
+                                        offset: Offset(12, 12),
+                                        blurRadius: 1,
+                                      ),
+                                    ],
                                     border: Border.all(
                                         color: Color(0xffFB3F4A), width: 2),
                                   ),
@@ -501,13 +496,13 @@ class _CheckinScreenState extends State<CheckinScreen> {
                                   decoration: BoxDecoration(
                                     color: Colors.white,
                                     shape: BoxShape.circle,
-                                         boxShadow: [
-                                        BoxShadow(
-                                          color: Colors.black12,
-                                          offset: Offset(8, 8),
-                                          blurRadius: 4,
-                                        ),
-                                      ],
+                                    boxShadow: [
+                                      BoxShadow(
+                                        color: Colors.black12,
+                                        offset: Offset(8, 8),
+                                        blurRadius: 4,
+                                      ),
+                                    ],
                                     border: Border.all(
                                         color: Color(0xffFB3F4A), width: 2),
                                   ),

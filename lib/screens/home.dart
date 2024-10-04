@@ -16,7 +16,6 @@ import 'package:quaidtech/screens/profile.dart';
 import 'package:quaidtech/screens/stastics.dart';
 import 'package:table_calendar/table_calendar.dart';
 import 'package:intl/intl.dart';
-// import 'package:circular_progress_stack/circularprogressstack.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({Key? key});
@@ -502,9 +501,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                     ),
                                   ]);
                                 }),
-                            SizedBox(
-                              height: 30,
-                            ),
+                            SizedBox(height: 30),
                             //mothly attendance
 
                             Container(
@@ -557,9 +554,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                         child: Text('No data available.'));
                                   },
                                 )),
-                            SizedBox(
-                              height: 20,
-                            ),
+                            SizedBox(height: 20),
                             Container(
                               decoration: BoxDecoration(
                                 color: Color(0xffEFF1FF),
@@ -645,9 +640,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                 ],
                               ),
                             ),
-                            SizedBox(
-                              height: 10,
-                            ),
+                            SizedBox(height: 10),
                           ],
                         ),
                       ),
@@ -661,74 +654,71 @@ class _HomeScreenState extends State<HomeScreen> {
                     alignment: Alignment.center,
                     children: [
                       // Outer Circle
-                      Container(
-                        width: 90,
-                        height: 90,
-                        decoration: BoxDecoration(
-                          color: Colors.white,
-                          shape: BoxShape.circle,
-                          border: Border.all(
-                            color: Color(0xff8E71DF).withOpacity(0.5),
-                            width: 2.0,
+                      Material(
+                        elevation: 4.0, // Adjust elevation as needed
+                        shape: CircleBorder(),
+                        child: CircleAvatar(
+                          radius:
+                              45, // This defines the size of the CircleAvatar (90 width and height)
+                          backgroundColor: Colors.white,
+                          child: Container(
+                            decoration: BoxDecoration(
+                              shape: BoxShape.circle,
+                              border: Border.all(
+                                color: Color(0xff8E71DF),
+                                width: 2.0,
+                              ),
+                            ),
                           ),
                         ),
                       ),
                       // Middle Circle
                       Container(
-                        width: 70,
-                        height: 70,
+                        width: 60,
+                        height: 60,
                         decoration: BoxDecoration(
                           color: Colors.white,
                           shape: BoxShape.circle,
                           border: Border.all(
-                            color: Color(0xff8E71DF).withOpacity(0.7),
-                            width: 2.0,
+                            color: Color(0xff8E71DF),
+                            width: 1.0,
                           ),
                         ),
                       ),
-                      // Floating Action Button
-
-                      // if (!snapshot.hasData || snapshot.data == null) {
-                      //   return Center(
-                      //       child: Text('No attendance data found.'));
-                      // }
-
-                      // // final data = snapshot.data!;
-                      // final checkIn =
-                      //     (data['checkIn'] as Timestamp?)?.toDate();
-                      // final checkOut =
-                      //     (data['checkOut'] as Timestamp?)?.toDate();
-
                       FloatingActionButton(
                         onPressed: () {
                           Navigator.push(
                             context,
                             MaterialPageRoute(
-                                builder: (context) => CheckinScreen()),
+                              builder: (context) => CheckinScreen(),
+                            ),
                           );
                         },
                         backgroundColor: Color(0xffEFF1FF),
                         shape: RoundedRectangleBorder(
                           borderRadius:
-                              BorderRadius.circular(100), // Set border radius
+                              BorderRadius.circular(300), // Set border radius
                         ),
                         child: Column(
                           mainAxisAlignment: MainAxisAlignment.center,
                           children: [
                             Image.asset(
                               'assets/mingcute.png',
-                              height: 28,
-                              width: 28,
+                              height: 20,
+                              width: 20,
                             ),
                             SizedBox(height: 4),
                             Text(
                               'Check In',
-                              style:
-                                  TextStyle(color: Colors.black, fontSize: 10),
+                              style: TextStyle(
+                                color: Colors.black,
+                                fontSize: 8,
+                                height: 0,
+                              ),
                             ),
                           ],
                         ),
-                      )
+                      ),
                     ],
                   ),
                 ),

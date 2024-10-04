@@ -1,5 +1,3 @@
-// ignore_for_file: prefer_const_constructors, prefer_const_literals_to_create_immutables
-
 import 'package:flutter/material.dart';
 
 class CheckoutScreen extends StatefulWidget {
@@ -12,8 +10,7 @@ class CheckoutScreen extends StatefulWidget {
 class _CheckoutScreenState extends State<CheckoutScreen> {
   @override
   Widget build(BuildContext context) {
-return Scaffold(
-  
+    return Scaffold(
       body: Padding(
         padding: const EdgeInsets.symmetric(vertical: 20),
         child: SafeArea(
@@ -23,7 +20,7 @@ return Scaffold(
               SizedBox(
                 height: 70,
                 child: Padding(
-                  padding: const EdgeInsets.only(left: 10.0,right: 10.0),
+                  padding: const EdgeInsets.only(left: 10.0, right: 10.0),
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
@@ -34,7 +31,7 @@ return Scaffold(
                           color: Colors.grey[200], // light background color
                           borderRadius:
                               BorderRadius.circular(12), // rounded corners
-                          boxShadow: [
+                          boxShadow: const [
                             BoxShadow(
                               color: Colors.black12,
                               offset: Offset(2, 2),
@@ -42,23 +39,24 @@ return Scaffold(
                             ),
                           ],
                         ),
-                        child: Icon(
+                        child: const Icon(
                           Icons.arrow_back,
                           color: Colors.black,
                         ),
                       ),
-                      Text(
+                      const Text(
                         'Check Out',
-                        style: TextStyle(fontSize: 22,fontWeight: FontWeight.w600),
+                        style: TextStyle(
+                            fontSize: 22, fontWeight: FontWeight.w600),
                       ),
-                             Container(
+                      Container(
                         width: 50,
                         height: 50,
                         decoration: BoxDecoration(
                           color: Colors.grey[200], // light background color
                           borderRadius:
                               BorderRadius.circular(12), // rounded corners
-                          boxShadow: [
+                          boxShadow: const [
                             BoxShadow(
                               color: Colors.black12,
                               offset: Offset(2, 2),
@@ -66,8 +64,8 @@ return Scaffold(
                             ),
                           ],
                         ),
-                        child: Icon(
-                         Icons.notifications_none,
+                        child: const Icon(
+                          Icons.notifications_none,
                           color: Colors.black,
                         ),
                       ),
@@ -80,15 +78,15 @@ return Scaffold(
                   ),
                 ),
               ),
-              Text(
+              const Text(
                 '05:00 PM',
                 style: TextStyle(fontSize: 40, color: Color(0xffFB3F4A)),
               ),
-              Text(
+              const Text(
                 'Feb19,2024-Monday',
                 style: TextStyle(fontSize: 20, color: Color(0xffFB3F4A)),
               ),
-              SizedBox(
+              const SizedBox(
                 height: 50,
               ),
               Stack(
@@ -99,9 +97,10 @@ return Scaffold(
                     width: 180,
                     height: 180,
                     decoration: BoxDecoration(
-                       color: Colors.white,
+                      color: Colors.white,
                       shape: BoxShape.circle,
-                      border: Border.all(color: Color(0xffFB3F4A), width: 2),
+                      border:
+                          Border.all(color: const Color(0xffFB3F4A), width: 2),
                     ),
                   ),
                   // Middle Circle
@@ -109,16 +108,17 @@ return Scaffold(
                     width: 120,
                     height: 120,
                     decoration: BoxDecoration(
-                       color: Colors.white,
+                      color: Colors.white,
                       shape: BoxShape.circle,
-                      border: Border.all(color: Color(0xffFB3F4A), width: 2),
+                      border:
+                          Border.all(color: const Color(0xffFB3F4A), width: 2),
                     ),
                   ),
                   // Inner Circle with Icon and Text
                   Container(
                     width: 115,
                     height: 115,
-                    decoration: BoxDecoration(
+                    decoration: const BoxDecoration(
                       shape: BoxShape.circle,
                       color: Colors.white,
                       boxShadow: [
@@ -136,8 +136,8 @@ return Scaffold(
                           height: 42,
                           width: 42,
                         ),
-                        SizedBox(height: 4),
-                        Text(
+                        const SizedBox(height: 4),
+                        const Text(
                           "Check Out",
                           style: TextStyle(
                             color: Colors.black,
@@ -149,7 +149,7 @@ return Scaffold(
                   ),
                 ],
               ),
-              Spacer(),
+              const Spacer(),
               SizedBox(
                 height: 140,
                 child: Padding(
@@ -161,7 +161,7 @@ return Scaffold(
                         height: 116,
                         width: 115,
                         decoration: BoxDecoration(
-                            color: Color(0xffEFF1FF),
+                            color: const Color(0xffEFF1FF),
                             borderRadius: BorderRadius.circular(12)),
                         child: Column(
                           mainAxisAlignment: MainAxisAlignment.spaceAround,
@@ -171,12 +171,12 @@ return Scaffold(
                               height: 42,
                               width: 42,
                             ),
-                            Text(
+                            const Text(
                               '08:00 AM',
                               style: TextStyle(
                                   fontSize: 18, fontWeight: FontWeight.w400),
                             ),
-                            Text(
+                            const Text(
                               'Check In',
                               style: TextStyle(
                                   fontSize: 14, fontWeight: FontWeight.w400),
@@ -188,7 +188,7 @@ return Scaffold(
                         height: 116,
                         width: 115,
                         decoration: BoxDecoration(
-                            color: Color(0xffEFF1FF),
+                            color: const Color(0xffEFF1FF),
                             borderRadius: BorderRadius.circular(12)),
                         child: Column(
                           mainAxisAlignment: MainAxisAlignment.spaceAround,
@@ -198,12 +198,12 @@ return Scaffold(
                               height: 42,
                               width: 42,
                             ),
-                            Text(
+                            const Text(
                               '05:00 PM',
                               style: TextStyle(
                                   fontSize: 18, fontWeight: FontWeight.w400),
                             ),
-                            Text(
+                            const Text(
                               'Check Out',
                               style: TextStyle(
                                   fontSize: 14, fontWeight: FontWeight.w400),
@@ -215,7 +215,7 @@ return Scaffold(
                         height: 116,
                         width: 115,
                         decoration: BoxDecoration(
-                            color: Color(0xffEFF1FF),
+                            color: const Color(0xffEFF1FF),
                             borderRadius: BorderRadius.circular(12)),
                         child: Column(
                           mainAxisAlignment: MainAxisAlignment.spaceAround,
@@ -225,12 +225,12 @@ return Scaffold(
                               height: 42,
                               width: 42,
                             ),
-                            Text(
+                            const Text(
                               '09:00',
                               style: TextStyle(
                                   fontSize: 18, fontWeight: FontWeight.w400),
                             ),
-                            Text(
+                            const Text(
                               'Total Hrs',
                               style: TextStyle(
                                   fontSize: 14, fontWeight: FontWeight.w400),

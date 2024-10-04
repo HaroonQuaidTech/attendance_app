@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:quaidtech/screens/home.dart';
@@ -13,7 +15,6 @@ class LoginScreen extends StatefulWidget {
 }
 
 class _LoginScreenState extends State<LoginScreen> {
-
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
   final TextEditingController _emailController = TextEditingController();
   final TextEditingController _passwordController = TextEditingController();
@@ -49,36 +50,25 @@ class _LoginScreenState extends State<LoginScreen> {
       // Try signing in
       final userCredential = await FirebaseAuth.instance
           .signInWithEmailAndPassword(email: email, password: password);
+      log(userCredential.toString());
 
       // ignore: use_build_context_synchronously
       Navigator.pop(context); // Close the loading indicator
-
-      if (userCredential != null) {
-        _showAlertDialog(
-          title: 'Successful',
-          titlecolor: Colors.green,
-          image: 'assets/success_alert.png',
-          message: 'Login Successfully',
-          buttontext: 'Continue',
-          closeCallback: () {
-            Navigator.pushReplacement(
-              context,
-              MaterialPageRoute(
-                builder: (context) => const HomeScreen(),
-              ),
-            );
-          },
-        );
-      } else {
-        _showAlertDialog(
-          title: 'Error',
-          titlecolor: Colors.red,
-          image: 'assets/failed_alert.png',
-          message: 'Invalid Credentials',
-          buttontext: 'Try Again',
-          closeCallback: () {},
-        );
-      }
+      _showAlertDialog(
+        title: 'Successful',
+        titlecolor: Colors.green,
+        image: 'assets/success_alert.png',
+        message: 'Login Successfully',
+        buttontext: 'Continue',
+        closeCallback: () {
+          Navigator.pushReplacement(
+            context,
+            MaterialPageRoute(
+              builder: (context) => const HomeScreen(),
+            ),
+          );
+        },
+      );
     } catch (e) {
       // ignore: use_build_context_synchronously
       Navigator.pop(context);
