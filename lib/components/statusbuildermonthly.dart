@@ -26,22 +26,24 @@ class _StatusBuilerState extends State<StatusBuiler> {
 
     final now = DateTime.now();
 
+  
     final firstDayOfMonth = DateTime(now.year, now.month, 1);
     final lastDayOfMonth = DateTime(now.year, now.month + 1, 0);
 
-    final formattedFirstDay = DateFormat('dd MMM').format(firstDayOfMonth);
-    final formattedLastDay = DateFormat('dd MMM').format(lastDayOfMonth);
-
-   
-
+    
     for (int i = 0;
         i <= lastDayOfMonth.difference(firstDayOfMonth).inDays;
         i++) {
       final date = firstDayOfMonth.add(Duration(days: i));
-      
-      final formattedDate = DateFormat('yMMMd').format(date);
-      log("Fetching data for--: $formattedDate");
+   
 
+
+      final formattedDate = DateFormat('yMMMd').format(date);
+      
+
+   
+
+      // Fetch attendance data for the day
       final DocumentSnapshot<Map<String, dynamic>> snapshot =
           await FirebaseFirestore.instance
               .collection('AttendanceDetails')
@@ -51,9 +53,25 @@ class _StatusBuilerState extends State<StatusBuiler> {
               .get();
 
       if (snapshot.exists) {
-        monthlyAttendanceList.add(snapshot.data());
+        final data = snapshot.data();
+
+        // Check if the user has checked in, if not mark it as empty attendance
+        final checkIn = (data?['checkIn'] as Timestamp?)?.toDate();
+        if (checkIn == null) {
+          monthlyAttendanceList.add({
+            'date': formattedDate,
+            'status': 'Absent', // or handle it as you need
+          });
+        } else {
+          // If check-in exists, add the attendance data
+          monthlyAttendanceList.add(data);
+        }
       } else {
-        monthlyAttendanceList.add(null);
+        // If no data exists for the day, mark it as absent (or empty)
+        monthlyAttendanceList.add({
+          'date': formattedDate,
+          'status': 'Absent', // Handle missing attendance as 'Absent'
+        });
       }
     }
 
@@ -138,25 +156,19 @@ class _StatusBuilerState extends State<StatusBuiler> {
     return totalMinutes / 60;
   }
 
-
-
-
 //-------------------------1
   Widget _buildEmptyAttendanceContainer(
     int index,
   ) {
     final DateTime now = DateTime.now();
 
-  
     final DateTime firstDayOfMonth = DateTime(now.year, now.month, 1);
 
     final DateTime date = firstDayOfMonth.add(Duration(days: index));
 
-   
     final String day = DateFormat('EE').format(date);
     final String formattedDate = DateFormat('dd').format(date);
 
- 
     return Container(
       padding: EdgeInsets.all(12),
       margin: EdgeInsets.only(bottom: 10),
@@ -212,20 +224,17 @@ class _StatusBuilerState extends State<StatusBuiler> {
     );
   }
 
-  Widget _buildHNullAttendanceContainer( int index, ) {
+  Widget _buildHNullAttendanceContainer(
+    int index,
+  ) {
     final DateTime now = DateTime.now();
 
-  
     final DateTime firstDayOfMonth = DateTime(now.year, now.month, 1);
 
- 
     final DateTime date = firstDayOfMonth.add(Duration(days: index));
 
-   
     final String day = DateFormat('EE').format(date);
     final String formattedDate = DateFormat('dd').format(date);
-
- 
 
     return Container(
       padding: EdgeInsets.all(12),
@@ -286,21 +295,15 @@ class _StatusBuilerState extends State<StatusBuiler> {
   String getCurrentMonthDateRange() {
     final now = DateTime.now();
 
-  
     final firstDayOfMonth = DateTime(now.year, now.month, 1);
     final lastDayOfMonth = DateTime(now.year, now.month + 1, 0);
 
     // Format the dates
-    final formattedFirstDay =
-        DateFormat('dd MMM').format(firstDayOfMonth);
-    final formattedLastDay =
-        DateFormat('dd MMM').format(lastDayOfMonth); 
+    final formattedFirstDay = DateFormat('dd MMM').format(firstDayOfMonth);
+    final formattedLastDay = DateFormat('dd MMM').format(lastDayOfMonth);
 
- 
     return '$formattedFirstDay - $formattedLastDay';
   }
-
-
 
   Future<void> _refresh() {
     return Future.delayed(Duration(seconds: 1));
@@ -359,37 +362,43 @@ class _StatusBuilerState extends State<StatusBuiler> {
               itemCount: attendanceData.length,
               itemBuilder: (context, index) {
                 final data = attendanceData[index];
-                
-                if (data == null) {
-                  return _buildHNullAttendanceContainer(index); 
-                }
 
-                final checkIn = (data['checkIn'] as Timestamp?)?.toDate();
-                  final checkOut = (data['checkOut'] as Timestamp?)?.toDate();
+                if (data == null) {
+                  return _buildHNullAttendanceContainer(index);
+                }
 
                 final DateTime now = DateTime.now();
 
-
                 final DateTime firstDayOfMonth =
                     DateTime(now.year, now.month, 1);
-
 
                 final DateTime date =
                     firstDayOfMonth.add(Duration(days: index));
 
                 final String day = DateFormat('EE').format(date);
                 final String formattedDate = DateFormat('dd').format(date);
+                if (date.isAfter(now)) {
+                  // Case: Future date, display null container
+                  return _buildHNullAttendanceContainer(
+                      index); // Null container for future dates
+                }
 
-    if (date.isAfter(now) || (checkIn == null && checkOut == null)) {
-      return _buildEmptyAttendanceContainer(index); // Return the container for empty attendance (red)
-    }
+                // If the attendance data for the day is null, meaning no data is available
+                if (data == null) {
+                  return _buildHNullAttendanceContainer(
+                      index); // Empty container for leave/absent
+                }
 
-              
+                // Get check-in and check-out times if available
+                final checkIn = (data['checkIn'] as Timestamp?)?.toDate();
+                final checkOut = (data['checkOut'] as Timestamp?)?.toDate();
 
-          
+                // Case: The user did not check in (leave case)
+                if (checkIn == null && checkOut == null) {
+                  return _buildEmptyAttendanceContainer(
+                      index); // Custom container for leave
+                }
 
-
-              
                 final totalHours = _calculateTotalHours(checkIn, checkOut);
                 Color containerColor;
 
@@ -426,11 +435,10 @@ class _StatusBuilerState extends State<StatusBuiler> {
                   } else if (checkInDateTime.isAfter(lateArrivalDateTime)) {
                     containerColor = Color(0xffF6C15B);
                   } else {
-                    containerColor = Color(0xffEC5851); 
+                    containerColor = Color(0xffEC5851);
                   }
                 } else {
-                  containerColor =Color(0xff8E71DF);
-                   
+                  containerColor = Color(0xff8E71DF);
                 }
 
                 if (checkOut != null) {
@@ -459,7 +467,6 @@ class _StatusBuilerState extends State<StatusBuiler> {
                     containerColor = Color(0xffF07E25); // Early check-out
                   }
                 }
-                
 
                 return Container(
                   padding: EdgeInsets.all(12),
@@ -766,14 +773,6 @@ class _StatusBuilerState extends State<StatusBuiler> {
                                 ],
                               ),
                               SizedBox(height: 14),
-
-                              //----------------------dot indicators--------------------------------
-                              // Row(
-                              //   mainAxisAlignment:
-                              //       MainAxisAlignment.center,
-                              //   children: List.generate(
-                              //       4, (index) => buildDot(index: index)),
-                              // ),
                             ]))),
               );
             }),
