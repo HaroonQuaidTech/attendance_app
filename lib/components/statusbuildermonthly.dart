@@ -22,22 +22,21 @@ class _StatusBuilerState extends State<StatusBuiler> {
 
     final now = DateTime.now();
 
-  
+    // Get the first and last day of the current month
     final firstDayOfMonth = DateTime(now.year, now.month, 1);
     final lastDayOfMonth = DateTime(now.year, now.month + 1, 0);
 
-    
+    // Loop through each day of the current month
     for (int i = 0;
         i <= lastDayOfMonth.difference(firstDayOfMonth).inDays;
         i++) {
       final date = firstDayOfMonth.add(Duration(days: i));
-   
 
+      // Skip weekends (Saturdays and Sundays)
 
       final formattedDate = DateFormat('yMMMd').format(date);
-      
 
-   
+      // Fetch attendance data for the day
 
       // Fetch attendance data for the day
       final DocumentSnapshot<Map<String, dynamic>> snapshot =
@@ -374,25 +373,30 @@ class _StatusBuilerState extends State<StatusBuiler> {
                 final String day = DateFormat('EE').format(date);
                 final String formattedDate = DateFormat('dd').format(date);
                 if (date.isAfter(now)) {
-                  // Case: Future date, display null container
+                
                   return _buildHNullAttendanceContainer(
-                      index); // Null container for future dates
+                      index); 
+                }
+                if (date.weekday == DateTime.saturday ||
+                    date.weekday == DateTime.sunday) {
+                  return _buildHNullAttendanceContainer(
+                      index); 
                 }
 
-                // If the attendance data for the day is null, meaning no data is available
+             
                 if (data == null) {
                   return _buildHNullAttendanceContainer(
-                      index); // Empty container for leave/absent
+                      index); 
                 }
 
-                // Get check-in and check-out times if available
+              
                 final checkIn = (data['checkIn'] as Timestamp?)?.toDate();
                 final checkOut = (data['checkOut'] as Timestamp?)?.toDate();
 
-                // Case: The user did not check in (leave case)
+              
                 if (checkIn == null && checkOut == null) {
                   return _buildEmptyAttendanceContainer(
-                      index); // Custom container for leave
+                      index);
                 }
 
                 final totalHours = _calculateTotalHours(checkIn, checkOut);
