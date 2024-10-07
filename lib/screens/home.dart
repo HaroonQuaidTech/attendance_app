@@ -133,24 +133,22 @@ class _HomeScreenState extends State<HomeScreen> {
 
   Future<Map<String, int>> fetchMonthlyAttendance(String userId) async {
     final now = DateTime.now();
-      final startOfMonth = DateTime(now.year, now.month, 1);
-  final endOfMonth = DateTime(now.year, now.month + 1, 0); 
+    final startOfMonth = DateTime(now.year, now.month, 1);
+    final endOfMonth = DateTime(now.year, now.month + 1, 0);
     final attendanceCollection = FirebaseFirestore.instance
         .collection('AttendanceDetails')
         .doc(userId)
         .collection('dailyattendance');
 
     try {
+      final querySnapshot = await attendanceCollection
+          .where('checkIn', isGreaterThanOrEqualTo: startOfMonth)
+          .where('checkIn', isLessThanOrEqualTo: endOfMonth)
+          .get();
 
-          final querySnapshot = await attendanceCollection
-        .where('checkIn', isGreaterThanOrEqualTo: startOfMonth)
-        .where('checkIn', isLessThanOrEqualTo: endOfMonth)
-        .get();
-
-    if (querySnapshot.docs.isEmpty) {
-      return {'present': 0, 'late': 0, 'absent': 0};
-    }
-
+      if (querySnapshot.docs.isEmpty) {
+        return {'present': 0, 'late': 0, 'absent': 0};
+      }
 
       if (querySnapshot.docs.isEmpty) {
         return {'present': 0, 'late': 0, 'absent': 0};
@@ -176,7 +174,7 @@ class _HomeScreenState extends State<HomeScreen> {
               accumulator['late'] = (accumulator['late'] ?? 0) + 1;
             }
 
-            if (checkIn==null && checkOut== null) {
+            if (checkIn == null && checkOut == null) {
               accumulator['absent'] = (accumulator['absent'] ?? 0) + 1;
             }
           } else {
@@ -257,7 +255,6 @@ class _HomeScreenState extends State<HomeScreen> {
     final Size screenSize = MediaQuery.of(context).size;
     final double screenHeight = screenSize.height;
     final double screenWidth = screenSize.width;
-     
 
     // ignore: deprecated_member_use
     return WillPopScope(
@@ -519,7 +516,6 @@ class _HomeScreenState extends State<HomeScreen> {
 
                             Container(
                                 padding: EdgeInsets.all(12),
-                                height: screenHeight * 0.19,
                                 decoration: BoxDecoration(
                                   color: Color(0xffEFF1FF),
                                   borderRadius: BorderRadius.circular(12),
@@ -533,7 +529,12 @@ class _HomeScreenState extends State<HomeScreen> {
                                 child: Column(
                                   crossAxisAlignment: CrossAxisAlignment.start,
                                   children: [
-                                    Text('Monthly Attendance',style: TextStyle(fontSize: 18,fontWeight: FontWeight.w600),),
+                                    Text(
+                                      'Monthly Attendance',
+                                      style: TextStyle(
+                                          fontSize: 18,
+                                          fontWeight: FontWeight.w600),
+                                    ),
                                     SizedBox(height: 8),
                                     FutureBuilder<Map<String, int>>(
                                       future: fetchMonthlyAttendance(user!.uid),
@@ -541,18 +542,19 @@ class _HomeScreenState extends State<HomeScreen> {
                                         if (snapshot.connectionState ==
                                             ConnectionState.waiting) {
                                           return Center(
-                                              child: CircularProgressIndicator());
+                                              child:
+                                                  CircularProgressIndicator());
                                         }
-                                    
+
                                         if (snapshot.hasError) {
                                           return Center(
-                                              child:
-                                                  Text('Error: ${snapshot.error}'));
+                                              child: Text(
+                                                  'Error: ${snapshot.error}'));
                                         }
-                                    
+
                                         if (snapshot.hasData) {
                                           final data = snapshot.data!;
-                                    
+
                                           if (data['present'] == 0 &&
                                               data['late'] == 0 &&
                                               data['absent'] == 0) {
@@ -560,14 +562,14 @@ class _HomeScreenState extends State<HomeScreen> {
                                                 child: Text(
                                                     'No attendance records available for this month.'));
                                           }
-                                    
+
                                           return Monthlyattendance(
                                             presentCount: data['present']!,
                                             lateCount: data['late']!,
                                             absentCount: data['absent']!,
                                           );
                                         }
-                                    
+
                                         return Center(
                                             child: Text('No data available.'));
                                       },

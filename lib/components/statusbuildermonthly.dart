@@ -232,54 +232,49 @@ class _StatusBuilerState extends State<StatusBuiler> {
     final String formattedDate = DateFormat('dd').format(date);
 
     return Container(
-      padding: EdgeInsets.all(12),
+      padding: EdgeInsets.symmetric(horizontal: 12),
       margin: EdgeInsets.only(bottom: 10),
       height: 82,
-      width: 360,
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(12),
         color: Colors.white,
       ),
       child: Row(
-        crossAxisAlignment: CrossAxisAlignment.center,
         children: [
-          Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              Container(
-                width: 53,
-                height: 55,
-                decoration: BoxDecoration(
-                    color: Color(0xff8E71DF),
-                    borderRadius: BorderRadius.circular(6)),
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  crossAxisAlignment: CrossAxisAlignment.center,
-                  children: [
-                    Text(
-                      formattedDate,
-                      style: TextStyle(
-                          fontSize: 22,
-                          fontWeight: FontWeight.w600,
-                          color: Colors.white),
-                    ),
-                    Text(
-                      day,
-                      style: TextStyle(
-                          fontSize: 12,
-                          fontWeight: FontWeight.w400,
-                          color: Colors.white),
-                    ),
-                  ],
+          Container(
+            width: 53,
+            height: 55,
+            decoration: BoxDecoration(
+                color: Color(0xff8E71DF),
+                borderRadius: BorderRadius.circular(6)),
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: [
+                Text(
+                  formattedDate,
+                  style: TextStyle(
+                      fontSize: 22,
+                      fontWeight: FontWeight.w600,
+                      color: Colors.white),
                 ),
-              ),
-            ],
+                Text(
+                  day,
+                  style: TextStyle(
+                      fontSize: 12,
+                      fontWeight: FontWeight.w400,
+                      color: Colors.white),
+                ),
+              ],
+            ),
           ),
-          Padding(
-            padding: const EdgeInsets.only(left: 50.0),
-            child: Text(
-              'Data not Available',
-              style: TextStyle(fontSize: 22, fontWeight: FontWeight.bold),
+          SizedBox(width: 25),
+          Text(
+            'Data not Available',
+            style: TextStyle(
+              fontSize: 22,
+              fontWeight: FontWeight.bold,
+              height: 0,
             ),
           )
         ],
@@ -373,30 +368,22 @@ class _StatusBuilerState extends State<StatusBuiler> {
                 final String day = DateFormat('EE').format(date);
                 final String formattedDate = DateFormat('dd').format(date);
                 if (date.isAfter(now)) {
-                
-                  return _buildHNullAttendanceContainer(
-                      index); 
+                  return _buildHNullAttendanceContainer(index);
                 }
                 if (date.weekday == DateTime.saturday ||
                     date.weekday == DateTime.sunday) {
-                  return _buildHNullAttendanceContainer(
-                      index); 
+                  return _buildHNullAttendanceContainer(index);
                 }
 
-             
                 if (data == null) {
-                  return _buildHNullAttendanceContainer(
-                      index); 
+                  return _buildHNullAttendanceContainer(index);
                 }
 
-              
                 final checkIn = (data['checkIn'] as Timestamp?)?.toDate();
                 final checkOut = (data['checkOut'] as Timestamp?)?.toDate();
 
-              
                 if (checkIn == null && checkOut == null) {
-                  return _buildEmptyAttendanceContainer(
-                      index);
+                  return _buildEmptyAttendanceContainer(index);
                 }
 
                 final totalHours = _calculateTotalHours(checkIn, checkOut);
