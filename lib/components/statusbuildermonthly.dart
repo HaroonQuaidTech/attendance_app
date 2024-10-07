@@ -1,10 +1,6 @@
 // ignore_for_file: prefer_const_constructors, prefer_const_literals_to_create_immutables, use_super_parameters, unused_local_variable, unnecessary_string_interpolations, depend_on_referenced_packages, unnecessary_null_comparison, prefer_const_declarations, unnecessary_brace_in_string_interps, unused_element
-
 import 'dart:async';
-import 'dart:developer';
-
 import 'package:flutter/material.dart';
-
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:intl/intl.dart';
