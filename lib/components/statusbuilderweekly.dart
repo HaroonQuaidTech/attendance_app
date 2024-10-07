@@ -255,7 +255,7 @@ class _StatusBuilerState extends State<StatusBuilderWeekly> {
       builder: (context, snapshot) {
         if (snapshot.connectionState == ConnectionState.waiting) {
           return const Padding(
-            padding: EdgeInsets.only(top: 100.0),
+            padding: EdgeInsets.only(top: 200.0),
             child: Center(child: CircularProgressIndicator()),
           );
         }
@@ -507,8 +507,8 @@ class _StatusBuilerState extends State<StatusBuilderWeekly> {
         builder: (context, snapshot) {
           if (snapshot.connectionState == ConnectionState.waiting) {
             return const Padding(
-              padding: EdgeInsets.only(top: 60.0),
-              child: Center(child: CircularProgressIndicator()),
+              padding: EdgeInsets.only(top: 200.0),
+              child: CircularProgressIndicator(),
             );
           }
 
