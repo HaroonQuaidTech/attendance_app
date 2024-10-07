@@ -154,8 +154,7 @@ class _WeeklyAttendanceState extends State<WeeklyAttendance> {
             ? weeklyData.where((element) => (element['statuses'] as List).contains('Late Arrival')).toList()
                          
                         : weeklyData;
-                        log('---------------$weeklyData');
-                          log('-----------------------$filteredData');
+                  
 
 
     return Column(

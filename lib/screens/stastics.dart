@@ -93,57 +93,6 @@ class _StatsticsScreenState extends State<StatsticsScreen> {
           WeeklyAttendance( color: color,dropdownValue2: dropdownValue2,),
         ]));
   }
-// void _buildAttendanceDetails() {
-//   // Define a function to build attendance based on dropdown values
-//   void _handleAttendanceDetails(String period, String status, Color color) {
-//     if (_selectedIndex != 1) {
-//       if (period == 'Weekly') {
-//         _buildWeeklyAttendance('$status Details', color, status);
-//       } else if (period == 'Monthly') {
-//         _buildMonthlyAttendance('$status Details', color, status);
-//       }
-//     }
-//   }
-
-//   // Check conditions and call the function
-//   if (dropdownValue1 == 'Weekly') {
-//     switch (dropdownValue2) {
-//       case 'Late Arrival':
-//         _handleAttendanceDetails('Weekly', 'Late Arrival', Color(0xffF6C15B));
-//         break;
-//       case 'Absent':
-//         _handleAttendanceDetails('Weekly', 'Absent', Color(0xffEC5851));
-//         break;
-//       case 'On Time':
-//         _handleAttendanceDetails('Weekly', 'On Time', Color(0xff22AF41));
-//         break;
-//       case 'Early Out':
-//         _handleAttendanceDetails('Weekly', 'Early Out', Color(0xffF07E25));
-//         break;
-//       case 'Present':
-//         _handleAttendanceDetails('Weekly', 'Present', Color(0xff8E71DF));
-//         break;
-//     }
-//   } else if (dropdownValue1 == 'Monthly') {
-//     switch (dropdownValue2) {
-//       case 'Late Arrival':
-//         _handleAttendanceDetails('Monthly', 'Late Arrival', Color(0xffF6C15B));
-//         break;
-//       case 'Absent':
-//         _handleAttendanceDetails('Monthly', 'Absent', Color(0xffEC5851));
-//         break;
-//       case 'On Time':
-//         _handleAttendanceDetails('Monthly', 'On Time', Color(0xff22AF41));
-//         break;
-//       case 'Early Out':
-//         _handleAttendanceDetails('Monthly', 'Early Out', Color(0xffF07E25));
-//         break;
-//       case 'Present':
-//         _handleAttendanceDetails('Monthly', 'Present', Color(0xff8E71DF));
-//         break;
-//     }
-//   }
-// }
 
 
   Widget _buildSegment(String text, int index) {
@@ -379,135 +328,135 @@ class _StatsticsScreenState extends State<StatsticsScreen> {
                           ]),
                     ),
                   ),
-                  SizedBox(height: 15),
-              if (dropdownValue1 == 'Monthly')
-                  Container(
-                    height: 130,
-                    width: double.infinity,
-                    decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(20),
-                      color: Color(0xffEFF1FF),
-                      boxShadow: [
-                        BoxShadow(
-                          color: Colors.grey.withOpacity(0.2),
-                          spreadRadius: 2,
-                          blurRadius: 4,
-                          offset: Offset(0, 2), // changes position of shadow
-                        ),
-                      ],
-                    ),
-                    child: Padding(
-                      padding: const EdgeInsets.symmetric(
-                          horizontal: 10.0, vertical: 10.0),
-                      child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Text(
-                              'Log Times',
-                              style: TextStyle(
-                                  fontWeight: FontWeight.w600, fontSize: 18),
-                            ),
-                            SizedBox(height: 10),
-                            Row(
-                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                              children: [
-                                // First Dropdown
-                                Expanded(
-                                  child: Container(
-                                    height: 50,
-                                    padding:
-                                        EdgeInsets.symmetric(horizontal: 10),
-                                    decoration: BoxDecoration(
-                                      color: Colors.white,
-                                      borderRadius: BorderRadius.circular(12),
-                                    ),
-                                    child: DropdownButton<String>(
-                                      value: dropdownValue3,
-                                      icon: Icon(Icons.arrow_drop_down),
-                                      iconSize: 24,
-                                      elevation: 16,
-                                      isExpanded: true,
-                                      style: TextStyle(
-                                          color: Colors.black, fontSize: 16),
-                                      underline: SizedBox(),
-                                      onChanged: (String? newValue) {
-                                        setState(() {
-                                          dropdownValue3 = newValue!;
-                                        });
-                                      },
-                                      items: <String>[
-                                        'Select Month',
-                                        'January',
-                                        'February',
-                                        'March',
-                                        'April',
-                                          'May',
-                                            'June',
-                                              'July',
-                                                'August',
-                                                  'September',
-                                                    'October',
-                                                      'November',
-                                                        'December',
+              //     SizedBox(height: 15),
+              // if (dropdownValue1 == 'Monthly')
+              //     Container(
+              //       height: 130,
+              //       width: double.infinity,
+              //       decoration: BoxDecoration(
+              //         borderRadius: BorderRadius.circular(20),
+              //         color: Color(0xffEFF1FF),
+              //         boxShadow: [
+              //           BoxShadow(
+              //             color: Colors.grey.withOpacity(0.2),
+              //             spreadRadius: 2,
+              //             blurRadius: 4,
+              //             offset: Offset(0, 2), // changes position of shadow
+              //           ),
+              //         ],
+              //       ),
+              //       child: Padding(
+              //         padding: const EdgeInsets.symmetric(
+              //             horizontal: 10.0, vertical: 10.0),
+              //         child: Column(
+              //             crossAxisAlignment: CrossAxisAlignment.start,
+              //             children: [
+              //               Text(
+              //                 'Log Times',
+              //                 style: TextStyle(
+              //                     fontWeight: FontWeight.w600, fontSize: 18),
+              //               ),
+              //               SizedBox(height: 10),
+              //               Row(
+              //                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              //                 children: [
+              //                   // First Dropdown
+              //                   Expanded(
+              //                     child: Container(
+              //                       height: 50,
+              //                       padding:
+              //                           EdgeInsets.symmetric(horizontal: 10),
+              //                       decoration: BoxDecoration(
+              //                         color: Colors.white,
+              //                         borderRadius: BorderRadius.circular(12),
+              //                       ),
+              //                       child: DropdownButton<String>(
+              //                         value: dropdownValue3,
+              //                         icon: Icon(Icons.arrow_drop_down),
+              //                         iconSize: 24,
+              //                         elevation: 16,
+              //                         isExpanded: true,
+              //                         style: TextStyle(
+              //                             color: Colors.black, fontSize: 16),
+              //                         underline: SizedBox(),
+              //                         onChanged: (String? newValue) {
+              //                           setState(() {
+              //                             dropdownValue3 = newValue!;
+              //                           });
+              //                         },
+              //                         items: <String>[
+              //                           'Select Month',
+              //                           'January',
+              //                           'February',
+              //                           'March',
+              //                           'April',
+              //                             'May',
+              //                               'June',
+              //                                 'July',
+              //                                   'August',
+              //                                     'September',
+              //                                       'October',
+              //                                         'November',
+              //                                           'December',
 
 
-                                      ].map<DropdownMenuItem<String>>(
-                                          (String value) {
-                                        return DropdownMenuItem<String>(
-                                          value: value,
-                                          child: Text(value),
-                                        );
-                                      }).toList(),
-                                    ),
-                                  ),
-                                ),
-                                SizedBox(width: 16),
-                                // Second Dropdown
-                                Expanded(
-                                  child: Container(
-                                    height: 50,
-                                    padding:
-                                        EdgeInsets.symmetric(horizontal: 10),
-                                    decoration: BoxDecoration(
-                                      color: Colors.white,
-                                      borderRadius: BorderRadius.circular(12),
-                                    ),
-                                    child: DropdownButton<String>(
-                                      value: dropdownValue4,
-                                      icon: Icon(Icons.arrow_drop_down),
-                                      iconSize: 24,
-                                      elevation: 16,
-                                      isExpanded: true,
-                                      style: TextStyle(
-                                          color: Colors.black, fontSize: 16),
-                                      underline: SizedBox(),
-                                      onChanged: (String? newValue) {
-                                        setState(() {
-                                          dropdownValue4 = newValue!;
-                                        });
-                                      },
-                                      items: <String>[
-                                        'Select Year',
-                                        '2024',
-                                        '2023',
-                                        '2022',
-                                        '2021',
-                                        '2020'
-                                      ].map<DropdownMenuItem<String>>(
-                                          (String value) {
-                                        return DropdownMenuItem<String>(
-                                          value: value,
-                                          child: Text(value),
-                                        );
-                                      }).toList(),
-                                    ),
-                                  ),
-                                ),
-                              ],
-                            ),
-                          ]),
-                    ),
-                  ),
+              //                         ].map<DropdownMenuItem<String>>(
+              //                             (String value) {
+              //                           return DropdownMenuItem<String>(
+              //                             value: value,
+              //                             child: Text(value),
+              //                           );
+              //                         }).toList(),
+              //                       ),
+              //                     ),
+              //                   ),
+              //                   SizedBox(width: 16),
+              //                   // Second Dropdown
+              //                   Expanded(
+              //                     child: Container(
+              //                       height: 50,
+              //                       padding:
+              //                           EdgeInsets.symmetric(horizontal: 10),
+              //                       decoration: BoxDecoration(
+              //                         color: Colors.white,
+              //                         borderRadius: BorderRadius.circular(12),
+              //                       ),
+              //                       child: DropdownButton<String>(
+              //                         value: dropdownValue4,
+              //                         icon: Icon(Icons.arrow_drop_down),
+              //                         iconSize: 24,
+              //                         elevation: 16,
+              //                         isExpanded: true,
+              //                         style: TextStyle(
+              //                             color: Colors.black, fontSize: 16),
+              //                         underline: SizedBox(),
+              //                         onChanged: (String? newValue) {
+              //                           setState(() {
+              //                             dropdownValue4 = newValue!;
+              //                           });
+              //                         },
+              //                         items: <String>[
+              //                           'Select Year',
+              //                           '2024',
+              //                           '2023',
+              //                           '2022',
+              //                           '2021',
+              //                           '2020'
+              //                         ].map<DropdownMenuItem<String>>(
+              //                             (String value) {
+              //                           return DropdownMenuItem<String>(
+              //                             value: value,
+              //                             child: Text(value),
+              //                           );
+              //                         }).toList(),
+              //                       ),
+              //                     ),
+              //                   ),
+              //                 ],
+              //               ),
+              //             ]),
+              //       ),
+              //     ),
             
 
             

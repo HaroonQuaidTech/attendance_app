@@ -32,13 +32,11 @@ class _StatusBuilerState extends State<StatusBuiler> {
     final formattedFirstDay = DateFormat('dd MMM').format(firstDayOfMonth);
     final formattedLastDay = DateFormat('dd MMM').format(lastDayOfMonth);
 
-   
-
     for (int i = 0;
         i <= lastDayOfMonth.difference(firstDayOfMonth).inDays;
         i++) {
       final date = firstDayOfMonth.add(Duration(days: i));
-      
+
       final formattedDate = DateFormat('yMMMd').format(date);
       log("Fetching data for--: $formattedDate");
 
@@ -138,25 +136,19 @@ class _StatusBuilerState extends State<StatusBuiler> {
     return totalMinutes / 60;
   }
 
-
-
-
 //-------------------------1
   Widget _buildEmptyAttendanceContainer(
     int index,
   ) {
     final DateTime now = DateTime.now();
 
-  
     final DateTime firstDayOfMonth = DateTime(now.year, now.month, 1);
 
     final DateTime date = firstDayOfMonth.add(Duration(days: index));
 
-   
     final String day = DateFormat('EE').format(date);
     final String formattedDate = DateFormat('dd').format(date);
 
- 
     return Container(
       padding: EdgeInsets.all(12),
       margin: EdgeInsets.only(bottom: 10),
@@ -212,20 +204,17 @@ class _StatusBuilerState extends State<StatusBuiler> {
     );
   }
 
-  Widget _buildHNullAttendanceContainer( int index, ) {
+  Widget _buildHNullAttendanceContainer(
+    int index,
+  ) {
     final DateTime now = DateTime.now();
 
-  
     final DateTime firstDayOfMonth = DateTime(now.year, now.month, 1);
 
- 
     final DateTime date = firstDayOfMonth.add(Duration(days: index));
 
-   
     final String day = DateFormat('EE').format(date);
     final String formattedDate = DateFormat('dd').format(date);
-
- 
 
     return Container(
       padding: EdgeInsets.all(12),
@@ -286,21 +275,15 @@ class _StatusBuilerState extends State<StatusBuiler> {
   String getCurrentMonthDateRange() {
     final now = DateTime.now();
 
-  
     final firstDayOfMonth = DateTime(now.year, now.month, 1);
     final lastDayOfMonth = DateTime(now.year, now.month + 1, 0);
 
     // Format the dates
-    final formattedFirstDay =
-        DateFormat('dd MMM').format(firstDayOfMonth);
-    final formattedLastDay =
-        DateFormat('dd MMM').format(lastDayOfMonth); 
+    final formattedFirstDay = DateFormat('dd MMM').format(firstDayOfMonth);
+    final formattedLastDay = DateFormat('dd MMM').format(lastDayOfMonth);
 
- 
     return '$formattedFirstDay - $formattedLastDay';
   }
-
-
 
   Future<void> _refresh() {
     return Future.delayed(Duration(seconds: 1));
@@ -360,36 +343,26 @@ class _StatusBuilerState extends State<StatusBuiler> {
               itemBuilder: (context, index) {
                 final data = attendanceData[index];
                 final checkIn = (data?['checkIn'] as Timestamp?)?.toDate();
+                final checkOut = (data?['checkOut'] as Timestamp?)?.toDate();
 
                 final DateTime now = DateTime.now();
 
-
                 final DateTime firstDayOfMonth =
                     DateTime(now.year, now.month, 1);
-
 
                 final DateTime date =
                     firstDayOfMonth.add(Duration(days: index));
 
                 final String day = DateFormat('EE').format(date);
                 final String formattedDate = DateFormat('dd').format(date);
-
-
-                if (data == null) {
-                  return _buildHNullAttendanceContainer(
-                      index); 
-                }
-
-                if (date.isAfter(now) && checkIn==null) {
+                if ( checkIn == null ) {
                   return _buildEmptyAttendanceContainer(index);
                 }
 
-              
+                if (data == null) {
+                  return _buildHNullAttendanceContainer(index);
+                }
 
-          
-
-
-                final checkOut = (data['checkOut'] as Timestamp?)?.toDate();
                 final totalHours = _calculateTotalHours(checkIn, checkOut);
                 Color containerColor;
 
@@ -426,11 +399,10 @@ class _StatusBuilerState extends State<StatusBuiler> {
                   } else if (checkInDateTime.isAfter(lateArrivalDateTime)) {
                     containerColor = Color(0xffF6C15B);
                   } else {
-                    containerColor = Color(0xffEC5851); 
+                    containerColor = Color(0xffEC5851);
                   }
                 } else {
-                  containerColor =Color(0xff8E71DF);
-                   
+                  containerColor = Color(0xff8E71DF);
                 }
 
                 if (checkOut != null) {
@@ -459,7 +431,6 @@ class _StatusBuilerState extends State<StatusBuiler> {
                     containerColor = Color(0xffF07E25); // Early check-out
                   }
                 }
-                
 
                 return Container(
                   padding: EdgeInsets.all(12),
