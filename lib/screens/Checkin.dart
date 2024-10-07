@@ -1,5 +1,3 @@
-// ignore_for_file: prefer_const_constructors, prefer_const_literals_to_create_immutables, file_names, unnecessary_string_interpolations, depend_on_referenced_packages, unused_local_variable, unnecessary_null_comparison
-
 import 'dart:developer';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -16,7 +14,6 @@ class AttendanceService {
   Future<void> checkIn(String userId) async {
     try {
       Timestamp checkInTime = Timestamp.now();
-      String checkInId = _firestore.collection("AttendanceDetails").doc().id;
       DateTime now = DateTime.now();
 
       String formattedDate =
@@ -26,7 +23,7 @@ class AttendanceService {
           .collection("AttendanceDetails")
           .doc(userId)
           .collection("dailyattendance")
-          .doc('$formattedDate')
+          .doc(formattedDate)
           .set({
         'checkIn': checkInTime,
         'checkOut': null,
@@ -50,7 +47,7 @@ class AttendanceService {
           .collection("AttendanceDetails")
           .doc(userId)
           .collection("dailyattendance")
-          .doc('$formattedDate')
+          .doc(formattedDate)
           .update({
         'checkOut': checkOutTime,
       });
@@ -82,7 +79,7 @@ class _CheckinScreenState extends State<CheckinScreen> {
             .collection('AttendanceDetails')
             .doc(userId)
             .collection('dailyattendance')
-            .doc('$formattedDate')
+            .doc(formattedDate)
             .get();
 
     if (snapshot.exists) {
@@ -187,16 +184,12 @@ class _CheckinScreenState extends State<CheckinScreen> {
             future: _getAttendanceDetails(userId),
             builder: (context, snapshot) {
               if (snapshot.connectionState == ConnectionState.waiting) {
-                return Center(child: CircularProgressIndicator());
+                return const Center(child: CircularProgressIndicator());
               }
 
               if (snapshot.hasError) {
                 return Center(child: Text('Error: ${snapshot.error}'));
               }
-
-              // if (!snapshot.hasData || snapshot.data == null) {
-              //   return Center(child: Text('No attendance data found.'));
-              // }
 
               DateTime? checkIn;
               DateTime? checkOut;
@@ -220,6 +213,7 @@ class _CheckinScreenState extends State<CheckinScreen> {
                     DateTime(now.year, now.month, now.day, 7, 0);
                 if (now.isAfter(nextDay7AM)) {
                   checkIn != null;
+                  // ignore: unnecessary_null_comparison
                   checkOut != null;
                 } else {
                   formattedDate = DateFormat('yyyy-MM-dd').format(now);
@@ -249,43 +243,7 @@ class _CheckinScreenState extends State<CheckinScreen> {
                                         .grey[200], // light background color
                                     borderRadius: BorderRadius.circular(
                                         12), // rounded corners
-                                    boxShadow: [
-                                      BoxShadow(
-                                        color: Colors.black12,
-                                        offset: Offset(2, 2),
-                                        blurRadius: 4,
-                                      ),
-                                    ],
-                                  ),
-                                  child: GestureDetector(
-                                    onTap: () {
-                                      Navigator.push(
-                                        context,
-                                        MaterialPageRoute(
-                                            builder: (context) => HomeScreen()),
-                                      );
-                                    },
-                                    child: Icon(
-                                      Icons.arrow_back,
-                                      color: Colors.black,
-                                    ),
-                                  ),
-                                ),
-                                Text(
-                                  'Check Out',
-                                  style: TextStyle(
-                                      fontSize: 22,
-                                      fontWeight: FontWeight.w600),
-                                ),
-                                Container(
-                                  width: 50,
-                                  height: 50,
-                                  decoration: BoxDecoration(
-                                    color: Colors
-                                        .grey[200], // light background color
-                                    borderRadius: BorderRadius.circular(
-                                        12), // rounded corners
-                                    boxShadow: [
+                                    boxShadow: const [
                                       BoxShadow(
                                         color: Colors.black12,
                                         offset: Offset(2, 2),
@@ -299,10 +257,47 @@ class _CheckinScreenState extends State<CheckinScreen> {
                                         context,
                                         MaterialPageRoute(
                                             builder: (context) =>
-                                                NotificationScreen()),
+                                                const HomeScreen()),
                                       );
                                     },
-                                    child: Icon(
+                                    child: const Icon(
+                                      Icons.arrow_back,
+                                      color: Colors.black,
+                                    ),
+                                  ),
+                                ),
+                                const Text(
+                                  'Check Out',
+                                  style: TextStyle(
+                                      fontSize: 22,
+                                      fontWeight: FontWeight.w600),
+                                ),
+                                Container(
+                                  width: 50,
+                                  height: 50,
+                                  decoration: BoxDecoration(
+                                    color: Colors
+                                        .grey[200], // light background color
+                                    borderRadius: BorderRadius.circular(
+                                        12), // rounded corners
+                                    boxShadow: const [
+                                      BoxShadow(
+                                        color: Colors.black12,
+                                        offset: Offset(2, 2),
+                                        blurRadius: 4,
+                                      ),
+                                    ],
+                                  ),
+                                  child: GestureDetector(
+                                    onTap: () {
+                                      Navigator.push(
+                                        context,
+                                        MaterialPageRoute(
+                                            builder: (context) =>
+                                                const NotificationScreen()),
+                                      );
+                                    },
+                                    child: const Icon(
                                       Icons.notifications_none,
                                       color: Colors.black,
                                     ),
@@ -313,28 +308,27 @@ class _CheckinScreenState extends State<CheckinScreen> {
                           ),
                         ),
                         Text(
-                          '$formattedTime',
-                          style:
-                              TextStyle(fontSize: 40, color: Color(0xff7647EB)),
+                          formattedTime,
+                          style: const TextStyle(
+                              fontSize: 40, color: Color(0xff7647EB)),
                         ),
                         Row(
                           mainAxisAlignment: MainAxisAlignment.center,
                           children: [
                             Text(
-                              '$formattedDate',
-                              style: TextStyle(
+                              formattedDate,
+                              style: const TextStyle(
                                   fontSize: 20, color: Color(0xff7647EB)),
                             ),
                             Text(
                               ' $formattedDay',
-                              style: TextStyle(
+                              style: const TextStyle(
                                   fontSize: 20, color: Color(0xff7647EB)),
                             ),
                           ],
                         ),
                         SizedBox(
-                          height: 80,
-                        ),
+                            height: MediaQuery.of(context).size.height * 0.1),
                         //--------------------Check iN-------------------------
                         if (checkIn == null && checkOut == null)
                           GestureDetector(
@@ -376,7 +370,7 @@ class _CheckinScreenState extends State<CheckinScreen> {
                                   decoration: BoxDecoration(
                                     color: Colors.white,
                                     shape: BoxShape.circle,
-                                    boxShadow: [
+                                    boxShadow: const [
                                       BoxShadow(
                                         color: Colors.black12,
                                         offset: Offset(2, 2),
@@ -384,7 +378,8 @@ class _CheckinScreenState extends State<CheckinScreen> {
                                       ),
                                     ],
                                     border: Border.all(
-                                        color: Color(0xff7647EB), width: 2),
+                                        color: const Color(0xff7647EB),
+                                        width: 2),
                                   ),
                                 ),
                                 // Middle Circle
@@ -394,7 +389,7 @@ class _CheckinScreenState extends State<CheckinScreen> {
                                   decoration: BoxDecoration(
                                     color: Colors.white,
                                     shape: BoxShape.circle,
-                                    boxShadow: [
+                                    boxShadow: const [
                                       BoxShadow(
                                         color: Colors.black12,
                                         offset: Offset(2, 2),
@@ -402,14 +397,15 @@ class _CheckinScreenState extends State<CheckinScreen> {
                                       ),
                                     ],
                                     border: Border.all(
-                                        color: Color(0xff7647EB), width: 2),
+                                        color: const Color(0xff7647EB),
+                                        width: 2),
                                   ),
                                 ),
                                 // Inner Circle with Icon and Text
                                 Container(
                                   width: 115,
                                   height: 115,
-                                  decoration: BoxDecoration(
+                                  decoration: const BoxDecoration(
                                     shape: BoxShape.circle,
                                     color: Colors.white,
                                     boxShadow: [
@@ -427,8 +423,8 @@ class _CheckinScreenState extends State<CheckinScreen> {
                                         height: 42,
                                         width: 42,
                                       ),
-                                      SizedBox(height: 4),
-                                      Text(
+                                      const SizedBox(height: 4),
+                                      const Text(
                                         "Check In",
                                         style: TextStyle(
                                           color: Colors.black,
@@ -445,28 +441,147 @@ class _CheckinScreenState extends State<CheckinScreen> {
                         if (checkIn != null && checkOut == null)
                           GestureDetector(
                             onTap: () async {
-                              Position currentPosition =
-                                  await Geolocator.getCurrentPosition(
-                                desiredAccuracy: LocationAccuracy.high,
+                              showDialog(
+                                context: context,
+                                builder: (BuildContext context) {
+                                  // Get the screen width and height
+                                  final screenHeight =
+                                      MediaQuery.of(context).size.height;
+                                  final screenWidth =
+                                      MediaQuery.of(context).size.width;
+
+                                  return Stack(
+                                    alignment: Alignment.topCenter,
+                                    children: [
+                                      AlertDialog(
+                                        contentPadding:
+                                            const EdgeInsets.only(top: 60.0),
+                                        backgroundColor: Colors.white,
+                                        shape: RoundedRectangleBorder(
+                                          borderRadius:
+                                              BorderRadius.circular(15),
+                                        ),
+                                        title: Column(
+                                          children: [
+                                            const Text(
+                                              'Are you Sure',
+                                              style: TextStyle(
+                                                fontSize: 18,
+                                                fontWeight: FontWeight.bold,
+                                              ),
+                                              textAlign: TextAlign.center,
+                                            ),
+                                            const Text(
+                                              'Do you want to checkout ?',
+                                              style: TextStyle(
+                                                fontWeight: FontWeight.normal,
+                                                color: Colors.black,
+                                                fontSize: 14,
+                                              ),
+                                              textAlign: TextAlign.center,
+                                            ),
+                                            const SizedBox(height: 15),
+                                            Row(
+                                              mainAxisAlignment:
+                                                  MainAxisAlignment
+                                                      .spaceBetween,
+                                              children: [
+                                                GestureDetector(
+                                                  onTap: () {
+                                                    Navigator.of(context).pop();
+                                                  },
+                                                  child: Container(
+                                                    width: screenWidth *
+                                                        0.3, // Responsive width
+                                                    height: screenHeight *
+                                                        0.05, // Responsive height
+                                                    decoration: BoxDecoration(
+                                                      color: Colors.grey[400],
+                                                      borderRadius:
+                                                          BorderRadius.circular(
+                                                              5),
+                                                    ),
+                                                    child: const Center(
+                                                      child: Text(
+                                                        'Cancel',
+                                                        style: TextStyle(
+                                                          fontSize: 14,
+                                                          color: Colors.white,
+                                                        ),
+                                                      ),
+                                                    ),
+                                                  ),
+                                                ),
+                                                GestureDetector(
+                                                  onTap: () async {
+                                                    Position currentPosition =
+                                                        await Geolocator
+                                                            .getCurrentPosition(
+                                                      desiredAccuracy:
+                                                          LocationAccuracy.high,
+                                                    );
+
+                                                    // Target coordinates
+                                                    double targetLatitude =
+                                                        33.6084548;
+                                                    double targetLongitude =
+                                                        73.0171062;
+
+                                                    double distanceInMeters =
+                                                        Geolocator
+                                                            .distanceBetween(
+                                                      currentPosition.latitude,
+                                                      currentPosition.longitude,
+                                                      targetLatitude,
+                                                      targetLongitude,
+                                                    );
+
+                                                    log('Distance to target: $distanceInMeters meters');
+
+                                                    await _attendanceService
+                                                        .checkOut(userId);
+                                                  },
+                                                  child: Container(
+                                                    width: screenWidth *
+                                                        0.3, // Responsive width
+                                                    height: screenHeight *
+                                                        0.05, // Responsive height
+                                                    decoration: BoxDecoration(
+                                                      color: const Color(
+                                                          0xff7647EB),
+                                                      borderRadius:
+                                                          BorderRadius.circular(
+                                                              5),
+                                                    ),
+                                                    child: const Center(
+                                                      child: Text(
+                                                        'Checkout',
+                                                        style: TextStyle(
+                                                          fontSize: 14,
+                                                          color: Colors.white,
+                                                        ),
+                                                      ),
+                                                    ),
+                                                  ),
+                                                ),
+                                              ],
+                                            ),
+                                          ],
+                                        ),
+                                      ),
+                                      // Responsively positioned warning icon
+                                      Positioned(
+                                        top: screenHeight * 0.33,
+                                        child: Image.asset(
+                                          'assets/warning_alert.png',
+                                          width: screenWidth * 0.15,
+                                          height: screenHeight * 0.08,
+                                        ),
+                                      ),
+                                    ],
+                                  );
+                                },
                               );
-
-                              // Target coordinates
-                              double targetLatitude = 33.6084548;
-                              double targetLongitude = 73.0171062;
-
-                              double distanceInMeters =
-                                  Geolocator.distanceBetween(
-                                currentPosition.latitude,
-                                currentPosition.longitude,
-                                targetLatitude,
-                                targetLongitude,
-                              );
-
-                              log('Distance to target: $distanceInMeters meters');
-
-                              // if (distanceInMeters <= 1) {
-                              await _attendanceService.checkOut(userId);
-                              showToastMessage('Checked out Successfully');
                             },
                             child: Stack(
                               alignment: Alignment.center,
@@ -478,7 +593,7 @@ class _CheckinScreenState extends State<CheckinScreen> {
                                   decoration: BoxDecoration(
                                     color: Colors.white,
                                     shape: BoxShape.circle,
-                                    boxShadow: [
+                                    boxShadow: const [
                                       BoxShadow(
                                         color: Colors.black12,
                                         offset: Offset(12, 12),
@@ -486,7 +601,8 @@ class _CheckinScreenState extends State<CheckinScreen> {
                                       ),
                                     ],
                                     border: Border.all(
-                                        color: Color(0xffFB3F4A), width: 2),
+                                        color: const Color(0xffFB3F4A),
+                                        width: 2),
                                   ),
                                 ),
                                 // Middle Circle
@@ -496,7 +612,7 @@ class _CheckinScreenState extends State<CheckinScreen> {
                                   decoration: BoxDecoration(
                                     color: Colors.white,
                                     shape: BoxShape.circle,
-                                    boxShadow: [
+                                    boxShadow: const [
                                       BoxShadow(
                                         color: Colors.black12,
                                         offset: Offset(8, 8),
@@ -504,14 +620,15 @@ class _CheckinScreenState extends State<CheckinScreen> {
                                       ),
                                     ],
                                     border: Border.all(
-                                        color: Color(0xffFB3F4A), width: 2),
+                                        color: const Color(0xffFB3F4A),
+                                        width: 2),
                                   ),
                                 ),
                                 // Inner Circle with Icon and Text
                                 Container(
                                   width: 115,
                                   height: 115,
-                                  decoration: BoxDecoration(
+                                  decoration: const BoxDecoration(
                                     shape: BoxShape.circle,
                                     color: Colors.white,
                                     boxShadow: [
@@ -529,8 +646,8 @@ class _CheckinScreenState extends State<CheckinScreen> {
                                         height: 42,
                                         width: 42,
                                       ),
-                                      SizedBox(height: 4),
-                                      Text(
+                                      const SizedBox(height: 4),
+                                      const Text(
                                         "Check Out",
                                         style: TextStyle(
                                           color: Colors.black,
@@ -543,7 +660,7 @@ class _CheckinScreenState extends State<CheckinScreen> {
                               ],
                             ),
                           ),
-                        SizedBox(
+                        const SizedBox(
                           height: 30,
                         ),
                         // Center(
@@ -553,7 +670,7 @@ class _CheckinScreenState extends State<CheckinScreen> {
                         //           'Current Location: \nLatitude: ${_currentPosition!.latitude}\n,Longitude: ${_currentPosition!.longitude}'),
                         // ),
 
-                        Spacer(),
+                        const Spacer(),
                         //----------------------------------------------------------------------------------------------------------------------------
                         SizedBox(
                           height: 140,
@@ -566,9 +683,9 @@ class _CheckinScreenState extends State<CheckinScreen> {
                                   height: screenHeight * 0.46,
                                   width: screenWidth * 0.3,
                                   decoration: BoxDecoration(
-                                    color: Color(0xffEFF1FF),
+                                    color: const Color(0xffEFF1FF),
                                     borderRadius: BorderRadius.circular(12),
-                                    boxShadow: [
+                                    boxShadow: const [
                                       BoxShadow(
                                         color: Colors.black12,
                                         offset: Offset(2, 2),
@@ -586,12 +703,12 @@ class _CheckinScreenState extends State<CheckinScreen> {
                                         width: 42,
                                       ),
                                       Text(
-                                        '${_formatTime(checkIn)}',
-                                        style: TextStyle(
+                                        _formatTime(checkIn),
+                                        style: const TextStyle(
                                             fontSize: 22,
                                             fontWeight: FontWeight.bold),
                                       ),
-                                      Text(
+                                      const Text(
                                         'Check In',
                                         style: TextStyle(
                                             fontSize: 16,
@@ -604,9 +721,9 @@ class _CheckinScreenState extends State<CheckinScreen> {
                                   height: screenHeight * 0.46,
                                   width: screenWidth * 0.3,
                                   decoration: BoxDecoration(
-                                    color: Color(0xffEFF1FF),
+                                    color: const Color(0xffEFF1FF),
                                     borderRadius: BorderRadius.circular(12),
-                                    boxShadow: [
+                                    boxShadow: const [
                                       BoxShadow(
                                         color: Colors.black12,
                                         offset: Offset(2, 2),
@@ -624,12 +741,12 @@ class _CheckinScreenState extends State<CheckinScreen> {
                                         width: 42,
                                       ),
                                       Text(
-                                        '${_formatTime(checkOut)}',
-                                        style: TextStyle(
+                                        _formatTime(checkOut),
+                                        style: const TextStyle(
                                             fontSize: 22,
                                             fontWeight: FontWeight.bold),
                                       ),
-                                      Text(
+                                      const Text(
                                         'Check Out',
                                         style: TextStyle(
                                             fontSize: 16,
@@ -642,9 +759,9 @@ class _CheckinScreenState extends State<CheckinScreen> {
                                   height: screenHeight * 0.46,
                                   width: screenWidth * 0.3,
                                   decoration: BoxDecoration(
-                                    color: Color(0xffEFF1FF),
+                                    color: const Color(0xffEFF1FF),
                                     borderRadius: BorderRadius.circular(12),
-                                    boxShadow: [
+                                    boxShadow: const [
                                       BoxShadow(
                                         color: Colors.black12,
                                         offset: Offset(2, 2),
@@ -662,12 +779,12 @@ class _CheckinScreenState extends State<CheckinScreen> {
                                         width: 42,
                                       ),
                                       Text(
-                                        '$totalHours',
-                                        style: TextStyle(
+                                        totalHours,
+                                        style: const TextStyle(
                                             fontSize: 22,
                                             fontWeight: FontWeight.bold),
                                       ),
-                                      Text(
+                                      const Text(
                                         'Total Hours',
                                         style: TextStyle(
                                             fontSize: 16,

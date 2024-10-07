@@ -1,5 +1,3 @@
-
-
 // ignore_for_file: library_private_types_in_public_api, use_key_in_widget_constructors
 
 import 'package:flutter/material.dart';
@@ -21,7 +19,6 @@ void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp();
 
-
   runApp(MyApp());
 }
 
@@ -33,8 +30,6 @@ class MyApp extends StatefulWidget {
 class _MyAppState extends State<MyApp> {
   @override
   Widget build(BuildContext context) {
-     
-    
     return MaterialApp(
       debugShowCheckedModeBanner: false,
       theme: ThemeData(fontFamily: "KumbhSans"),
@@ -47,10 +42,10 @@ class _MyAppState extends State<MyApp> {
         'checkin': (context) => const CheckinScreen(),
         'checkout': (context) => const CheckoutScreen(),
         'notification': (context) => const NotificationScreen(),
-         'profile': (context) => const ProfileScreen(),
-         'stat': (context) =>  const StatsticsScreen(),
-         'adminh': (context) => const AdminHomeScreen(),
-          'splash': (context) => const Splashscreen(),
+        'profile': (context) => const ProfileScreen(),
+        'stat': (context) => const StatsticsScreen(),
+        'adminh': (context) => const AdminHomeScreen(),
+        'splash': (context) => const Splashscreen(),
       },
     );
   }

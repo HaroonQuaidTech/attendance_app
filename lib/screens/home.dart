@@ -1,14 +1,12 @@
 // ignore_for_file: prefer_const_constructors, prefer_const_literals_to_create_immutables, unnecessary_new, avoid_print, sort_child_properties_last, unused_local_variable, unnecessary_string_interpolations, depend_on_referenced_packages, use_key_in_widget_constructors, unnecessary_null_comparison
 import 'dart:developer';
 import 'dart:io';
-
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:draggable_fab/draggable_fab.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:quaidtech/components/dailyAttendancedetails.dart';
 import 'package:quaidtech/components/dailyNullAttend.dart';
-
 import 'package:quaidtech/components/monthlyattendance.dart';
 import 'package:quaidtech/screens/Checkin.dart';
 import 'package:quaidtech/screens/notification.dart';
@@ -82,6 +80,12 @@ class _HomeScreenState extends State<HomeScreen> {
   }
 
   void _showNoDataMessage() {}
+    @override
+  void initState() {
+    _loadUserProfile();
+    super.initState();
+    _selectedDay = DateTime.now();
+  }
 
   void _onDaySelected(DateTime selectedDay, DateTime focusedDay) async {
     setState(() {
@@ -241,12 +245,7 @@ class _HomeScreenState extends State<HomeScreen> {
     );
   }
 
-  @override
-  void initState() {
-    _loadUserProfile();
 
-    super.initState();
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -376,11 +375,6 @@ class _HomeScreenState extends State<HomeScreen> {
                                     .doc(user?.uid)
                                     .get(),
                                 builder: (context, snapshot) {
-                                  if (snapshot.connectionState ==
-                                      ConnectionState.waiting) {
-                                    return Center(
-                                        child: CircularProgressIndicator());
-                                  }
                                   if (!snapshot.hasData ||
                                       !snapshot.data!.exists) {
                                     return Row(children: [
@@ -539,13 +533,6 @@ class _HomeScreenState extends State<HomeScreen> {
                                     FutureBuilder<Map<String, int>>(
                                       future: fetchMonthlyAttendance(user!.uid),
                                       builder: (context, snapshot) {
-                                        if (snapshot.connectionState ==
-                                            ConnectionState.waiting) {
-                                          return Center(
-                                              child:
-                                                  CircularProgressIndicator());
-                                        }
-
                                         if (snapshot.hasError) {
                                           return Center(
                                               child: Text(
