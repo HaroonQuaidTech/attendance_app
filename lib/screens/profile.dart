@@ -1,7 +1,5 @@
 // ignore_for_file: prefer_const_literals_to_create_immutables, prefer_const_constructors, use_build_context_synchronously, unused_import, avoid_print
-
 import 'dart:developer';
-
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_storage/firebase_storage.dart';
@@ -145,7 +143,9 @@ class _PrifileScreenState extends State<ProfileScreen> {
     await _auth.signOut();
 
     // Navigate to the login screen after the delay
-    Navigator.of(context,).pushAndRemoveUntil(
+    Navigator.of(
+      context,
+    ).pushAndRemoveUntil(
       MaterialPageRoute(builder: (context) => const LoginScreen()),
       (Route<dynamic> route) => false,
     );
