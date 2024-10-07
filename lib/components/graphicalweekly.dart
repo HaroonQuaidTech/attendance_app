@@ -324,31 +324,47 @@ class _GraphicalbuilerState extends State<GraphicalbuilerWeekly> {
                                 BarChartRodData(
                                     toY: weeklyHours[1] ?? 0,
                                     color: Color(0xff9478F7),
-                                    width: 22)
+                                    width: 22,  backDrawRodData: BackgroundBarChartRodData(
+                      show: true,
+                      toY: 8,
+                      color: Colors.white,
+                    ),)
                               ]),
                               BarChartGroupData(x: 1, barRods: [
                                 BarChartRodData(
                                     toY: weeklyHours[2] ?? 0,
                                     color: Color(0xff9478F7),
-                                    width: 22)
+                                    width: 22,  backDrawRodData: BackgroundBarChartRodData(
+                      show: true,
+                      toY: 8,
+                      color: Colors.white,
+                    ),)
                               ]),
                               BarChartGroupData(x: 2, barRods: [
                                 BarChartRodData(
                                     toY: weeklyHours[3] ?? 0,
                                     color: Color(0xff9478F7),
-                                    width: 22)
+                                    width: 22,  backDrawRodData: BackgroundBarChartRodData(
+                      show: true,
+                      toY: 8,
+                      color: Colors.white,
+                    ),)
                               ]),
                               BarChartGroupData(x: 3, barRods: [
                                 BarChartRodData(
                                     toY: weeklyHours[4] ?? 0,
                                     color: Color(0xff9478F7),
-                                    width: 22)
+                                    width: 22,  backDrawRodData: BackgroundBarChartRodData(
+                      show: true,
+                      toY: 8,
+                      color: Colors.white,
+                    ),)
                               ]),
                               BarChartGroupData(x: 4, barRods: [
                                 BarChartRodData(
                                     toY: weeklyHours[5] ?? 0,
                                     color: Color(0xff9478F7),
-                                    width: 22)
+                                    width: 8)
                               ]),
                             ],
                           ),

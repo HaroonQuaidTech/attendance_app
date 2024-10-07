@@ -290,9 +290,10 @@ class _StatusBuilerState extends State<StatusBuilderWeekly> {
 
               final data = weeklyData[index];
               final checkIn = (data?['checkIn'] as Timestamp?)?.toDate();
+                final checkOut = (data?['checkOut'] as Timestamp?)?.toDate();
 
               // Check if date is in the future
-              if (date.isAfter(now) && checkIn == null) {
+              if (date.isAfter(now) && checkIn == null && checkOut==null) {
                 return _buildHNullAttendanceContainer(index);
               }
 
@@ -301,7 +302,7 @@ class _StatusBuilerState extends State<StatusBuilderWeekly> {
                 return _buildEmptyAttendanceContainer(index);
               }
 
-              final checkOut = (data['checkOut'] as Timestamp?)?.toDate();
+              
               final totalHours = _calculateTotalHours(checkIn, checkOut);
               Color containerColor;
 

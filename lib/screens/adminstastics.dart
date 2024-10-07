@@ -2,7 +2,7 @@
 
 import 'package:flutter/material.dart';
 import 'package:quaidtech/components/employeeAttendance.dart';
-import 'package:quaidtech/components/graphicalbuiler.dart';
+import 'package:quaidtech/components/graphicalbuildermonthly.dart';
 import 'package:quaidtech/components/graphicalweekly.dart';
 import 'package:quaidtech/components/statusbuilderweekly.dart';
 
@@ -526,7 +526,7 @@ class _StatsticsScreenState extends State<AdminStatsticsScreen> {
                 if (dropdownValue2 == 'Weekly' && _selectedIndex == 1)
                   GraphicalbuilerWeekly(),
                 if (dropdownValue2 == 'Monthly' && _selectedIndex == 1)
-                  Graphicalbuiler()
+GraphicalbuilerMonthly()
 
                 //-------------------------Weekly Log Times------------------------------------------
               ],
