@@ -80,7 +80,7 @@ class _HomeScreenState extends State<HomeScreen> {
   }
 
   void _showNoDataMessage() {}
-    @override
+  @override
   void initState() {
     _loadUserProfile();
     super.initState();
@@ -245,8 +245,6 @@ class _HomeScreenState extends State<HomeScreen> {
     );
   }
 
-
-
   @override
   Widget build(BuildContext context) {
     String? displayName = user?.displayName ?? "No Name Provided";
@@ -363,96 +361,33 @@ class _HomeScreenState extends State<HomeScreen> {
               ? StatsticsScreen()
               : _selectedIndex == 2
                   ? ProfileScreen()
-                  : SingleChildScrollView(
-                      child: Padding(
-                        padding: const EdgeInsets.symmetric(
-                            horizontal: 16.0, vertical: 16.0),
-                        child: Column(
-                          children: [
-                            FutureBuilder<DocumentSnapshot>(
-                                future: FirebaseFirestore.instance
-                                    .collection('Users')
-                                    .doc(user?.uid)
-                                    .get(),
-                                builder: (context, snapshot) {
-                                  if (!snapshot.hasData ||
-                                      !snapshot.data!.exists) {
-                                    return Row(children: [
-                                      Padding(
-                                        padding:
-                                            const EdgeInsets.only(right: 10.0),
-                                        child: ClipRRect(
-                                            borderRadius:
-                                                BorderRadius.circular(80),
-                                            child: Image.asset(
-                                              'assets/pp.jpg',
-                                              height: 60,
-                                              width: 60,
-                                              fit: BoxFit.cover,
-                                            )),
-                                      ),
-                                      Column(
-                                        crossAxisAlignment:
-                                            CrossAxisAlignment.start,
-                                        mainAxisAlignment:
-                                            MainAxisAlignment.center,
-                                        children: [
-                                          Text(
-                                            "No Name Provided",
-                                            style: TextStyle(
-                                                fontSize: 20,
-                                                fontWeight: FontWeight.w600),
-                                          ),
-                                          Text(
-                                            "No Email Provided",
-                                            style: TextStyle(
-                                                fontSize: 16,
-                                                fontWeight: FontWeight.w400),
-                                          ),
-                                        ],
-                                      ),
-                                      Spacer(),
-                                      GestureDetector(
-                                        onTap: () {
-                                          Navigator.push(
-                                            context,
-                                            MaterialPageRoute(
-                                                builder: (context) =>
-                                                    NotificationScreen()),
-                                          );
-                                        },
-                                        child: Image.asset(
-                                          'assets/icon.png',
-                                          height: 72,
-                                          width: 72,
-                                        ),
-                                      )
-                                    ]);
-                                  }
-
-                                  var userData = snapshot.data!.data()
-                                      as Map<String, dynamic>;
-                                  String displayName =
-                                      userData['name'] ?? "No Name Provided";
-                                  String email =
-                                      userData['email'] ?? "No Name Provided";
-
+                  : Padding(
+                      padding: const EdgeInsets.symmetric(
+                          horizontal: 10.0, vertical: 16.0),
+                      child: Column(
+                        children: [
+                          FutureBuilder<DocumentSnapshot>(
+                              future: FirebaseFirestore.instance
+                                  .collection('Users')
+                                  .doc(user?.uid)
+                                  .get(),
+                              builder: (context, snapshot) {
+                                if (!snapshot.hasData ||
+                                    !snapshot.data!.exists) {
                                   return Row(children: [
-                                    if (_imageUrl != null &&
-                                        _imageUrl!.isNotEmpty)
-                                      Padding(
-                                          padding: const EdgeInsets.only(
-                                              right: 10.0),
-                                          child: ClipRRect(
-                                            borderRadius:
-                                                BorderRadius.circular(900),
-                                            child: Image.network(
-                                              _imageUrl!,
-                                              width: 60,
-                                              height: 60,
-                                              fit: BoxFit.cover,
-                                            ),
+                                    Padding(
+                                      padding:
+                                          const EdgeInsets.only(right: 10.0),
+                                      child: ClipRRect(
+                                          borderRadius:
+                                              BorderRadius.circular(80),
+                                          child: Image.asset(
+                                            'assets/pp.jpg',
+                                            height: 60,
+                                            width: 60,
+                                            fit: BoxFit.cover,
                                           )),
+                                    ),
                                     Column(
                                       crossAxisAlignment:
                                           CrossAxisAlignment.start,
@@ -460,13 +395,13 @@ class _HomeScreenState extends State<HomeScreen> {
                                           MainAxisAlignment.center,
                                       children: [
                                         Text(
-                                          "$displayName",
+                                          "No Name Provided",
                                           style: TextStyle(
                                               fontSize: 20,
                                               fontWeight: FontWeight.w600),
                                         ),
                                         Text(
-                                          "$email",
+                                          "No Email Provided",
                                           style: TextStyle(
                                               fontSize: 16,
                                               fontWeight: FontWeight.w400),
@@ -474,100 +409,104 @@ class _HomeScreenState extends State<HomeScreen> {
                                       ],
                                     ),
                                     Spacer(),
-                                    Container(
-                                      width: 50,
-                                      height: 50,
-                                      decoration: BoxDecoration(
-                                        color: Colors.grey[200],
-                                        borderRadius: BorderRadius.circular(12),
-                                        boxShadow: [
-                                          BoxShadow(
-                                            color: Colors.black12,
-                                            offset: Offset(2, 2),
-                                            blurRadius: 4,
-                                          ),
-                                        ],
-                                      ),
-                                      child: GestureDetector(
-                                        onTap: () {
-                                          Navigator.push(
-                                            context,
-                                            MaterialPageRoute(
-                                                builder: (context) =>
-                                                    NotificationScreen()),
-                                          );
-                                        },
-                                        child: Icon(
-                                          Icons.notifications_none,
-                                          color: Colors.black,
-                                        ),
-                                      ),
-                                    ),
-                                  ]);
-                                }),
-                            SizedBox(height: 30),
-                            //mothly attendance
-
-                            Container(
-                                padding: EdgeInsets.all(12),
-                                decoration: BoxDecoration(
-                                  color: Color(0xffEFF1FF),
-                                  borderRadius: BorderRadius.circular(12),
-                                  boxShadow: [
-                                    BoxShadow(
-                                      color: Colors.black12,
-                                      blurRadius: 10,
-                                    ),
-                                  ],
-                                ),
-                                child: Column(
-                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                  children: [
-                                    Text(
-                                      'Monthly Attendance',
-                                      style: TextStyle(
-                                          fontSize: 18,
-                                          fontWeight: FontWeight.w600),
-                                    ),
-                                    SizedBox(height: 8),
-                                    FutureBuilder<Map<String, int>>(
-                                      future: fetchMonthlyAttendance(user!.uid),
-                                      builder: (context, snapshot) {
-                                        if (snapshot.hasError) {
-                                          return Center(
-                                              child: Text(
-                                                  'Error: ${snapshot.error}'));
-                                        }
-
-                                        if (snapshot.hasData) {
-                                          final data = snapshot.data!;
-
-                                          if (data['present'] == 0 &&
-                                              data['late'] == 0 &&
-                                              data['absent'] == 0) {
-                                            return Center(
-                                                child: Text(
-                                                    'No attendance records available for this month.'));
-                                          }
-
-                                          return Monthlyattendance(
-                                            presentCount: data['present']!,
-                                            lateCount: data['late']!,
-                                            absentCount: data['absent']!,
-                                          );
-                                        }
-
-                                        return Center(
-                                            child: Text('No data available.'));
+                                    GestureDetector(
+                                      onTap: () {
+                                        Navigator.push(
+                                          context,
+                                          MaterialPageRoute(
+                                              builder: (context) =>
+                                                  NotificationScreen()),
+                                        );
                                       },
+                                      child: Image.asset(
+                                        'assets/icon.png',
+                                        height: 72,
+                                        width: 72,
+                                      ),
+                                    )
+                                  ]);
+                                }
+                      
+                                var userData = snapshot.data!.data()
+                                    as Map<String, dynamic>;
+                                String displayName =
+                                    userData['name'] ?? "No Name Provided";
+                                String email =
+                                    userData['email'] ?? "No Name Provided";
+                      
+                                return Row(children: [
+                                  if (_imageUrl != null &&
+                                      _imageUrl!.isNotEmpty)
+                                    Padding(
+                                        padding:
+                                            const EdgeInsets.only(right: 10.0),
+                                        child: ClipRRect(
+                                          borderRadius:
+                                              BorderRadius.circular(900),
+                                          child: Image.network(
+                                            _imageUrl!,
+                                            width: 60,
+                                            height: 60,
+                                            fit: BoxFit.cover,
+                                          ),
+                                        )),
+                                  Column(
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.start,
+                                    mainAxisAlignment: MainAxisAlignment.center,
+                                    children: [
+                                      Text(
+                                        "$displayName",
+                                        style: TextStyle(
+                                            fontSize: 20,
+                                            fontWeight: FontWeight.w600),
+                                      ),
+                                      Text(
+                                        "$email",
+                                        style: TextStyle(
+                                            fontSize: 16,
+                                            fontWeight: FontWeight.w400),
+                                      ),
+                                    ],
+                                  ),
+                                  Spacer(),
+                                  Container(
+                                    width: 50,
+                                    height: 50,
+                                    decoration: BoxDecoration(
+                                      color: Colors.grey[200],
+                                      borderRadius: BorderRadius.circular(12),
+                                      boxShadow: [
+                                        BoxShadow(
+                                          color: Colors.black12,
+                                          offset: Offset(2, 2),
+                                          blurRadius: 4,
+                                        ),
+                                      ],
                                     ),
-                                  ],
-                                )),
-                            SizedBox(height: 20),
-                            Container(
+                                    child: GestureDetector(
+                                      onTap: () {
+                                        Navigator.push(
+                                          context,
+                                          MaterialPageRoute(
+                                              builder: (context) =>
+                                                  NotificationScreen()),
+                                        );
+                                      },
+                                      child: Icon(
+                                        Icons.notifications_none,
+                                        color: Colors.black,
+                                      ),
+                                    ),
+                                  ),
+                                ]);
+                              }),
+                          SizedBox(height: 30),
+                          Container(
+                              padding: EdgeInsets.all(12),
                               decoration: BoxDecoration(
                                 color: Color(0xffEFF1FF),
-                                borderRadius: BorderRadius.circular(16),
+                                borderRadius: BorderRadius.circular(12),
                                 boxShadow: [
                                   BoxShadow(
                                     color: Colors.black12,
@@ -575,83 +514,147 @@ class _HomeScreenState extends State<HomeScreen> {
                                   ),
                                 ],
                               ),
-                              child: TableCalendar(
-                                firstDay: DateTime.utc(2020, 10, 16),
-                                lastDay: DateTime.utc(2030, 3, 14),
-                                focusedDay: _focusedDay,
-                                calendarFormat: _calendarFormat,
-                                availableCalendarFormats: const {
-                                  CalendarFormat.month: 'Month',
-                                },
-                                headerVisible: true,
-                                selectedDayPredicate: (day) {
-                                  return isSameDay(_selectedDay, day);
-                                },
-                                onDaySelected: _onDaySelected,
-                                onFormatChanged: (format) {
-                                  if (_calendarFormat != format) {
-                                    setState(() {
-                                      _calendarFormat = format;
-                                    });
-                                  }
-                                },
-                                onPageChanged: (focusedDay) {
-                                  _focusedDay = focusedDay;
-                                },
-                              ),
-                            ),
-
-                            SizedBox(
-                              height: 20,
-                            ),
-                            Container(
-                              height: 142,
-                              padding: EdgeInsets.symmetric(vertical: 8),
-                              decoration: BoxDecoration(
-                                borderRadius: BorderRadius.circular(12),
-                                color: Color(0xffEFF1FF),
-                                boxShadow: [
-                                  BoxShadow(
-                                    color: Colors.black12,
-                                    offset: Offset(4, 4),
-                                    blurRadius: 4,
+                              child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  Text(
+                                    'Monthly Attendance',
+                                    style: TextStyle(
+                                        fontSize: 18,
+                                        fontWeight: FontWeight.w600),
+                                  ),
+                                  SizedBox(height: 8),
+                                  FutureBuilder<Map<String, int>>(
+                                    future: fetchMonthlyAttendance(user!.uid),
+                                    builder: (context, snapshot) {
+                                      if (snapshot.hasError) {
+                                        return Center(
+                                            child: Text(
+                                                'Error: ${snapshot.error}'));
+                                      }
+                                                  
+                                      if (snapshot.hasData) {
+                                        final data = snapshot.data!;
+                                                  
+                                        if (data['present'] == 0 &&
+                                            data['late'] == 0 &&
+                                            data['absent'] == 0) {
+                                          return Center(
+                                              child: Text(
+                                                  'No attendance records available for this month.'));
+                                        }
+                                                  
+                                        return Monthlyattendance(
+                                          presentCount: data['present']!,
+                                          lateCount: data['late']!,
+                                          absentCount: data['absent']!,
+                                        );
+                                      }
+                                                  
+                                      return Center(
+                                          child: Text('No data available.'));
+                                    },
+                                  ),
+                                ],
+                              )),
+                          
+                          Expanded(
+                            child: SingleChildScrollView(
+                              child: Column(
+                                children: [
+                                  SizedBox(height: 20),
+                                  Container(
+                                    decoration: BoxDecoration(
+                                      color: Color(0xffEFF1FF),
+                                      borderRadius: BorderRadius.circular(16),
+                                      boxShadow: [
+                                        BoxShadow(
+                                          color: Colors.black12,
+                                          blurRadius: 10,
+                                        ),
+                                      ],
+                                    ),
+                                    child: TableCalendar(
+                                      firstDay: DateTime.utc(2020, 10, 16),
+                                      lastDay: DateTime.utc(2030, 3, 14),
+                                      focusedDay: _focusedDay,
+                                      calendarFormat: _calendarFormat,
+                                      availableCalendarFormats: const {
+                                        CalendarFormat.month: 'Month',
+                                      },
+                                      availableGestures: AvailableGestures.horizontalSwipe,
+                                      headerVisible: true,
+                                      selectedDayPredicate: (day) {
+                                        return isSameDay(_selectedDay, day);
+                                      },
+                                      onDaySelected: _onDaySelected,
+                                      onFormatChanged: (format) {
+                                        if (_calendarFormat != format) {
+                                          setState(() {
+                                            _calendarFormat = format;
+                                          });
+                                        }
+                                      },
+                                      onPageChanged: (focusedDay) {
+                                        _focusedDay = focusedDay;
+                                      },
+                                    ),
+                                  ),
+                                  SizedBox(
+                                    height: 20,
+                                  ),
+                                  Container(
+                                    height: 142,
+                                    padding: EdgeInsets.symmetric(vertical: 8),
+                                    decoration: BoxDecoration(
+                                      borderRadius: BorderRadius.circular(12),
+                                      color: Color(0xffEFF1FF),
+                                      boxShadow: [
+                                        BoxShadow(
+                                          color: Colors.black12,
+                                          offset: Offset(4, 4),
+                                          blurRadius: 4,
+                                        ),
+                                      ],
+                                    ),
+                                    child: Row(
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.center,
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.start,
+                                      children: [
+                                        Center(
+                                            child: Column(
+                                          crossAxisAlignment:
+                                              CrossAxisAlignment.start,
+                                          children: [
+                                            Text(
+                                              'Attendance Details',
+                                              style: TextStyle(
+                                                  fontSize: 18,
+                                                  fontWeight: FontWeight.w600),
+                                            ),
+                                            SizedBox(height: 6),
+                                            Builder(builder: (context) {
+                                              if (data == null) {
+                                                return DailyEmptyAttendance(
+                                                    selectedDay: _selectedDay);
+                                              }
+                                                              
+                                              return DailyAttendance(
+                                                  data: data,
+                                                  selectedDay: _selectedDay);
+                                            }),
+                                          ],
+                                        )),
+                                      ],
+                                    ),
                                   ),
                                 ],
                               ),
-                              child: Row(
-                                mainAxisAlignment: MainAxisAlignment.center,
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: [
-                                  Center(
-                                      child: Column(
-                                    crossAxisAlignment:
-                                        CrossAxisAlignment.start,
-                                    children: [
-                                      Text(
-                                        'Attendance Details',
-                                        style: TextStyle(
-                                            fontSize: 18,
-                                            fontWeight: FontWeight.w600),
-                                      ),
-                                      SizedBox(height: 6),
-                                      Builder(builder: (context) {
-                                        if (data == null) {
-                                          return DailyEmptyAttendance(
-                                              selectedDay: _selectedDay);
-                                        }
-
-                                        return DailyAttendance(
-                                            data: data,
-                                            selectedDay: _selectedDay);
-                                      }),
-                                    ],
-                                  )),
-                                ],
-                              ),
                             ),
-                            SizedBox(height: 10),
-                          ],
-                        ),
+                          )
+                        ],
                       ),
                     ),
         ),

@@ -184,7 +184,7 @@ class _StatusBuilerState extends State<StatusBuilderWeekly> {
     );
   }
 
-  Widget _buildHNullAttendanceContainer(
+  Widget _buildNullAttendanceContainer(
     int index,
   ) {
     final DateTime date = DateTime.now()
@@ -274,11 +274,19 @@ class _StatusBuilerState extends State<StatusBuilderWeekly> {
         }
 
         final weeklyData = snapshot.data!;
-        final now = DateTime.now();
+     
         return Expanded(
           child: ListView.builder(
             itemCount: weeklyData.length,
+            
             itemBuilder: (context, index) {
+                  final data =weeklyData[index];
+                  
+                  
+              if (data == null) {
+                return _buildNullAttendanceContainer(index);
+              }
+
               final DateTime date = DateTime.now()
                   .subtract(Duration(days: DateTime.now().weekday - 1 - index));
               final String day = DateFormat('EE').format(date);
@@ -288,20 +296,17 @@ class _StatusBuilerState extends State<StatusBuilderWeekly> {
                 return const SizedBox.shrink();
               }
 
-              final data = weeklyData[index];
-              final checkIn = (data?['checkIn'] as Timestamp?)?.toDate();
-                final checkOut = (data?['checkOut'] as Timestamp?)?.toDate();
+        
+             
 
               // Check if date is in the future
-              if (date.isAfter(now) && checkIn == null && checkOut==null) {
-                return _buildHNullAttendanceContainer(index);
-              }
-
-              // Logic 1: If data is null, show it as "Leave"
-              if (data == null) {
+               final checkIn = (data['checkIn'] as Timestamp?)?.toDate();
+              final checkOut = (data['checkOut'] as Timestamp?)?.toDate();
+                  
+              if (checkIn == null && checkOut == null) {
                 return _buildEmptyAttendanceContainer(index);
               }
-
+              
               
               final totalHours = _calculateTotalHours(checkIn, checkOut);
               Color containerColor;

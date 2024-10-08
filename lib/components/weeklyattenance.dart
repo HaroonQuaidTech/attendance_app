@@ -59,7 +59,7 @@ class _WeeklyAttendanceState extends State<WeeklyAttendance> {
         List<String> statuses = []; 
       
 
-          if (checkInTime == null) {
+          if (checkInTime == null )  {
              statuses.add("Absent");
           absents.add(data);
            
@@ -182,6 +182,7 @@ class _WeeklyAttendanceState extends State<WeeklyAttendance> {
             child: ListView.builder(
                 shrinkWrap: true,
                 itemCount: filteredData.length,
+          
                 itemBuilder: (context, index) {
                   Map<String, dynamic> data = filteredData[index];
                   final DateTime date = DateFormat('MMM dd, yyyy').parse(filteredData[index]['formattedDate']);
