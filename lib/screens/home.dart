@@ -363,7 +363,7 @@ class _HomeScreenState extends State<HomeScreen> {
                   ? ProfileScreen()
                   : Padding(
                       padding: const EdgeInsets.symmetric(
-                          horizontal: 10.0, vertical: 16.0),
+                          horizontal: 12.0, vertical: 16.0),
                       child: Column(
                         children: [
                           FutureBuilder<DocumentSnapshot>(
