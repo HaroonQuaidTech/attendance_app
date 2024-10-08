@@ -1,4 +1,4 @@
-// ignore_for_file: prefer_const_constructors
+// ignore_for_file: prefer_const_constructors, prefer_const_literals_to_create_immutables
 
 import 'package:flutter/material.dart';
 import 'package:quaidtech/components/graphicalbuildermonthly.dart';
@@ -136,298 +136,306 @@ class _StatsticsScreenState extends State<StatsticsScreen> {
       body: SafeArea(
         child: Padding(
           padding: const EdgeInsets.symmetric(horizontal: 10.0),
-          child: SingleChildScrollView(
-            child: Column(
-              children: [
-                SizedBox(
-                  height: 70,
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      Container(
-                        width: 50,
-                        height: 50,
-                        decoration: BoxDecoration(
-                          color: Colors.transparent,
-                          borderRadius: BorderRadius.circular(12),
-                          boxShadow: const [
-                            BoxShadow(
-                              color: Colors.transparent,
-                              offset: Offset(2, 2),
-                              blurRadius: 4,
-                            ),
-                          ],
-                        ),
-                        child: GestureDetector(
-                          onTap: () {
-                            Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                  builder: (context) => const HomeScreen()),
-                            );
-                          },
-                          child: const Icon(
-                            Icons.arrow_back,
+          child: Column(
+            children: [
+              SizedBox(
+                height: 70,
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Container(
+                      width: 50,
+                      height: 50,
+                      decoration: BoxDecoration(
+                        color: Colors.transparent,
+                        borderRadius: BorderRadius.circular(12),
+                        boxShadow: const [
+                          BoxShadow(
                             color: Colors.transparent,
+                            offset: Offset(2, 2),
+                            blurRadius: 4,
                           ),
+                        ],
+                      ),
+                      child: GestureDetector(
+                        onTap: () {
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                                builder: (context) => const HomeScreen()),
+                          );
+                        },
+                        child: const Icon(
+                          Icons.arrow_back,
+                          color: Colors.transparent,
                         ),
                       ),
-                      const Text(
-                        'Statistics',
-                        style: TextStyle(
-                            fontSize: 22, fontWeight: FontWeight.w600),
-                      ),
-                      Container(
-                        width: 50,
-                        height: 50,
-                        decoration: BoxDecoration(
-                          color: Colors.grey[200],
-                          borderRadius: BorderRadius.circular(12),
-                          boxShadow: const [
-                            BoxShadow(
-                              color: Colors.black12,
-                              offset: Offset(2, 2),
-                              blurRadius: 4,
-                            ),
-                          ],
-                        ),
-                        child: GestureDetector(
-                          onTap: () {
-                            Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                  builder: (context) =>
-                                      const NotificationScreen()),
-                            );
-                          },
-                          child: const Icon(
-                            Icons.notifications_none,
-                            color: Colors.black,
+                    ),
+                    const Text(
+                      'Statistics',
+                      style: TextStyle(
+                          fontSize: 22, fontWeight: FontWeight.w600),
+                    ),
+                    Container(
+                      width: 50,
+                      height: 50,
+                      decoration: BoxDecoration(
+                        color: Colors.grey[200],
+                        borderRadius: BorderRadius.circular(12),
+                        boxShadow: const [
+                          BoxShadow(
+                            color: Colors.black12,
+                            offset: Offset(2, 2),
+                            blurRadius: 4,
                           ),
+                        ],
+                      ),
+                      child: GestureDetector(
+                        onTap: () {
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                                builder: (context) =>
+                                    const NotificationScreen()),
+                          );
+                        },
+                        child: const Icon(
+                          Icons.notifications_none,
+                          color: Colors.black,
                         ),
                       ),
+                    ),
+                  ],
+                ),
+              ),
+              const SizedBox(height: 20),
+          
+              //-----------------------------Filter container-------------------------------------------
+              Expanded(
+                child: SingleChildScrollView(
+                  child: Column(
+                    children: [
+                       if (_selectedIndex != 1)
+                    Container(
+                      height: 130,
+                      width: double.infinity,
+                      decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(20),
+                        color: const Color(0xffEFF1FF),
+                        boxShadow: [
+                          BoxShadow(
+                            color: Colors.grey.withOpacity(0.2),
+                            spreadRadius: 2,
+                            blurRadius: 4,
+                            offset:
+                                const Offset(0, 2), // changes position of shadow
+                          ),
+                        ],
+                      ),
+                      child: Padding(
+                        padding: const EdgeInsets.symmetric(
+                            horizontal: 10.0, vertical: 10.0),
+                        child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              const Text(
+                                'Filter',
+                                style: TextStyle(
+                                    fontWeight: FontWeight.w600, fontSize: 18),
+                              ),
+                              const SizedBox(height: 10),
+                              Row(
+                                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                children: [
+                                  // First Dropdown
+                                  Expanded(
+                                    child: Container(
+                                      height: 50,
+                                      padding: const EdgeInsets.symmetric(
+                                          horizontal: 10),
+                                      decoration: BoxDecoration(
+                                        color: Colors.white,
+                                        borderRadius: BorderRadius.circular(12),
+                                      ),
+                                      child: DropdownButton<String>(
+                                        value: dropdownValue1,
+                                        icon: const Icon(Icons.arrow_drop_down),
+                                        iconSize: 24,
+                                        elevation: 16,
+                                        isExpanded: true,
+                                        style: const TextStyle(
+                                            color: Colors.black, fontSize: 16),
+                                        underline: const SizedBox(),
+                                        onChanged: (String? newValue) {
+                                          setState(() {
+                                            dropdownValue1 = newValue!;
+                                          });
+                                        },
+                                        items: <String>[
+                                          'Weekly',
+                                          'Monthly',
+                                        ].map<DropdownMenuItem<String>>(
+                                            (String value) {
+                                          return DropdownMenuItem<String>(
+                                            value: value,
+                                            child: Text(value),
+                                          );
+                                        }).toList(),
+                                      ),
+                                    ),
+                                  ),
+                                  const SizedBox(width: 16),
+                                  // Second Dropdown
+                                  Expanded(
+                                    child: Container(
+                                      height: 50,
+                                      padding: const EdgeInsets.symmetric(
+                                          horizontal: 10),
+                                      decoration: BoxDecoration(
+                                        color: Colors.white,
+                                        borderRadius: BorderRadius.circular(12),
+                                      ),
+                                      child: DropdownButton<String>(
+                                        value: dropdownValue2,
+                                        icon: const Icon(Icons.arrow_drop_down),
+                                        iconSize: 24,
+                                        elevation: 16,
+                                        isExpanded: true,
+                                        style: const TextStyle(
+                                            color: Colors.black, fontSize: 16),
+                                        underline: const SizedBox(),
+                                        onChanged: (String? newValue) {
+                                          setState(() {
+                                            dropdownValue2 = newValue!;
+                                          });
+                                        },
+                                        items: <String>[
+                                          'Select',
+                                          'Late Arrival',
+                                          'Absent',
+                                          'On Time',
+                                          'Early Out',
+                                          'Present'
+                                        ].map<DropdownMenuItem<String>>(
+                                            (String value) {
+                                          return DropdownMenuItem<String>(
+                                            value: value,
+                                            child: Text(value),
+                                          );
+                                        }).toList(),
+                                      ),
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            ]),
+                      ),
+                    ),
+                             
+                            
+                            
+                            
+                  SizedBox(
+                    height: 20,
+                  ),
+                            
+                            
+                  if (dropdownValue1 == 'Weekly' && dropdownValue2 == 'Late Arrival' && _selectedIndex != 1)
+                    _buildWeeklyAttendance('Late Arrival Details', Color(0xffF6C15B),dropdownValue2),
+                            
+                  if (dropdownValue1 == 'Weekly' && dropdownValue2 == 'Absent' && _selectedIndex != 1)
+                    _buildWeeklyAttendance('Absent Details', Color(0xffEC5851),dropdownValue2),
+                            
+                  if (dropdownValue1 == 'Weekly' && dropdownValue2 == 'On Time' && _selectedIndex != 1)
+                    _buildWeeklyAttendance('On Time Details', Color(0xff22AF41),dropdownValue2),
+                            
+                  if (dropdownValue1 == 'Weekly' && dropdownValue2 == 'Early Out' && _selectedIndex != 1)
+                    _buildWeeklyAttendance(
+                        'Early Out Details', Color(0xffF07E25),dropdownValue2),
+                  if (dropdownValue1 == 'Weekly' && dropdownValue2 == 'Present' && _selectedIndex != 1)
+                    _buildWeeklyAttendance(
+                      'Present Details',
+                      Color(0xff8E71DF),dropdownValue2
+                    ),
+                    
+                  if (dropdownValue1 == 'Monthly' && dropdownValue2 == 'Late Arrival' && _selectedIndex != 1)
+                    _buildMonthlyAttendance('Late Arrival Details',Color(0xffF6C15B),dropdownValue2),
+                            
+                            
+                  if (dropdownValue1 == 'Monthly' && dropdownValue2 == 'Absent'&& _selectedIndex != 1)
+                    _buildMonthlyAttendance('Absent Details', Color(0xffEC5851),dropdownValue2),
+                            
+                   if (dropdownValue1 == 'Monthly' && dropdownValue2 == 'On Time'&& _selectedIndex != 1)
+                    _buildMonthlyAttendance('On Time Details', Color(0xff22AF41),dropdownValue2),
+                            
+                   if (dropdownValue1 == 'Monthly' && dropdownValue2 == 'Early Out'&& _selectedIndex != 1)
+                    _buildMonthlyAttendance(
+                        'Early Out Details', Color(0xffF07E25),dropdownValue2),
+                  if (dropdownValue1 == 'Monthly' && dropdownValue2 == 'Present'&& _selectedIndex != 1)
+                    _buildMonthlyAttendance(
+                      'Present Details',
+                      Color(0xff8E71DF),dropdownValue2
+                    ),
+                            
+                            
+                  //------------------------------------ygrt----------------------------------------------------
+                  if (dropdownValue2 != 'Present' &&
+                      dropdownValue2 != 'On Time' &&
+                      dropdownValue2 != 'Absent' &&
+                      dropdownValue2 != 'Early Out' &&
+                      dropdownValue2 != 'Late Arrival')
+                    Container(
+                      height: 65,
+                      width: double.infinity,
+                      decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(60),
+                        color: const Color(0xffEFF1FF),
+                        boxShadow: [
+                          BoxShadow(
+                            color: Colors.grey.withOpacity(0.2),
+                            spreadRadius: 2,
+                            blurRadius: 4,
+                            offset:
+                                const Offset(0, 2), // changes position of shadow
+                          ),
+                        ],
+                      ),
+                      child: Row(
+                        children: [
+                          _buildSegment('Details Stats', 0),
+                          _buildSegment('Graphical View', 1),
+                        ],
+                      ),
+                    ),
+                            
+                  if (dropdownValue2 != 'Present' &&
+                      dropdownValue2 != 'On Time' &&
+                      dropdownValue2 != 'Absent' &&
+                      dropdownValue2 != 'Early Out' &&
+                      dropdownValue2 != 'Late Arrival')
+                    if (dropdownValue1 == 'Weekly' && _selectedIndex == 0)
+                      const StatusBuilderWeekly(),
+                  if (dropdownValue2 != 'Present' &&
+                      dropdownValue2 != 'On Time' &&
+                      dropdownValue2 != 'Absent' &&
+                      dropdownValue2 != 'Early Out' &&
+                      dropdownValue2 != 'Late Arrival')
+                    if (dropdownValue1 == 'Monthly' && _selectedIndex == 0)
+                      const StatusBuiler(),
+                            
+                     if (dropdownValue1 == 'Weekly' && _selectedIndex == 1)
+                  GraphicalbuilerWeekly(),
+                         if (dropdownValue1 == 'Monthly' && _selectedIndex == 1)
+                              GraphicalbuilerMonthly()
+                      
                     ],
                   ),
                 ),
-                const SizedBox(height: 20),
-
-                //-----------------------------Filter container-------------------------------------------
-                if (_selectedIndex != 1)
-                  Container(
-                    height: 130,
-                    width: double.infinity,
-                    decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(20),
-                      color: const Color(0xffEFF1FF),
-                      boxShadow: [
-                        BoxShadow(
-                          color: Colors.grey.withOpacity(0.2),
-                          spreadRadius: 2,
-                          blurRadius: 4,
-                          offset:
-                              const Offset(0, 2), // changes position of shadow
-                        ),
-                      ],
-                    ),
-                    child: Padding(
-                      padding: const EdgeInsets.symmetric(
-                          horizontal: 10.0, vertical: 10.0),
-                      child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            const Text(
-                              'Filter',
-                              style: TextStyle(
-                                  fontWeight: FontWeight.w600, fontSize: 18),
-                            ),
-                            const SizedBox(height: 10),
-                            Row(
-                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                              children: [
-                                // First Dropdown
-                                Expanded(
-                                  child: Container(
-                                    height: 50,
-                                    padding: const EdgeInsets.symmetric(
-                                        horizontal: 10),
-                                    decoration: BoxDecoration(
-                                      color: Colors.white,
-                                      borderRadius: BorderRadius.circular(12),
-                                    ),
-                                    child: DropdownButton<String>(
-                                      value: dropdownValue1,
-                                      icon: const Icon(Icons.arrow_drop_down),
-                                      iconSize: 24,
-                                      elevation: 16,
-                                      isExpanded: true,
-                                      style: const TextStyle(
-                                          color: Colors.black, fontSize: 16),
-                                      underline: const SizedBox(),
-                                      onChanged: (String? newValue) {
-                                        setState(() {
-                                          dropdownValue1 = newValue!;
-                                        });
-                                      },
-                                      items: <String>[
-                                        'Weekly',
-                                        'Monthly',
-                                      ].map<DropdownMenuItem<String>>(
-                                          (String value) {
-                                        return DropdownMenuItem<String>(
-                                          value: value,
-                                          child: Text(value),
-                                        );
-                                      }).toList(),
-                                    ),
-                                  ),
-                                ),
-                                const SizedBox(width: 16),
-                                // Second Dropdown
-                                Expanded(
-                                  child: Container(
-                                    height: 50,
-                                    padding: const EdgeInsets.symmetric(
-                                        horizontal: 10),
-                                    decoration: BoxDecoration(
-                                      color: Colors.white,
-                                      borderRadius: BorderRadius.circular(12),
-                                    ),
-                                    child: DropdownButton<String>(
-                                      value: dropdownValue2,
-                                      icon: const Icon(Icons.arrow_drop_down),
-                                      iconSize: 24,
-                                      elevation: 16,
-                                      isExpanded: true,
-                                      style: const TextStyle(
-                                          color: Colors.black, fontSize: 16),
-                                      underline: const SizedBox(),
-                                      onChanged: (String? newValue) {
-                                        setState(() {
-                                          dropdownValue2 = newValue!;
-                                        });
-                                      },
-                                      items: <String>[
-                                        'Select',
-                                        'Late Arrival',
-                                        'Absent',
-                                        'On Time',
-                                        'Early Out',
-                                        'Present'
-                                      ].map<DropdownMenuItem<String>>(
-                                          (String value) {
-                                        return DropdownMenuItem<String>(
-                                          value: value,
-                                          child: Text(value),
-                                        );
-                                      }).toList(),
-                                    ),
-                                  ),
-                                ),
-                              ],
-                            ),
-                          ]),
-                    ),
-                  ),
+              )
              
-
-            
-
-                SizedBox(
-                  height: 20,
-                ),
-
-
-                if (dropdownValue1 == 'Weekly' && dropdownValue2 == 'Late Arrival' && _selectedIndex != 1)
-                  _buildWeeklyAttendance('Late Arrival Details', Color(0xffF6C15B),dropdownValue2),
-
-                if (dropdownValue1 == 'Weekly' && dropdownValue2 == 'Absent' && _selectedIndex != 1)
-                  _buildWeeklyAttendance('Absent Details', Color(0xffEC5851),dropdownValue2),
-
-                if (dropdownValue1 == 'Weekly' && dropdownValue2 == 'On Time' && _selectedIndex != 1)
-                  _buildWeeklyAttendance('On Time Details', Color(0xff22AF41),dropdownValue2),
-
-                if (dropdownValue1 == 'Weekly' && dropdownValue2 == 'Early Out' && _selectedIndex != 1)
-                  _buildWeeklyAttendance(
-                      'Early Out Details', Color(0xffF07E25),dropdownValue2),
-                if (dropdownValue1 == 'Weekly' && dropdownValue2 == 'Present' && _selectedIndex != 1)
-                  _buildWeeklyAttendance(
-                    'Present Details',
-                    Color(0xff8E71DF),dropdownValue2
-                  ),
-                  
-                if (dropdownValue1 == 'Monthly' && dropdownValue2 == 'Late Arrival' && _selectedIndex != 1)
-                  _buildMonthlyAttendance('Late Arrival Details',Color(0xffF6C15B),dropdownValue2),
-
-
-                if (dropdownValue1 == 'Monthly' && dropdownValue2 == 'Absent'&& _selectedIndex != 1)
-                  _buildMonthlyAttendance('Absent Details', Color(0xffEC5851),dropdownValue2),
-
-                 if (dropdownValue1 == 'Monthly' && dropdownValue2 == 'On Time'&& _selectedIndex != 1)
-                  _buildMonthlyAttendance('On Time Details', Color(0xff22AF41),dropdownValue2),
-
-                 if (dropdownValue1 == 'Monthly' && dropdownValue2 == 'Early Out'&& _selectedIndex != 1)
-                  _buildMonthlyAttendance(
-                      'Early Out Details', Color(0xffF07E25),dropdownValue2),
-                if (dropdownValue1 == 'Monthly' && dropdownValue2 == 'Present'&& _selectedIndex != 1)
-                  _buildMonthlyAttendance(
-                    'Present Details',
-                    Color(0xff8E71DF),dropdownValue2
-                  ),
-
-
-                //------------------------------------ygrt----------------------------------------------------
-                if (dropdownValue2 != 'Present' &&
-                    dropdownValue2 != 'On Time' &&
-                    dropdownValue2 != 'Absent' &&
-                    dropdownValue2 != 'Early Out' &&
-                    dropdownValue2 != 'Late Arrival')
-                  Container(
-                    height: 65,
-                    width: double.infinity,
-                    decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(60),
-                      color: const Color(0xffEFF1FF),
-                      boxShadow: [
-                        BoxShadow(
-                          color: Colors.grey.withOpacity(0.2),
-                          spreadRadius: 2,
-                          blurRadius: 4,
-                          offset:
-                              const Offset(0, 2), // changes position of shadow
-                        ),
-                      ],
-                    ),
-                    child: Row(
-                      children: [
-                        _buildSegment('Details Stats', 0),
-                        _buildSegment('Graphical View', 1),
-                      ],
-                    ),
-                  ),
-
-                if (dropdownValue2 != 'Present' &&
-                    dropdownValue2 != 'On Time' &&
-                    dropdownValue2 != 'Absent' &&
-                    dropdownValue2 != 'Early Out' &&
-                    dropdownValue2 != 'Late Arrival')
-                  if (dropdownValue1 == 'Weekly' && _selectedIndex == 0)
-                    const StatusBuilderWeekly(),
-                if (dropdownValue2 != 'Present' &&
-                    dropdownValue2 != 'On Time' &&
-                    dropdownValue2 != 'Absent' &&
-                    dropdownValue2 != 'Early Out' &&
-                    dropdownValue2 != 'Late Arrival')
-                  if (dropdownValue1 == 'Monthly' && _selectedIndex == 0)
-                    const StatusBuiler(),
-
-                   if (dropdownValue1 == 'Weekly' && _selectedIndex == 1)
-                GraphicalbuilerWeekly(),
-                       if (dropdownValue1 == 'Monthly' && _selectedIndex == 1)
-              GraphicalbuilerMonthly()
-
-                //-------------------------Weekly Log Times------------------------------------------
-              ],
-            ),
+          
+              //-------------------------Weekly Log Times------------------------------------------
+            ],
           ),
         ),
       ),

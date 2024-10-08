@@ -364,7 +364,13 @@ class _GraphicalbuilerState extends State<GraphicalbuilerWeekly> {
                                 BarChartRodData(
                                     toY: weeklyHours[5] ?? 0,
                                     color: Color(0xff9478F7),
-                                    width: 8)
+                                    width: 22,
+                                    
+                             backDrawRodData: BackgroundBarChartRodData(
+                      show: true,
+                      toY: 8,
+                      color: Colors.white,
+                    ),)
                               ]),
                             ],
                           ),
