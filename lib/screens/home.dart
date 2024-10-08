@@ -557,9 +557,10 @@ class _HomeScreenState extends State<HomeScreen> {
                                   ),
                                 ],
                               )),
-                          
+                       
                           Expanded(
                             child: SingleChildScrollView(
+                                                 
                               child: Column(
                                 children: [
                                   SizedBox(height: 20),
