@@ -31,6 +31,7 @@ class _HomeScreenState extends State<HomeScreen> {
   final FirebaseAuth _auth = FirebaseAuth.instance;
   String? _imageUrl;
   bool isCheck = false;
+  bool _isLoading = false;
 
   CalendarFormat _calendarFormat = CalendarFormat.month;
   DateTime _focusedDay = DateTime.now();
@@ -94,6 +95,7 @@ class _HomeScreenState extends State<HomeScreen> {
     setState(() {
       _selectedDay = selectedDay;
       _focusedDay = focusedDay;
+      _isLoading = true;
     });
 
     String userId = FirebaseAuth.instance.currentUser!.uid;
@@ -101,6 +103,7 @@ class _HomeScreenState extends State<HomeScreen> {
       data = await _getAttendanceDetails(userId, selectedDay);
 
       setState(() {
+        _isLoading = false;
         if (data != null) {
           _showAttendanceDetails(data!);
         } else {
@@ -110,6 +113,7 @@ class _HomeScreenState extends State<HomeScreen> {
     } catch (e) {
       log('Error fetching attendance details: $e');
       setState(() {
+        _isLoading = false;
         _showNoDataMessage();
       });
     }
@@ -429,14 +433,14 @@ class _HomeScreenState extends State<HomeScreen> {
                                     )
                                   ]);
                                 }
-                      
+
                                 var userData = snapshot.data!.data()
                                     as Map<String, dynamic>;
                                 String displayName =
                                     userData['name'] ?? "No Name Provided";
                                 String email =
                                     userData['email'] ?? "No Name Provided";
-                      
+
                                 return Row(children: [
                                   if (_imageUrl != null &&
                                       _imageUrl!.isNotEmpty)
@@ -535,10 +539,10 @@ class _HomeScreenState extends State<HomeScreen> {
                                             child: Text(
                                                 'Error: ${snapshot.error}'));
                                       }
-                                                  
+
                                       if (snapshot.hasData) {
                                         final data = snapshot.data!;
-                                                  
+
                                         if (data['present'] == 0 &&
                                             data['late'] == 0 &&
                                             data['absent'] == 0) {
@@ -546,21 +550,20 @@ class _HomeScreenState extends State<HomeScreen> {
                                               child: Text(
                                                   'No attendance records available for this month.'));
                                         }
-                                                  
+
                                         return Monthlyattendance(
                                           presentCount: data['present']!,
                                           lateCount: data['late']!,
                                           absentCount: data['absent']!,
                                         );
                                       }
-                                                  
+
                                       return Center(
                                           child: Text('No data available.'));
                                     },
                                   ),
                                 ],
                               )),
-                          
                           Expanded(
                             child: SingleChildScrollView(
                               child: Column(
@@ -585,7 +588,8 @@ class _HomeScreenState extends State<HomeScreen> {
                                       availableCalendarFormats: const {
                                         CalendarFormat.month: 'Month',
                                       },
-                                      availableGestures: AvailableGestures.horizontalSwipe,
+                                      availableGestures:
+                                          AvailableGestures.horizontalSwipe,
                                       headerVisible: true,
                                       selectedDayPredicate: (day) {
                                         return isSameDay(_selectedDay, day);
@@ -603,56 +607,73 @@ class _HomeScreenState extends State<HomeScreen> {
                                       },
                                     ),
                                   ),
-                                  SizedBox(
-                                    height: 20,
-                                  ),
-                                  Container(
-                                    height: 142,
-                                    padding: EdgeInsets.symmetric(vertical: 8),
-                                    decoration: BoxDecoration(
-                                      borderRadius: BorderRadius.circular(12),
-                                      color: Color(0xffEFF1FF),
-                                      boxShadow: [
-                                        BoxShadow(
-                                          color: Colors.black12,
-                                          offset: Offset(4, 4),
-                                          blurRadius: 4,
+                                  SizedBox(height: 20),
+
+                                  // Attendance Details Container
+                                  _isLoading
+                                      ? CircularProgressIndicator()
+                                      : Container(
+                                          height: 142,
+                                          padding:
+                                              EdgeInsets.symmetric(vertical: 8),
+                                          decoration: BoxDecoration(
+                                            borderRadius:
+                                                BorderRadius.circular(12),
+                                            color: Color(0xffEFF1FF),
+                                            boxShadow: [
+                                              BoxShadow(
+                                                color: Colors.black12,
+                                                offset: Offset(4, 4),
+                                                blurRadius: 4,
+                                              ),
+                                            ],
+                                          ),
+                                          child: Row(
+                                            mainAxisAlignment:
+                                                MainAxisAlignment.center,
+                                            crossAxisAlignment:
+                                                CrossAxisAlignment.start,
+                                            children: [
+                                              Center(
+                                                child: Column(
+                                                  crossAxisAlignment:
+                                                      CrossAxisAlignment.start,
+                                                  children: [
+                                                    Text(
+                                                      'Attendance Details',
+                                                      style: TextStyle(
+                                                        fontSize: 18,
+                                                        fontWeight:
+                                                            FontWeight.w600,
+                                                      ),
+                                                    ),
+                                                    SizedBox(height: 6),
+                                                    Builder(
+                                                      builder: (context) {
+                                                        // Show loader if data is being fetched
+
+                                                        // Show 'No data' if data is null
+                                                        if (data == null) {
+                                                          return DailyEmptyAttendance(
+                                                            selectedDay:
+                                                                _selectedDay,
+                                                          );
+                                                        }
+
+                                                        // Show the fetched attendance data
+                                                        return DailyAttendance(
+                                                          data: data!,
+                                                          selectedDay:
+                                                              _selectedDay,
+                                                        );
+                                                      },
+                                                    ),
+                                                  ],
+                                                ),
+                                              ),
+                                            ],
+                                          ),
                                         ),
-                                      ],
-                                    ),
-                                    child: Row(
-                                      mainAxisAlignment:
-                                          MainAxisAlignment.center,
-                                      crossAxisAlignment:
-                                          CrossAxisAlignment.start,
-                                      children: [
-                                        Center(
-                                            child: Column(
-                                          crossAxisAlignment:
-                                              CrossAxisAlignment.start,
-                                          children: [
-                                            Text(
-                                              'Attendance Details',
-                                              style: TextStyle(
-                                                  fontSize: 18,
-                                                  fontWeight: FontWeight.w600),
-                                            ),
-                                            SizedBox(height: 6),
-                                            Builder(builder: (context) {
-                                              if (data == null) {
-                                                return DailyEmptyAttendance(
-                                                    selectedDay: _selectedDay);
-                                              }
-                                                              
-                                              return DailyAttendance(
-                                                  data: data,
-                                                  selectedDay: _selectedDay);
-                                            }),
-                                          ],
-                                        )),
-                                      ],
-                                    ),
-                                  ),
                                 ],
                               ),
                             ),
