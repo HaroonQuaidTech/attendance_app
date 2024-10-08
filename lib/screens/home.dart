@@ -31,6 +31,7 @@ class _HomeScreenState extends State<HomeScreen> {
   final FirebaseAuth _auth = FirebaseAuth.instance;
   String? _imageUrl;
   bool isCheck = false;
+  bool _isLoading = false;
 
   CalendarFormat _calendarFormat = CalendarFormat.month;
   DateTime _focusedDay = DateTime.now();
@@ -79,8 +80,11 @@ class _HomeScreenState extends State<HomeScreen> {
     }
   }
 
-  void _showNoDataMessage() {}
-    @override
+  void _showNoDataMessage() {
+    log('No attendance data available for the selected day');
+  }
+
+  @override
   void initState() {
     _loadUserProfile();
     super.initState();
@@ -91,6 +95,7 @@ class _HomeScreenState extends State<HomeScreen> {
     setState(() {
       _selectedDay = selectedDay;
       _focusedDay = focusedDay;
+      _isLoading = true;
     });
 
     String userId = FirebaseAuth.instance.currentUser!.uid;
@@ -98,6 +103,7 @@ class _HomeScreenState extends State<HomeScreen> {
       data = await _getAttendanceDetails(userId, selectedDay);
 
       setState(() {
+        _isLoading = false;
         if (data != null) {
           _showAttendanceDetails(data!);
         } else {
@@ -107,6 +113,7 @@ class _HomeScreenState extends State<HomeScreen> {
     } catch (e) {
       log('Error fetching attendance details: $e');
       setState(() {
+        _isLoading = false;
         _showNoDataMessage();
       });
     }
@@ -244,8 +251,6 @@ class _HomeScreenState extends State<HomeScreen> {
       ),
     );
   }
-
-
 
   @override
   Widget build(BuildContext context) {
@@ -600,55 +605,68 @@ class _HomeScreenState extends State<HomeScreen> {
                                 },
                               ),
                             ),
+                            SizedBox(height: 20),
 
-                            SizedBox(
-                              height: 20,
-                            ),
-                            Container(
-                              height: 142,
-                              padding: EdgeInsets.symmetric(vertical: 8),
-                              decoration: BoxDecoration(
-                                borderRadius: BorderRadius.circular(12),
-                                color: Color(0xffEFF1FF),
-                                boxShadow: [
-                                  BoxShadow(
-                                    color: Colors.black12,
-                                    offset: Offset(4, 4),
-                                    blurRadius: 4,
+                            // Attendance Details Container
+                            _isLoading
+                                ? CircularProgressIndicator()
+                                : Container(
+                                    height: 142,
+                                    padding: EdgeInsets.symmetric(vertical: 8),
+                                    decoration: BoxDecoration(
+                                      borderRadius: BorderRadius.circular(12),
+                                      color: Color(0xffEFF1FF),
+                                      boxShadow: [
+                                        BoxShadow(
+                                          color: Colors.black12,
+                                          offset: Offset(4, 4),
+                                          blurRadius: 4,
+                                        ),
+                                      ],
+                                    ),
+                                    child: Row(
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.center,
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.start,
+                                      children: [
+                                        Center(
+                                          child: Column(
+                                            crossAxisAlignment:
+                                                CrossAxisAlignment.start,
+                                            children: [
+                                              Text(
+                                                'Attendance Details',
+                                                style: TextStyle(
+                                                  fontSize: 18,
+                                                  fontWeight: FontWeight.w600,
+                                                ),
+                                              ),
+                                              SizedBox(height: 6),
+                                              Builder(
+                                                builder: (context) {
+                                                  // Show loader if data is being fetched
+
+                                                  // Show 'No data' if data is null
+                                                  if (data == null) {
+                                                    return DailyEmptyAttendance(
+                                                      selectedDay: _selectedDay,
+                                                    );
+                                                  }
+
+                                                  // Show the fetched attendance data
+                                                  return DailyAttendance(
+                                                    data: data!,
+                                                    selectedDay: _selectedDay,
+                                                  );
+                                                },
+                                              ),
+                                            ],
+                                          ),
+                                        ),
+                                      ],
+                                    ),
                                   ),
-                                ],
-                              ),
-                              child: Row(
-                                mainAxisAlignment: MainAxisAlignment.center,
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: [
-                                  Center(
-                                      child: Column(
-                                    crossAxisAlignment:
-                                        CrossAxisAlignment.start,
-                                    children: [
-                                      Text(
-                                        'Attendance Details',
-                                        style: TextStyle(
-                                            fontSize: 18,
-                                            fontWeight: FontWeight.w600),
-                                      ),
-                                      SizedBox(height: 6),
-                                      Builder(builder: (context) {
-                                        if (data == null) {
-                                          return DailyEmptyAttendance(
-                                              selectedDay: _selectedDay);
-                                        }
-
-                                        return DailyAttendance(
-                                            data: data,
-                                            selectedDay: _selectedDay);
-                                      }),
-                                    ],
-                                  )),
-                                ],
-                              ),
-                            ),
                             SizedBox(height: 10),
                           ],
                         ),
