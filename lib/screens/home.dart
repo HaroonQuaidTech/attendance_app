@@ -81,7 +81,6 @@ class _HomeScreenState extends State<HomeScreen> {
   }
 
   void _showNoDataMessage() {
-    log('No attendance data available for the selected day');
   }
 
   @override
