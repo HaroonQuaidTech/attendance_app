@@ -267,10 +267,13 @@ class _HomeScreenState extends State<HomeScreen> {
           context: context,
           builder: (BuildContext context) {
             return Stack(
-              alignment: Alignment.topCenter,
+              alignment: Alignment.center,
+              clipBehavior:
+                  Clip.none, // Ensures the icon can overflow outside the dialog
               children: [
                 AlertDialog(
-                  contentPadding: const EdgeInsets.only(top: 60.0),
+                  contentPadding: EdgeInsets.only(
+                      top: MediaQuery.of(context).size.height * 0.1),
                   backgroundColor: Colors.white,
                   shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(15),
@@ -280,21 +283,24 @@ class _HomeScreenState extends State<HomeScreen> {
                       Text(
                         'Are you Sure',
                         style: TextStyle(
-                          fontSize: 18,
+                          fontSize: MediaQuery.of(context).size.width *
+                              0.05, // Responsive font size
                           fontWeight: FontWeight.bold,
                         ),
                         textAlign: TextAlign.center,
                       ),
                       Text(
-                        'Do you want to exit app ?',
-                        style: const TextStyle(
+                        'Do you want to exit the app?',
+                        style: TextStyle(
                           fontWeight: FontWeight.normal,
                           color: Colors.black,
-                          fontSize: 14,
+                          fontSize: MediaQuery.of(context).size.width *
+                              0.04, // Responsive font size
                         ),
                         textAlign: TextAlign.center,
                       ),
-                      const SizedBox(height: 15),
+                      SizedBox(
+                          height: MediaQuery.of(context).size.height * 0.02),
                       Row(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
@@ -303,8 +309,10 @@ class _HomeScreenState extends State<HomeScreen> {
                               Navigator.of(context).pop();
                             },
                             child: Container(
-                              width: 110,
-                              height: 30,
+                              width: MediaQuery.of(context).size.width *
+                                  0.3, // Responsive width
+                              height: MediaQuery.of(context).size.height *
+                                  0.05, // Responsive height
                               decoration: BoxDecoration(
                                 color: Colors.grey[400],
                                 borderRadius: BorderRadius.circular(5),
@@ -312,8 +320,10 @@ class _HomeScreenState extends State<HomeScreen> {
                               child: Center(
                                 child: Text(
                                   'Cancel',
-                                  style: const TextStyle(
-                                    fontSize: 14,
+                                  style: TextStyle(
+                                    fontSize:
+                                        MediaQuery.of(context).size.width *
+                                            0.04, // Responsive font size
                                     color: Colors.white,
                                   ),
                                 ),
@@ -325,8 +335,10 @@ class _HomeScreenState extends State<HomeScreen> {
                               exit(0);
                             },
                             child: Container(
-                              width: 110,
-                              height: 30,
+                              width: MediaQuery.of(context).size.width *
+                                  0.3, // Responsive width
+                              height: MediaQuery.of(context).size.height *
+                                  0.05, // Responsive height
                               decoration: BoxDecoration(
                                 color: const Color(0xff7647EB),
                                 borderRadius: BorderRadius.circular(5),
@@ -334,8 +346,10 @@ class _HomeScreenState extends State<HomeScreen> {
                               child: Center(
                                 child: Text(
                                   'Continue',
-                                  style: const TextStyle(
-                                    fontSize: 14,
+                                  style: TextStyle(
+                                    fontSize:
+                                        MediaQuery.of(context).size.width *
+                                            0.04, // Responsive font size
                                     color: Colors.white,
                                   ),
                                 ),
@@ -348,11 +362,11 @@ class _HomeScreenState extends State<HomeScreen> {
                   ),
                 ),
                 Positioned(
-                  top: 260,
+                  top: MediaQuery.of(context).size.height * 0.34,
                   child: Image.asset(
                     'assets/warning_alert.png',
-                    width: 60, // Adjust as needed
-                    height: 60, // Adjust as needed
+                    width: MediaQuery.of(context).size.width * 0.15,
+                    height: MediaQuery.of(context).size.width * 0.15,
                   ),
                 ),
               ],
@@ -496,8 +510,9 @@ class _HomeScreenState extends State<HomeScreen> {
                                         Navigator.push(
                                           context,
                                           MaterialPageRoute(
-                                              builder: (context) =>
-                                                  NotificationScreen()),
+                                            builder: (context) =>
+                                                NotificationScreen(),
+                                          ),
                                         );
                                       },
                                       child: Icon(
@@ -564,10 +579,8 @@ class _HomeScreenState extends State<HomeScreen> {
                                   ),
                                 ],
                               )),
-                       
                           Expanded(
                             child: SingleChildScrollView(
-                                                 
                               child: Column(
                                 children: [
                                   SizedBox(height: 20),

@@ -328,7 +328,7 @@ class _CheckinScreenState extends State<CheckinScreen> {
                           ],
                         ),
                         SizedBox(
-                            height: MediaQuery.of(context).size.height * 0.1),
+                            height: MediaQuery.of(context).size.height * 0.14),
                         //--------------------Check iN-------------------------
                         if (checkIn == null && checkOut == null)
                           GestureDetector(
@@ -444,18 +444,17 @@ class _CheckinScreenState extends State<CheckinScreen> {
                               showDialog(
                                 context: context,
                                 builder: (BuildContext context) {
-                                  // Get the screen width and height
-                                  final screenHeight =
-                                      MediaQuery.of(context).size.height;
-                                  final screenWidth =
-                                      MediaQuery.of(context).size.width;
-
                                   return Stack(
-                                    alignment: Alignment.topCenter,
+                                    alignment: Alignment.center,
+                                    clipBehavior: Clip
+                                        .none, // Ensures the icon can overflow outside the dialog
                                     children: [
                                       AlertDialog(
-                                        contentPadding:
-                                            const EdgeInsets.only(top: 60.0),
+                                        contentPadding: EdgeInsets.only(
+                                            top: MediaQuery.of(context)
+                                                    .size
+                                                    .height *
+                                                0.1),
                                         backgroundColor: Colors.white,
                                         shape: RoundedRectangleBorder(
                                           borderRadius:
@@ -463,24 +462,34 @@ class _CheckinScreenState extends State<CheckinScreen> {
                                         ),
                                         title: Column(
                                           children: [
-                                            const Text(
+                                            Text(
                                               'Are you Sure',
                                               style: TextStyle(
-                                                fontSize: 18,
+                                                fontSize: MediaQuery.of(context)
+                                                        .size
+                                                        .width *
+                                                    0.05, // Responsive font size
                                                 fontWeight: FontWeight.bold,
                                               ),
                                               textAlign: TextAlign.center,
                                             ),
-                                            const Text(
+                                            Text(
                                               'Do you want to checkout ?',
                                               style: TextStyle(
                                                 fontWeight: FontWeight.normal,
                                                 color: Colors.black,
-                                                fontSize: 14,
+                                                fontSize: MediaQuery.of(context)
+                                                        .size
+                                                        .width *
+                                                    0.04, // Responsive font size
                                               ),
                                               textAlign: TextAlign.center,
                                             ),
-                                            const SizedBox(height: 15),
+                                            SizedBox(
+                                                height: MediaQuery.of(context)
+                                                        .size
+                                                        .height *
+                                                    0.02),
                                             Row(
                                               mainAxisAlignment:
                                                   MainAxisAlignment
@@ -491,9 +500,15 @@ class _CheckinScreenState extends State<CheckinScreen> {
                                                     Navigator.of(context).pop();
                                                   },
                                                   child: Container(
-                                                    width: screenWidth *
+                                                    width: MediaQuery.of(
+                                                                context)
+                                                            .size
+                                                            .width *
                                                         0.3, // Responsive width
-                                                    height: screenHeight *
+                                                    height: MediaQuery.of(
+                                                                context)
+                                                            .size
+                                                            .height *
                                                         0.05, // Responsive height
                                                     decoration: BoxDecoration(
                                                       color: Colors.grey[400],
@@ -501,11 +516,15 @@ class _CheckinScreenState extends State<CheckinScreen> {
                                                           BorderRadius.circular(
                                                               5),
                                                     ),
-                                                    child: const Center(
+                                                    child: Center(
                                                       child: Text(
                                                         'Cancel',
                                                         style: TextStyle(
-                                                          fontSize: 14,
+                                                          fontSize: MediaQuery.of(
+                                                                      context)
+                                                                  .size
+                                                                  .width *
+                                                              0.04, // Responsive font size
                                                           color: Colors.white,
                                                         ),
                                                       ),
@@ -540,11 +559,21 @@ class _CheckinScreenState extends State<CheckinScreen> {
 
                                                     await _attendanceService
                                                         .checkOut(userId);
+                                                    // ignore: use_build_context_synchronously
+                                                    Navigator.pop(context);
+                                                    // ignore: use_build_context_synchronously
+                                                    Navigator.pop(context);
                                                   },
                                                   child: Container(
-                                                    width: screenWidth *
+                                                    width: MediaQuery.of(
+                                                                context)
+                                                            .size
+                                                            .width *
                                                         0.3, // Responsive width
-                                                    height: screenHeight *
+                                                    height: MediaQuery.of(
+                                                                context)
+                                                            .size
+                                                            .height *
                                                         0.05, // Responsive height
                                                     decoration: BoxDecoration(
                                                       color: const Color(
@@ -553,11 +582,15 @@ class _CheckinScreenState extends State<CheckinScreen> {
                                                           BorderRadius.circular(
                                                               5),
                                                     ),
-                                                    child: const Center(
+                                                    child: Center(
                                                       child: Text(
                                                         'Checkout',
                                                         style: TextStyle(
-                                                          fontSize: 14,
+                                                          fontSize: MediaQuery.of(
+                                                                      context)
+                                                                  .size
+                                                                  .width *
+                                                              0.04, // Responsive font size
                                                           color: Colors.white,
                                                         ),
                                                       ),
@@ -569,13 +602,21 @@ class _CheckinScreenState extends State<CheckinScreen> {
                                           ],
                                         ),
                                       ),
-                                      // Responsively positioned warning icon
                                       Positioned(
-                                        top: screenHeight * 0.33,
+                                        top: MediaQuery.of(context)
+                                                .size
+                                                .height *
+                                            0.34, // Responsive top position for the image
                                         child: Image.asset(
                                           'assets/warning_alert.png',
-                                          width: screenWidth * 0.15,
-                                          height: screenHeight * 0.08,
+                                          width: MediaQuery.of(context)
+                                                  .size
+                                                  .width *
+                                              0.15, // Responsive width
+                                          height: MediaQuery.of(context)
+                                                  .size
+                                                  .width *
+                                              0.15, // Responsive height
                                         ),
                                       ),
                                     ],
