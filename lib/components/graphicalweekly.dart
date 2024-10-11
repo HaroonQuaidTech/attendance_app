@@ -22,7 +22,6 @@ class _GraphicalbuilerState extends State<GraphicalbuilerWeekly> {
 
   Future<List<Map<String, dynamic>>?> fetchWeeklyAttendance(
       String userId) async {
-    // Fetching weekly attendance data for the current week.
     try {
       DateTime now = DateTime.now();
       DateTime monday = now.subtract(Duration(days: now.weekday - 1));
@@ -46,7 +45,6 @@ class _GraphicalbuilerState extends State<GraphicalbuilerWeekly> {
 
       List<DocumentSnapshot> snapshots = await Future.wait(futures);
 
-      // Parse the snapshots into a list of maps
       List<Map<String, dynamic>> weeklyData = snapshots.map((doc) {
         return doc.exists
             ? Map<String, dynamic>.from(doc.data() as Map)
@@ -56,7 +54,7 @@ class _GraphicalbuilerState extends State<GraphicalbuilerWeekly> {
       return weeklyData;
     } catch (e) {
       log('Error fetching weekly attendance: $e');
-      return null; // Return null if an error occurs
+      return null;
     }
   }
 
@@ -153,13 +151,12 @@ class _GraphicalbuilerState extends State<GraphicalbuilerWeekly> {
     return attendanceStats;
   }
 
-  Map<String, double> weeklyHoursss = {
-    "Present": 0,
-    "Absent": 0,
-    "Early Out": 0,
-    "Late Arrival": 0,
-  };
-
+Map<String, double> weeklyHoursss = {
+  'Present': 15,     // hours present
+  'Absent': 3,       // days absent
+  'Late Arrival': 2, // late days
+  'Early Out': 1,    // early check-outs
+};
   @override
   void initState() {
     super.initState();
@@ -182,7 +179,7 @@ class _GraphicalbuilerState extends State<GraphicalbuilerWeekly> {
         builder: (context, snapshot) {
           if (snapshot.connectionState == ConnectionState.waiting) {
             return Padding(
-              padding: const EdgeInsets.only(top: 80.0),
+              padding: const EdgeInsets.only(top: 240.0),
               child: CircularProgressIndicator(),
             );
           } else if (snapshot.hasError) {
@@ -251,7 +248,7 @@ class _GraphicalbuilerState extends State<GraphicalbuilerWeekly> {
                         child: BarChart(
                           BarChartData(
                             alignment: BarChartAlignment.spaceAround,
-                            maxY: 8,
+                            maxY: 9,
                             barTouchData: BarTouchData(enabled: false),
                             titlesData: FlTitlesData(
                               leftTitles: AxisTitles(
@@ -272,38 +269,62 @@ class _GraphicalbuilerState extends State<GraphicalbuilerWeekly> {
                                 sideTitles: SideTitles(
                                   showTitles: true,
                                   getTitlesWidget: (value, meta) {
-                                    switch (value.toInt()) {
+                                    int dayIndex = value.toInt();
+                                    bool hasData = (weeklyHours[dayIndex + 1] ??
+                                            0) >
+                                        0; // Adjust index for your data map (1 for Mon, 2 for Tue, etc.)
+
+                                    // Get the current day of the week (Monday is 1, ..., Sunday is 7)
+                                    int currentDayOfWeek =
+                                        DateTime.now().weekday;
+
+                                    // Only show titles for Monday to Friday, and make sure not to show future days.
+                                    if (currentDayOfWeek > 5) {
+                                      currentDayOfWeek =
+                                          5; // If it's Saturday or Sunday, cap it at Friday
+                                    }
+
+                                    // Don't show future days (if dayIndex exceeds currentDayOfWeek - 1, it's a future day)
+                                    if (dayIndex >= currentDayOfWeek) {
+                                      return const Text(
+                                          ''); // Return empty text for future days
+                                    }
+
+                                    // Set the text color based on data presence
+                                    Color textColor =
+                                        hasData ? Colors.black : Colors.red;
+
+                                    switch (dayIndex) {
                                       case 0:
                                         return Text('Mon',
                                             style: TextStyle(
-                                                color: Colors.black,
+                                                color: textColor,
                                                 fontSize: 15,
                                                 fontWeight: FontWeight.w600));
                                       case 1:
                                         return Text('Tue',
                                             style: TextStyle(
-                                                color: Colors.black,
+                                                color: textColor,
                                                 fontSize: 15,
                                                 fontWeight: FontWeight.w600));
                                       case 2:
                                         return Text('Wed',
                                             style: TextStyle(
-                                                color: Colors.black,
+                                                color: textColor,
                                                 fontSize: 15,
                                                 fontWeight: FontWeight.w600));
                                       case 3:
                                         return Text('Thur',
                                             style: TextStyle(
-                                                color: Colors.black,
+                                                color: textColor,
                                                 fontSize: 15,
                                                 fontWeight: FontWeight.w600));
                                       case 4:
                                         return Text('Fri',
                                             style: TextStyle(
-                                                color: Colors.black,
+                                                color: textColor,
                                                 fontSize: 15,
                                                 fontWeight: FontWeight.w600));
-
                                       default:
                                         return Text('');
                                     }
@@ -320,58 +341,26 @@ class _GraphicalbuilerState extends State<GraphicalbuilerWeekly> {
                             borderData: FlBorderData(show: false),
                             gridData: FlGridData(show: false),
                             barGroups: [
-                              BarChartGroupData(x: 0, barRods: [
-                                BarChartRodData(
-                                    toY: weeklyHours[1] ?? 0,
-                                    color: Color(0xff9478F7),
-                                    width: 22,  backDrawRodData: BackgroundBarChartRodData(
-                      show: true,
-                      toY: 8,
-                      color: Colors.white,
-                    ),)
-                              ]),
-                              BarChartGroupData(x: 1, barRods: [
-                                BarChartRodData(
-                                    toY: weeklyHours[2] ?? 0,
-                                    color: Color(0xff9478F7),
-                                    width: 22,  backDrawRodData: BackgroundBarChartRodData(
-                      show: true,
-                      toY: 8,
-                      color: Colors.white,
-                    ),)
-                              ]),
-                              BarChartGroupData(x: 2, barRods: [
-                                BarChartRodData(
-                                    toY: weeklyHours[3] ?? 0,
-                                    color: Color(0xff9478F7),
-                                    width: 22,  backDrawRodData: BackgroundBarChartRodData(
-                      show: true,
-                      toY: 8,
-                      color: Colors.white,
-                    ),)
-                              ]),
-                              BarChartGroupData(x: 3, barRods: [
-                                BarChartRodData(
-                                    toY: weeklyHours[4] ?? 0,
-                                    color: Color(0xff9478F7),
-                                    width: 22,  backDrawRodData: BackgroundBarChartRodData(
-                      show: true,
-                      toY: 8,
-                      color: Colors.white,
-                    ),)
-                              ]),
-                              BarChartGroupData(x: 4, barRods: [
-                                BarChartRodData(
-                                    toY: weeklyHours[5] ?? 0,
-                                    color: Color(0xff9478F7),
+                              for (int day = 1; day <= 5; day++)
+                                BarChartGroupData(x: day - 1, barRods: [
+                                  BarChartRodData(
+                                    toY: weeklyHours[day] ?? 0,
+                                    color: (weeklyHours[day] ?? 0) == 0
+                                        ? Colors.red
+                                        : Color(0xff9478F7),
                                     width: 22,
-                                    
-                             backDrawRodData: BackgroundBarChartRodData(
-                      show: true,
-                      toY: 8,
-                      color: Colors.white,
-                    ),)
-                              ]),
+                                    backDrawRodData:
+                                        (weeklyHours[day] ?? 0) == 0
+                                            ? BackgroundBarChartRodData(
+                                                show: false,
+                                              )
+                                            : BackgroundBarChartRodData(
+                                                show: true,
+                                                toY: 9,
+                                                color: Colors.white,
+                                              ),
+                                  )
+                                ]),
                             ],
                           ),
                         ),
@@ -387,62 +376,64 @@ class _GraphicalbuilerState extends State<GraphicalbuilerWeekly> {
                 height: 24,
               ),
               Container(
-                padding: EdgeInsets.all(12),
-                height: 430,
-                width: double.infinity,
-                decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(20),
-                  color: Color(0xffEFF1FF),
-                  // color: Colors.amber,
-                  boxShadow: [
-                    BoxShadow(
-                      color: Colors.grey.withOpacity(0.2),
-                      spreadRadius: 2,
-                      blurRadius: 4,
-                      offset: Offset(0, 2), // changes position of shadow
-                    ),
-                  ],
-                ),
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text(
-                      'Weekly',
-                      style: TextStyle(
-                        fontSize: 20,
-                        fontWeight: FontWeight.w600,
-                      ),
-                    ),
-                    SizedBox(height: 20),
-                    PieChart(
-                      dataMap: weeklyHoursss,
-                      colorList: [
-                        
-                        
-                        Color(0xff9478F7),// Present
-                        Color(0xffEC5851),// Absent
-                        Color(0xffF6C15B), // late arrival
-                        Color(0xffF07E25),// early Out
-                      ],
-                      chartRadius: MediaQuery.of(context).size.width / 1.7,
-                      legendOptions: LegendOptions(
-                        legendPosition: LegendPosition.top,
-                        showLegendsInRow: true,
-                        showLegends: true,
-                        legendShape: BoxShape.circle,
-                        legendTextStyle: TextStyle(
-                          fontWeight: FontWeight.bold,
-                        ),
-                      ),
-                      chartValuesOptions: ChartValuesOptions(
-                        showChartValues: false,
-                      ),
-                      totalValue: weeklyHoursss.values.reduce((a, b) => a + b),
-                    ),
-                  ],
+  padding: EdgeInsets.all(12),
+  height: 430,
+  width: double.infinity,
+  decoration: BoxDecoration(
+    borderRadius: BorderRadius.circular(20),
+    color: Color(0xffEFF1FF),
+    boxShadow: [
+      BoxShadow(
+        color: Colors.grey.withOpacity(0.2),
+        spreadRadius: 2,
+        blurRadius: 4,
+        offset: Offset(0, 2), // changes position of shadow
+      ),
+    ],
+  ),
+  child: Column(
+    mainAxisAlignment: MainAxisAlignment.center,
+    crossAxisAlignment: CrossAxisAlignment.start,
+    children: [
+      Text(
+        'Weekly',
+        style: TextStyle(
+          fontSize: 20,
+          fontWeight: FontWeight.w600,
+        ),
+      ),
+      SizedBox(height: 20),
+      weeklyHoursss.isEmpty
+          ? Center(child: Text('No data available'))
+          : PieChart(
+              dataMap: weeklyHoursss,
+              colorList: [
+                Color(0xff9478F7), // Present
+                Color(0xffEC5851), // Absent
+                Color(0xffF6C15B), // Late Arrival
+                Color(0xffF07E25), // Early Out
+              ],
+              chartRadius: MediaQuery.of(context).size.width / 1.7,
+              legendOptions: LegendOptions(
+                legendPosition: LegendPosition.top,
+                showLegendsInRow: true,
+                showLegends: true,
+                legendShape: BoxShape.circle,
+                legendTextStyle: TextStyle(
+                  fontWeight: FontWeight.bold,
                 ),
               ),
+              chartValuesOptions: ChartValuesOptions(
+                showChartValues: false,
+              ),
+              totalValue: weeklyHoursss.values.isNotEmpty
+                  ? weeklyHoursss.values.reduce((a, b) => a + b)
+                  : 1, // Avoid division by zero
+            ),
+    ],
+  ),
+),
+
             ]),
           );
         });

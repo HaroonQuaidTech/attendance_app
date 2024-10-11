@@ -308,9 +308,9 @@ class _StatusBuilerState extends State<StatusBuiler> {
     future: _getMonthlyAttendanceDetails(userId),
     builder: (context, snapshot) {
        if (snapshot.connectionState == ConnectionState.waiting) {
-      // Display CircularProgressIndicator while data is loading
+ 
       return Padding(
-        padding: const EdgeInsets.only(top: 160.0),
+        padding: const EdgeInsets.only(top: 360.0),
         child: Center(
           child: CircularProgressIndicator(),
         ),
@@ -383,19 +383,19 @@ Color _determineContainerColor(DateTime? checkIn, DateTime? checkOut) {
 
     if (checkInTime.hour < onTime.hour ||
         (checkInTime.hour == onTime.hour && checkInTime.minute < onTime.minute)) {
-      return Color(0xff22AF41); // Early
+      return Color(0xff22AF41); // On tIME
     } else if (checkInTime.hour > lateArrival.hour ||
         (checkInTime.hour == lateArrival.hour && checkInTime.minute > lateArrival.minute)) {
       return Color(0xffF6C15B); // Late
     } else {
-      return Color(0xffEC5851); // On time
+      return Color(0xffEC5851); // Absent
     }
   } else if (checkOut != null) {
     final TimeOfDay checkOutTime = TimeOfDay.fromDateTime(checkOut);
     final TimeOfDay earlyCheckout = TimeOfDay(hour: 17, minute: 0);
     if (checkOutTime.hour < earlyCheckout.hour ||
         (checkOutTime.hour == earlyCheckout.hour && checkOutTime.minute < earlyCheckout.minute)) {
-      return Color(0xffF07E25); // Early check-out
+      return Color.fromARGB(255, 223, 103, 11); // Early check-out
     }
   }
   return Color(0xff8E71DF); // Default
@@ -502,16 +502,13 @@ Widget _buildDivider() {
         FutureBuilder(
             future: _getMonthlyAttendanceDetails(userId),
             builder: (context, snapshot) {
-              if (snapshot.connectionState == ConnectionState.waiting) {
-                return Text('.');
-              }
-
+           
               if (snapshot.hasError) {
                 return Center(child: Text('Error: ${snapshot.error}'));
               }
 
               if (!snapshot.hasData || snapshot.data == null) {
-                return Center(child: Text('No data available'));
+                return Center(child: Text('.'));
               }
               final List<Map<String, dynamic>?> allData = snapshot.data ?? [];
 
@@ -665,38 +662,9 @@ Widget _buildDivider() {
         SizedBox(
           height: 20,
         ),
-      FutureBuilder<List<Map<String, dynamic>?>>(
-  future: _getMonthlyAttendanceDetails(userId),  // Your async function to get the data
-  builder: (context, snapshot) {
-    if (snapshot.connectionState == ConnectionState.waiting) {
-      // Display CircularProgressIndicator while data is loading
-      return Padding(
-        padding: const EdgeInsets.only(top: 160.0),
-        child: Center(
-          child: CircularProgressIndicator(),
-        ),
-      );
-    }
-
-    if (snapshot.hasError) {
-      // Handle error case
-      return Center(
-        child: Text('Error: ${snapshot.error}'),
-      );
-    }
-
-    if (!snapshot.hasData || snapshot.data!.isEmpty) {
-      // Handle case when no data is available
-      return Center(
-        child: Text('No attendance data found.'),
-      );
-    }
-
-    
-    return Container(
+    Container(
       padding: EdgeInsets.all(12),
       height: MediaQuery.of(context).size.height * 3.66,
-      width: double.infinity,
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(20),
         color: Color(0xffEFF1FF),
@@ -717,17 +685,14 @@ Widget _buildDivider() {
             style: TextStyle(fontWeight: FontWeight.w600, fontSize: 18),
           ),
           SizedBox(height: 10),
-           if (snapshot.hasData && snapshot.data != null)
-     
-          _buildAttendance(color: Color(0xff9478F7), data: snapshot.data!),
+          _buildAttendance(color: Color(0xff9478F7), data: []),
           SizedBox(height: 10),
         ],
       ),
-    );
-  },
-)
+  
+  
 
-      ]),
-    );
+      ),
+    ]));
   }
 }

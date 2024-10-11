@@ -161,7 +161,7 @@ class _GraphicalbuilerState extends State<GraphicalbuilerMonthly> {
       builder: (context, snapshot) {
         if (snapshot.connectionState == ConnectionState.waiting) {
           return Padding(
-            padding: const EdgeInsets.only(top: 80.0),
+            padding: const EdgeInsets.only(top:240.0),
             child: CircularProgressIndicator(),
           );
         } else if (snapshot.hasError) {

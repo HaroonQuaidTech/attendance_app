@@ -14,43 +14,75 @@ Future<Map<String, int>> fetchMonthlyAttendance(String userId) async {
       .doc(userId)
       .collection('dailyattendance');
 
-  final querySnapshot = await attendanceCollection
-      .where('date', isGreaterThanOrEqualTo: Timestamp.fromDate(startOfMonth))
-      .where('date', isLessThanOrEqualTo: Timestamp.fromDate(endOfMonth))
-      .get();
+  try {
+    // Fetch attendance records for the current month up to the current date
+    final querySnapshot = await attendanceCollection
+        .where('checkIn', isGreaterThanOrEqualTo: startOfMonth)
+        .where('checkIn',
+            isLessThanOrEqualTo: now) // Only consider past and current dates
+        .get();
 
-  int presentCount = 0;
-  int lateCount = 0;
-  int absentCount = 0;
+    // Get the current day of the month (this ensures we don't count future absences)
+    final currentDayOfMonth = now.day;
 
-  for (final doc in querySnapshot.docs) {
-    final data = doc.data();
-    final checkIn = (data['checkIn'] as Timestamp?)?.toDate();
-    final checkOut = (data['checkOut'] as Timestamp?)?.toDate();
-
-    final lateThreshold = DateTime(now.year, now.month, now.day, 9, 0);
-
-    if (checkIn != null) {
-      if (checkOut != null) {
-        if (checkIn.isAfter(lateThreshold)) {
-          lateCount++;
-        } else {
-          presentCount++;
-        }
-      } else {
-        // Handle cases where check-out is null (could be considered absent for simplicity)
-        absentCount++;
-      }
-    } else {
-      absentCount++;
+    // If there are no records for the month, assume all days up to today are absences
+    if (querySnapshot.docs.isEmpty) {
+      return {'present': 0, 'late': 0, 'absent': currentDayOfMonth};
     }
-  }
 
-  return {
-    'present': presentCount,
-    'late': lateCount,
-    'absent': absentCount,
-  };
+    // Define late arrival threshold (8:15 AM)
+    final lateThreshold = DateTime(now.year, now.month, now.day, 8, 15);
+
+    // Initialize attendance counters
+    Map<String, int> counts = {
+      'present': 0,
+      'late': 0,
+      'absent': 0,
+    };
+
+    // Set of all days in the month with attendance records
+    Set<int> daysWithRecords = {};
+
+    // Process each attendance record
+    for (var doc in querySnapshot.docs) {
+      final data = doc.data();
+      final checkIn = (data['checkIn'] as Timestamp?)?.toDate();
+      final checkOut = (data['checkOut'] as Timestamp?)
+          ?.toDate(); // Check for checkOut as well
+
+      // If both check-in and check-out are null, the user is absent for that day
+      if (checkIn == null && checkOut == null) {
+        continue; // Skip, will mark absent later
+      }
+
+      // Record the day of the check-in
+      if (checkIn != null) {
+        daysWithRecords.add(checkIn.day);
+      }
+
+      // Determine if the user was late
+      if (checkIn != null && checkIn.isAfter(lateThreshold)) {
+        counts['late'] = (counts['late'] ?? 0) + 1;
+      } else if (checkIn != null) {
+        counts['present'] = (counts['present'] ?? 0) + 1;
+      }
+    }
+
+    // Calculate absences by checking which past and current days are missing records
+    for (int day = 1; day <= currentDayOfMonth; day++) {
+      if (!daysWithRecords.contains(day)) {
+        counts['absent'] = (counts['absent'] ?? 0) + 1;
+      }
+    }
+
+    return counts;
+  } catch (e) {
+    return {
+      'present': 0,
+      'late': 0,
+      'absent': 0,
+    };
+  }
 }
 
 class Monthlyattendance extends StatelessWidget {
@@ -104,7 +136,7 @@ class Monthlyattendance extends StatelessWidget {
             ], sectionsSpace: 0, centerSpaceRadius: 26),
           ),
         ),
-
+        SizedBox(width: screenWidth * 0.05),
         SizedBox(
           width: screenWidth * 0.57,
           child: Row(
@@ -131,6 +163,7 @@ class Monthlyattendance extends StatelessWidget {
                   ],
                 ),
               ),
+              SizedBox(width: screenWidth * 0.06),
               Expanded(
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.center,
@@ -151,6 +184,9 @@ class Monthlyattendance extends StatelessWidget {
                     ),
                   ],
                 ),
+              ),
+              SizedBox(
+                width: screenWidth * 0.06,
               ),
               Expanded(
                 child: Column(

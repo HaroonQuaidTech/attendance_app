@@ -142,70 +142,85 @@ class _HomeScreenState extends State<HomeScreen> {
     }
   }
 
-  Future<Map<String, int>> fetchMonthlyAttendance(String userId) async {
-    final now = DateTime.now();
-    final startOfMonth = DateTime(now.year, now.month, 1);
-    final endOfMonth = DateTime(now.year, now.month + 1, 0);
-    final attendanceCollection = FirebaseFirestore.instance
-        .collection('AttendanceDetails')
-        .doc(userId)
-        .collection('dailyattendance');
+Future<Map<String, int>> fetchMonthlyAttendance(String userId) async {
+  final now = DateTime.now();
+  final startOfMonth = DateTime(now.year, now.month, 1);
 
-    try {
-      final querySnapshot = await attendanceCollection
-          .where('checkIn', isGreaterThanOrEqualTo: startOfMonth)
-          .where('checkIn', isLessThanOrEqualTo: endOfMonth)
-          .get();
+  final attendanceCollection = FirebaseFirestore.instance
+      .collection('AttendanceDetails')
+      .doc(userId)
+      .collection('dailyattendance');
 
-      if (querySnapshot.docs.isEmpty) {
-        return {'present': 0, 'late': 0, 'absent': 0};
-      }
+  try {
+ 
+    final querySnapshot = await attendanceCollection
+        .where('checkIn', isGreaterThanOrEqualTo: startOfMonth)
+        .where('checkIn', isLessThanOrEqualTo: now) 
+        .get();
 
-      if (querySnapshot.docs.isEmpty) {
-        return {'present': 0, 'late': 0, 'absent': 0};
-      }
+   
+    final currentDayOfMonth = now.day;
 
-      final lateThreshold = DateTime(now.year, now.month, now.day, 8);
+ 
+    Map<String, int> counts = {
+      'present': 0,
+      'late': 0,
+      'absent': 0,
+    };
 
-      final counts = querySnapshot.docs.fold<Map<String, int>>(
-        {'present': 0, 'late': 0, 'absent': 0},
-        (Map<String, int> accumulator, doc) {
-          final data = doc.data();
-          final checkIn = (data['checkIn'] as Timestamp?)?.toDate();
-          final checkOut = (data['checkOut'] as Timestamp?)?.toDate();
 
-          if (checkIn == null && checkOut == null) {
-            accumulator['absent'] = (accumulator['absent'] ?? 0) + 1;
-          } else if (checkIn != null) {
-            if (checkIn.isAfter(lateThreshold)) {
-              accumulator['present'] = (accumulator['present'] ?? 0) + 1;
-              accumulator['late'] = (accumulator['late'] ?? 0) + 1;
-            } else {
-              accumulator['present'] = (accumulator['present'] ?? 0) + 1;
-              accumulator['late'] = (accumulator['late'] ?? 0) + 1;
-            }
-
-            if (checkIn == null && checkOut == null) {
-              accumulator['absent'] = (accumulator['absent'] ?? 0) + 1;
-            }
-          } else {
-            accumulator['absent'] = (accumulator['absent'] ?? 0) + 1;
-          }
-
-          return accumulator;
-        },
-      );
-
-      return counts;
-    } catch (e) {
-      print('Error fetching monthly attendance: $e');
-      return {
-        'present': 0,
-        'late': 0,
-        'absent': 0,
-      };
+    if (querySnapshot.docs.isEmpty) {
+      return {'present': 0, 'late': 0, 'absent': currentDayOfMonth};
     }
+
+
+    Set<int> daysWithRecords = {};
+
+  
+    for (var doc in querySnapshot.docs) {
+      final data = doc.data();
+      final checkIn = (data['checkIn'] as Timestamp?)?.toDate();
+
+      if (checkIn == null) continue; 
+
+      final checkInDay = checkIn.day;
+
+     
+      final lateThreshold = DateTime(checkIn.year, checkIn.month, checkIn.day, 8, 15);
+
+   
+      daysWithRecords.add(checkInDay);
+
+     
+      counts['present'] = (counts['present'] ?? 0) + 1;
+
+
+      if (checkIn.isAfter(lateThreshold)) {
+        counts['late'] = (counts['late'] ?? 0) + 1;
+      }
+    }
+
+ 
+    for (int day = 1; day <= currentDayOfMonth; day++) {
+      if (!daysWithRecords.contains(day)) {
+        counts['absent'] = (counts['absent'] ?? 0) + 1;
+      }
+    }
+    counts['absent'] = (counts['absent']! - 2).clamp(0, currentDayOfMonth);
+
+    return counts;
+  } catch (e) {
+    log('Error fetching monthly attendance: $e');
+    return {
+      'present': 0,
+      'late': 0,
+      'absent': 0,
+    };
   }
+}
+
+
+
 
   Widget _buildSegmentNavigator(String text, int index, Icon icon) {
     final Size screenSize = MediaQuery.of(context).size;
@@ -550,6 +565,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                               child: Text(
                                                   'No attendance records available for this month.'));
                                         }
+                                                //Monthly attendance componenet
 
                                         return Monthlyattendance(
                                           presentCount: data['present']!,
@@ -559,15 +575,13 @@ class _HomeScreenState extends State<HomeScreen> {
                                       }
 
                                       return Center(
-                                          child: Text('No data available.'));
+                                          child: CircularProgressIndicator());
                                     },
                                   ),
                                 ],
                               )),
-                       
                           Expanded(
                             child: SingleChildScrollView(
-                                                 
                               child: Column(
                                 children: [
                                   SizedBox(height: 20),

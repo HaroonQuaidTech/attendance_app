@@ -1,6 +1,5 @@
 // ignore_for_file: prefer_const_constructors, prefer_const_literals_to_create_immutables, use_super_parameters, unnecessary_string_interpolations, unused_element, depend_on_referenced_packages, curly_braces_in_flow_control_structures
 
-import 'dart:developer';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -25,7 +24,7 @@ class _WeeklyAttendanceState extends State<WeeklyAttendance> {
   final String userId = FirebaseAuth.instance.currentUser!.uid;
   bool isLoading = true;
   List<Map<String, dynamic>> weeklyData = [];
-  
+
   List<Map<String, dynamic>> lateArrivals = [];
   List<Map<String, dynamic>> absents = [];
   List<Map<String, dynamic>> onTime = [];
@@ -40,75 +39,70 @@ class _WeeklyAttendanceState extends State<WeeklyAttendance> {
       String formattedDate = DateFormat('yMMMd').format(day);
       String formattedDay = DateFormat('EEE').format(day);
 
-      final DocumentSnapshot<Map<String, dynamic>> snapshot =
-          await FirebaseFirestore.instance
-              .collection('AttendanceDetails')
-              .doc(userId)
-              .collection('dailyattendance')
-              .doc(formattedDate)
-              .get();
-      if (snapshot.exists) {
-        Map<String, dynamic>? data = snapshot.data();
+      if (day.isBefore(today) || day.isAtSameMomentAs(today)) {
+        final DocumentSnapshot<Map<String, dynamic>> snapshot =
+            await FirebaseFirestore.instance
+                .collection('AttendanceDetails')
+                .doc(uid)
+                .collection('dailyattendance')
+                .doc(formattedDate)
+                .get();
 
-        if (data != null) {
-      
+        if (snapshot.exists) {
+          Map<String, dynamic>? data = snapshot.data();
 
-          DateTime? checkInTime = (data['checkIn'] as Timestamp?)?.toDate();
-          DateTime? checkOutTime = (data['checkOut'] as Timestamp?)?.toDate();
-          
-        List<String> statuses = []; 
-      
+          if (data != null) {
+            DateTime? checkInTime = (data['checkIn'] as Timestamp?)?.toDate();
+            DateTime? checkOutTime = (data['checkOut'] as Timestamp?)?.toDate();
 
-          if (checkInTime == null )  {
-             statuses.add("Absent");
-          absents.add(data);
-           
-          } else {
-          
-            if (checkInTime
-                .isAfter(DateTime(day.year, day.month, day.day, 8, 15))) {
-             statuses.add("Late Arrival");
-            lateArrivals.add(data);
-           
-   
-            }   if (checkOutTime != null && checkOutTime.isBefore(DateTime(day.year, day.month, day.day, 17, 0))) {
-            statuses.add("Early Out");
-            earlyOuts.add(data);
-            log('Early Out: Check-out at $checkOutTime on $formattedDate');
+            List<String> statuses = [];
+
+            if (checkInTime == null) {
+              statuses.add("Absent");
+            } else {
+              statuses.add("Present");
+
+              if (checkInTime
+                  .isAfter(DateTime(day.year, day.month, day.day, 8, 15))) {
+                statuses.add("Late Arrival");
+              }
+
+              if (checkOutTime != null &&
+                  checkOutTime.isBefore(
+                      DateTime(day.year, day.month, day.day, 17, 0))) {
+                statuses.add("Early Out");
+              }
+
+              if (checkInTime
+                      .isAfter(DateTime(day.year, day.month, day.day, 7, 50)) &&
+                  checkInTime.isBefore(
+                      DateTime(day.year, day.month, day.day, 8, 10))) {
+                statuses.add("On Time");
+              }
+            }
+
+            data['formattedDate'] = formattedDate;
+            data['formattedDay'] = formattedDay;
+            data['statuses'] = statuses;
+
+            weeklyData.add(data); //-------------------------------------------------------------------------displaying week data
           }
-         if (checkInTime.isAfter(DateTime(day.year, day.month, day.day, 7, 50)) && 
-              checkInTime.isBefore(DateTime(day.year, day.month, day.day, 8, 10))) {
-            statuses.add("On Time");
-            onTime.add(data);
-              log('On Time: Check-in at $onTime');
-     
-          }
-          }
-
-          data['formattedDate'] = formattedDate;
-          data['formattedDay'] = formattedDay;
-          data['statuses'] = statuses;
-          weeklyData.add(data);
-      
         } else {
           weeklyData.add({
             "checkIn": null,
             "checkOut": null,
-            "status": ["Absent"],
+            "statuses": ["Absent"],
             "formattedDate": formattedDate,
             "formattedDay": formattedDay,
           });
-   
         }
-      }
-
+      } else {}
     }
 
     setState(() {
       isLoading = false;
     });
   }
-
 
   String _calculateTotalHours(Timestamp? checkIn, Timestamp? checkOut) {
     if (checkIn == null || checkOut == null) return '0:00';
@@ -141,21 +135,29 @@ class _WeeklyAttendanceState extends State<WeeklyAttendance> {
 
   @override
   Widget build(BuildContext context) {
-    
     List<Map<String, dynamic>> filteredData = widget.dropdownValue2 == 'Select'
         ? weeklyData
-              : widget.dropdownValue2 == 'On Time'
-            ? weeklyData.where((element) => (element['statuses'] as List).contains('On Time')).toList()
-                  : widget.dropdownValue2 == 'Absent'
-            ? weeklyData.where((element) => (element['statuses'] as List).contains('Absent')).toList()
-                   : widget.dropdownValue2 == 'Early Out'
-            ? weeklyData.where((element) => (element['statuses'] as List).contains('Early Out')).toList()
-                          : widget.dropdownValue2 == 'Late Arrival'
-            ? weeklyData.where((element) => (element['statuses'] as List).contains('Late Arrival')).toList()
-                         
+        : widget.dropdownValue2 == 'On Time'
+            ? weeklyData
+                .where((element) =>
+                    (element['statuses'] as List).contains('On Time'))
+                .toList()
+            : widget.dropdownValue2 == 'Absent'
+                ? weeklyData
+                    .where((element) =>
+                        (element['statuses'] as List).contains('Absent'))
+                    .toList()
+                : widget.dropdownValue2 == 'Early Out'
+                    ? weeklyData
+                        .where((element) =>
+                            (element['statuses'] as List).contains('Early Out'))
+                        .toList()
+                    : widget.dropdownValue2 == 'Late Arrival'
+                        ? weeklyData
+                            .where((element) => (element['statuses'] as List)
+                                .contains('Late Arrival'))
+                            .toList()
                         : weeklyData;
-                  
-
 
     return Column(
       mainAxisSize: MainAxisSize.min,
@@ -166,31 +168,32 @@ class _WeeklyAttendanceState extends State<WeeklyAttendance> {
             child: Center(
               child: CircularProgressIndicator(),
             ),
-          )    else if (filteredData.isEmpty) // Show "No Data" if list is empty
-      Padding(
-        padding: const EdgeInsets.only(top: 100.0),
-        child: Center(
-          child: Text(
-            "No Data Available",
-            style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
-          ),
-        ),
-      )
+          )
+        else if (filteredData.isEmpty) // Show "No Data" if list is empty
+          Padding(
+            padding: const EdgeInsets.only(top: 100.0),
+            child: Center(
+              child: Text(
+                "No Data Available",
+                style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
+              ),
+            ),
+          )
         else
           Flexible(
             fit: FlexFit.loose,
             child: ListView.builder(
                 shrinkWrap: true,
                 itemCount: filteredData.length,
-          
                 itemBuilder: (context, index) {
+              
                   Map<String, dynamic> data = filteredData[index];
-                  final DateTime date = DateFormat('MMM dd, yyyy').parse(filteredData[index]['formattedDate']);
-                  
-
+                  final DateTime date = DateFormat('MMM dd, yyyy')
+                      .parse(filteredData[index]['formattedDate']);
 
                   String day = DateFormat('EE').format(date);
                   String formattedDate = DateFormat('dd').format(date);
+          
                   String checkInTime =
                       _formatTime(data['checkIn'] as Timestamp?);
                   String checkOutTime =
@@ -201,7 +204,6 @@ class _WeeklyAttendanceState extends State<WeeklyAttendance> {
                   return Container(
                     padding: const EdgeInsets.all(12),
                     margin: const EdgeInsets.only(bottom: 10),
-                    height: 82,
                     width: double.infinity,
                     decoration: BoxDecoration(
                       borderRadius: BorderRadius.circular(12),
