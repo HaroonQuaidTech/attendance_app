@@ -1,4 +1,3 @@
-// ignore_for_file: prefer_const_constructors, prefer_const_literals_to_create_immutables, unnecessary_new, avoid_print, sort_child_properties_last, unused_local_variable, unnecessary_string_interpolations, depend_on_referenced_packages, use_key_in_widget_constructors, unnecessary_null_comparison
 import 'dart:developer';
 import 'dart:io';
 import 'package:cloud_firestore/cloud_firestore.dart';
@@ -16,7 +15,7 @@ import 'package:table_calendar/table_calendar.dart';
 import 'package:intl/intl.dart';
 
 class HomeScreen extends StatefulWidget {
-  const HomeScreen({Key? key});
+  const HomeScreen({super.key});
 
   @override
   State<HomeScreen> createState() => _HomeScreenState();
@@ -30,14 +29,20 @@ class _HomeScreenState extends State<HomeScreen> {
   User? user = FirebaseAuth.instance.currentUser;
   final FirebaseAuth _auth = FirebaseAuth.instance;
   String? _imageUrl;
-  bool isCheck = false;
   bool _isLoading = false;
-
+  int _selectedIndex = 0;
   CalendarFormat _calendarFormat = CalendarFormat.month;
   DateTime _focusedDay = DateTime.now();
-  DateTime? _selectedDay;
+  DateTime _selectedDay = DateTime.now();
 
-  int _selectedIndex = 0;
+  final Map<DateTime, List<Color>> _events = {
+    DateTime.utc(2024, 10, 1): [const Color(0xff8E71DF)],
+    DateTime.utc(2024, 10, 2): [const Color(0xffF6C15B)],
+  };
+
+  List<Color> _getEventsForDay(DateTime day) {
+    return _events[day] ?? [];
+  }
 
   Future<Map<String, dynamic>?> _getAttendanceDetails(
       String uid, DateTime day) async {
@@ -48,7 +53,7 @@ class _HomeScreenState extends State<HomeScreen> {
             .collection('AttendanceDetails')
             .doc(userId)
             .collection('dailyattendance')
-            .doc('$formattedDate')
+            .doc(formattedDate)
             .get();
 
     if (snapshot.exists) {
@@ -65,19 +70,10 @@ class _HomeScreenState extends State<HomeScreen> {
     DateTime? checkOutTime = (data['checkOut'] != null)
         ? (data['checkOut'] as Timestamp).toDate()
         : null;
-    String checkInTimeFormatted =
-        checkInTime != null ? DateFormat('hh:mm:a').format(checkInTime) : 'N/A';
-    String checkOutTimeFormatted = checkOutTime != null
-        ? DateFormat('hh:mm:a').format(checkOutTime)
-        : 'N/A';
 
-    String tatFormatted;
     if (checkOutTime != null && checkInTime != null) {
-      Duration tat = checkOutTime.difference(checkInTime);
-      tatFormatted = "${tat.inHours}h ${tat.inMinutes.remainder(60)}m";
-    } else {
-      tatFormatted = "N/A"; // If check-in or check-out is null
-    }
+      checkOutTime.difference(checkInTime);
+    } else {}
   }
 
   void _showNoDataMessage() {
@@ -86,9 +82,12 @@ class _HomeScreenState extends State<HomeScreen> {
 
   @override
   void initState() {
-    _loadUserProfile();
     super.initState();
-    _selectedDay = DateTime.now();
+    _onItemTapped(0);
+    _loadUserProfile();
+    _onDaySelected(_selectedDay, _focusedDay);
+    _getAttendanceDetails(userId, DateTime.now());
+    _fetchEventsForMonth(userId);
   }
 
   void _onDaySelected(DateTime selectedDay, DateTime focusedDay) async {
@@ -97,11 +96,9 @@ class _HomeScreenState extends State<HomeScreen> {
       _focusedDay = focusedDay;
       _isLoading = true;
     });
-
     String userId = FirebaseAuth.instance.currentUser!.uid;
     try {
       data = await _getAttendanceDetails(userId, selectedDay);
-
       setState(() {
         _isLoading = false;
         if (data != null) {
@@ -123,6 +120,55 @@ class _HomeScreenState extends State<HomeScreen> {
     setState(() {
       _selectedIndex = index;
     });
+  }
+
+  Future<void> _fetchEventsForMonth(String userId) async {
+    final now = DateTime.now();
+    final startOfMonth = DateTime(now.year, now.month, 1);
+
+    final attendanceCollection = FirebaseFirestore.instance
+        .collection('AttendanceDetails')
+        .doc(userId)
+        .collection('dailyattendance');
+
+    try {
+      final querySnapshot = await attendanceCollection
+          .where('checkIn', isGreaterThanOrEqualTo: startOfMonth)
+          .where('checkIn', isLessThanOrEqualTo: now)
+          .get();
+
+      if (querySnapshot.docs.isNotEmpty) {
+        setState(() {
+          _events.clear();
+
+          for (var doc in querySnapshot.docs) {
+            final data = doc.data();
+            final checkIn = (data['checkIn'] as Timestamp?)?.toDate();
+            // final checkOut = (data['checkIn'] as Timestamp?)?.toDate();
+
+            if (checkIn != null) {
+              final lateThreshold =
+                  DateTime(checkIn.year, checkIn.month, checkIn.day, 8, 00);
+
+              // Determine color based on attendance status
+              Color eventColor;
+              if (checkIn.isAfter(lateThreshold)) {
+                eventColor = const Color(0xffF6C15B);
+              } else if (checkIn.isBefore(lateThreshold)) {
+                eventColor = const Color(0xff22AF41);
+              } else {
+                eventColor = const Color(0xff22AF41);
+              }
+
+              _events[DateTime.utc(checkIn.year, checkIn.month, checkIn.day)] =
+                  [eventColor];
+            }
+          }
+        });
+      }
+    } catch (e) {
+      log('Error fetching events: $e');
+    }
   }
 
   Future<void> _loadUserProfile() async {
@@ -233,14 +279,14 @@ Future<Map<String, int>> fetchMonthlyAttendance(String userId) async {
     double baseFontSize = 16;
     double responsiveFontSize = baseFontSize * (screenWidth / 375);
     bool isSelected = _selectedIndex == index;
-    if (index == 1) StatsticsScreen();
-    if (index == 2) ProfileScreen();
+    if (index == 1) const StatsticsScreen();
+    if (index == 2) const ProfileScreen();
     return Expanded(
       child: GestureDetector(
         onTap: () => _onItemTapped(index),
         child: Container(
-          padding: EdgeInsets.symmetric(vertical: 10.0),
-          margin: EdgeInsets.symmetric(vertical: 8.0, horizontal: 5.0),
+          padding: const EdgeInsets.symmetric(vertical: 10.0),
+          margin: const EdgeInsets.symmetric(vertical: 8.0, horizontal: 5.0),
           decoration: BoxDecoration(
             color: isSelected ? Colors.white : Colors.transparent,
             borderRadius: BorderRadius.circular(48.0),
@@ -251,15 +297,19 @@ Future<Map<String, int>> fetchMonthlyAttendance(String userId) async {
               children: [
                 Icon(
                   icon.icon,
-                  color: isSelected ? Color(0xff7647EB) : Color(0xffA4A4A4),
+                  color: isSelected
+                      ? const Color(0xff7647EB)
+                      : const Color(0xffA4A4A4),
                 ),
-                SizedBox(
+                const SizedBox(
                   width: 5,
                 ),
                 Text(
                   text,
                   style: TextStyle(
-                      color: isSelected ? Color(0xff7647EB) : Color(0xffA4A4A4),
+                      color: isSelected
+                          ? const Color(0xff7647EB)
+                          : const Color(0xffA4A4A4),
                       fontWeight:
                           isSelected ? FontWeight.bold : FontWeight.normal,
                       fontSize: responsiveFontSize),
@@ -274,12 +324,6 @@ Future<Map<String, int>> fetchMonthlyAttendance(String userId) async {
 
   @override
   Widget build(BuildContext context) {
-    String? displayName = user?.displayName ?? "No Name Provided";
-    String? email = user?.email ?? "No Email Provided";
-    final Size screenSize = MediaQuery.of(context).size;
-    final double screenHeight = screenSize.height;
-    final double screenWidth = screenSize.width;
-
     // ignore: deprecated_member_use
     return WillPopScope(
       onWillPop: () async {
@@ -288,8 +332,7 @@ Future<Map<String, int>> fetchMonthlyAttendance(String userId) async {
           builder: (BuildContext context) {
             return Stack(
               alignment: Alignment.center,
-              clipBehavior:
-                  Clip.none, // Ensures the icon can overflow outside the dialog
+              clipBehavior: Clip.none,
               children: [
                 AlertDialog(
                   contentPadding: EdgeInsets.only(
@@ -314,8 +357,7 @@ Future<Map<String, int>> fetchMonthlyAttendance(String userId) async {
                         style: TextStyle(
                           fontWeight: FontWeight.normal,
                           color: Colors.black,
-                          fontSize: MediaQuery.of(context).size.width *
-                              0.04, // Responsive font size
+                          fontSize: MediaQuery.of(context).size.width * 0.04,
                         ),
                         textAlign: TextAlign.center,
                       ),
@@ -399,9 +441,9 @@ Future<Map<String, int>> fetchMonthlyAttendance(String userId) async {
         backgroundColor: Colors.white,
         body: SafeArea(
           child: _selectedIndex == 1
-              ? StatsticsScreen()
+              ? const StatsticsScreen()
               : _selectedIndex == 2
-                  ? ProfileScreen()
+                  ? const ProfileScreen()
                   : Padding(
                       padding: const EdgeInsets.symmetric(
                           horizontal: 12.0, vertical: 16.0),
@@ -429,7 +471,7 @@ Future<Map<String, int>> fetchMonthlyAttendance(String userId) async {
                                             fit: BoxFit.cover,
                                           )),
                                     ),
-                                    Column(
+                                    const Column(
                                       crossAxisAlignment:
                                           CrossAxisAlignment.start,
                                       mainAxisAlignment:
@@ -449,14 +491,14 @@ Future<Map<String, int>> fetchMonthlyAttendance(String userId) async {
                                         ),
                                       ],
                                     ),
-                                    Spacer(),
+                                    const Spacer(),
                                     GestureDetector(
                                       onTap: () {
                                         Navigator.push(
                                           context,
                                           MaterialPageRoute(
                                               builder: (context) =>
-                                                  NotificationScreen()),
+                                                  const NotificationScreen()),
                                         );
                                       },
                                       child: Image.asset(
@@ -497,27 +539,27 @@ Future<Map<String, int>> fetchMonthlyAttendance(String userId) async {
                                     mainAxisAlignment: MainAxisAlignment.center,
                                     children: [
                                       Text(
-                                        "$displayName",
-                                        style: TextStyle(
+                                        displayName,
+                                        style: const TextStyle(
                                             fontSize: 20,
                                             fontWeight: FontWeight.w600),
                                       ),
                                       Text(
-                                        "$email",
-                                        style: TextStyle(
+                                        email,
+                                        style: const TextStyle(
                                             fontSize: 16,
                                             fontWeight: FontWeight.w400),
                                       ),
                                     ],
                                   ),
-                                  Spacer(),
+                                  const Spacer(),
                                   Container(
                                     width: 50,
                                     height: 50,
                                     decoration: BoxDecoration(
                                       color: Colors.grey[200],
                                       borderRadius: BorderRadius.circular(12),
-                                      boxShadow: [
+                                      boxShadow: const [
                                         BoxShadow(
                                           color: Colors.black12,
                                           offset: Offset(2, 2),
@@ -531,11 +573,11 @@ Future<Map<String, int>> fetchMonthlyAttendance(String userId) async {
                                           context,
                                           MaterialPageRoute(
                                             builder: (context) =>
-                                                NotificationScreen(),
+                                                const NotificationScreen(),
                                           ),
                                         );
                                       },
-                                      child: Icon(
+                                      child: const Icon(
                                         Icons.notifications_none,
                                         color: Colors.black,
                                       ),
@@ -543,73 +585,79 @@ Future<Map<String, int>> fetchMonthlyAttendance(String userId) async {
                                   ),
                                 ]);
                               }),
-                          SizedBox(height: 30),
+                          const SizedBox(height: 30),
                           Container(
-                              padding: EdgeInsets.all(12),
-                              decoration: BoxDecoration(
-                                color: Color(0xffEFF1FF),
-                                borderRadius: BorderRadius.circular(12),
-                                boxShadow: [
-                                  BoxShadow(
-                                    color: Colors.black12,
-                                    blurRadius: 10,
-                                  ),
-                                ],
-                              ),
-                              child: Column(
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: [
-                                  Text(
+                            decoration: BoxDecoration(
+                              color: const Color(0xffEFF1FF),
+                              borderRadius: BorderRadius.circular(12),
+                              boxShadow: const [
+                                BoxShadow(
+                                  color: Colors.black12,
+                                  blurRadius: 10,
+                                ),
+                              ],
+                            ),
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                const SizedBox(height: 10),
+                                const Padding(
+                                  padding: EdgeInsets.only(left: 25.0),
+                                  child: Text(
                                     'Monthly Attendance',
                                     style: TextStyle(
-                                        fontSize: 18,
-                                        fontWeight: FontWeight.w600),
+                                      fontSize: 18,
+                                      fontWeight: FontWeight.w600,
+                                      height: 0,
+                                    ),
                                   ),
-                                  SizedBox(height: 8),
-                                  FutureBuilder<Map<String, int>>(
-                                    future: fetchMonthlyAttendance(user!.uid),
-                                    builder: (context, snapshot) {
-                                      if (snapshot.hasError) {
-                                        return Center(
-                                            child: Text(
-                                                'Error: ${snapshot.error}'));
-                                      }
+                                ),
+                                const SizedBox(height: 10),
+                                FutureBuilder<Map<String, int>>(
+                                  future: fetchMonthlyAttendance(user!.uid),
+                                  builder: (context, snapshot) {
+                                    if (snapshot.hasError) {
+                                      return Text('Error: ${snapshot.error}');
+                                    }
 
-                                      if (snapshot.hasData) {
-                                        final data = snapshot.data!;
+                                    if (snapshot.hasData) {
+                                      final data = snapshot.data!;
 
-                                        if (data['present'] == 0 &&
-                                            data['late'] == 0 &&
-                                            data['absent'] == 0) {
-                                          return Center(
-                                              child: Text(
-                                                  'No attendance records available for this month.'));
-                                        }
-                                                //Monthly attendance componenet
-
-                                        return Monthlyattendance(
-                                          presentCount: data['present']!,
-                                          lateCount: data['late']!,
-                                          absentCount: data['absent']!,
+                                      if (data['present'] == 0 &&
+                                          data['late'] == 0 &&
+                                          data['absent'] == 0) {
+                                        return const Center(
+                                          child: Text(
+                                              'No attendance records available for this month.'),
                                         );
                                       }
+                                      //Monthly attendance componenet
 
-                                      return Center(
-                                          child: CircularProgressIndicator());
-                                    },
-                                  ),
-                                ],
-                              )),
+                                      return Monthlyattendance(
+                                        presentCount: data['present']!,
+                                        lateCount: data['late']!,
+                                        absentCount: data['absent']!,
+                                      );
+                                    }
+
+                                    return const Center(
+                                      child: CircularProgressIndicator(),
+                                    );
+                                  },
+                                ),
+                              ],
+                            ),
+                          ),
                           Expanded(
                             child: SingleChildScrollView(
                               child: Column(
                                 children: [
-                                  SizedBox(height: 20),
+                                  const SizedBox(height: 20),
                                   Container(
                                     decoration: BoxDecoration(
-                                      color: Color(0xffEFF1FF),
+                                      color: const Color(0xffEFF1FF),
                                       borderRadius: BorderRadius.circular(16),
-                                      boxShadow: [
+                                      boxShadow: const [
                                         BoxShadow(
                                           color: Colors.black12,
                                           blurRadius: 10,
@@ -627,9 +675,8 @@ Future<Map<String, int>> fetchMonthlyAttendance(String userId) async {
                                       availableGestures:
                                           AvailableGestures.horizontalSwipe,
                                       headerVisible: true,
-                                      selectedDayPredicate: (day) {
-                                        return isSameDay(_selectedDay, day);
-                                      },
+                                      selectedDayPredicate: (day) =>
+                                          isSameDay(_selectedDay, day),
                                       onDaySelected: _onDaySelected,
                                       onFormatChanged: (format) {
                                         if (_calendarFormat != format) {
@@ -641,22 +688,49 @@ Future<Map<String, int>> fetchMonthlyAttendance(String userId) async {
                                       onPageChanged: (focusedDay) {
                                         _focusedDay = focusedDay;
                                       },
+                                      eventLoader: _getEventsForDay,
+                                      calendarBuilders: CalendarBuilders(
+                                        markerBuilder: (context, day, events) {
+                                          if (events.isEmpty) {
+                                            return const SizedBox.shrink();
+                                          }
+                                          return Row(
+                                            mainAxisSize: MainAxisSize.min,
+                                            children: List.generate(
+                                                events.length, (index) {
+                                              final color =
+                                                  events[index] as Color;
+                                              return Container(
+                                                margin:
+                                                    const EdgeInsets.symmetric(
+                                                        horizontal: 1.5),
+                                                width: 6,
+                                                height: 6,
+                                                decoration: BoxDecoration(
+                                                  shape: BoxShape.circle,
+                                                  color: color,
+                                                ),
+                                              );
+                                            }),
+                                          );
+                                        },
+                                      ),
                                     ),
                                   ),
-                                  SizedBox(height: 20),
+                                  const SizedBox(height: 20),
 
                                   // Attendance Details Container
                                   _isLoading
-                                      ? CircularProgressIndicator()
+                                      ? const CircularProgressIndicator()
                                       : Container(
                                           height: 142,
-                                          padding:
-                                              EdgeInsets.symmetric(vertical: 8),
+                                          padding: const EdgeInsets.symmetric(
+                                              vertical: 8),
                                           decoration: BoxDecoration(
                                             borderRadius:
                                                 BorderRadius.circular(12),
-                                            color: Color(0xffEFF1FF),
-                                            boxShadow: [
+                                            color: const Color(0xffEFF1FF),
+                                            boxShadow: const [
                                               BoxShadow(
                                                 color: Colors.black12,
                                                 offset: Offset(4, 4),
@@ -675,7 +749,7 @@ Future<Map<String, int>> fetchMonthlyAttendance(String userId) async {
                                                   crossAxisAlignment:
                                                       CrossAxisAlignment.start,
                                                   children: [
-                                                    Text(
+                                                    const Text(
                                                       'Attendance Details',
                                                       style: TextStyle(
                                                         fontSize: 18,
@@ -683,12 +757,9 @@ Future<Map<String, int>> fetchMonthlyAttendance(String userId) async {
                                                             FontWeight.w600,
                                                       ),
                                                     ),
-                                                    SizedBox(height: 6),
+                                                    const SizedBox(height: 6),
                                                     Builder(
                                                       builder: (context) {
-                                                        // Show loader if data is being fetched
-
-                                                        // Show 'No data' if data is null
                                                         if (data == null) {
                                                           return DailyEmptyAttendance(
                                                             selectedDay:
@@ -713,90 +784,187 @@ Future<Map<String, int>> fetchMonthlyAttendance(String userId) async {
                                 ],
                               ),
                             ),
-                          )
+                          ),
                         ],
                       ),
                     ),
         ),
         floatingActionButton: _selectedIndex == 0
-            ? DraggableFab(
-                child: Container(
-                  margin: EdgeInsets.only(bottom: 20.0),
-                  child: Stack(
-                    alignment: Alignment.center,
-                    children: [
-                      // Outer Circle
-                      Material(
-                        elevation: 4.0, // Adjust elevation as needed
-                        shape: CircleBorder(),
-                        child: CircleAvatar(
-                          radius:
-                              45, // This defines the size of the CircleAvatar (90 width and height)
-                          backgroundColor: Colors.white,
-                          child: Container(
-                            decoration: BoxDecoration(
-                              shape: BoxShape.circle,
-                              border: Border.all(
-                                color: Color(0xff8E71DF),
-                                width: 2.0,
+            ? FutureBuilder<Map<String, dynamic>?>(
+                future: _getAttendanceDetails(userId, DateTime.now()),
+                builder: (context, snapshot) {
+                  DateTime? checkIn;
+                  DateTime? checkOut;
+
+                  if (snapshot.hasData && snapshot.data != null) {
+                    final data = snapshot.data!;
+                    checkIn = (data['checkIn'] as Timestamp?)?.toDate();
+                    checkOut = (data['checkOut'] as Timestamp?)?.toDate();
+                  }
+
+                  if (checkIn != null && checkOut == null) {
+                    // Display Check-Out Button
+                    return DraggableFab(
+                      child: Container(
+                        margin: const EdgeInsets.only(bottom: 20.0),
+                        child: Stack(
+                          alignment: Alignment.center,
+                          children: [
+                            // Outer Circle
+                            Material(
+                              elevation: 4.0, // Adjust elevation as needed
+                              shape: const CircleBorder(),
+                              child: CircleAvatar(
+                                radius:
+                                    45, // This defines the size of the CircleAvatar (90 width and height)
+                                backgroundColor: Colors.white,
+                                child: Container(
+                                  decoration: BoxDecoration(
+                                    shape: BoxShape.circle,
+                                    border: Border.all(
+                                      color: const Color(0xffFB3F4A),
+                                      width: 2.0,
+                                    ),
+                                  ),
+                                ),
                               ),
                             ),
-                          ),
-                        ),
-                      ),
-                      // Middle Circle
-                      Container(
-                        width: 60,
-                        height: 60,
-                        decoration: BoxDecoration(
-                          color: Colors.white,
-                          shape: BoxShape.circle,
-                          border: Border.all(
-                            color: Color(0xff8E71DF),
-                            width: 1.0,
-                          ),
-                        ),
-                      ),
-                      FloatingActionButton(
-                        onPressed: () {
-                          Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                              builder: (context) => CheckinScreen(),
+                            // Middle Circle
+                            Container(
+                              width: 60,
+                              height: 60,
+                              decoration: BoxDecoration(
+                                color: Colors.white,
+                                shape: BoxShape.circle,
+                                border: Border.all(
+                                  color: const Color(0xffFB3F4A),
+                                  width: 1.0,
+                                ),
+                              ),
                             ),
-                          );
-                        },
-                        backgroundColor: Color(0xffEFF1FF),
-                        shape: RoundedRectangleBorder(
-                          borderRadius:
-                              BorderRadius.circular(300), // Set border radius
-                        ),
-                        child: Column(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: [
-                            Image.asset(
-                              'assets/mingcute.png',
-                              height: 20,
-                              width: 20,
-                            ),
-                            SizedBox(height: 4),
-                            Text(
-                              'Check In',
-                              style: TextStyle(
-                                color: Colors.black,
-                                fontSize: 8,
-                                height: 0,
+                            FloatingActionButton(
+                              onPressed: () {
+                                Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                    builder: (context) => const CheckinScreen(),
+                                  ),
+                                );
+                              },
+                              backgroundColor: const Color(0xffffd7d9),
+                              shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(
+                                    300), // Set border radius
+                              ),
+                              child: Column(
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                children: [
+                                  Image.asset(
+                                    'assets/mingcute.png',
+                                    height: 20,
+                                    width: 20,
+                                    color: const Color(0xffFB3F4A),
+                                  ),
+                                  const SizedBox(height: 4),
+                                  const Text(
+                                    'Check Out',
+                                    style: TextStyle(
+                                      color: Colors.black,
+                                      fontSize: 8,
+                                      height: 0,
+                                    ),
+                                  ),
+                                ],
                               ),
                             ),
                           ],
                         ),
                       ),
-                    ],
-                  ),
-                ),
+                    );
+                  } else if (checkIn == null && checkOut == null) {
+                    // Display Check-In Button
+                    return DraggableFab(
+                      child: Container(
+                        margin: const EdgeInsets.only(bottom: 20.0),
+                        child: Stack(
+                          alignment: Alignment.center,
+                          children: [
+                            // Outer Circle
+                            Material(
+                              elevation: 4.0, // Adjust elevation as needed
+                              shape: const CircleBorder(),
+                              child: CircleAvatar(
+                                radius:
+                                    45, // This defines the size of the CircleAvatar (90 width and height)
+                                backgroundColor: Colors.white,
+                                child: Container(
+                                  decoration: BoxDecoration(
+                                    shape: BoxShape.circle,
+                                    border: Border.all(
+                                      color: const Color(0xff8E71DF),
+                                      width: 2.0,
+                                    ),
+                                  ),
+                                ),
+                              ),
+                            ),
+                            // Middle Circle
+                            Container(
+                              width: 60,
+                              height: 60,
+                              decoration: BoxDecoration(
+                                color: Colors.white,
+                                shape: BoxShape.circle,
+                                border: Border.all(
+                                  color: const Color(0xff8E71DF),
+                                  width: 1.0,
+                                ),
+                              ),
+                            ),
+                            FloatingActionButton(
+                              onPressed: () {
+                                Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                    builder: (context) => const CheckinScreen(),
+                                  ),
+                                );
+                              },
+                              backgroundColor: const Color(0xffEFF1FF),
+                              shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(
+                                    300), // Set border radius
+                              ),
+                              child: Column(
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                children: [
+                                  Image.asset(
+                                    'assets/mingcute.png',
+                                    height: 20,
+                                    width: 20,
+                                  ),
+                                  const SizedBox(height: 4),
+                                  const Text(
+                                    'Check In',
+                                    style: TextStyle(
+                                      color: Colors.black,
+                                      fontSize: 8,
+                                      height: 0,
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                    );
+                  }
+                  return const SizedBox();
+                },
               )
             : null,
-        floatingActionButtonLocation: FloatingActionButtonLocation.centerTop,
+        floatingActionButtonLocation: FloatingActionButtonLocation.endFloat,
         bottomNavigationBar: Padding(
           padding: const EdgeInsets.symmetric(horizontal: 10.0, vertical: 10.0),
           child: Container(
@@ -804,22 +972,22 @@ Future<Map<String, int>> fetchMonthlyAttendance(String userId) async {
             width: double.infinity,
             decoration: BoxDecoration(
               borderRadius: BorderRadius.circular(60),
-              color: Color(0xffEFF1FF),
+              color: const Color(0xffEFF1FF),
               boxShadow: [
                 BoxShadow(
                   color: Colors.grey.withOpacity(0.2),
                   spreadRadius: 2,
                   blurRadius: 4,
-                  offset: Offset(0, 2), // changes position of shadow
+                  offset: const Offset(0, 2), // changes position of shadow
                 ),
               ],
             ),
             child: Row(
               children: [
-                _buildSegmentNavigator('Home', 0, Icon(Icons.home)),
+                _buildSegmentNavigator('Home', 0, const Icon(Icons.home)),
                 _buildSegmentNavigator(
-                    'Stats', 1, Icon(Icons.graphic_eq_outlined)),
-                _buildSegmentNavigator('Profile', 2, Icon(Icons.person)),
+                    'Stats', 1, const Icon(Icons.graphic_eq_outlined)),
+                _buildSegmentNavigator('Profile', 2, const Icon(Icons.person)),
               ],
             ),
           ),

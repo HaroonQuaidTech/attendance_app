@@ -1,7 +1,6 @@
 // ignore_for_file: prefer_const_constructors, prefer_const_literals_to_create_immutables, unnecessary_string_interpolations, depend_on_referenced_packages, unused_local_variable
 
 import 'dart:developer';
-
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
@@ -21,7 +20,6 @@ class _GraphicalbuilerState extends State<GraphicalbuilerMonthly> {
 
   Future<List<Map<String, dynamic>>?> fetchMonthlyAttendance(
       String userId) async {
-    // Fetching monthly attendance data
     try {
       DateTime now = DateTime.now();
       DateTime firstDayOfMonth = DateTime(now.year, now.month, 1);
@@ -210,7 +208,7 @@ class _GraphicalbuilerState extends State<GraphicalbuilerMonthly> {
       builder: (context, snapshot) {
         if (snapshot.connectionState == ConnectionState.waiting) {
           return Padding(
-            padding: const EdgeInsets.only(top:240.0),
+            padding: const EdgeInsets.only(top: 240.0),
             child: CircularProgressIndicator(),
           );
         } else if (snapshot.hasError) {
