@@ -5,24 +5,22 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 
 import 'package:intl/intl.dart';
-enum AttendanceType { monthly}
+
 class MonthlyAttendance extends StatefulWidget {
   final Color color;
   final String? dropdownValue2;
-   final AttendanceType attendanceType;
 
   const MonthlyAttendance({
     Key? key,
     required this.color,
     required this.dropdownValue2,
-     this.attendanceType = AttendanceType.monthly,
   }) : super(key: key);
 
   @override
-  State<MonthlyAttendance> createState() => _MonthlyAttendanceState();
+  State<MonthlyAttendance> createState() => _WeeklyAttendanceState();
 }
 
-class _MonthlyAttendanceState extends State<MonthlyAttendance> {
+class _WeeklyAttendanceState extends State<MonthlyAttendance> {
   final String userId = FirebaseAuth.instance.currentUser!.uid;
   bool isLoading = true;
 
@@ -35,11 +33,12 @@ class _MonthlyAttendanceState extends State<MonthlyAttendance> {
   Future<void> _getMonthlyAttendance(String uid) async {
     DateTime today = DateTime.now();
 
+    // Get the first day of the current month
     DateTime firstDayOfMonth = DateTime(today.year, today.month, 1);
 
-   
+    // Get the last day of the current month
     int lastDayOfMonth = DateTime(today.year, today.month + 1, 0)
-        .day;
+        .day; // This gets the last day of the current month
 
     for (int day = 1; day <= lastDayOfMonth; day++) {
       DateTime currentDate =
@@ -47,7 +46,7 @@ class _MonthlyAttendanceState extends State<MonthlyAttendance> {
       String formattedDate = DateFormat('yMMMd').format(currentDate);
       String formattedDay = DateFormat('EEE').format(currentDate);
 
-     
+      // Fetch attendance data from Firestore for the current date
       final DocumentSnapshot<Map<String, dynamic>> snapshot =
           await FirebaseFirestore.instance
               .collection('AttendanceDetails')
@@ -94,13 +93,13 @@ class _MonthlyAttendanceState extends State<MonthlyAttendance> {
             }
           }
 
-         
+          // Add additional data to each entry
           data['formattedDate'] = formattedDate;
           data['formattedDay'] = formattedDay;
           data['statuses'] = statuses;
           monthlyData.add(data);
         } else {
-        
+          // No data for this day, mark as Absent
           monthlyData.add({
             "checkIn": null,
             "checkOut": null,
@@ -193,14 +192,8 @@ class _MonthlyAttendanceState extends State<MonthlyAttendance> {
                   final DateTime date = DateFormat('MMM dd, yyyy')
                       .parse(filteredData[index]['formattedDate']);
                   final String day = DateFormat('EE').format(date);
-
-                  // Skip weekends (Saturday and Sunday)
-                  if (day == 'Sat' || day == 'Sun') {
-                    return SizedBox
-                        .shrink(); // Return an empty widget for weekends
-                  }
-
                   final String formattedDate = DateFormat('dd').format(date);
+
                   String checkInTime =
                       _formatTime(data['checkIn'] as Timestamp?);
                   String checkOutTime =

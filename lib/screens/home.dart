@@ -188,90 +188,78 @@ class _HomeScreenState extends State<HomeScreen> {
     }
   }
 
-Future<Map<String, int>> fetchMonthlyAttendance(String userId) async {
-  final now = DateTime.now();
-  final startOfMonth = DateTime(now.year, now.month, 1);
+  Future<Map<String, int>> fetchMonthlyAttendance(String userId) async {
+    final now = DateTime.now();
+    final startOfMonth = DateTime(now.year, now.month, 1);
 
-  final attendanceCollection = FirebaseFirestore.instance
-      .collection('AttendanceDetails')
-      .doc(userId)
-      .collection('dailyattendance');
+    final attendanceCollection = FirebaseFirestore.instance
+        .collection('AttendanceDetails')
+        .doc(userId)
+        .collection('dailyattendance');
 
-  try {
- 
-    final querySnapshot = await attendanceCollection
-        .where('checkIn', isGreaterThanOrEqualTo: startOfMonth)
-        .where('checkIn', isLessThanOrEqualTo: now) 
-        .get();
+    try {
+      final querySnapshot = await attendanceCollection
+          .where('checkIn', isGreaterThanOrEqualTo: startOfMonth)
+          .where('checkIn', isLessThanOrEqualTo: now)
+          .get();
 
-   
-    final currentDayOfMonth = now.day;
+      final currentDayOfMonth = now.day;
 
- 
-    Map<String, int> counts = {
-      'present': 0,
-      'late': 0,
-      'absent': 0,
-    };
+      Map<String, int> counts = {
+        'present': 0,
+        'late': 0,
+        'absent': 0,
+      };
 
-
-    if (querySnapshot.docs.isEmpty) {
-      return {'present': 0, 'late': 0, 'absent': currentDayOfMonth};
-    }
-
-
-    Set<int> daysWithRecords = {};
-
-  
-    for (var doc in querySnapshot.docs) {
-      final data = doc.data();
-      final checkIn = (data['checkIn'] as Timestamp?)?.toDate();
-
-      if (checkIn == null) continue; 
-
-      final checkInDay = checkIn.day;
-
-     
-      final lateThreshold = DateTime(checkIn.year, checkIn.month, checkIn.day, 8, 15);
-
-   
-      daysWithRecords.add(checkInDay);
-
-     
-      counts['present'] = (counts['present'] ?? 0) + 1;
-
-
-      if (checkIn.isAfter(lateThreshold)) {
-        counts['late'] = (counts['late'] ?? 0) + 1;
+      if (querySnapshot.docs.isEmpty) {
+        return {'present': 0, 'late': 0, 'absent': currentDayOfMonth};
       }
+
+      Set<int> daysWithRecords = {};
+
+      for (var doc in querySnapshot.docs) {
+        final data = doc.data();
+        final checkIn = (data['checkIn'] as Timestamp?)?.toDate();
+
+        if (checkIn == null) continue;
+
+        final checkInDay = checkIn.day;
+
+        final lateThreshold =
+            DateTime(checkIn.year, checkIn.month, checkIn.day, 8, 15);
+
+        daysWithRecords.add(checkInDay);
+
+        counts['present'] = (counts['present'] ?? 0) + 1;
+
+        if (checkIn.isAfter(lateThreshold)) {
+          counts['late'] = (counts['late'] ?? 0) + 1;
+        }
+      }
+
+      for (int day = 1; day <= currentDayOfMonth; day++) {
+        final DateTime date = DateTime(now.year, now.month, day);
+
+        if (date.weekday == DateTime.saturday ||
+            date.weekday == DateTime.sunday) {
+          continue;
+        }
+
+        if (!daysWithRecords.contains(day)) {
+          counts['absent'] = (counts['absent'] ?? 0) + 1;
+        }
+      }
+
+      return counts;
+    } catch (e) {
+      log('Error fetching monthly attendance: $e');
+      return {
+        'present': 0,
+        'late': 0,
+        'absent': 0,
+      };
     }
-
- for (int day = 1; day <= currentDayOfMonth; day++) {
-  final DateTime date = DateTime(now.year, now.month, day);
-  
- 
-  if (date.weekday == DateTime.saturday || date.weekday == DateTime.sunday) {
-    continue; 
   }
-
-  if (!daysWithRecords.contains(day)) {
-    counts['absent'] = (counts['absent'] ?? 0) + 1;
-  }
-}
-
-    return counts;
-  } catch (e) {
-    log('Error fetching monthly attendance: $e');
-    return {
-      'present': 0,
-      'late': 0,
-      'absent': 0,
-    };
-  }
-}
-
-
-
 
   Widget _buildSegmentNavigator(String text, int index, Icon icon) {
     final Size screenSize = MediaQuery.of(context).size;
