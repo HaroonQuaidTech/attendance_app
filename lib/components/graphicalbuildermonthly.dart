@@ -100,41 +100,90 @@ class _GraphicalbuilerState extends State<GraphicalbuilerMonthly> {
 
   Map<String, double> calculateAttendanceStats(
       List<Map<String, dynamic>> data) {
-    Map<String, double> stats = {
+    Map<String, double> attendanceStats = {
       "Present": 0,
       "Absent": 0,
-      "Late Arrival": 0,
       "Early Out": 0,
+      "Late Arrival": 0,
     };
-    final now = DateTime.now();
+
     for (var entry in data) {
       final checkIn = (entry['checkIn'] as Timestamp?)?.toDate();
       final checkOut = (entry['checkOut'] as Timestamp?)?.toDate();
 
-      // Assume logic for categorizing attendance
       if (checkIn != null && checkOut != null) {
-        // Example logic for counting attendance types
-        // Modify according to your attendance rules
-        if (checkIn
-            .isAfter(DateTime(now.year, now.month, checkIn.day, 8, 30))) {
-          stats["Late Arrival"] = (stats["Late Arrival"] ?? 0) + 1;
-        } else {
-          stats["Present"] = (stats["Present"] ?? 0) + 1;
+        final checkInTime = TimeOfDay.fromDateTime(checkIn);
+        final checkOutTime = TimeOfDay.fromDateTime(checkOut);
+
+        if (checkInTime.hour > 8 ||
+            (checkInTime.hour == 8 && checkInTime.minute > 15)) {
+          attendanceStats["Late Arrival"] =
+              (attendanceStats["Late Arrival"] ?? 0) + 1;
         }
 
-        if (checkOut
-            .isBefore(DateTime(now.year, now.month, checkIn.day, 17, 0))) {
-          stats["Early Out"] = (stats["Early Out"] ?? 0) + 1;
+        if (checkOutTime.hour < 17) {
+          attendanceStats["Early Out"] =
+              (attendanceStats["Early Out"] ?? 0) + 1;
         }
       } else {
-        stats["Absent"] =
-            (stats["Absent"] ?? 0) + 1; // Count as absent if no check-in
+        attendanceStats["Absent"] = (attendanceStats["Absent"] ?? 0) + 1;
       }
     }
 
-    return stats;
+    return attendanceStats;
   }
 
+  int getLateArrivalCount(List<Map<String, dynamic>> attendanceData) {
+    int lateCount = 0;
+
+    for (var entry in attendanceData) {
+      if (entry['checkIn'] != null) {
+        DateTime checkInTime = (entry['checkIn'] as Timestamp).toDate();
+     
+        if (checkInTime.isAfter(DateTime(
+            checkInTime.year, checkInTime.month, checkInTime.day, 8, 15))) {
+          lateCount++;
+        }
+      }
+    }
+    return lateCount;
+  }
+
+  int getEarlyOutCount(List<Map<String, dynamic>> attendanceData) {
+    int earlyCount = 0;
+
+    for (var entry in attendanceData) {
+      // Check if 'checkOut' is not null before processing
+      if (entry['checkOut'] != null) {
+        DateTime checkOutTime = (entry['checkOut'] as Timestamp)
+            .toDate(); 
+     
+        if (checkOutTime.isBefore(DateTime(
+            checkOutTime.year, checkOutTime.month, checkOutTime.day, 17, 0))) {
+          earlyCount++;
+        }
+      }
+    }
+    return earlyCount;
+  }
+  int getAbsentCount(List<dynamic> attendanceData) {
+  int absentCount = 0;
+
+  // Loop through the attendance data to count absences
+  for (var record in attendanceData) {
+    if (record['checkIn'] == null && record['checkOut'] == null) {
+      absentCount++;
+    }
+  }
+  
+  return absentCount; // Returns total absent days
+}
+  Map<String, double> weeklyHours= {
+    'Present': 0, // hours present
+    'Absent': 0, // days absent
+    'Late Arrival': 0, // late days
+    'Early Out':0, // early check-outs
+  };
   @override
   void initState() {
     super.initState();
@@ -178,6 +227,15 @@ class _GraphicalbuilerState extends State<GraphicalbuilerMonthly> {
             calculateMonthlyHours(snapshot.data!);
         Map<String, double> monthlyAttendanceStats =
             calculateAttendanceStats(snapshot.data!);
+            log("$monthlyHours");
+
+
+                Map<String, double> pieChartData = {
+            'Present': monthlyHours.values.reduce((a, b) => a +b).toDouble(),
+           'Absent': getAbsentCount(snapshot.data!) * 9.0,
+            'Late Arrival': getLateArrivalCount(snapshot.data!).toDouble(), 
+            'Early Out': getEarlyOutCount(snapshot.data!).toDouble(), 
+          };
 
         return Container(
           decoration: BoxDecoration(
@@ -352,59 +410,61 @@ class _GraphicalbuilerState extends State<GraphicalbuilerMonthly> {
             ),
             SizedBox(height: 20),
             // Monthly Pie Chart
-            Container(
-              padding: EdgeInsets.all(12),
-              height: 430,
-              width: double.infinity,
-              decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(20),
-                color: Color(0xffEFF1FF),
-                boxShadow: [
-                  BoxShadow(
-                    color: Colors.grey.withOpacity(0.2),
-                    spreadRadius: 2,
-                    blurRadius: 4,
-                    offset: Offset(0, 2),
-                  ),
-                ],
-              ),
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text(
-                    'Monthly',
-                    style: TextStyle(
-                      fontSize: 20,
-                      fontWeight: FontWeight.w600,
+           Container(
+                padding: EdgeInsets.all(12),
+                height: 430,
+                width: double.infinity,
+                decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(20),
+                  color: Color(0xffEFF1FF),
+                  boxShadow: [
+                    BoxShadow(
+                      color: Colors.grey.withOpacity(0.2),
+                      spreadRadius: 2,
+                      blurRadius: 4,
+                      offset: Offset(0, 2), 
                     ),
-                  ),
-                  SizedBox(height: 20),
-                  PieChart(
-                    dataMap: monthlyAttendanceStats
-                        .map((key, value) => MapEntry(key, value.toDouble())),
-                    colorList: [
-                      Color(0xff9478F7), // Present
-                      Color(0xffEC5851), // Absent
-                      Color(0xffF6C15B), // late arrival
-                      Color(0xffF07E25), // early Out
-                    ],
-                    chartRadius: MediaQuery.of(context).size.width / 1.7,
-                    legendOptions: LegendOptions(
-                      legendPosition: LegendPosition.top,
-                      showLegendsInRow: true,
-                      showLegends: true,
-                      legendShape: BoxShape.circle,
-                      legendTextStyle: TextStyle(
-                        fontWeight: FontWeight.bold,
+                  ],
+                ),
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      'Monthly',
+                      style: TextStyle(
+                        fontSize: 20,
+                        fontWeight: FontWeight.w600,
                       ),
                     ),
-                    chartValuesOptions: ChartValuesOptions(
-                      showChartValues: false,
-                    ),
-                    totalValue: monthlyAttendanceStats.values
-                        .reduce((a, b) => a + b)
-                        .toDouble(),
+                    SizedBox(height: 20),
+                    pieChartData.isEmpty
+                        ? Center(child: Text('No data available'))
+                        : PieChart(
+                            dataMap: pieChartData,
+                            colorList: [
+                              Color(0xff9478F7), // Present
+                              Color(0xffEC5851), // Absent
+                              Color(0xffF6C15B), // Late Arrival
+                              Color(0xffF07E25), // Early Out
+                            ],
+                            chartRadius:
+                                MediaQuery.of(context).size.width / 1.7,
+                            legendOptions: LegendOptions(
+                              legendPosition: LegendPosition.top,
+                              showLegendsInRow: true,
+                              showLegends: true,
+                              legendShape: BoxShape.circle,
+                              legendTextStyle: TextStyle(
+                                fontWeight: FontWeight.bold,
+                              ),
+                            ),
+                            chartValuesOptions: ChartValuesOptions(
+                              showChartValues: false,
+                            ),
+                            totalValue: pieChartData.values.isNotEmpty
+                                ? pieChartData.values.reduce((a, b) => a + b)
+                                : 1, 
                   ),
                 ],
               ),

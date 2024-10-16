@@ -151,12 +151,58 @@ class _GraphicalbuilerState extends State<GraphicalbuilerWeekly> {
     return attendanceStats;
   }
 
-Map<String, double> weeklyHoursss = {
-  'Present': 15,     // hours present
-  'Absent': 3,       // days absent
-  'Late Arrival': 2, // late days
-  'Early Out': 1,    // early check-outs
-};
+  int getLateArrivalCount(List<Map<String, dynamic>> attendanceData) {
+    int lateCount = 0;
+
+    for (var entry in attendanceData) {
+      if (entry['checkIn'] != null) {
+        DateTime checkInTime = (entry['checkIn'] as Timestamp).toDate();
+     
+        if (checkInTime.isAfter(DateTime(
+            checkInTime.year, checkInTime.month, checkInTime.day, 8, 15))) {
+          lateCount++;
+        }
+      }
+    }
+    return lateCount;
+  }
+
+  int getEarlyOutCount(List<Map<String, dynamic>> attendanceData) {
+    int earlyCount = 0;
+
+    for (var entry in attendanceData) {
+      // Check if 'checkOut' is not null before processing
+      if (entry['checkOut'] != null) {
+        DateTime checkOutTime = (entry['checkOut'] as Timestamp)
+            .toDate(); 
+     
+        if (checkOutTime.isBefore(DateTime(
+            checkOutTime.year, checkOutTime.month, checkOutTime.day, 17, 0))) {
+          earlyCount++;
+        }
+      }
+    }
+    return earlyCount;
+  }
+  int getAbsentCount(List<dynamic> attendanceData) {
+  int absentCount = 0;
+
+  // Loop through the attendance data to count absences
+  for (var record in attendanceData) {
+    if (record['checkIn'] == null && record['checkOut'] == null) {
+      absentCount++;
+    }
+  }
+  
+  return absentCount; // Returns total absent days
+}
+
+  Map<String, double> weeklyHoursss = {
+    'Present': 0, // hours present
+    'Absent': 0, // days absent
+    'Late Arrival': 0, // late days
+    'Early Out':0, // early check-outs
+  };
   @override
   void initState() {
     super.initState();
@@ -193,6 +239,13 @@ Map<String, double> weeklyHoursss = {
 
           // Get the weekly hours
           Map<int, double> weeklyHours = calculateWeeklyHourss(snapshot.data!);
+
+          Map<String, double> pieChartData = {
+            'Present': weeklyHours.values.reduce((a, b) => a + b).toDouble(),
+           'Absent': getAbsentCount(snapshot.data!) * 9.0,
+            'Late Arrival': getLateArrivalCount(snapshot.data!).toDouble(), 
+            'Early Out': getEarlyOutCount(snapshot.data!).toDouble(), 
+          };
 
           return Container(
             decoration: BoxDecoration(
@@ -272,25 +325,25 @@ Map<String, double> weeklyHoursss = {
                                     int dayIndex = value.toInt();
                                     bool hasData = (weeklyHours[dayIndex + 1] ??
                                             0) >
-                                        0; // Adjust index for your data map (1 for Mon, 2 for Tue, etc.)
+                                        0; 
 
-                                    // Get the current day of the week (Monday is 1, ..., Sunday is 7)
+                                 
                                     int currentDayOfWeek =
                                         DateTime.now().weekday;
 
-                                    // Only show titles for Monday to Friday, and make sure not to show future days.
+                                
                                     if (currentDayOfWeek > 5) {
                                       currentDayOfWeek =
-                                          5; // If it's Saturday or Sunday, cap it at Friday
+                                          5; 
                                     }
 
-                                    // Don't show future days (if dayIndex exceeds currentDayOfWeek - 1, it's a future day)
+                               
                                     if (dayIndex >= currentDayOfWeek) {
                                       return const Text(
-                                          ''); // Return empty text for future days
+                                          ''); 
                                     }
 
-                                    // Set the text color based on data presence
+                                   
                                     Color textColor =
                                         hasData ? Colors.black : Colors.red;
 
@@ -376,64 +429,64 @@ Map<String, double> weeklyHoursss = {
                 height: 24,
               ),
               Container(
-  padding: EdgeInsets.all(12),
-  height: 430,
-  width: double.infinity,
-  decoration: BoxDecoration(
-    borderRadius: BorderRadius.circular(20),
-    color: Color(0xffEFF1FF),
-    boxShadow: [
-      BoxShadow(
-        color: Colors.grey.withOpacity(0.2),
-        spreadRadius: 2,
-        blurRadius: 4,
-        offset: Offset(0, 2), // changes position of shadow
-      ),
-    ],
-  ),
-  child: Column(
-    mainAxisAlignment: MainAxisAlignment.center,
-    crossAxisAlignment: CrossAxisAlignment.start,
-    children: [
-      Text(
-        'Weekly',
-        style: TextStyle(
-          fontSize: 20,
-          fontWeight: FontWeight.w600,
-        ),
-      ),
-      SizedBox(height: 20),
-      weeklyHoursss.isEmpty
-          ? Center(child: Text('No data available'))
-          : PieChart(
-              dataMap: weeklyHoursss,
-              colorList: [
-                Color(0xff9478F7), // Present
-                Color(0xffEC5851), // Absent
-                Color(0xffF6C15B), // Late Arrival
-                Color(0xffF07E25), // Early Out
-              ],
-              chartRadius: MediaQuery.of(context).size.width / 1.7,
-              legendOptions: LegendOptions(
-                legendPosition: LegendPosition.top,
-                showLegendsInRow: true,
-                showLegends: true,
-                legendShape: BoxShape.circle,
-                legendTextStyle: TextStyle(
-                  fontWeight: FontWeight.bold,
+                padding: EdgeInsets.all(12),
+                height: 430,
+                width: double.infinity,
+                decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(20),
+                  color: Color(0xffEFF1FF),
+                  boxShadow: [
+                    BoxShadow(
+                      color: Colors.grey.withOpacity(0.2),
+                      spreadRadius: 2,
+                      blurRadius: 4,
+                      offset: Offset(0, 2), 
+                    ),
+                  ],
+                ),
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      'Weekly',
+                      style: TextStyle(
+                        fontSize: 20,
+                        fontWeight: FontWeight.w600,
+                      ),
+                    ),
+                    SizedBox(height: 20),
+                    pieChartData.isEmpty
+                        ? Center(child: Text('No data available'))
+                        : PieChart(
+                            dataMap: pieChartData,
+                            colorList: [
+                              Color(0xff9478F7), // Present
+                              Color(0xffEC5851), // Absent
+                              Color(0xffF6C15B), // Late Arrival
+                              Color(0xffF07E25), // Early Out
+                            ],
+                            chartRadius:
+                                MediaQuery.of(context).size.width / 1.7,
+                            legendOptions: LegendOptions(
+                              legendPosition: LegendPosition.top,
+                              showLegendsInRow: true,
+                              showLegends: true,
+                              legendShape: BoxShape.circle,
+                              legendTextStyle: TextStyle(
+                                fontWeight: FontWeight.bold,
+                              ),
+                            ),
+                            chartValuesOptions: ChartValuesOptions(
+                              showChartValues: false,
+                            ),
+                            totalValue: pieChartData.values.isNotEmpty
+                                ? pieChartData.values.reduce((a, b) => a + b)
+                                : 1, 
+                          ),
+                  ],
                 ),
               ),
-              chartValuesOptions: ChartValuesOptions(
-                showChartValues: false,
-              ),
-              totalValue: weeklyHoursss.values.isNotEmpty
-                  ? weeklyHoursss.values.reduce((a, b) => a + b)
-                  : 1, // Avoid division by zero
-            ),
-    ],
-  ),
-),
-
             ]),
           );
         });

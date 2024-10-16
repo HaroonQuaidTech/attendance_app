@@ -94,7 +94,24 @@ class _StatusBuilerState extends State<StatusBuiler> {
     return '$formattedHours:$formattedMinutes';
   }
 
-  int _calculateWeeklyTotal(List<Map<String, dynamic>?> weeklyData) {
+  int _calculateMonthlyTotal(List<Map<String, dynamic>?> monthlyData) {
+    int totalMinutes = 0;
+
+    for (var data in monthlyData) {
+      if (data == null) continue;
+      final checkIn = (data['checkIn'] as Timestamp?)?.toDate();
+      final checkOut = (data['checkOut'] as Timestamp?)?.toDate();
+
+      if (checkIn != null && checkOut != null) {
+        final duration = checkOut.difference(checkIn);
+        totalMinutes += duration.inMinutes;
+      }
+    }
+
+    return totalMinutes;
+  }
+
+  int _calculateMonthlyMins(List<Map<String, dynamic>?> weeklyData) {
     int totalMinutes = 0;
 
     for (var data in weeklyData) {
@@ -111,45 +128,25 @@ class _StatusBuilerState extends State<StatusBuiler> {
     return totalMinutes;
   }
 
-  int _calculateWeeklyTotalP(List<Map<String, dynamic>?> weeklyData) {
-    int totalMinutes = 0;
+ double _calculateMonthlyHours(List<Map<String, dynamic>?> monthlyData) {
+  int totalMinutes = 0;
 
-    for (var data in weeklyData) {
-      if (data == null) continue;
-      final checkIn = (data['checkIn'] as Timestamp?)?.toDate();
-      final checkOut = (data['checkOut'] as Timestamp?)?.toDate();
+  for (var data in monthlyData) {
+    if (data == null) continue;
+    final checkIn = (data['checkIn'] as Timestamp?)?.toDate();
+    final checkOut = (data['checkOut'] as Timestamp?)?.toDate();
 
-      if (checkIn != null && checkOut != null) {
-        final duration = checkOut.difference(checkIn);
-        totalMinutes += duration.inMinutes;
-      }
+    if (checkIn != null && checkOut != null) {
+      final duration = checkOut.difference(checkIn);
+      totalMinutes += duration.inMinutes;
     }
-
-    return totalMinutes;
   }
 
-  double _calculateWeeklyHours(List<Map<String, dynamic>?> weeklyData) {
-    int totalMinutes = 0;
-    final now = DateTime.now();
-    final startOfWeek = now.subtract(Duration(days: now.weekday - 1));
-    final endOfWeek = startOfWeek.add(Duration(days: 6));
 
-    for (var data in weeklyData) {
-      if (data == null) continue;
-      final checkIn = (data['checkIn'] as Timestamp?)?.toDate();
-      final checkOut = (data['checkOut'] as Timestamp?)?.toDate();
+  final double totalHours = totalMinutes / 60;
+  return totalHours;
+}
 
-      if (checkIn != null && checkOut != null) {
-        final date = checkIn.toLocal();
-        if (date.isAfter(startOfWeek) && date.isBefore(endOfWeek)) {
-          final duration = checkOut.difference(checkIn);
-          totalMinutes += duration.inMinutes;
-        }
-      }
-    }
-
-    return totalMinutes / 60;
-  }
 
 //-------------------------1
   Widget _buildEmptyAttendanceContainer(
@@ -282,6 +279,72 @@ class _StatusBuilerState extends State<StatusBuiler> {
       ),
     );
   }
+  Widget _buildWeekendContainer(
+    int index,
+  ) {
+    final DateTime now = DateTime.now();
+
+    final DateTime firstDayOfMonth = DateTime(now.year, now.month, 1);
+
+    final DateTime date = firstDayOfMonth.add(Duration(days: index));
+
+    final String day = DateFormat('EE').format(date);
+    final String formattedDate = DateFormat('dd').format(date);
+
+    return Container(
+      padding: EdgeInsets.symmetric(horizontal: 12),
+      margin: EdgeInsets.only(bottom: 10),
+      height: 82,
+      decoration: BoxDecoration(
+        borderRadius: BorderRadius.circular(12),
+        color: Colors.white,
+      ),
+      child: Row(
+        children: [
+          Container(
+            width: 53,
+            height: 55,
+            decoration: BoxDecoration(
+                color: Colors.blueGrey,
+                borderRadius: BorderRadius.circular(6)),
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: [
+                Text(
+                  formattedDate,
+                  style: TextStyle(
+                      fontSize: 22,
+                      fontWeight: FontWeight.w600,
+                      color: Colors.white),
+                ),
+                Text(
+                  day,
+                  style: TextStyle(
+                    fontSize: 12,
+                    fontWeight: FontWeight.w400,
+                    color: Colors.white,
+                  ),
+                ),
+              ],
+            ),
+          ),
+          SizedBox(width: 30),
+          Padding(
+            padding: const EdgeInsets.only(left: 20.0),
+            child: Text(
+              'Weekend Days',
+              style: TextStyle(
+                fontSize: 22,
+                fontWeight: FontWeight.bold,
+                height: 0,
+              ),
+            ),
+          )
+        ],
+      ),
+    );
+  }
 
   String getCurrentMonthDateRange() {
     final now = DateTime.now();
@@ -343,6 +406,9 @@ class _StatusBuilerState extends State<StatusBuiler> {
             final DateTime date = firstDayOfMonth.add(Duration(days: index));
             final String day = DateFormat('EE').format(date);
             final String formattedDate = DateFormat('dd').format(date);
+             if (date.weekday == DateTime.saturday || date.weekday == DateTime.sunday) {
+    return _buildWeekendContainer(index);
+  }
 
             if (date.isAfter(now) ||
                 date.weekday == DateTime.saturday ||
@@ -522,20 +588,22 @@ Widget _buildDivider() {
                     date.isBefore(newWeekEnd.add(Duration(days: 1)));
               }).toList();
 
-              final weeklyData = snapshot.data!;
+              final monthlyData = snapshot.data!;
 
-              final totalTime = _calculateWeeklyTotal(weeklyData);
+              final totalTime = _calculateMonthlyTotal(monthlyData);
 
               final totalHours = (totalTime / 60).toStringAsFixed(2);
-              final totalMinutes = _calculateWeeklyTotal(weeklyData);
-              final totalHourss = _calculateWeeklyHours(weeklyData);
+              final totalMinutes = _calculateMonthlyTotal(monthlyData);
+              final totalHourss = _calculateMonthlyHours(monthlyData);
+             
+              
 
-              final int maxMinutes = 3000;
-              final double maxHours = 40;
+              final int maxMinutes =10392;
+              final double maxHours = 173.2;
+              double progressValue = maxHours != 0 ? totalHourss / maxHours : 0.0;
+           
 
-              final double progress = totalHourss / maxHours;
-
-              final double progresss = totalMinutes / maxMinutes;
+           
 
               return Container(
                   height: 207,
@@ -640,7 +708,7 @@ Widget _buildDivider() {
                                               fontSize: 20),
                                         ),
                                         LinearProgressIndicator(
-                                          value: progress,
+                                         value: progressValue,
                                           backgroundColor: Colors.grey[300],
                                           color: Color(0xff9478F7),
                                         ),

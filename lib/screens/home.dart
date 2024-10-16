@@ -200,13 +200,18 @@ Future<Map<String, int>> fetchMonthlyAttendance(String userId) async {
       }
     }
 
+ for (int day = 1; day <= currentDayOfMonth; day++) {
+  final DateTime date = DateTime(now.year, now.month, day);
+  
  
-    for (int day = 1; day <= currentDayOfMonth; day++) {
-      if (!daysWithRecords.contains(day)) {
-        counts['absent'] = (counts['absent'] ?? 0) + 1;
-      }
-    }
-    counts['absent'] = (counts['absent']! - 2).clamp(0, currentDayOfMonth);
+  if (date.weekday == DateTime.saturday || date.weekday == DateTime.sunday) {
+    continue; 
+  }
+
+  if (!daysWithRecords.contains(day)) {
+    counts['absent'] = (counts['absent'] ?? 0) + 1;
+  }
+}
 
     return counts;
   } catch (e) {

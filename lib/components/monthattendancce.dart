@@ -5,22 +5,24 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 
 import 'package:intl/intl.dart';
-
+enum AttendanceType { monthly}
 class MonthlyAttendance extends StatefulWidget {
   final Color color;
   final String? dropdownValue2;
+   final AttendanceType attendanceType;
 
   const MonthlyAttendance({
     Key? key,
     required this.color,
     required this.dropdownValue2,
+     this.attendanceType = AttendanceType.monthly,
   }) : super(key: key);
 
   @override
-  State<MonthlyAttendance> createState() => _WeeklyAttendanceState();
+  State<MonthlyAttendance> createState() => _MonthlyAttendanceState();
 }
 
-class _WeeklyAttendanceState extends State<MonthlyAttendance> {
+class _MonthlyAttendanceState extends State<MonthlyAttendance> {
   final String userId = FirebaseAuth.instance.currentUser!.uid;
   bool isLoading = true;
 
@@ -30,86 +32,92 @@ class _WeeklyAttendanceState extends State<MonthlyAttendance> {
   List<Map<String, dynamic>> onTime = [];
   List<Map<String, dynamic>> earlyOuts = [];
   List<Map<String, dynamic>> presents = [];
-   Future<void> _getMonthlyAttendance(String uid) async {
-  DateTime today = DateTime.now();
-  
-  // Get the first day of the current month
-  DateTime firstDayOfMonth = DateTime(today.year, today.month, 1);
-  
-  // Get the last day of the current month
-  int lastDayOfMonth = DateTime(today.year, today.month + 1, 0).day;  // This gets the last day of the current month
+  Future<void> _getMonthlyAttendance(String uid) async {
+    DateTime today = DateTime.now();
 
-  for (int day = 1; day <= lastDayOfMonth; day++) {
-    DateTime currentDate = DateTime(firstDayOfMonth.year, firstDayOfMonth.month, day);
-    String formattedDate = DateFormat('yMMMd').format(currentDate);
-    String formattedDay = DateFormat('EEE').format(currentDate);
+    // Get the first day of the current month
+    DateTime firstDayOfMonth = DateTime(today.year, today.month, 1);
 
-    // Fetch attendance data from Firestore for the current date
-    final DocumentSnapshot<Map<String, dynamic>> snapshot = await FirebaseFirestore.instance
-        .collection('AttendanceDetails')
-        .doc(uid)
-        .collection('dailyattendance')
-        .doc(formattedDate)
-        .get();
-        
-    if (snapshot.exists) {
-      Map<String, dynamic>? data = snapshot.data();
+    // Get the last day of the current month
+    int lastDayOfMonth = DateTime(today.year, today.month + 1, 0)
+        .day; // This gets the last day of the current month
 
-      if (data != null) {
-        DateTime? checkInTime = (data['checkIn'] as Timestamp?)?.toDate();
-        DateTime? checkOutTime = (data['checkOut'] as Timestamp?)?.toDate();
-        
-        List<String> statuses = [];
+    for (int day = 1; day <= lastDayOfMonth; day++) {
+      DateTime currentDate =
+          DateTime(firstDayOfMonth.year, firstDayOfMonth.month, day);
+      String formattedDate = DateFormat('yMMMd').format(currentDate);
+      String formattedDay = DateFormat('EEE').format(currentDate);
 
-        if (checkInTime == null) {
-          statuses.add("Absent");
-          absents.add(data);
+      // Fetch attendance data from Firestore for the current date
+      final DocumentSnapshot<Map<String, dynamic>> snapshot =
+          await FirebaseFirestore.instance
+              .collection('AttendanceDetails')
+              .doc(uid)
+              .collection('dailyattendance')
+              .doc(formattedDate)
+              .get();
+
+      if (snapshot.exists) {
+        Map<String, dynamic>? data = snapshot.data();
+
+        if (data != null) {
+          DateTime? checkInTime = (data['checkIn'] as Timestamp?)?.toDate();
+          DateTime? checkOutTime = (data['checkOut'] as Timestamp?)?.toDate();
+
+          List<String> statuses = [];
+
+          if (checkInTime == null) {
+            statuses.add("Absent");
+            absents.add(data);
+          } else {
+            // Late Arrival condition
+            if (checkInTime.isAfter(DateTime(
+                currentDate.year, currentDate.month, currentDate.day, 8, 15))) {
+              statuses.add("Late Arrival");
+              lateArrivals.add(data);
+            }
+
+            // Early Out condition
+            if (checkOutTime != null &&
+                checkOutTime.isBefore(DateTime(currentDate.year,
+                    currentDate.month, currentDate.day, 17, 0))) {
+              statuses.add("Early Out");
+              earlyOuts.add(data);
+            }
+
+            // On Time condition
+            if (checkInTime.isAfter(DateTime(currentDate.year,
+                    currentDate.month, currentDate.day, 7, 50)) &&
+                checkInTime.isBefore(DateTime(currentDate.year,
+                    currentDate.month, currentDate.day, 8, 10))) {
+              statuses.add("On Time");
+              onTime.add(data);
+            }
+          }
+
+          // Add additional data to each entry
+          data['formattedDate'] = formattedDate;
+          data['formattedDay'] = formattedDay;
+          data['statuses'] = statuses;
+          monthlyData.add(data);
         } else {
-          // Late Arrival condition
-          if (checkInTime.isAfter(DateTime(currentDate.year, currentDate.month, currentDate.day, 8, 15))) {
-            statuses.add("Late Arrival");
-            lateArrivals.add(data);
-          }
-
-          // Early Out condition
-          if (checkOutTime != null && checkOutTime.isBefore(DateTime(currentDate.year, currentDate.month, currentDate.day, 17, 0))) {
-            statuses.add("Early Out");
-            earlyOuts.add(data);
-          }
-
-          // On Time condition
-          if (checkInTime.isAfter(DateTime(currentDate.year, currentDate.month, currentDate.day, 7, 50)) &&
-              checkInTime.isBefore(DateTime(currentDate.year, currentDate.month, currentDate.day, 8, 10))) {
-            statuses.add("On Time");
-            onTime.add(data);
-          }
+          // No data for this day, mark as Absent
+          monthlyData.add({
+            "checkIn": null,
+            "checkOut": null,
+            "statuses": ["Absent"],
+            "formattedDate": formattedDate,
+            "formattedDay": formattedDay,
+          });
         }
-
-        // Add additional data to each entry
-        data['formattedDate'] = formattedDate;
-        data['formattedDay'] = formattedDay;
-        data['statuses'] = statuses;
-        monthlyData.add(data);
-      } else {
-        // No data for this day, mark as Absent
-        monthlyData.add({
-          "checkIn": null,
-          "checkOut": null,
-          "statuses": ["Absent"],
-          "formattedDate": formattedDate,
-          "formattedDay": formattedDay,
-        });
       }
     }
+
+    // Update UI state
+    setState(() {
+      isLoading = false;
+    });
   }
-
-  // Update UI state
-  setState(() {
-    isLoading = false;
-  });
-}
-
-
 
   String _calculateTotalHours(Timestamp? checkIn, Timestamp? checkOut) {
     if (checkIn == null || checkOut == null) return '0:00';
@@ -186,9 +194,14 @@ class _WeeklyAttendanceState extends State<MonthlyAttendance> {
                   final DateTime date = DateFormat('MMM dd, yyyy')
                       .parse(filteredData[index]['formattedDate']);
                   final String day = DateFormat('EE').format(date);
-                  final String formattedDate = DateFormat('dd').format(date);
 
-        
+                  // Skip weekends (Saturday and Sunday)
+                  if (day == 'Sat' || day == 'Sun') {
+                    return SizedBox
+                        .shrink(); // Return an empty widget for weekends
+                  }
+
+                  final String formattedDate = DateFormat('dd').format(date);
                   String checkInTime =
                       _formatTime(data['checkIn'] as Timestamp?);
                   String checkOutTime =
@@ -197,7 +210,6 @@ class _WeeklyAttendanceState extends State<MonthlyAttendance> {
                       data['checkIn'] as Timestamp?,
                       data['checkOut'] as Timestamp?);
 
-                 
                   String status = "On Time";
 
                   return Container(
