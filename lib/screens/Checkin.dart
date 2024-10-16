@@ -89,7 +89,7 @@ class _CheckinScreenState extends State<CheckinScreen> {
   }
 
   String _formatTime(DateTime? dateTime) {
-    if (dateTime == null) return 'N/A';
+    if (dateTime == null) return '00:00 PM';
     final DateFormat formatter =
         DateFormat('hh:mm a'); // Format to display only time
     return formatter.format(dateTime);
@@ -97,7 +97,7 @@ class _CheckinScreenState extends State<CheckinScreen> {
 
   String _calculateTotalHours(DateTime? checkIn, DateTime? checkOut) {
     if (checkIn == null || checkOut == null) {
-      return "N/A";
+      return "00:00";
     }
 
     Duration duration = checkOut.difference(checkIn);
@@ -180,665 +180,655 @@ class _CheckinScreenState extends State<CheckinScreen> {
     String formattedDay = DateFormat('EEEE').format(now); // Example: Tuesday
     String formattedTime = DateFormat('hh:mm a').format(now);
     return Scaffold(
-        body: FutureBuilder<Map<String, dynamic>?>(
-            future: _getAttendanceDetails(userId),
-            builder: (context, snapshot) {
-              if (snapshot.connectionState == ConnectionState.waiting) {
-                return const Center(child: CircularProgressIndicator());
-              }
+      body: FutureBuilder<Map<String, dynamic>?>(
+        future: _getAttendanceDetails(userId),
+        builder: (context, snapshot) {
+          if (snapshot.connectionState == ConnectionState.waiting) {
+            return const Center(child: CircularProgressIndicator());
+          }
 
-              if (snapshot.hasError) {
-                return Center(child: Text('Error: ${snapshot.error}'));
-              }
+          if (snapshot.hasError) {
+            return Center(child: Text('Error: ${snapshot.error}'));
+          }
 
-              DateTime? checkIn;
-              DateTime? checkOut;
+          DateTime? checkIn;
+          DateTime? checkOut;
 
-              if (!(!snapshot.hasData || snapshot.data == null)) {
-                final data = snapshot.data!;
+          if (!(!snapshot.hasData || snapshot.data == null)) {
+            final data = snapshot.data!;
 
-                checkIn = (data['checkIn'] as Timestamp?)?.toDate();
-                checkOut = (data['checkOut'] as Timestamp?)?.toDate();
-              }
+            checkIn = (data['checkIn'] as Timestamp?)?.toDate();
+            checkOut = (data['checkOut'] as Timestamp?)?.toDate();
+          }
 
-              DateTime now = DateTime.now();
-              DateTime currentDayStart = DateTime(now.year, now.month, now.day);
-              if (checkIn != null && checkIn.isBefore(currentDayStart)) {
-                checkIn = null;
-                checkOut = null;
-              }
+          DateTime now = DateTime.now();
+          DateTime currentDayStart = DateTime(now.year, now.month, now.day);
+          if (checkIn != null && checkIn.isBefore(currentDayStart)) {
+            checkIn = null;
+            checkOut = null;
+          }
 
-              if (checkOut != null) {
-                DateTime nextDay7AM =
-                    DateTime(now.year, now.month, now.day, 7, 0);
-                if (now.isAfter(nextDay7AM)) {
-                  checkIn != null;
-                  // ignore: unnecessary_null_comparison
-                  checkOut != null;
-                } else {
-                  formattedDate = DateFormat('yyyy-MM-dd').format(now);
-                }
-              }
+          if (checkOut != null) {
+            DateTime nextDay7AM = DateTime(now.year, now.month, now.day, 7, 0);
+            if (now.isAfter(nextDay7AM)) {
+              checkIn != null;
+              // ignore: unnecessary_null_comparison
+              checkOut != null;
+            } else {
+              formattedDate = DateFormat('yyyy-MM-dd').format(now);
+            }
+          }
 
-              final totalHours = _calculateTotalHours(checkIn, checkOut);
-              return Padding(
-                  padding: const EdgeInsets.symmetric(vertical: 20),
-                  child: SafeArea(
-                      child: Column(
-                          mainAxisAlignment: MainAxisAlignment.spaceAround,
-                          children: [
-                        SizedBox(
-                          height: 70,
-                          child: Padding(
-                            padding:
-                                const EdgeInsets.only(left: 10.0, right: 10.0),
-                            child: Row(
-                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          final totalHours = _calculateTotalHours(checkIn, checkOut);
+          return Padding(
+            padding: const EdgeInsets.symmetric(vertical: 20),
+            child: SafeArea(
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.spaceAround,
+                children: [
+                  SizedBox(
+                    height: 70,
+                    child: Padding(
+                      padding: const EdgeInsets.only(left: 10.0, right: 10.0),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          Container(
+                            width: 50,
+                            height: 50,
+                            decoration: BoxDecoration(
+                              color: Colors.grey[200], // light background color
+                              borderRadius:
+                                  BorderRadius.circular(12), // rounded corners
+                              boxShadow: const [
+                                BoxShadow(
+                                  color: Colors.black12,
+                                  offset: Offset(2, 2),
+                                  blurRadius: 4,
+                                ),
+                              ],
+                            ),
+                            child: GestureDetector(
+                              onTap: () {
+                                Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                    builder: (context) => const HomeScreen(),
+                                  ),
+                                );
+                              },
+                              child: const Icon(
+                                Icons.arrow_back,
+                                color: Colors.black,
+                              ),
+                            ),
+                          ),
+                          if (checkIn == null && checkOut == null)
+                            const Text(
+                              'Check In',
+                              style: TextStyle(
+                                fontSize: 22,
+                                fontWeight: FontWeight.w600,
+                                height: 0,
+                              ),
+                            ),
+                          if (checkIn != null && checkOut == null)
+                            const Text(
+                              'Check Out',
+                              style: TextStyle(
+                                fontSize: 22,
+                                fontWeight: FontWeight.w600,
+                                height: 0,
+                              ),
+                            ),
+                          Container(
+                            width: 50,
+                            height: 50,
+                            decoration: BoxDecoration(
+                              color: Colors.grey[200], // light background color
+                              borderRadius:
+                                  BorderRadius.circular(12), // rounded corners
+                              boxShadow: const [
+                                BoxShadow(
+                                  color: Colors.black12,
+                                  offset: Offset(2, 2),
+                                  blurRadius: 4,
+                                ),
+                              ],
+                            ),
+                            child: GestureDetector(
+                              onTap: () {
+                                Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                    builder: (context) =>
+                                        const NotificationScreen(),
+                                  ),
+                                );
+                              },
+                              child: const Icon(
+                                Icons.notifications_none,
+                                color: Colors.black,
+                              ),
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                  ),
+                  Text(
+                    formattedTime,
+                    style: const TextStyle(
+                      fontSize: 40,
+                      color: Color(0xff7647EB),
+                    ),
+                  ),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Text(
+                        formattedDate,
+                        style: const TextStyle(
+                            fontSize: 20, color: Color(0xff7647EB)),
+                      ),
+                      Text(
+                        ' $formattedDay',
+                        style: const TextStyle(
+                            fontSize: 20, color: Color(0xff7647EB)),
+                      ),
+                    ],
+                  ),
+                  SizedBox(height: MediaQuery.of(context).size.height * 0.14),
+                  //--------------------Check iN-------------------------
+                  if (checkIn == null && checkOut == null)
+                    GestureDetector(
+                      onTap: () async {
+                        Position currentPosition =
+                            await Geolocator.getCurrentPosition(
+                          desiredAccuracy: LocationAccuracy.high,
+                        );
+
+                        // Target coordinates
+                        double targetLatitude = 33.6084548;
+                        double targetLongitude = 73.0171062;
+
+                        double distanceInMeters = Geolocator.distanceBetween(
+                          currentPosition.latitude,
+                          currentPosition.longitude,
+                          targetLatitude,
+                          targetLongitude,
+                        );
+                        log('Distance to target: $distanceInMeters meters');
+                        // if (distanceInMeters <= 1) {
+                        await _attendanceService.checkIn(userId);
+                        showToastMessage('Checked In Successfully');
+                        // ignore: use_build_context_synchronously
+                        Navigator.pop(context);
+                        // } else {
+                        //   showToastMessage(
+                        //       'You are too far from the check-in location.');
+                        // }
+                      },
+                      child: Stack(
+                        alignment: Alignment.center,
+                        children: [
+                          // Outer Circle
+                          Container(
+                            width: 180,
+                            height: 180,
+                            decoration: BoxDecoration(
+                              color: Colors.white,
+                              shape: BoxShape.circle,
+                              boxShadow: const [
+                                BoxShadow(
+                                  color: Colors.black12,
+                                  offset: Offset(2, 2),
+                                  blurRadius: 4,
+                                ),
+                              ],
+                              border: Border.all(
+                                  color: const Color(0xff7647EB), width: 2),
+                            ),
+                          ),
+                          // Middle Circle
+                          Container(
+                            width: 120,
+                            height: 120,
+                            decoration: BoxDecoration(
+                              color: Colors.white,
+                              shape: BoxShape.circle,
+                              boxShadow: const [
+                                BoxShadow(
+                                  color: Colors.black12,
+                                  offset: Offset(2, 2),
+                                  blurRadius: 4,
+                                ),
+                              ],
+                              border: Border.all(
+                                  color: const Color(0xff7647EB), width: 2),
+                            ),
+                          ),
+                          // Inner Circle with Icon and Text
+                          Container(
+                            width: 115,
+                            height: 115,
+                            decoration: const BoxDecoration(
+                              shape: BoxShape.circle,
+                              color: Colors.white,
+                              boxShadow: [
+                                BoxShadow(
+                                  color: Colors.black12,
+                                  blurRadius: 4,
+                                ),
+                              ],
+                            ),
+                            child: Column(
+                              mainAxisAlignment: MainAxisAlignment.center,
                               children: [
-                                Container(
-                                  width: 50,
-                                  height: 50,
-                                  decoration: BoxDecoration(
-                                    color: Colors
-                                        .grey[200], // light background color
-                                    borderRadius: BorderRadius.circular(
-                                        12), // rounded corners
-                                    boxShadow: const [
-                                      BoxShadow(
-                                        color: Colors.black12,
-                                        offset: Offset(2, 2),
-                                        blurRadius: 4,
+                                Image.asset(
+                                  'assets/mingcute.png',
+                                  height: 42,
+                                  width: 42,
+                                ),
+                                const SizedBox(height: 4),
+                                const Text(
+                                  "Check In",
+                                  style: TextStyle(
+                                    color: Colors.black,
+                                    fontSize: 16,
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                  //----------------------------------------check out----------------------------------------------------------
+                  if (checkIn != null && checkOut == null)
+                    GestureDetector(
+                      onTap: () async {
+                        showDialog(
+                          context: context,
+                          builder: (BuildContext context) {
+                            return Stack(
+                              alignment: Alignment.center,
+                              clipBehavior: Clip
+                                  .none, // Ensures the icon can overflow outside the dialog
+                              children: [
+                                AlertDialog(
+                                  contentPadding: EdgeInsets.only(
+                                      top: MediaQuery.of(context).size.height *
+                                          0.1),
+                                  backgroundColor: Colors.white,
+                                  shape: RoundedRectangleBorder(
+                                    borderRadius: BorderRadius.circular(15),
+                                  ),
+                                  title: Column(
+                                    children: [
+                                      Text(
+                                        'Are you Sure',
+                                        style: TextStyle(
+                                          fontSize: MediaQuery.of(context)
+                                                  .size
+                                                  .width *
+                                              0.05, // Responsive font size
+                                          fontWeight: FontWeight.bold,
+                                        ),
+                                        textAlign: TextAlign.center,
+                                      ),
+                                      Text(
+                                        'Do you want to checkout ?',
+                                        style: TextStyle(
+                                          fontWeight: FontWeight.normal,
+                                          color: Colors.black,
+                                          fontSize: MediaQuery.of(context)
+                                                  .size
+                                                  .width *
+                                              0.04, // Responsive font size
+                                        ),
+                                        textAlign: TextAlign.center,
+                                      ),
+                                      SizedBox(
+                                          height: MediaQuery.of(context)
+                                                  .size
+                                                  .height *
+                                              0.02),
+                                      Row(
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.spaceBetween,
+                                        children: [
+                                          GestureDetector(
+                                            onTap: () {
+                                              Navigator.of(context).pop();
+                                            },
+                                            child: Container(
+                                              width: MediaQuery.of(context)
+                                                      .size
+                                                      .width *
+                                                  0.3, // Responsive width
+                                              height: MediaQuery.of(context)
+                                                      .size
+                                                      .height *
+                                                  0.05, // Responsive height
+                                              decoration: BoxDecoration(
+                                                color: Colors.grey[400],
+                                                borderRadius:
+                                                    BorderRadius.circular(5),
+                                              ),
+                                              child: Center(
+                                                child: Text(
+                                                  'Cancel',
+                                                  style: TextStyle(
+                                                    fontSize: MediaQuery.of(
+                                                                context)
+                                                            .size
+                                                            .width *
+                                                        0.04, // Responsive font size
+                                                    color: Colors.white,
+                                                  ),
+                                                ),
+                                              ),
+                                            ),
+                                          ),
+                                          GestureDetector(
+                                            onTap: () async {
+                                              Position currentPosition =
+                                                  await Geolocator
+                                                      .getCurrentPosition(
+                                                desiredAccuracy:
+                                                    LocationAccuracy.high,
+                                              );
+
+                                              // Target coordinates
+                                              double targetLatitude =
+                                                  33.6084548;
+                                              double targetLongitude =
+                                                  73.0171062;
+
+                                              double distanceInMeters =
+                                                  Geolocator.distanceBetween(
+                                                currentPosition.latitude,
+                                                currentPosition.longitude,
+                                                targetLatitude,
+                                                targetLongitude,
+                                              );
+
+                                              log('Distance to target: $distanceInMeters meters');
+
+                                              await _attendanceService
+                                                  .checkOut(userId);
+                                              // ignore: use_build_context_synchronously
+                                              Navigator.pop(context);
+                                              // ignore: use_build_context_synchronously
+                                              Navigator.pop(context);
+                                            },
+                                            child: Container(
+                                              width: MediaQuery.of(context)
+                                                      .size
+                                                      .width *
+                                                  0.3, // Responsive width
+                                              height: MediaQuery.of(context)
+                                                      .size
+                                                      .height *
+                                                  0.05, // Responsive height
+                                              decoration: BoxDecoration(
+                                                color: const Color(0xff7647EB),
+                                                borderRadius:
+                                                    BorderRadius.circular(5),
+                                              ),
+                                              child: Center(
+                                                child: Text(
+                                                  'Checkout',
+                                                  style: TextStyle(
+                                                    fontSize: MediaQuery.of(
+                                                                context)
+                                                            .size
+                                                            .width *
+                                                        0.04, // Responsive font size
+                                                    color: Colors.white,
+                                                  ),
+                                                ),
+                                              ),
+                                            ),
+                                          ),
+                                        ],
                                       ),
                                     ],
                                   ),
-                                  child: GestureDetector(
-                                    onTap: () {
-                                      Navigator.push(
-                                        context,
-                                        MaterialPageRoute(
-                                            builder: (context) =>
-                                                const HomeScreen()),
-                                      );
-                                    },
-                                    child: const Icon(
-                                      Icons.arrow_back,
-                                      color: Colors.black,
-                                    ),
+                                ),
+                                Positioned(
+                                  top: MediaQuery.of(context).size.height *
+                                      0.34, // Responsive top position for the image
+                                  child: Image.asset(
+                                    'assets/warning_alert.png',
+                                    width: MediaQuery.of(context).size.width *
+                                        0.15, // Responsive width
+                                    height: MediaQuery.of(context).size.width *
+                                        0.15, // Responsive height
                                   ),
+                                ),
+                              ],
+                            );
+                          },
+                        );
+                      },
+                      child: Stack(
+                        alignment: Alignment.center,
+                        children: [
+                          // Outer Circle
+                          Container(
+                            width: 180,
+                            height: 180,
+                            decoration: BoxDecoration(
+                              color: Colors.white,
+                              shape: BoxShape.circle,
+                              boxShadow: const [
+                                BoxShadow(
+                                  color: Colors.black12,
+                                  offset: Offset(12, 12),
+                                  blurRadius: 1,
+                                ),
+                              ],
+                              border: Border.all(
+                                  color: const Color(0xffFB3F4A), width: 2),
+                            ),
+                          ),
+                          // Middle Circle
+                          Container(
+                            width: 120,
+                            height: 120,
+                            decoration: BoxDecoration(
+                              color: Colors.white,
+                              shape: BoxShape.circle,
+                              boxShadow: const [
+                                BoxShadow(
+                                  color: Colors.black12,
+                                  offset: Offset(8, 8),
+                                  blurRadius: 4,
+                                ),
+                              ],
+                              border: Border.all(
+                                  color: const Color(0xffFB3F4A), width: 2),
+                            ),
+                          ),
+                          // Inner Circle with Icon and Text
+                          Container(
+                            width: 115,
+                            height: 115,
+                            decoration: const BoxDecoration(
+                              shape: BoxShape.circle,
+                              color: Colors.white,
+                              boxShadow: [
+                                BoxShadow(
+                                  color: Colors.black12,
+                                  blurRadius: 4,
+                                ),
+                              ],
+                            ),
+                            child: Column(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+                                Image.asset(
+                                  'assets/mingout.png',
+                                  height: 42,
+                                  width: 42,
+                                ),
+                                const SizedBox(height: 4),
+                                const Text(
+                                  "Check Out",
+                                  style: TextStyle(
+                                    color: Colors.black,
+                                    fontSize: 16,
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                  const SizedBox(
+                    height: 30,
+                  ),
+                  // Center(
+                  //   child: _currentPosition == null
+                  //       ? CircularProgressIndicator()
+                  //       : Text(
+                  //           'Current Location: \nLatitude: ${_currentPosition!.latitude}\n,Longitude: ${_currentPosition!.longitude}'),
+                  // ),
+
+                  const Spacer(),
+                  //----------------------------------------------------------------------------------------------------------------------------
+                  SizedBox(
+                    height: 140,
+                    child: Padding(
+                      padding: const EdgeInsets.all(8.0),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          Container(
+                            height: screenHeight * 0.46,
+                            width: screenWidth * 0.3,
+                            decoration: BoxDecoration(
+                              color: const Color(0xffEFF1FF),
+                              borderRadius: BorderRadius.circular(12),
+                              boxShadow: const [
+                                BoxShadow(
+                                  color: Colors.black12,
+                                  offset: Offset(2, 2),
+                                  blurRadius: 4,
+                                ),
+                              ],
+                            ),
+                            child: Column(
+                              mainAxisAlignment: MainAxisAlignment.spaceAround,
+                              children: [
+                                Image.asset(
+                                  'assets/checkin.png',
+                                  height: 42,
+                                  width: 42,
+                                ),
+                                Text(
+                                  _formatTime(checkIn),
+                                  style: const TextStyle(
+                                      fontSize: 22,
+                                      fontWeight: FontWeight.bold),
+                                ),
+                                const Text(
+                                  'Check In',
+                                  style: TextStyle(
+                                      fontSize: 16,
+                                      fontWeight: FontWeight.w800),
+                                ),
+                              ],
+                            ),
+                          ),
+                          Container(
+                            height: screenHeight * 0.46,
+                            width: screenWidth * 0.3,
+                            decoration: BoxDecoration(
+                              color: const Color(0xffEFF1FF),
+                              borderRadius: BorderRadius.circular(12),
+                              boxShadow: const [
+                                BoxShadow(
+                                  color: Colors.black12,
+                                  offset: Offset(2, 2),
+                                  blurRadius: 4,
+                                ),
+                              ],
+                            ),
+                            child: Column(
+                              mainAxisAlignment: MainAxisAlignment.spaceAround,
+                              children: [
+                                Image.asset(
+                                  'assets/checkout.png',
+                                  height: 42,
+                                  width: 42,
+                                ),
+                                Text(
+                                  _formatTime(checkOut),
+                                  style: const TextStyle(
+                                      fontSize: 22,
+                                      fontWeight: FontWeight.bold),
                                 ),
                                 const Text(
                                   'Check Out',
                                   style: TextStyle(
+                                      fontSize: 16,
+                                      fontWeight: FontWeight.w800),
+                                ),
+                              ],
+                            ),
+                          ),
+                          Container(
+                            height: screenHeight * 0.46,
+                            width: screenWidth * 0.3,
+                            decoration: BoxDecoration(
+                              color: const Color(0xffEFF1FF),
+                              borderRadius: BorderRadius.circular(12),
+                              boxShadow: const [
+                                BoxShadow(
+                                  color: Colors.black12,
+                                  offset: Offset(2, 2),
+                                  blurRadius: 4,
+                                ),
+                              ],
+                            ),
+                            child: Column(
+                              mainAxisAlignment: MainAxisAlignment.spaceAround,
+                              children: [
+                                Image.asset(
+                                  'assets/totalhours.png',
+                                  height: 42,
+                                  width: 42,
+                                ),
+                                Text(
+                                  totalHours,
+                                  style: const TextStyle(
                                       fontSize: 22,
-                                      fontWeight: FontWeight.w600),
+                                      fontWeight: FontWeight.bold),
                                 ),
-                                Container(
-                                  width: 50,
-                                  height: 50,
-                                  decoration: BoxDecoration(
-                                    color: Colors
-                                        .grey[200], // light background color
-                                    borderRadius: BorderRadius.circular(
-                                        12), // rounded corners
-                                    boxShadow: const [
-                                      BoxShadow(
-                                        color: Colors.black12,
-                                        offset: Offset(2, 2),
-                                        blurRadius: 4,
-                                      ),
-                                    ],
-                                  ),
-                                  child: GestureDetector(
-                                    onTap: () {
-                                      Navigator.push(
-                                        context,
-                                        MaterialPageRoute(
-                                            builder: (context) =>
-                                                const NotificationScreen()),
-                                      );
-                                    },
-                                    child: const Icon(
-                                      Icons.notifications_none,
-                                      color: Colors.black,
-                                    ),
+                                const Text(
+                                  'Total Hrs',
+                                  style: TextStyle(
+                                    fontSize: 16,
+                                    fontWeight: FontWeight.w800,
                                   ),
                                 ),
                               ],
                             ),
                           ),
-                        ),
-                        Text(
-                          formattedTime,
-                          style: const TextStyle(
-                              fontSize: 40, color: Color(0xff7647EB)),
-                        ),
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: [
-                            Text(
-                              formattedDate,
-                              style: const TextStyle(
-                                  fontSize: 20, color: Color(0xff7647EB)),
-                            ),
-                            Text(
-                              ' $formattedDay',
-                              style: const TextStyle(
-                                  fontSize: 20, color: Color(0xff7647EB)),
-                            ),
-                          ],
-                        ),
-                        SizedBox(
-                            height: MediaQuery.of(context).size.height * 0.14),
-                        //--------------------Check iN-------------------------
-                        if (checkIn == null && checkOut == null)
-                          GestureDetector(
-                            onTap: () async {
-                              Position currentPosition =
-                                  await Geolocator.getCurrentPosition(
-                                desiredAccuracy: LocationAccuracy.high,
-                              );
-
-                              // Target coordinates
-                              double targetLatitude = 33.6084548;
-                              double targetLongitude = 73.0171062;
-
-                              double distanceInMeters =
-                                  Geolocator.distanceBetween(
-                                currentPosition.latitude,
-                                currentPosition.longitude,
-                                targetLatitude,
-                                targetLongitude,
-                              );
-                              log('Distance to target: $distanceInMeters meters');
-                              // if (distanceInMeters <= 1) {
-                              await _attendanceService.checkIn(userId);
-                              showToastMessage('Checked In Successfully');
-                              // ignore: use_build_context_synchronously
-                              Navigator.pop(context);
-                              // } else {
-                              //   showToastMessage(
-                              //       'You are too far from the check-in location.');
-                              // }
-                            },
-                            child: Stack(
-                              alignment: Alignment.center,
-                              children: [
-                                // Outer Circle
-                                Container(
-                                  width: 180,
-                                  height: 180,
-                                  decoration: BoxDecoration(
-                                    color: Colors.white,
-                                    shape: BoxShape.circle,
-                                    boxShadow: const [
-                                      BoxShadow(
-                                        color: Colors.black12,
-                                        offset: Offset(2, 2),
-                                        blurRadius: 4,
-                                      ),
-                                    ],
-                                    border: Border.all(
-                                        color: const Color(0xff7647EB),
-                                        width: 2),
-                                  ),
-                                ),
-                                // Middle Circle
-                                Container(
-                                  width: 120,
-                                  height: 120,
-                                  decoration: BoxDecoration(
-                                    color: Colors.white,
-                                    shape: BoxShape.circle,
-                                    boxShadow: const [
-                                      BoxShadow(
-                                        color: Colors.black12,
-                                        offset: Offset(2, 2),
-                                        blurRadius: 4,
-                                      ),
-                                    ],
-                                    border: Border.all(
-                                        color: const Color(0xff7647EB),
-                                        width: 2),
-                                  ),
-                                ),
-                                // Inner Circle with Icon and Text
-                                Container(
-                                  width: 115,
-                                  height: 115,
-                                  decoration: const BoxDecoration(
-                                    shape: BoxShape.circle,
-                                    color: Colors.white,
-                                    boxShadow: [
-                                      BoxShadow(
-                                        color: Colors.black12,
-                                        blurRadius: 4,
-                                      ),
-                                    ],
-                                  ),
-                                  child: Column(
-                                    mainAxisAlignment: MainAxisAlignment.center,
-                                    children: [
-                                      Image.asset(
-                                        'assets/mingcute.png',
-                                        height: 42,
-                                        width: 42,
-                                      ),
-                                      const SizedBox(height: 4),
-                                      const Text(
-                                        "Check In",
-                                        style: TextStyle(
-                                          color: Colors.black,
-                                          fontSize: 16,
-                                        ),
-                                      ),
-                                    ],
-                                  ),
-                                ),
-                              ],
-                            ),
-                          ),
-                        //----------------------------------------check out----------------------------------------------------------
-                        if (checkIn != null && checkOut == null)
-                          GestureDetector(
-                            onTap: () async {
-                              showDialog(
-                                context: context,
-                                builder: (BuildContext context) {
-                                  return Stack(
-                                    alignment: Alignment.center,
-                                    clipBehavior: Clip
-                                        .none, // Ensures the icon can overflow outside the dialog
-                                    children: [
-                                      AlertDialog(
-                                        contentPadding: EdgeInsets.only(
-                                            top: MediaQuery.of(context)
-                                                    .size
-                                                    .height *
-                                                0.1),
-                                        backgroundColor: Colors.white,
-                                        shape: RoundedRectangleBorder(
-                                          borderRadius:
-                                              BorderRadius.circular(15),
-                                        ),
-                                        title: Column(
-                                          children: [
-                                            Text(
-                                              'Are you Sure',
-                                              style: TextStyle(
-                                                fontSize: MediaQuery.of(context)
-                                                        .size
-                                                        .width *
-                                                    0.05, // Responsive font size
-                                                fontWeight: FontWeight.bold,
-                                              ),
-                                              textAlign: TextAlign.center,
-                                            ),
-                                            Text(
-                                              'Do you want to checkout ?',
-                                              style: TextStyle(
-                                                fontWeight: FontWeight.normal,
-                                                color: Colors.black,
-                                                fontSize: MediaQuery.of(context)
-                                                        .size
-                                                        .width *
-                                                    0.04, // Responsive font size
-                                              ),
-                                              textAlign: TextAlign.center,
-                                            ),
-                                            SizedBox(
-                                                height: MediaQuery.of(context)
-                                                        .size
-                                                        .height *
-                                                    0.02),
-                                            Row(
-                                              mainAxisAlignment:
-                                                  MainAxisAlignment
-                                                      .spaceBetween,
-                                              children: [
-                                                GestureDetector(
-                                                  onTap: () {
-                                                    Navigator.of(context).pop();
-                                                  },
-                                                  child: Container(
-                                                    width: MediaQuery.of(
-                                                                context)
-                                                            .size
-                                                            .width *
-                                                        0.3, // Responsive width
-                                                    height: MediaQuery.of(
-                                                                context)
-                                                            .size
-                                                            .height *
-                                                        0.05, // Responsive height
-                                                    decoration: BoxDecoration(
-                                                      color: Colors.grey[400],
-                                                      borderRadius:
-                                                          BorderRadius.circular(
-                                                              5),
-                                                    ),
-                                                    child: Center(
-                                                      child: Text(
-                                                        'Cancel',
-                                                        style: TextStyle(
-                                                          fontSize: MediaQuery.of(
-                                                                      context)
-                                                                  .size
-                                                                  .width *
-                                                              0.04, // Responsive font size
-                                                          color: Colors.white,
-                                                        ),
-                                                      ),
-                                                    ),
-                                                  ),
-                                                ),
-                                                GestureDetector(
-                                                  onTap: () async {
-                                                    Position currentPosition =
-                                                        await Geolocator
-                                                            .getCurrentPosition(
-                                                      desiredAccuracy:
-                                                          LocationAccuracy.high,
-                                                    );
-
-                                                    // Target coordinates
-                                                    double targetLatitude =
-                                                        33.6084548;
-                                                    double targetLongitude =
-                                                        73.0171062;
-
-                                                    double distanceInMeters =
-                                                        Geolocator
-                                                            .distanceBetween(
-                                                      currentPosition.latitude,
-                                                      currentPosition.longitude,
-                                                      targetLatitude,
-                                                      targetLongitude,
-                                                    );
-
-                                                    log('Distance to target: $distanceInMeters meters');
-
-                                                    await _attendanceService
-                                                        .checkOut(userId);
-                                                    // ignore: use_build_context_synchronously
-                                                    Navigator.pop(context);
-                                                    // ignore: use_build_context_synchronously
-                                                    Navigator.pop(context);
-                                                  },
-                                                  child: Container(
-                                                    width: MediaQuery.of(
-                                                                context)
-                                                            .size
-                                                            .width *
-                                                        0.3, // Responsive width
-                                                    height: MediaQuery.of(
-                                                                context)
-                                                            .size
-                                                            .height *
-                                                        0.05, // Responsive height
-                                                    decoration: BoxDecoration(
-                                                      color: const Color(
-                                                          0xff7647EB),
-                                                      borderRadius:
-                                                          BorderRadius.circular(
-                                                              5),
-                                                    ),
-                                                    child: Center(
-                                                      child: Text(
-                                                        'Checkout',
-                                                        style: TextStyle(
-                                                          fontSize: MediaQuery.of(
-                                                                      context)
-                                                                  .size
-                                                                  .width *
-                                                              0.04, // Responsive font size
-                                                          color: Colors.white,
-                                                        ),
-                                                      ),
-                                                    ),
-                                                  ),
-                                                ),
-                                              ],
-                                            ),
-                                          ],
-                                        ),
-                                      ),
-                                      Positioned(
-                                        top: MediaQuery.of(context)
-                                                .size
-                                                .height *
-                                            0.34, // Responsive top position for the image
-                                        child: Image.asset(
-                                          'assets/warning_alert.png',
-                                          width: MediaQuery.of(context)
-                                                  .size
-                                                  .width *
-                                              0.15, // Responsive width
-                                          height: MediaQuery.of(context)
-                                                  .size
-                                                  .width *
-                                              0.15, // Responsive height
-                                        ),
-                                      ),
-                                    ],
-                                  );
-                                },
-                              );
-                            },
-                            child: Stack(
-                              alignment: Alignment.center,
-                              children: [
-                                // Outer Circle
-                                Container(
-                                  width: 180,
-                                  height: 180,
-                                  decoration: BoxDecoration(
-                                    color: Colors.white,
-                                    shape: BoxShape.circle,
-                                    boxShadow: const [
-                                      BoxShadow(
-                                        color: Colors.black12,
-                                        offset: Offset(12, 12),
-                                        blurRadius: 1,
-                                      ),
-                                    ],
-                                    border: Border.all(
-                                        color: const Color(0xffFB3F4A),
-                                        width: 2),
-                                  ),
-                                ),
-                                // Middle Circle
-                                Container(
-                                  width: 120,
-                                  height: 120,
-                                  decoration: BoxDecoration(
-                                    color: Colors.white,
-                                    shape: BoxShape.circle,
-                                    boxShadow: const [
-                                      BoxShadow(
-                                        color: Colors.black12,
-                                        offset: Offset(8, 8),
-                                        blurRadius: 4,
-                                      ),
-                                    ],
-                                    border: Border.all(
-                                        color: const Color(0xffFB3F4A),
-                                        width: 2),
-                                  ),
-                                ),
-                                // Inner Circle with Icon and Text
-                                Container(
-                                  width: 115,
-                                  height: 115,
-                                  decoration: const BoxDecoration(
-                                    shape: BoxShape.circle,
-                                    color: Colors.white,
-                                    boxShadow: [
-                                      BoxShadow(
-                                        color: Colors.black12,
-                                        blurRadius: 4,
-                                      ),
-                                    ],
-                                  ),
-                                  child: Column(
-                                    mainAxisAlignment: MainAxisAlignment.center,
-                                    children: [
-                                      Image.asset(
-                                        'assets/mingout.png',
-                                        height: 42,
-                                        width: 42,
-                                      ),
-                                      const SizedBox(height: 4),
-                                      const Text(
-                                        "Check Out",
-                                        style: TextStyle(
-                                          color: Colors.black,
-                                          fontSize: 16,
-                                        ),
-                                      ),
-                                    ],
-                                  ),
-                                ),
-                              ],
-                            ),
-                          ),
-                        const SizedBox(
-                          height: 30,
-                        ),
-                        // Center(
-                        //   child: _currentPosition == null
-                        //       ? CircularProgressIndicator()
-                        //       : Text(
-                        //           'Current Location: \nLatitude: ${_currentPosition!.latitude}\n,Longitude: ${_currentPosition!.longitude}'),
-                        // ),
-
-                        const Spacer(),
-                        //----------------------------------------------------------------------------------------------------------------------------
-                        SizedBox(
-                          height: 140,
-                          child: Padding(
-                            padding: const EdgeInsets.all(8.0),
-                            child: Row(
-                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                              children: [
-                                Container(
-                                  height: screenHeight * 0.46,
-                                  width: screenWidth * 0.3,
-                                  decoration: BoxDecoration(
-                                    color: const Color(0xffEFF1FF),
-                                    borderRadius: BorderRadius.circular(12),
-                                    boxShadow: const [
-                                      BoxShadow(
-                                        color: Colors.black12,
-                                        offset: Offset(2, 2),
-                                        blurRadius: 4,
-                                      ),
-                                    ],
-                                  ),
-                                  child: Column(
-                                    mainAxisAlignment:
-                                        MainAxisAlignment.spaceAround,
-                                    children: [
-                                      Image.asset(
-                                        'assets/checkin.png',
-                                        height: 42,
-                                        width: 42,
-                                      ),
-                                      Text(
-                                        _formatTime(checkIn),
-                                        style: const TextStyle(
-                                            fontSize: 22,
-                                            fontWeight: FontWeight.bold),
-                                      ),
-                                      const Text(
-                                        'Check In',
-                                        style: TextStyle(
-                                            fontSize: 16,
-                                            fontWeight: FontWeight.w800),
-                                      ),
-                                    ],
-                                  ),
-                                ),
-                                Container(
-                                  height: screenHeight * 0.46,
-                                  width: screenWidth * 0.3,
-                                  decoration: BoxDecoration(
-                                    color: const Color(0xffEFF1FF),
-                                    borderRadius: BorderRadius.circular(12),
-                                    boxShadow: const [
-                                      BoxShadow(
-                                        color: Colors.black12,
-                                        offset: Offset(2, 2),
-                                        blurRadius: 4,
-                                      ),
-                                    ],
-                                  ),
-                                  child: Column(
-                                    mainAxisAlignment:
-                                        MainAxisAlignment.spaceAround,
-                                    children: [
-                                      Image.asset(
-                                        'assets/checkout.png',
-                                        height: 42,
-                                        width: 42,
-                                      ),
-                                      Text(
-                                        _formatTime(checkOut),
-                                        style: const TextStyle(
-                                            fontSize: 22,
-                                            fontWeight: FontWeight.bold),
-                                      ),
-                                      const Text(
-                                        'Check Out',
-                                        style: TextStyle(
-                                            fontSize: 16,
-                                            fontWeight: FontWeight.w800),
-                                      ),
-                                    ],
-                                  ),
-                                ),
-                                Container(
-                                  height: screenHeight * 0.46,
-                                  width: screenWidth * 0.3,
-                                  decoration: BoxDecoration(
-                                    color: const Color(0xffEFF1FF),
-                                    borderRadius: BorderRadius.circular(12),
-                                    boxShadow: const [
-                                      BoxShadow(
-                                        color: Colors.black12,
-                                        offset: Offset(2, 2),
-                                        blurRadius: 4,
-                                      ),
-                                    ],
-                                  ),
-                                  child: Column(
-                                    mainAxisAlignment:
-                                        MainAxisAlignment.spaceAround,
-                                    children: [
-                                      Image.asset(
-                                        'assets/checkin.png',
-                                        height: 42,
-                                        width: 42,
-                                      ),
-                                      Text(
-                                        totalHours,
-                                        style: const TextStyle(
-                                            fontSize: 22,
-                                            fontWeight: FontWeight.bold),
-                                      ),
-                                      const Text(
-                                        'Total Hours',
-                                        style: TextStyle(
-                                            fontSize: 16,
-                                            fontWeight: FontWeight.w800),
-                                      ),
-                                    ],
-                                  ),
-                                ),
-                              ],
-                            ),
-                          ),
-                        )
-                      ])));
-            }));
+                        ],
+                      ),
+                    ),
+                  )
+                ],
+              ),
+            ),
+          );
+        },
+      ),
+    );
   }
 }
