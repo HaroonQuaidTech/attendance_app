@@ -35,12 +35,11 @@ class _MonthlyAttendanceState extends State<MonthlyAttendance> {
   Future<void> _getMonthlyAttendance(String uid) async {
     DateTime today = DateTime.now();
 
-    // Get the first day of the current month
     DateTime firstDayOfMonth = DateTime(today.year, today.month, 1);
 
-    // Get the last day of the current month
+   
     int lastDayOfMonth = DateTime(today.year, today.month + 1, 0)
-        .day; // This gets the last day of the current month
+        .day;
 
     for (int day = 1; day <= lastDayOfMonth; day++) {
       DateTime currentDate =
@@ -48,7 +47,7 @@ class _MonthlyAttendanceState extends State<MonthlyAttendance> {
       String formattedDate = DateFormat('yMMMd').format(currentDate);
       String formattedDay = DateFormat('EEE').format(currentDate);
 
-      // Fetch attendance data from Firestore for the current date
+     
       final DocumentSnapshot<Map<String, dynamic>> snapshot =
           await FirebaseFirestore.instance
               .collection('AttendanceDetails')
@@ -95,13 +94,13 @@ class _MonthlyAttendanceState extends State<MonthlyAttendance> {
             }
           }
 
-          // Add additional data to each entry
+         
           data['formattedDate'] = formattedDate;
           data['formattedDay'] = formattedDay;
           data['statuses'] = statuses;
           monthlyData.add(data);
         } else {
-          // No data for this day, mark as Absent
+        
           monthlyData.add({
             "checkIn": null,
             "checkOut": null,
