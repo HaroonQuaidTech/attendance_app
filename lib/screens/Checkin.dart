@@ -250,6 +250,7 @@ class _CheckinScreenState extends State<CheckinScreen> {
                             ),
                             child: GestureDetector(
                               onTap: () {
+                                
                                 Navigator.push(
                                   context,
                                   MaterialPageRoute(
