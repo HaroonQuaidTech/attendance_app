@@ -661,7 +661,7 @@ class _StatusBuilerState extends State<StatusBuilderWeekly> {
           SizedBox(height: 20),
           Container(
             padding: EdgeInsets.all(12),
-            height: MediaQuery.of(context).size.height * 3.66,
+            height: MediaQuery.of(context).size.height * 0.68,
             width: double.infinity,
             decoration: BoxDecoration(
               borderRadius: BorderRadius.circular(20),

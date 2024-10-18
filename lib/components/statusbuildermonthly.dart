@@ -81,7 +81,7 @@ class _StatusBuilerState extends State<StatusBuiler> {
 
   String _calculateTotalHours(DateTime? checkIn, DateTime? checkOut) {
     if (checkIn == null || checkOut == null) {
-      return "Null";
+      return "00:00";
     }
 
     Duration duration = checkOut.difference(checkIn);
