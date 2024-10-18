@@ -8,6 +8,8 @@ import 'package:quaidtech/screens/home.dart';
 import 'package:quaidtech/screens/notification.dart';
 import 'package:intl/intl.dart';
 
+typedef CloseCallback = Function();
+
 class AttendanceService {
   final FirebaseFirestore _firestore = FirebaseFirestore.instance;
 
@@ -89,7 +91,7 @@ class _CheckinScreenState extends State<CheckinScreen> {
   }
 
   String _formatTime(DateTime? dateTime) {
-    if (dateTime == null) return '00:00 PM';
+    if (dateTime == null) return '--:--';
     final DateFormat formatter =
         DateFormat('hh:mm a'); // Format to display only time
     return formatter.format(dateTime);
@@ -97,7 +99,7 @@ class _CheckinScreenState extends State<CheckinScreen> {
 
   String _calculateTotalHours(DateTime? checkIn, DateTime? checkOut) {
     if (checkIn == null || checkOut == null) {
-      return "00:00";
+      return "--:--";
     }
 
     Duration duration = checkOut.difference(checkIn);
@@ -250,7 +252,6 @@ class _CheckinScreenState extends State<CheckinScreen> {
                             ),
                             child: GestureDetector(
                               onTap: () {
-                                
                                 Navigator.push(
                                   context,
                                   MaterialPageRoute(
@@ -360,15 +361,15 @@ class _CheckinScreenState extends State<CheckinScreen> {
                           targetLongitude,
                         );
                         log('Distance to target: $distanceInMeters meters');
-                        // if (distanceInMeters <= 1) {
+
                         await _attendanceService.checkIn(userId);
                         showToastMessage('Checked In Successfully');
-                        // ignore: use_build_context_synchronously
-                        Navigator.pop(context);
-                        // } else {
-                        //   showToastMessage(
-                        //       'You are too far from the check-in location.');
-                        // }
+
+                        if (mounted) {
+                          // ignore: use_build_context_synchronously
+                          Navigator.of(context).pop(true);
+                          CloseCallback;
+                        }
                       },
                       child: Stack(
                         alignment: Alignment.center,
@@ -559,10 +560,13 @@ class _CheckinScreenState extends State<CheckinScreen> {
 
                                               await _attendanceService
                                                   .checkOut(userId);
-                                              // ignore: use_build_context_synchronously
-                                              Navigator.pop(context);
-                                              // ignore: use_build_context_synchronously
-                                              Navigator.pop(context);
+                                              showToastMessage(
+                                                  'Checked Out Successfully');
+                                              if (mounted) {
+                                                // ignore: use_build_context_synchronously
+                                                Navigator.of(context).pop(true);
+                                                CloseCallback;
+                                              }
                                             },
                                             child: Container(
                                               width: MediaQuery.of(context)
@@ -692,15 +696,9 @@ class _CheckinScreenState extends State<CheckinScreen> {
                   const SizedBox(
                     height: 30,
                   ),
-                  // Center(
-                  //   child: _currentPosition == null
-                  //       ? CircularProgressIndicator()
-                  //       : Text(
-                  //           'Current Location: \nLatitude: ${_currentPosition!.latitude}\n,Longitude: ${_currentPosition!.longitude}'),
-                  // ),
 
                   const Spacer(),
-                  //----------------------------------------------------------------------------------------------------------------------------
+
                   SizedBox(
                     height: 140,
                     child: Padding(

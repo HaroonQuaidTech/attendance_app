@@ -11,7 +11,6 @@ import 'package:quaidtech/screens/Checkin.dart';
 import 'package:quaidtech/screens/notification.dart';
 import 'package:quaidtech/screens/profile.dart';
 import 'package:quaidtech/screens/stastics.dart';
-
 import 'package:table_calendar/table_calendar.dart';
 import 'package:intl/intl.dart';
 
@@ -467,27 +466,26 @@ class _HomeScreenState extends State<HomeScreen> {
 
                                 var userData = snapshot.data!.data()
                                     as Map<String, dynamic>;
-                                String displayName =
-                                    userData['name'] ?? ".";
-                                String email =
-                                    userData['email'] ?? ".";
+                                String displayName = userData['name'] ?? ".";
+                                String email = userData['email'] ?? ".";
 
                                 return Row(children: [
                                   if (_imageUrl != null &&
                                       _imageUrl!.isNotEmpty)
                                     Padding(
-                                        padding:
-                                            const EdgeInsets.only(right: 10.0),
-                                        child: ClipRRect(
-                                          borderRadius:
-                                              BorderRadius.circular(900),
-                                          child: Image.network(
-                                            _imageUrl!,
-                                            width: 60,
-                                            height: 60,
-                                            fit: BoxFit.cover,
-                                          ),
-                                        )),
+                                      padding:
+                                          const EdgeInsets.only(right: 10.0),
+                                      child: ClipRRect(
+                                        borderRadius:
+                                            BorderRadius.circular(900),
+                                        child: Image.network(
+                                          _imageUrl!,
+                                          width: 60,
+                                          height: 60,
+                                          fit: BoxFit.cover,
+                                        ),
+                                      ),
+                                    ),
                                   Column(
                                     crossAxisAlignment:
                                         CrossAxisAlignment.start,
