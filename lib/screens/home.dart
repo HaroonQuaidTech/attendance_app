@@ -15,6 +15,8 @@ import 'package:quaidtech/screens/stastics.dart';
 import 'package:table_calendar/table_calendar.dart';
 import 'package:intl/intl.dart';
 
+typedef CloseCallback = Function();
+
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
 
@@ -148,7 +150,7 @@ class _HomeScreenState extends State<HomeScreen> {
 
             if (checkIn != null) {
               final lateThreshold =
-                  DateTime(checkIn.year, checkIn.month, checkIn.day, 8, 00);
+                  DateTime(checkIn.year, checkIn.month, checkIn.day, 8, 15);
 
               // Determine color based on attendance status
               Color eventColor;
@@ -444,39 +446,6 @@ class _HomeScreenState extends State<HomeScreen> {
                                 if (!snapshot.hasData ||
                                     !snapshot.data!.exists) {
                                   return Row(children: [
-                                    Padding(
-                                      padding:
-                                          const EdgeInsets.only(right: 10.0),
-                                      child: ClipRRect(
-                                          borderRadius:
-                                              BorderRadius.circular(80),
-                                          child: Image.asset(
-                                            'assets/pp.jpg',
-                                            height: 60,
-                                            width: 60,
-                                            fit: BoxFit.cover,
-                                          )),
-                                    ),
-                                    const Column(
-                                      crossAxisAlignment:
-                                          CrossAxisAlignment.start,
-                                      mainAxisAlignment:
-                                          MainAxisAlignment.center,
-                                      children: [
-                                        Text(
-                                          "No Name Provided",
-                                          style: TextStyle(
-                                              fontSize: 20,
-                                              fontWeight: FontWeight.w600),
-                                        ),
-                                        Text(
-                                          "No Email Provided",
-                                          style: TextStyle(
-                                              fontSize: 16,
-                                              fontWeight: FontWeight.w400),
-                                        ),
-                                      ],
-                                    ),
                                     const Spacer(),
                                     GestureDetector(
                                       onTap: () {
