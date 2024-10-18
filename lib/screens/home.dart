@@ -11,6 +11,7 @@ import 'package:quaidtech/screens/Checkin.dart';
 import 'package:quaidtech/screens/notification.dart';
 import 'package:quaidtech/screens/profile.dart';
 import 'package:quaidtech/screens/stastics.dart';
+
 import 'package:table_calendar/table_calendar.dart';
 import 'package:intl/intl.dart';
 
@@ -144,7 +145,6 @@ class _HomeScreenState extends State<HomeScreen> {
           for (var doc in querySnapshot.docs) {
             final data = doc.data();
             final checkIn = (data['checkIn'] as Timestamp?)?.toDate();
-            // final checkOut = (data['checkIn'] as Timestamp?)?.toDate();
 
             if (checkIn != null) {
               final lateThreshold =
@@ -157,7 +157,7 @@ class _HomeScreenState extends State<HomeScreen> {
               } else if (checkIn.isBefore(lateThreshold)) {
                 eventColor = const Color(0xff22AF41);
               } else {
-                eventColor = const Color(0xff22AF41);
+                eventColor = const Color(0xffEC5851);
               }
 
               _events[DateTime.utc(checkIn.year, checkIn.month, checkIn.day)] =
@@ -268,7 +268,7 @@ class _HomeScreenState extends State<HomeScreen> {
     double responsiveFontSize = baseFontSize * (screenWidth / 375);
     bool isSelected = _selectedIndex == index;
     if (index == 1) const StatsticsScreen();
-    if (index == 2) const ProfileScreen();
+    if (index == 2) ProfileScreen;
     return Expanded(
       child: GestureDetector(
         onTap: () => _onItemTapped(index),
@@ -359,10 +359,8 @@ class _HomeScreenState extends State<HomeScreen> {
                               Navigator.of(context).pop();
                             },
                             child: Container(
-                              width: MediaQuery.of(context).size.width *
-                                  0.3, // Responsive width
-                              height: MediaQuery.of(context).size.height *
-                                  0.05, // Responsive height
+                              width: MediaQuery.of(context).size.width * 0.3,
+                              height: MediaQuery.of(context).size.height * 0.05,
                               decoration: BoxDecoration(
                                 color: Colors.grey[400],
                                 borderRadius: BorderRadius.circular(5),
@@ -373,7 +371,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                   style: TextStyle(
                                     fontSize:
                                         MediaQuery.of(context).size.width *
-                                            0.04, // Responsive font size
+                                            0.04,
                                     color: Colors.white,
                                   ),
                                 ),
@@ -679,35 +677,59 @@ class _HomeScreenState extends State<HomeScreen> {
                                       eventLoader: _getEventsForDay,
                                       calendarBuilders: CalendarBuilders(
                                         markerBuilder: (context, day, events) {
-                                          if (events.isEmpty) {
-                                            return const SizedBox.shrink();
+                                          // Get the currently visible month in the calendar.
+                                          final currentMonth =
+                                              DateTime.now().month;
+                                          final currentYear =
+                                              DateTime.now().year;
+
+                                          // Check if the day is within the current month and year.
+                                          bool isCurrentMonth =
+                                              (day.month == currentMonth &&
+                                                  day.year == currentYear);
+
+                                          // Check if the day is a weekend (Saturday or Sunday).
+                                          bool isWeekend = day.weekday ==
+                                                  DateTime.saturday ||
+                                              day.weekday == DateTime.sunday;
+
+                                          // Ensure markers are only shown for past or present days within the current month.
+                                          bool isPastOrToday =
+                                              day.isBefore(DateTime.now()) ||
+                                                  day.isAtSameMomentAs(
+                                                      DateTime.now());
+
+                                          // Determine the event color (red for missing check-ins, event color otherwise).
+                                          Color? eventColor = (!isWeekend &&
+                                                  isCurrentMonth &&
+                                                  isPastOrToday)
+                                              ? (events.isEmpty
+                                                  ? const Color(0xffEC5851)
+                                                  : events.first as Color)
+                                              : null; // No marker for weekends, future dates, or non-current months.
+
+                                          // Return the marker only if there's a valid color (i.e., not null).
+                                          if (eventColor != null) {
+                                            return Container(
+                                              margin:
+                                                  const EdgeInsets.symmetric(
+                                                      horizontal: 1.5),
+                                              width: 6,
+                                              height: 6,
+                                              decoration: BoxDecoration(
+                                                shape: BoxShape.circle,
+                                                color: eventColor,
+                                              ),
+                                            );
                                           }
-                                          return Row(
-                                            mainAxisSize: MainAxisSize.min,
-                                            children: List.generate(
-                                                events.length, (index) {
-                                              final color =
-                                                  events[index] as Color;
-                                              return Container(
-                                                margin:
-                                                    const EdgeInsets.symmetric(
-                                                        horizontal: 1.5),
-                                                width: 6,
-                                                height: 6,
-                                                decoration: BoxDecoration(
-                                                  shape: BoxShape.circle,
-                                                  color: color,
-                                                ),
-                                              );
-                                            }),
-                                          );
+
+                                          // Return an empty widget if no marker is needed.
+                                          return const SizedBox.shrink();
                                         },
                                       ),
                                     ),
                                   ),
                                   const SizedBox(height: 20),
-
-                                  // Attendance Details Container
                                   _isLoading
                                       ? const CircularProgressIndicator()
                                       : Container(

@@ -5,7 +5,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 
-enum AttendanceType { weekly}
+enum AttendanceType { weekly }
 
 class WeeklyAttendance extends StatefulWidget {
   final Color color;
@@ -22,8 +22,6 @@ class WeeklyAttendance extends StatefulWidget {
   @override
   State<WeeklyAttendance> createState() => _WeeklyAttendanceState();
 }
-
-
 
 class _WeeklyAttendanceState extends State<WeeklyAttendance> {
   final String userId = FirebaseAuth.instance.currentUser!.uid;
