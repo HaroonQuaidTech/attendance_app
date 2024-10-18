@@ -63,7 +63,7 @@ class _DailyAttendanceState extends State<DailyAttendance> {
         checkInTime.month,
         checkInTime.day,
         8,
-        0,
+        15,
       );
       if (checkInTime.isBefore(eightAM) ||
           checkInTime.isAtSameMomentAs(eightAM)) {
