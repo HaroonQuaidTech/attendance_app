@@ -3,6 +3,7 @@
 import 'package:flutter/material.dart';
 import 'package:quaidtech/components/graphicalbuildermonthly.dart';
 import 'package:quaidtech/components/graphicalweekly.dart';
+import 'package:quaidtech/components/monthattendancce.dart';
 import 'package:quaidtech/components/statusbuilderweekly.dart';
 import 'package:quaidtech/components/statusbuildermonthly.dart';
 import 'package:quaidtech/components/weeklyattenance.dart';
@@ -87,7 +88,7 @@ class _StatsticsScreenState extends State<StatsticsScreen> {
             height: 10,
           ),
           //----------------------------------------
-          WeeklyAttendance(
+          MonthlyAttendance(
             color: color,
             dropdownValue2: dropdownValue2,
           ),

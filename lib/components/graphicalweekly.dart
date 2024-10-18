@@ -157,7 +157,7 @@ class _GraphicalbuilerState extends State<GraphicalbuilerWeekly> {
     for (var entry in attendanceData) {
       if (entry['checkIn'] != null) {
         DateTime checkInTime = (entry['checkIn'] as Timestamp).toDate();
-     
+
         if (checkInTime.isAfter(DateTime(
             checkInTime.year, checkInTime.month, checkInTime.day, 8, 15))) {
           lateCount++;
@@ -173,9 +173,8 @@ class _GraphicalbuilerState extends State<GraphicalbuilerWeekly> {
     for (var entry in attendanceData) {
       // Check if 'checkOut' is not null before processing
       if (entry['checkOut'] != null) {
-        DateTime checkOutTime = (entry['checkOut'] as Timestamp)
-            .toDate(); 
-     
+        DateTime checkOutTime = (entry['checkOut'] as Timestamp).toDate();
+
         if (checkOutTime.isBefore(DateTime(
             checkOutTime.year, checkOutTime.month, checkOutTime.day, 17, 0))) {
           earlyCount++;
@@ -184,24 +183,44 @@ class _GraphicalbuilerState extends State<GraphicalbuilerWeekly> {
     }
     return earlyCount;
   }
-  int getAbsentCount(List<dynamic> attendanceData) {
+
+int getAbsentCount(List<dynamic> attendanceData) {
   int absentCount = 0;
+
+  // Debug: Print the entire attendanceData to see its structure
+
 
   // Loop through the attendance data to count absences
   for (var record in attendanceData) {
-    if (record['checkIn'] == null && record['checkOut'] == null) {
+    // Debug: Print each record to check its structure
+
+
+ 
+    if (record['formattedDate'] == null || record['formattedDate'] is! String) {
+      continue; 
+    }
+
+
+ 
+   if (record['checkIn'] == null || 
+        (record['status'] != null && record['status'].toString().toLowerCase() == 'Absent')) {
       absentCount++;
+      // Debug log to confirm when an absence is counted
+      log("Absence counted, current absent count: $absentCount");
     }
   }
-  
-  return absentCount; // Returns total absent days
+  // Debug: Print the total absent count
+  log("Total Absent Count: $absentCount");
+
+  return absentCount; // Return the total number of absent days
 }
+
 
   Map<String, double> weeklyHoursss = {
     'Present': 0, // hours present
     'Absent': 0, // days absent
     'Late Arrival': 0, // late days
-    'Early Out':0, // early check-outs
+    'Early Out': 0, // early check-outs
   };
   @override
   void initState() {
@@ -242,9 +261,9 @@ class _GraphicalbuilerState extends State<GraphicalbuilerWeekly> {
 
           Map<String, double> pieChartData = {
             'Present': weeklyHours.values.reduce((a, b) => a + b).toDouble(),
-           'Absent': getAbsentCount(snapshot.data!) * 9.0,
-            'Late Arrival': getLateArrivalCount(snapshot.data!).toDouble(), 
-            'Early Out': getEarlyOutCount(snapshot.data!).toDouble(), 
+            'Absent': getAbsentCount(snapshot.data!) * 9.0,
+            'Late Arrival': getLateArrivalCount(snapshot.data!).toDouble(),
+            'Early Out': getEarlyOutCount(snapshot.data!).toDouble(),
           };
 
           return Container(
@@ -323,27 +342,20 @@ class _GraphicalbuilerState extends State<GraphicalbuilerWeekly> {
                                   showTitles: true,
                                   getTitlesWidget: (value, meta) {
                                     int dayIndex = value.toInt();
-                                    bool hasData = (weeklyHours[dayIndex + 1] ??
-                                            0) >
-                                        0; 
+                                    bool hasData =
+                                        (weeklyHours[dayIndex + 1] ?? 0) > 0;
 
-                                 
                                     int currentDayOfWeek =
                                         DateTime.now().weekday;
 
-                                
                                     if (currentDayOfWeek > 5) {
-                                      currentDayOfWeek =
-                                          5; 
+                                      currentDayOfWeek = 5;
                                     }
 
-                               
                                     if (dayIndex >= currentDayOfWeek) {
-                                      return const Text(
-                                          ''); 
+                                      return const Text('');
                                     }
 
-                                   
                                     Color textColor =
                                         hasData ? Colors.black : Colors.red;
 
@@ -440,7 +452,7 @@ class _GraphicalbuilerState extends State<GraphicalbuilerWeekly> {
                       color: Colors.grey.withOpacity(0.2),
                       spreadRadius: 2,
                       blurRadius: 4,
-                      offset: Offset(0, 2), 
+                      offset: Offset(0, 2),
                     ),
                   ],
                 ),
@@ -482,7 +494,7 @@ class _GraphicalbuilerState extends State<GraphicalbuilerWeekly> {
                             ),
                             totalValue: pieChartData.values.isNotEmpty
                                 ? pieChartData.values.reduce((a, b) => a + b)
-                                : 1, 
+                                : 1,
                           ),
                   ],
                 ),

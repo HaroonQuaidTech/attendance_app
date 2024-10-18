@@ -468,9 +468,9 @@ class _HomeScreenState extends State<HomeScreen> {
                                 var userData = snapshot.data!.data()
                                     as Map<String, dynamic>;
                                 String displayName =
-                                    userData['name'] ?? "No Name Provided";
+                                    userData['name'] ?? ".";
                                 String email =
-                                    userData['email'] ?? "No Name Provided";
+                                    userData['email'] ?? ".";
 
                                 return Row(children: [
                                   if (_imageUrl != null &&

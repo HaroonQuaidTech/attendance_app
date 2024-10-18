@@ -49,10 +49,10 @@ class _DailyAttendanceState extends State<DailyAttendance> {
 
     String checkInTimeFormatted = checkInTime != null
         ? DateFormat('hh:mm a').format(checkInTime)
-        : '00:00 am';
+        : '--.-- am';
     String checkOutTimeFormatted = checkOutTime != null
         ? DateFormat('hh:mm a').format(checkOutTime)
-        : "00:00 pm";
+        : "--.-- PM";
 
     final totalHours = _calculateTotalHours(checkInTime, checkOutTime);
 
