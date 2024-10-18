@@ -17,10 +17,10 @@ class MonthlyAttendance extends StatefulWidget {
   }) : super(key: key);
 
   @override
-  State<MonthlyAttendance> createState() => _WeeklyAttendanceState();
+  State<MonthlyAttendance> createState() => _MonthlyAttendanceState();
 }
 
-class _WeeklyAttendanceState extends State<MonthlyAttendance> {
+class _MonthlyAttendanceState extends State<MonthlyAttendance> {
   final String userId = FirebaseAuth.instance.currentUser!.uid;
   bool isLoading = true;
 

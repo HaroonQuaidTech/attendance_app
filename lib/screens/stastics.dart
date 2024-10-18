@@ -151,15 +151,13 @@ class _StatsticsScreenState extends State<StatsticsScreen> {
         detailsColor = Color(0xff8E71DF);
         break;
       default:
-        return SizedBox.shrink(); 
+        return SizedBox.shrink();
     }
 
-   
     return isWeekly
         ? _buildWeeklyAttendance(detailsType, detailsColor, dropdownValue2)
         : _buildMonthlyAttendance(detailsType, detailsColor, dropdownValue2);
   }
-  
 
   @override
   Widget build(BuildContext context) {
