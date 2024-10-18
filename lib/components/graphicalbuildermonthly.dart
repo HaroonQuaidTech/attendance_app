@@ -164,18 +164,28 @@ class _GraphicalbuilerState extends State<GraphicalbuilerMonthly> {
     }
     return earlyCount;
   }
-  int getAbsentCount(List<dynamic> attendanceData) {
+int getAbsentCount(List<dynamic> attendanceData) {
   int absentCount = 0;
 
-  // Loop through the attendance data to count absences
   for (var record in attendanceData) {
-    if (record['checkIn'] == null && record['checkOut'] == null) {
+    // Parse the date from the record (assuming it's stored as a DateTime or can be converted to DateTime)
+  
+
+    // Increment absent count if check-in is null or status is 'Absent'
+    if (record['checkIn'] == null ||
+        (record['status'] != null &&
+            record['status'].toString().toLowerCase() == 'absent')) {
       absentCount++;
     }
   }
+
+  // Log the absent count
+  log('Absent Count: $absentCount');
   
-  return absentCount; // Returns total absent days
+  return absentCount;
 }
+
+
   Map<String, double> weeklyHours= {
     'Present': 0, // hours present
     'Absent': 0, // days absent

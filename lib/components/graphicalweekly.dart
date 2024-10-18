@@ -184,37 +184,19 @@ class _GraphicalbuilerState extends State<GraphicalbuilerWeekly> {
     return earlyCount;
   }
 
-int getAbsentCount(List<dynamic> attendanceData) {
-  int absentCount = 0;
+  int getAbsentCount(List<dynamic> attendanceData) {
+    int absentCount = 0;
 
-  // Debug: Print the entire attendanceData to see its structure
-
-
-  // Loop through the attendance data to count absences
-  for (var record in attendanceData) {
-    // Debug: Print each record to check its structure
-
-
- 
-    if (record['formattedDate'] == null || record['formattedDate'] is! String) {
-      continue; 
+   
+    for (var record in attendanceData) {
+      if (record['checkIn'] == null ||
+          (record['status'] != null &&
+              record['status'].toString().toLowerCase() == 'Absent')) {
+        absentCount++;
+      }
     }
-
-
- 
-   if (record['checkIn'] == null || 
-        (record['status'] != null && record['status'].toString().toLowerCase() == 'Absent')) {
-      absentCount++;
-      // Debug log to confirm when an absence is counted
-      log("Absence counted, current absent count: $absentCount");
-    }
+    return absentCount;
   }
-  // Debug: Print the total absent count
-  log("Total Absent Count: $absentCount");
-
-  return absentCount; // Return the total number of absent days
-}
-
 
   Map<String, double> weeklyHoursss = {
     'Present': 0, // hours present
