@@ -173,7 +173,7 @@ class _WeeklyAttendanceState extends State<WeeklyAttendance> {
               child: CircularProgressIndicator(),
             ),
           )
-        else if (filteredData.isEmpty) // Show "No Data" if list is empty
+        else if (filteredData.isEmpty) 
           Padding(
             padding: const EdgeInsets.only(top: 100.0),
             child: Center(

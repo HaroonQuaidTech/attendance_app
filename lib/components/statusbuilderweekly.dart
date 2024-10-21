@@ -73,7 +73,7 @@ class _StatusBuilerState extends State<StatusBuilderWeekly> {
 
   String _calculateTotalHours(DateTime? checkIn, DateTime? checkOut) {
     if (checkIn == null || checkOut == null) {
-      return "Null";
+      return "00:00";
     }
 
     Duration duration = checkOut.difference(checkIn);
@@ -340,14 +340,14 @@ class _StatusBuilerState extends State<StatusBuilderWeekly> {
                 );
 
                 if (checkInDateTime.isBefore(onTimeDateTime)) {
-                  containerColor = Colors.green; // On time
+                  containerColor = Color(0xff22Af41); // On time
                 } else if (checkInDateTime.isAfter(lateArrivalDateTime)) {
-                  containerColor = Colors.orange; // Late arrival
+                  containerColor = Color(0xffF6C15B);  // Late arrival
                 } else {
                   containerColor = const Color(0xff8E71DF); // Default color
                 }
               } else {
-                containerColor = Colors.red; // No check-in
+                containerColor = Color(0xffEC5851);  // No check-in
               }
 
               if (checkOut != null) {
@@ -423,7 +423,7 @@ class _StatusBuilerState extends State<StatusBuilderWeekly> {
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
                         Text(
-                          checkIn != null ? _formatTime(checkIn) : 'N/A',
+                          checkIn != null ? _formatTime(checkIn) : '--:--',
                           style: const TextStyle(
                               fontSize: 14,
                               fontWeight: FontWeight.bold,
@@ -447,7 +447,7 @@ class _StatusBuilerState extends State<StatusBuilderWeekly> {
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
                         Text(
-                          checkOut != null ? _formatTime(checkOut) : 'N/A',
+                          checkOut != null ? _formatTime(checkOut) : '--:--',
                           style: const TextStyle(
                               fontSize: 14,
                               fontWeight: FontWeight.bold,
@@ -514,7 +514,7 @@ class _StatusBuilerState extends State<StatusBuilderWeekly> {
               future: _getAttendanceDetails(userId),
               builder: (context, snapshot) {
                 if (snapshot.hasError) {
-                  return Center(child: Text('Error: ${snapshot.error}'));
+                  return Center(child: Text('Error: Check Your Internet Connection'));
                 }
 
                 if (!snapshot.hasData || snapshot.data == null) {
