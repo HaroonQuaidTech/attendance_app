@@ -80,6 +80,7 @@ class _GraphicalbuilerState extends State<GraphicalbuilerWeekly> {
     Map<String, double> weeklyHoursss = {
       "Present": 0,
       "Absent": 0,
+      "On Time": 0,
       "Late Arrival": 0,
       "Early Out": 0,
     };
@@ -109,6 +110,10 @@ class _GraphicalbuilerState extends State<GraphicalbuilerWeekly> {
             weeklyHoursss["Late Arrival"] =
                 (weeklyHoursss["Fri"] ?? 0) + duration.inHours.toDouble();
             break;
+          case 5:
+            weeklyHoursss["On Time"] =
+                (weeklyHoursss["On Time"] ?? 0) + duration.inHours.toDouble();
+            break;
         }
       }
     }
@@ -122,6 +127,7 @@ class _GraphicalbuilerState extends State<GraphicalbuilerWeekly> {
       "Present": 0,
       "Absent": 0,
       "Early Out": 0,
+      "On Time": 0,
       "Late Arrival": 0,
     };
 
@@ -132,6 +138,10 @@ class _GraphicalbuilerState extends State<GraphicalbuilerWeekly> {
       if (checkIn != null && checkOut != null) {
         final checkInTime = TimeOfDay.fromDateTime(checkIn);
         final checkOutTime = TimeOfDay.fromDateTime(checkOut);
+        if ((checkInTime.hour == 7 && checkInTime.minute >= 50) ||
+            (checkInTime.hour == 8 && checkInTime.minute <= 10)) {
+          attendanceStats["On Time"] = (attendanceStats["On Time"] ?? 0) + 1;
+        }
 
         if (checkInTime.hour > 8 ||
             (checkInTime.hour == 8 && checkInTime.minute > 15)) {
@@ -187,7 +197,6 @@ class _GraphicalbuilerState extends State<GraphicalbuilerWeekly> {
   int getAbsentCount(List<dynamic> attendanceData) {
     int absentCount = 0;
 
-   
     for (var record in attendanceData) {
       if (record['checkIn'] == null ||
           (record['status'] != null &&
@@ -198,11 +207,32 @@ class _GraphicalbuilerState extends State<GraphicalbuilerWeekly> {
     return absentCount;
   }
 
+  int getOnTimeCount(List<Map<String, dynamic>> data) {
+    int onTimeCount = 0;
+
+    for (var entry in data) {
+      final checkIn = (entry['checkIn'] as Timestamp?)?.toDate();
+
+      if (checkIn != null) {
+        final checkInTime = TimeOfDay.fromDateTime(checkIn);
+
+        // Check if the check-in is between 7:50 and 8:10 for "On Time"
+        if ((checkInTime.hour == 7 && checkInTime.minute >= 50) ||
+            (checkInTime.hour == 8 && checkInTime.minute <= 10)) {
+          onTimeCount++;
+        }
+      }
+    }
+
+    return onTimeCount;
+  }
+
   Map<String, double> weeklyHoursss = {
     'Present': 0, // hours present
     'Absent': 0, // days absent
     'Late Arrival': 0, // late days
     'Early Out': 0, // early check-outs
+    'On Time': 0, // early check-outs
   };
   @override
   void initState() {
@@ -246,6 +276,7 @@ class _GraphicalbuilerState extends State<GraphicalbuilerWeekly> {
             'Absent': getAbsentCount(snapshot.data!) * 9.0,
             'Late Arrival': getLateArrivalCount(snapshot.data!).toDouble(),
             'Early Out': getEarlyOutCount(snapshot.data!).toDouble(),
+            'On Time': getOnTimeCount(snapshot.data!).toDouble(),
           };
 
           return Container(
@@ -458,7 +489,8 @@ class _GraphicalbuilerState extends State<GraphicalbuilerWeekly> {
                               Color(0xff9478F7), // Present
                               Color(0xffEC5851), // Absent
                               Color(0xffF6C15B), // Late Arrival
-                              Color(0xffF07E25), // Early Out
+                              Color(0xffF07E25), // EARLY OUT
+                              Color(0xff22AF41),  //oN TIME
                             ],
                             chartRadius:
                                 MediaQuery.of(context).size.width / 1.7,
