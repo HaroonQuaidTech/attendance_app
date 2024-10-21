@@ -71,8 +71,6 @@ class CheckinScreen extends StatefulWidget {
 class _CheckinScreenState extends State<CheckinScreen> {
   final AttendanceService _attendanceService = AttendanceService();
   final String userId = FirebaseAuth.instance.currentUser!.uid;
-  bool? isCheck;
-  // Position? _currentPosition;
 
   Future<Map<String, dynamic>?> _getAttendanceDetails(String uid) async {
     String formattedDate = DateFormat('yMMMd').format(DateTime.now());

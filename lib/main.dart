@@ -2,12 +2,10 @@
 
 import 'package:flutter/material.dart';
 import 'package:quaidtech/screens/Checkin.dart';
-import 'package:quaidtech/screens/checkout.dart';
 import 'package:quaidtech/screens/home.dart';
 import 'package:quaidtech/screens/login.dart';
 import 'package:quaidtech/screens/adminhome.dart';
 import 'package:quaidtech/screens/newscreen.dart';
-
 import 'package:quaidtech/screens/notification.dart';
 import 'package:quaidtech/screens/profile.dart';
 import 'package:quaidtech/screens/signup.dart';
@@ -43,7 +41,6 @@ class _MyAppState extends State<MyApp> {
           'nscreen': (context) => const Newscreen(),
           'home': (context) => const HomeScreen(),
           'checkin': (context) => const CheckinScreen(),
-          'checkout': (context) => const CheckoutScreen(),
           'notification': (context) => const NotificationScreen(),
           'profile': (context) => const ProfileScreen(),
           'stat': (context) => const StatsticsScreen(),
