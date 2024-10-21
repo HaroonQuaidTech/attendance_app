@@ -583,7 +583,7 @@ class _StatusBuilerState extends State<StatusBuilderWeekly> {
                                               CrossAxisAlignment.start,
                                           children: [
                                             Text(
-                                              'Time in mints',
+                                              'Time in Mints',
                                               style: TextStyle(
                                                   fontWeight: FontWeight.w500,
                                                   fontSize: 14),
@@ -602,7 +602,7 @@ class _StatusBuilerState extends State<StatusBuilderWeekly> {
                                             Text(
                                               '$startFormatted - $endFormatted',
                                               style: TextStyle(
-                                                  fontWeight: FontWeight.w500,
+                                                  fontWeight: FontWeight.w600,
                                                   fontSize: 15),
                                             ),
                                           ],
@@ -626,13 +626,13 @@ class _StatusBuilerState extends State<StatusBuilderWeekly> {
                                               CrossAxisAlignment.start,
                                           children: [
                                             Text(
-                                              'Time in hours',
+                                              'Time in Hours',
                                               style: TextStyle(
                                                   fontWeight: FontWeight.w500,
                                                   fontSize: 14),
                                             ),
                                             Text(
-                                              '$totalHours hours',
+                                              '$totalHours Hours',
                                               style: TextStyle(
                                                   fontWeight: FontWeight.w600,
                                                   fontSize: 20),
@@ -645,8 +645,10 @@ class _StatusBuilerState extends State<StatusBuilderWeekly> {
                                             Text(
                                               '$startFormatted - $endFormatted',
                                               style: TextStyle(
-                                                  fontWeight: FontWeight.w500,
-                                                  fontSize: 15),
+                                                  fontWeight: FontWeight.w600,
+                                                  fontSize: 15
+                                                  
+                                                  ),
                                             ),
                                           ],
                                         ),
