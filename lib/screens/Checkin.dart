@@ -662,6 +662,7 @@ class _CheckinScreenState extends State<CheckinScreen> {
                                               ),
                                             ),
                                           ),
+                                          const SizedBox(width: 10,),
                                           GestureDetector(
                                             onTap: () async {
                                               Position currentPosition =

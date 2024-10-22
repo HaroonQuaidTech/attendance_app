@@ -582,7 +582,8 @@ class _PrifileScreenState extends State<ProfileScreen> {
                                             ),
                                           ),
                                           Positioned(
-                                            top: 260,
+                                          top: MediaQuery.of(context).size.height * (280 / 812),
+
                                             child: Image.asset(
                                               'assets/warning_alert.png',
                                               width: 60, // Adjust as needed
