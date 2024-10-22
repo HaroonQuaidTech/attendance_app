@@ -79,7 +79,7 @@ class _WeeklyAttendanceState extends State<WeeklyAttendance> {
               if (checkInTime
                       .isAfter(DateTime(day.year, day.month, day.day, 7, 50)) &&
                   checkInTime.isBefore(
-                      DateTime(day.year, day.month, day.day, 8, 10))) {
+                      DateTime(day.year, day.month, day.day, 8, 11))) {
                 statuses.add("On Time");
               }
             }
@@ -88,8 +88,7 @@ class _WeeklyAttendanceState extends State<WeeklyAttendance> {
             data['formattedDay'] = formattedDay;
             data['statuses'] = statuses;
 
-            weeklyData.add(
-                data); //-------------------------------------------------------------------------displaying week data
+            weeklyData.add(data); //-----------------displaying week data
           }
         } else {
           weeklyData.add({
@@ -173,7 +172,7 @@ class _WeeklyAttendanceState extends State<WeeklyAttendance> {
               child: CircularProgressIndicator(),
             ),
           )
-        else if (filteredData.isEmpty) 
+        else if (filteredData.isEmpty)
           Padding(
             padding: const EdgeInsets.only(top: 100.0),
             child: Center(
@@ -333,4 +332,3 @@ class _WeeklyAttendanceState extends State<WeeklyAttendance> {
     );
   }
 }
-

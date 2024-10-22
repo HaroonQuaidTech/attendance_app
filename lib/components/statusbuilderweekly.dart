@@ -266,7 +266,7 @@ class _StatusBuilerState extends State<StatusBuilderWeekly> {
         }
 
         if (snapshot.hasError) {
-          return Center(child: Text('Error: ${snapshot.error}'));
+         return Center(child: Text('Error Something went wrong Check Your Internet Connection',style: TextStyle(color: Colors.red),));
         }
 
         if (!snapshot.hasData || snapshot.data == null) {
@@ -313,7 +313,7 @@ class _StatusBuilerState extends State<StatusBuilderWeekly> {
 
               if (checkIn != null) {
                 final TimeOfDay checkInTime = TimeOfDay.fromDateTime(checkIn);
-                const TimeOfDay onTime = TimeOfDay(hour: 8, minute: 0);
+                const TimeOfDay onTime = TimeOfDay(hour: 8, minute: 14);
                 const TimeOfDay lateArrival = TimeOfDay(hour: 8, minute: 15);
 
                 final DateTime today = DateTime.now();
@@ -514,7 +514,7 @@ class _StatusBuilerState extends State<StatusBuilderWeekly> {
               future: _getAttendanceDetails(userId),
               builder: (context, snapshot) {
                 if (snapshot.hasError) {
-                  return Center(child: Text('Error: Check Your Internet Connection'));
+                  return Center(child: Text('Error Something went wrong Check Your Internet Connection',style: TextStyle(color: Colors.red),));
                 }
 
                 if (!snapshot.hasData || snapshot.data == null) {

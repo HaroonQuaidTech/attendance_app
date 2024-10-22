@@ -377,7 +377,7 @@ class _StatusBuilerState extends State<StatusBuiler> {
           );
         }
         if (snapshot.hasError) {
-          return Center(child: Text('Error: ${snapshot.error}'));
+          return Center(child: Text('Error Something went wrong Check Your Internet Connection',style: TextStyle(color: Colors.red),));
         }
 
         if (!snapshot.hasData || snapshot.data == null) {
