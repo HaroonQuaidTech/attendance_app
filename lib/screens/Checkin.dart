@@ -2,7 +2,6 @@ import 'dart:developer';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:fluttertoast/fluttertoast.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:quaidtech/screens/home.dart';
 import 'package:quaidtech/screens/notification.dart';
@@ -13,13 +12,21 @@ typedef CloseCallback = Function();
 class AttendanceService {
   final FirebaseFirestore _firestore = FirebaseFirestore.instance;
 
-  Future<void> checkIn(String userId) async {
+  Future<void> checkIn(BuildContext context, String userId) async {
+    showDialog(
+      context: context,
+      barrierDismissible: false,
+      builder: (BuildContext context) {
+        return const Center(
+          child: CircularProgressIndicator(),
+        );
+      },
+    );
     try {
       Timestamp checkInTime = Timestamp.now();
       DateTime now = DateTime.now();
 
-      String formattedDate =
-          DateFormat('yMMMd').format(now); // Example: Sep 3, 2024
+      String formattedDate = DateFormat('yMMMd').format(now);
 
       await _firestore
           .collection("AttendanceDetails")
@@ -33,19 +40,63 @@ class AttendanceService {
       });
 
       log("Checked in successfully");
+      // ignore: use_build_context_synchronously
+      Navigator.pop(context);
+
+      _showAlertDialog(
+        // ignore: use_build_context_synchronously
+        context: context,
+        title: 'Successful',
+        titleColor: Colors.green,
+        image: 'assets/success_alert.png',
+        message: 'Checked in successfully!',
+        closeCallback: () {
+          Navigator.pushReplacement(
+            context,
+            MaterialPageRoute(builder: (context) => const HomeScreen()),
+          );
+        },
+      );
     } catch (e) {
-      log("Error checking in: $e");
+      // ignore: use_build_context_synchronously
+      Navigator.pop(context);
+      String errorMessage = 'Something went wrong!';
+
+      if (e is FirebaseAuthException) {
+        errorMessage = e.message ?? errorMessage;
+      }
+
+      _showAlertDialog(
+        // ignore: use_build_context_synchronously
+        context: context,
+        title: 'Error',
+        titleColor: Colors.red,
+        image: 'assets/failed_alert.png',
+        message: errorMessage,
+        closeCallback: () {},
+      );
+
+      log("Error checking out: $e");
     }
   }
 
-  Future<void> checkOut(String userId) async {
+  Future<void> checkOut(BuildContext context, String userId) async {
+    showDialog(
+      context: context,
+      barrierDismissible: false,
+      builder: (BuildContext context) {
+        return const Center(
+          child: CircularProgressIndicator(),
+        );
+      },
+    );
+
     try {
       Timestamp checkOutTime = Timestamp.now();
       DateTime now = DateTime.now();
-
       String formattedDate = DateFormat('yMMMd').format(now);
 
-      await _firestore
+      await FirebaseFirestore.instance
           .collection("AttendanceDetails")
           .doc(userId)
           .collection("dailyattendance")
@@ -55,10 +106,108 @@ class AttendanceService {
       });
 
       log("Checked out successfully");
+
+      // ignore: use_build_context_synchronously
+      Navigator.pop(context);
+
+      _showAlertDialog(
+        // ignore: use_build_context_synchronously
+        context: context,
+        title: 'Successful',
+        titleColor: Colors.green,
+        image: 'assets/success_alert.png',
+        message: 'Checked out successfully!',
+        closeCallback: () {
+          Navigator.pushReplacement(
+            context,
+            MaterialPageRoute(builder: (context) => const HomeScreen()),
+          );
+        },
+      );
     } catch (e) {
+      // ignore: use_build_context_synchronously
+      Navigator.pop(context); // Ensure the loading indicator is dismissed
+      String errorMessage = 'Something went wrong!';
+
+      if (e is FirebaseAuthException) {
+        errorMessage = e.message ?? errorMessage;
+      }
+
+      _showAlertDialog(
+        // ignore: use_build_context_synchronously
+        context: context,
+        title: 'Error',
+        titleColor: Colors.red,
+        image: 'assets/failed_alert.png',
+        message: errorMessage,
+        closeCallback: () {},
+      );
+
       log("Error checking out: $e");
     }
   }
+}
+
+void _showAlertDialog({
+  required BuildContext context,
+  required String title,
+  required Color titleColor,
+  required String message,
+  required String image,
+  required VoidCallback closeCallback,
+}) {
+  showDialog(
+    context: context,
+    barrierDismissible: false,
+    builder: (BuildContext context) {
+      return Stack(
+        alignment: Alignment.topCenter,
+        children: [
+          AlertDialog(
+            contentPadding: const EdgeInsets.only(top: 60.0),
+            backgroundColor: Colors.white,
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(15),
+            ),
+            title: Column(
+              children: [
+                Text(
+                  title,
+                  style: TextStyle(
+                    fontSize: 18,
+                    fontWeight: FontWeight.bold,
+                    color: titleColor,
+                  ),
+                  textAlign: TextAlign.center,
+                ),
+                const SizedBox(height: 10),
+                Text(
+                  message,
+                  style: const TextStyle(
+                    fontWeight: FontWeight.normal,
+                    color: Colors.black,
+                    fontSize: 14,
+                  ),
+                  textAlign: TextAlign.center,
+                ),
+                const SizedBox(height: 15),
+              ],
+            ),
+          ),
+          Positioned(
+            top: 260,
+            child: Image.asset(
+              image,
+              width: 60,
+              height: 60,
+            ),
+          ),
+        ],
+      );
+    },
+  ).then((_) {
+    closeCallback(); // Call the callback after closing the alert dialog
+  });
 }
 
 class CheckinScreen extends StatefulWidget {
@@ -143,22 +292,7 @@ class _CheckinScreenState extends State<CheckinScreen> {
       desiredAccuracy: LocationAccuracy.high,
     );
 
-    setState(() {
-      // _currentPosition = position;
-    });
-
     log('Current location: ${position.latitude}, ${position.longitude}');
-  }
-
-  void showToastMessage(String message) {
-    Fluttertoast.showToast(
-      msg: message,
-      toastLength: Toast.LENGTH_SHORT,
-      gravity: ToastGravity.CENTER_RIGHT,
-      backgroundColor: Colors.black54,
-      textColor: Colors.white,
-      fontSize: 16.0,
-    );
   }
 
   @override
@@ -175,9 +309,8 @@ class _CheckinScreenState extends State<CheckinScreen> {
     DateTime now = DateTime.now();
 
     // Format date, day, and time
-    String formattedDate =
-        DateFormat('yMMMd').format(now); // Example: Sep 3, 2024
-    String formattedDay = DateFormat('EEEE').format(now); // Example: Tuesday
+    String formattedDate = DateFormat('yMMMd').format(now);
+    String formattedDay = DateFormat('EEEE').format(now);
     String formattedTime = DateFormat('hh:mm a').format(now);
     return Scaffold(
       body: FutureBuilder<Map<String, dynamic>?>(
@@ -212,8 +345,6 @@ class _CheckinScreenState extends State<CheckinScreen> {
             DateTime nextDay7AM = DateTime(now.year, now.month, now.day, 7, 0);
             if (now.isAfter(nextDay7AM)) {
               checkIn != null;
-              // ignore: unnecessary_null_comparison
-              checkOut != null;
             } else {
               formattedDate = DateFormat('yyyy-MM-dd').format(now);
             }
@@ -360,8 +491,8 @@ class _CheckinScreenState extends State<CheckinScreen> {
                         );
                         log('Distance to target: $distanceInMeters meters');
 
-                        await _attendanceService.checkIn(userId);
-                        showToastMessage('Checked In Successfully');
+                        // ignore: use_build_context_synchronously
+                        await _attendanceService.checkIn(context, userId);
 
                         if (mounted) {
                           // ignore: use_build_context_synchronously
@@ -556,15 +687,10 @@ class _CheckinScreenState extends State<CheckinScreen> {
 
                                               log('Distance to target: $distanceInMeters meters');
 
-                                              await _attendanceService
-                                                  .checkOut(userId);
-                                              showToastMessage(
-                                                  'Checked Out Successfully');
-                                              if (mounted) {
-                                                // ignore: use_build_context_synchronously
-                                                Navigator.of(context).pop(true);
-                                                CloseCallback;
-                                              }
+                                              await _attendanceService.checkOut(
+                                                  // ignore: use_build_context_synchronously
+                                                  context,
+                                                  userId);
                                             },
                                             child: Container(
                                               width: MediaQuery.of(context)

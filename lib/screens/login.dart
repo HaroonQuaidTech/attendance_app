@@ -110,7 +110,6 @@ class _LoginScreenState extends State<LoginScreen> {
                 borderRadius: BorderRadius.circular(15),
               ),
               title: Column(
-                // mainAxisSize: MainAxisSize.min,
                 children: [
                   Text(
                     title,
