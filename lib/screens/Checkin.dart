@@ -40,12 +40,9 @@ class AttendanceService {
         'userId': userId,
       });
 
-  
-    
       Navigator.pop(context);
 
       _showAlertDialog(
-    
         context: context,
         title: 'Successful',
         titleColor: Colors.green,
@@ -59,7 +56,6 @@ class AttendanceService {
         },
       );
     } catch (e) {
-
       Navigator.pop(context);
       String errorMessage = 'Something went wrong!';
 
@@ -76,8 +72,6 @@ class AttendanceService {
         message: errorMessage,
         closeCallback: () {},
       );
-
-   
     }
   }
 
@@ -106,8 +100,6 @@ class AttendanceService {
         'checkOut': checkOutTime,
       });
 
-  
-
       // ignore: use_build_context_synchronously
       Navigator.pop(context);
     } catch (e) {
@@ -118,8 +110,6 @@ class AttendanceService {
       if (e is FirebaseAuthException) {
         errorMessage = e.message ?? errorMessage;
       }
-
-
     }
   }
 }
@@ -239,11 +229,8 @@ class _CheckinScreenState extends State<CheckinScreen> {
     bool serviceEnabled;
     LocationPermission permission;
 
-  
     serviceEnabled = await Geolocator.isLocationServiceEnabled();
     if (!serviceEnabled) {
-    
-    
       return;
     }
 
@@ -251,24 +238,17 @@ class _CheckinScreenState extends State<CheckinScreen> {
     if (permission == LocationPermission.denied) {
       permission = await Geolocator.requestPermission();
       if (permission == LocationPermission.denied) {
-       
-       
         return;
       }
     }
 
     if (permission == LocationPermission.deniedForever) {
-     
-   
       return;
     }
 
-   
     Position position = await Geolocator.getCurrentPosition(
       desiredAccuracy: LocationAccuracy.high,
     );
-
-   
   }
 
   @override
@@ -465,7 +445,6 @@ class _CheckinScreenState extends State<CheckinScreen> {
                           targetLatitude,
                           targetLongitude,
                         );
-                      
 
                         // ignore: use_build_context_synchronously
                         await _attendanceService.checkIn(context, userId);
@@ -560,8 +539,7 @@ class _CheckinScreenState extends State<CheckinScreen> {
                           builder: (BuildContext context) {
                             return Stack(
                               alignment: Alignment.center,
-                              clipBehavior: Clip
-                                  .none, 
+                              clipBehavior: Clip.none,
                               children: [
                                 AlertDialog(
                                   contentPadding: EdgeInsets.only(
@@ -638,7 +616,9 @@ class _CheckinScreenState extends State<CheckinScreen> {
                                               ),
                                             ),
                                           ),
-                                          const SizedBox(width: 10,),
+                                          const SizedBox(
+                                            width: 10,
+                                          ),
                                           GestureDetector(
                                             onTap: () async {
                                               Position currentPosition =
@@ -661,8 +641,6 @@ class _CheckinScreenState extends State<CheckinScreen> {
                                                 targetLatitude,
                                                 targetLongitude,
                                               );
-
-                                            
 
                                               await _attendanceService.checkOut(
                                                   // ignore: use_build_context_synchronously
