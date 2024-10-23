@@ -66,7 +66,7 @@ class _WeeklyAttendanceState extends State<WeeklyAttendance> {
               statuses.add("Present");
 
               if (checkInTime
-                  .isAfter(DateTime(day.year, day.month, day.day, 8, 15))) {
+                  .isAfter(DateTime(day.year, day.month, day.day, 8, 10))) {
                 statuses.add("Late Arrival");
               }
 

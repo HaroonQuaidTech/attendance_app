@@ -1,4 +1,3 @@
-import 'dart:developer';
 import 'dart:io';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:draggable_fab/draggable_fab.dart';
@@ -65,7 +64,7 @@ class _HomeScreenState extends State<HomeScreen> {
   }
 
   void _showAttendanceDetails(Map<String, dynamic> data) {
-    log(' data1 $data', name: 'Logg');
+  
     DateTime? checkInTime = (data['checkIn'] != null)
         ? (data['checkIn'] as Timestamp).toDate()
         : null;
@@ -79,7 +78,7 @@ class _HomeScreenState extends State<HomeScreen> {
   }
 
   void _showNoDataMessage() {
-    log('No attendance data available for the selected day');
+   
   }
 
   @override
@@ -110,7 +109,7 @@ class _HomeScreenState extends State<HomeScreen> {
         }
       });
     } catch (e) {
-      log('Error fetching attendance details: $e');
+      
       setState(() {
         _isLoading = false;
         _showNoDataMessage();
@@ -168,7 +167,7 @@ class _HomeScreenState extends State<HomeScreen> {
         });
       }
     } catch (e) {
-      log('Error fetching events: $e');
+   const Text('Error');
     }
   }
 
@@ -253,7 +252,7 @@ class _HomeScreenState extends State<HomeScreen> {
 
       return counts;
     } catch (e) {
-      log('Error fetching monthly attendance: $e');
+     
       return {
         'present': 0,
         'late': 0,

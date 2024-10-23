@@ -1,6 +1,5 @@
 // ignore_for_file: prefer_const_constructors, prefer_const_literals_to_create_immutables, unnecessary_string_interpolations, depend_on_referenced_packages, unused_local_variable
 
-import 'dart:developer';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
@@ -252,7 +251,7 @@ class _GraphicalbuilerState extends State<GraphicalbuilerMonthly> {
             calculateMonthlyHours(snapshot.data!);
         Map<String, double> monthlyAttendanceStats =
             calculateAttendanceStats(snapshot.data!);
-        log("$monthlyHours");
+     
 
         Map<String, double> pieChartData = {
           'Present': monthlyHours.values.reduce((a, b) => a + b).toDouble(),

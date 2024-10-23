@@ -133,7 +133,7 @@ class _PrifileScreenState extends State<ProfileScreen> {
     showDialog(
       context: context,
       barrierDismissible:
-          false, // Prevents closing the dialog by tapping outside
+          false,
       builder: (BuildContext context) {
         return Center(
           child: CircularProgressIndicator(),
@@ -142,7 +142,7 @@ class _PrifileScreenState extends State<ProfileScreen> {
     );
     await _auth.signOut();
 
-    // Navigate to the login screen after the delay
+ 
     Navigator.of(
       context,
     ).pushAndRemoveUntil(
@@ -434,7 +434,7 @@ class _PrifileScreenState extends State<ProfileScreen> {
                             keyboardType: TextInputType
                                 .phone, // Set keyboard type to phone
                             validator: (value) {
-                              // Phone number validation logic
+                           
                               if (value == null || value.isEmpty) {
                                 return 'Phone number cannot be empty';
                               } else if (!RegExp(r'^[0-9]+$').hasMatch(value)) {
@@ -582,7 +582,8 @@ class _PrifileScreenState extends State<ProfileScreen> {
                                             ),
                                           ),
                                           Positioned(
-                                            top: 260,
+                                          top: MediaQuery.of(context).size.height * (280 / 812),
+
                                             child: Image.asset(
                                               'assets/warning_alert.png',
                                               width: 60, // Adjust as needed

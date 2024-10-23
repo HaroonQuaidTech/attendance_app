@@ -1,4 +1,5 @@
-import 'dart:developer';
+// ignore_for_file: use_build_context_synchronously, duplicate_ignore, unused_local_variable
+
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
@@ -39,11 +40,26 @@ class AttendanceService {
         'userId': userId,
       });
 
-      log("Checked in successfully");
-      // ignore: use_build_context_synchronously
+  
+    
       Navigator.pop(context);
+
+      _showAlertDialog(
+    
+        context: context,
+        title: 'Successful',
+        titleColor: Colors.green,
+        image: 'assets/success_alert.png',
+        message: 'Checked in successfully!',
+        closeCallback: () {
+          Navigator.pushReplacement(
+            context,
+            MaterialPageRoute(builder: (context) => const HomeScreen()),
+          );
+        },
+      );
     } catch (e) {
-      // ignore: use_build_context_synchronously
+
       Navigator.pop(context);
       String errorMessage = 'Something went wrong!';
 
@@ -51,7 +67,17 @@ class AttendanceService {
         errorMessage = e.message ?? errorMessage;
       }
 
-      log("Error checking out: $e");
+      _showAlertDialog(
+        // ignore: use_build_context_synchronously
+        context: context,
+        title: 'Error',
+        titleColor: Colors.red,
+        image: 'assets/failed_alert.png',
+        message: errorMessage,
+        closeCallback: () {},
+      );
+
+   
     }
   }
 
@@ -80,7 +106,7 @@ class AttendanceService {
         'checkOut': checkOutTime,
       });
 
-      log("Checked out successfully");
+  
 
       // ignore: use_build_context_synchronously
       Navigator.pop(context);
@@ -93,9 +119,71 @@ class AttendanceService {
         errorMessage = e.message ?? errorMessage;
       }
 
-      log("Error checking out: $e");
+
     }
   }
+}
+
+void _showAlertDialog({
+  required BuildContext context,
+  required String title,
+  required Color titleColor,
+  required String message,
+  required String image,
+  required VoidCallback closeCallback,
+}) {
+  showDialog(
+    context: context,
+    barrierDismissible: false,
+    builder: (BuildContext context) {
+      return Stack(
+        alignment: Alignment.topCenter,
+        children: [
+          AlertDialog(
+            contentPadding: const EdgeInsets.only(top: 60.0),
+            backgroundColor: Colors.white,
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(15),
+            ),
+            title: Column(
+              children: [
+                Text(
+                  title,
+                  style: TextStyle(
+                    fontSize: 18,
+                    fontWeight: FontWeight.bold,
+                    color: titleColor,
+                  ),
+                  textAlign: TextAlign.center,
+                ),
+                const SizedBox(height: 10),
+                Text(
+                  message,
+                  style: const TextStyle(
+                    fontWeight: FontWeight.normal,
+                    color: Colors.black,
+                    fontSize: 14,
+                  ),
+                  textAlign: TextAlign.center,
+                ),
+                const SizedBox(height: 15),
+              ],
+            ),
+          ),
+          Positioned(
+            top: 260,
+            child: Image.asset(
+              image,
+              width: 60,
+              height: 60,
+            ),
+          ),
+        ],
+      );
+    },
+  ).then((_) {
+    closeCallback(); // Call the callback after closing the alert dialog
+  });
 }
 
 class CheckinScreen extends StatefulWidget {
@@ -151,11 +239,11 @@ class _CheckinScreenState extends State<CheckinScreen> {
     bool serviceEnabled;
     LocationPermission permission;
 
-    // Test if location services are enabled
+  
     serviceEnabled = await Geolocator.isLocationServiceEnabled();
     if (!serviceEnabled) {
-      // Location services are not enabled don't continue
-      log('Location services are disabled.');
+    
+    
       return;
     }
 
@@ -163,24 +251,24 @@ class _CheckinScreenState extends State<CheckinScreen> {
     if (permission == LocationPermission.denied) {
       permission = await Geolocator.requestPermission();
       if (permission == LocationPermission.denied) {
-        // Permissions are denied, next time you could try requesting permissions again
-        log('Location permissions are denied');
+       
+       
         return;
       }
     }
 
     if (permission == LocationPermission.deniedForever) {
-      // Permissions are denied forever, handle appropriately
-      log('Location permissions are permanently denied, we cannot request permissions.');
+     
+   
       return;
     }
 
-    // When we reach here, permissions are granted and we can get the location
+   
     Position position = await Geolocator.getCurrentPosition(
       desiredAccuracy: LocationAccuracy.high,
     );
 
-    log('Current location: ${position.latitude}, ${position.longitude}');
+   
   }
 
   @override
@@ -377,7 +465,7 @@ class _CheckinScreenState extends State<CheckinScreen> {
                           targetLatitude,
                           targetLongitude,
                         );
-                        log('Distance to target: $distanceInMeters meters');
+                      
 
                         // ignore: use_build_context_synchronously
                         await _attendanceService.checkIn(context, userId);
@@ -473,7 +561,7 @@ class _CheckinScreenState extends State<CheckinScreen> {
                             return Stack(
                               alignment: Alignment.center,
                               clipBehavior: Clip
-                                  .none, // Ensures the icon can overflow outside the dialog
+                                  .none, 
                               children: [
                                 AlertDialog(
                                   contentPadding: EdgeInsets.only(
@@ -550,6 +638,7 @@ class _CheckinScreenState extends State<CheckinScreen> {
                                               ),
                                             ),
                                           ),
+                                          const SizedBox(width: 10,),
                                           GestureDetector(
                                             onTap: () async {
                                               Position currentPosition =
@@ -573,7 +662,7 @@ class _CheckinScreenState extends State<CheckinScreen> {
                                                 targetLongitude,
                                               );
 
-                                              log('Distance to target: $distanceInMeters meters');
+                                            
 
                                               await _attendanceService.checkOut(
                                                   // ignore: use_build_context_synchronously
