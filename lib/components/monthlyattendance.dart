@@ -114,19 +114,19 @@ class Monthlyattendance extends StatelessWidget {
             child: PieChart(
               PieChartData(sections: [
                 PieChartSectionData(
-                  color: Colors.purple,
+                  color: const Color(0xff8E71DF),
                   value: presentCount.toDouble(),
                   title: '',
                   radius: 12,
                 ),
                 PieChartSectionData(
-                  color: Colors.orange,
+                  color: const Color(0xffF6C15B),
                   value: lateCount.toDouble(),
                   title: '',
                   radius: 12,
                 ),
                 PieChartSectionData(
-                  color: Colors.red,
+                  color: const Color(0xffEC5851),
                   value: absentCount.toDouble(),
                   title: '',
                   radius: 12,
