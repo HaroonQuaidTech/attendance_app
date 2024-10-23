@@ -230,9 +230,10 @@ class _StatsticsScreenState extends State<StatsticsScreen> {
                                     const NotificationScreen()),
                           );
                         },
-                        child: const Icon(
-                          Icons.notifications_none,
-                          color: Colors.black,
+                        child: Image.asset(
+                          'assets/notification_icon.png',
+                          height: 30,
+                          width: 30,
                         ),
                       ),
                     ),

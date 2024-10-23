@@ -132,8 +132,7 @@ class _PrifileScreenState extends State<ProfileScreen> {
   Future<void> _logout(BuildContext context) async {
     showDialog(
       context: context,
-      barrierDismissible:
-          false,
+      barrierDismissible: false,
       builder: (BuildContext context) {
         return Center(
           child: CircularProgressIndicator(),
@@ -142,7 +141,6 @@ class _PrifileScreenState extends State<ProfileScreen> {
     );
     await _auth.signOut();
 
- 
     Navigator.of(
       context,
     ).pushAndRemoveUntil(
@@ -256,9 +254,10 @@ class _PrifileScreenState extends State<ProfileScreen> {
                                     builder: (context) => NotificationScreen()),
                               );
                             },
-                            child: Icon(
-                              Icons.notifications_none,
-                              color: Colors.black,
+                            child: Image.asset(
+                              'assets/notification_icon.png',
+                              height: 30,
+                              width: 30,
                             ),
                           ),
                         ),
@@ -434,7 +433,6 @@ class _PrifileScreenState extends State<ProfileScreen> {
                             keyboardType: TextInputType
                                 .phone, // Set keyboard type to phone
                             validator: (value) {
-                           
                               if (value == null || value.isEmpty) {
                                 return 'Phone number cannot be empty';
                               } else if (!RegExp(r'^[0-9]+$').hasMatch(value)) {
@@ -582,8 +580,10 @@ class _PrifileScreenState extends State<ProfileScreen> {
                                             ),
                                           ),
                                           Positioned(
-                                          top: MediaQuery.of(context).size.height * (280 / 812),
-
+                                            top: MediaQuery.of(context)
+                                                    .size
+                                                    .height *
+                                                (280 / 812),
                                             child: Image.asset(
                                               'assets/warning_alert.png',
                                               width: 60, // Adjust as needed

@@ -64,7 +64,6 @@ class _HomeScreenState extends State<HomeScreen> {
   }
 
   void _showAttendanceDetails(Map<String, dynamic> data) {
-  
     DateTime? checkInTime = (data['checkIn'] != null)
         ? (data['checkIn'] as Timestamp).toDate()
         : null;
@@ -77,9 +76,7 @@ class _HomeScreenState extends State<HomeScreen> {
     } else {}
   }
 
-  void _showNoDataMessage() {
-   
-  }
+  void _showNoDataMessage() {}
 
   @override
   void initState() {
@@ -109,7 +106,6 @@ class _HomeScreenState extends State<HomeScreen> {
         }
       });
     } catch (e) {
-      
       setState(() {
         _isLoading = false;
         _showNoDataMessage();
@@ -167,7 +163,7 @@ class _HomeScreenState extends State<HomeScreen> {
         });
       }
     } catch (e) {
-   const Text('Error');
+      const Text('Error');
     }
   }
 
@@ -252,7 +248,6 @@ class _HomeScreenState extends State<HomeScreen> {
 
       return counts;
     } catch (e) {
-     
       return {
         'present': 0,
         'late': 0,
@@ -406,9 +401,9 @@ class _HomeScreenState extends State<HomeScreen> {
                                         );
                                       },
                                       child: Image.asset(
-                                        'assets/icon.png',
-                                        height: 72,
-                                        width: 72,
+                                        'assets/notification_icon.png',
+                                        height: 30,
+                                        width: 30,
                                       ),
                                     )
                                   ]);
@@ -480,9 +475,10 @@ class _HomeScreenState extends State<HomeScreen> {
                                           ),
                                         );
                                       },
-                                      child: const Icon(
-                                        Icons.notifications_none,
-                                        color: Colors.black,
+                                      child: Image.asset(
+                                        'assets/notification_icon.png',
+                                        height: 30,
+                                        width: 30,
                                       ),
                                     ),
                                   ),

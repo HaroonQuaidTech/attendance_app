@@ -393,9 +393,10 @@ class _CheckinScreenState extends State<CheckinScreen> {
                                   ),
                                 );
                               },
-                              child: const Icon(
-                                Icons.notifications_none,
-                                color: Colors.black,
+                              child: Image.asset(
+                                'assets/notification_icon.png',
+                                height: 30,
+                                width: 30,
                               ),
                             ),
                           ),
