@@ -1,5 +1,5 @@
-// ignore_for_file: prefer_const_literals_to_create_immutables, prefer_const_constructors, use_build_context_synchronously, unused_import, avoid_print
 import 'dart:developer';
+
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_storage/firebase_storage.dart';
@@ -9,7 +9,6 @@ import 'package:image_picker/image_picker.dart';
 import 'package:quaidtech/screens/home.dart';
 import 'package:quaidtech/screens/login.dart';
 import 'package:quaidtech/screens/notification.dart';
-import 'package:quaidtech/screens/splashscreen.dart';
 import 'dart:io';
 
 class ProfileScreen extends StatefulWidget {
@@ -47,7 +46,7 @@ class _PrifileScreenState extends State<ProfileScreen> {
         context: context,
         barrierDismissible: false,
         builder: (BuildContext context) {
-          return Center(
+          return const Center(
             child: CircularProgressIndicator(),
           );
         },
@@ -61,17 +60,15 @@ class _PrifileScreenState extends State<ProfileScreen> {
         isEdited = false;
       });
 
+      // ignore: use_build_context_synchronously
       Navigator.of(context).pop();
-      // Navigator.pushReplacement(
-      //   context,
-      //   MaterialPageRoute(builder: (context) => Splashscreen()),
-      // );
 
       showToastMessage('Profile and Data Updated successfully');
     } catch (e) {
+      // ignore: use_build_context_synchronously
       Navigator.of(context).pop();
       showToastMessage(e.toString());
-      print('$e');
+      log('$e');
     }
   }
 
@@ -134,7 +131,7 @@ class _PrifileScreenState extends State<ProfileScreen> {
       context: context,
       barrierDismissible: false,
       builder: (BuildContext context) {
-        return Center(
+        return const Center(
           child: CircularProgressIndicator(),
         );
       },
@@ -142,6 +139,7 @@ class _PrifileScreenState extends State<ProfileScreen> {
     await _auth.signOut();
 
     Navigator.of(
+      // ignore: use_build_context_synchronously
       context,
     ).pushAndRemoveUntil(
       MaterialPageRoute(builder: (context) => const LoginScreen()),
@@ -189,7 +187,6 @@ class _PrifileScreenState extends State<ProfileScreen> {
             child: Form(
               key: _formKey,
               child: Column(
-                // mainAxisAlignment: MainAxisAlignment.center,
                 children: [
                   SizedBox(
                     height: 70,
@@ -200,10 +197,9 @@ class _PrifileScreenState extends State<ProfileScreen> {
                           width: 50,
                           height: 50,
                           decoration: BoxDecoration(
-                            color: Colors.transparent, // light background color
-                            borderRadius:
-                                BorderRadius.circular(12), // rounded corners
-                            boxShadow: [
+                            color: Colors.transparent,
+                            borderRadius: BorderRadius.circular(12),
+                            boxShadow: const [
                               BoxShadow(
                                 color: Colors.transparent,
                                 offset: Offset(0, 4),
@@ -217,16 +213,16 @@ class _PrifileScreenState extends State<ProfileScreen> {
                               Navigator.push(
                                 context,
                                 MaterialPageRoute(
-                                    builder: (context) => HomeScreen()),
+                                    builder: (context) => const HomeScreen()),
                               );
                             },
-                            child: Icon(
+                            child: const Icon(
                               Icons.arrow_back,
                               color: Colors.transparent,
                             ),
                           ),
                         ),
-                        Text(
+                        const Text(
                           'Profile',
                           style: TextStyle(
                               fontSize: 22, fontWeight: FontWeight.w600),
@@ -306,7 +302,7 @@ class _PrifileScreenState extends State<ProfileScreen> {
                               : Container(
                                   width: 175,
                                   height: 175,
-                                  decoration: BoxDecoration(),
+                                  decoration: const BoxDecoration(),
                                   child: ClipRRect(
                                     borderRadius: BorderRadius.circular(900),
                                     child: Image.asset(
@@ -329,27 +325,28 @@ class _PrifileScreenState extends State<ProfileScreen> {
                                   borderRadius: BorderRadius.circular(20)),
                               child: IconButton(
                                   onPressed: _pickImage,
-                                  icon: Icon(
+                                  icon: const Icon(
                                     Icons.camera_enhance,
                                     size: 28,
                                   ))),
                         ),
                     ],
                   ),
-                  SizedBox(
+                  const SizedBox(
                     height: 30,
                   ),
                   Container(
                     // height: screenHeight * 0.48,
-                    padding: EdgeInsets.symmetric(vertical: 20, horizontal: 10),
+                    padding: const EdgeInsets.symmetric(
+                        vertical: 20, horizontal: 10),
                     width: double.infinity,
                     decoration: BoxDecoration(
-                        color: Color(0xffEFF1FF),
+                        color: const Color(0xffEFF1FF),
                         borderRadius: BorderRadius.circular(18)),
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        Text(
+                        const Text(
                           'Name',
                           style: TextStyle(
                             fontSize: 16,
@@ -358,7 +355,7 @@ class _PrifileScreenState extends State<ProfileScreen> {
                           ),
                         ),
                         Container(
-                          padding: EdgeInsets.symmetric(horizontal: 3),
+                          padding: const EdgeInsets.symmetric(horizontal: 3),
                           decoration: BoxDecoration(
                               color: Colors.white,
                               borderRadius: BorderRadius.circular(8)),
@@ -373,7 +370,7 @@ class _PrifileScreenState extends State<ProfileScreen> {
                               return null;
                             },
                             enabled: isEdited,
-                            decoration: InputDecoration(
+                            decoration: const InputDecoration(
                               filled: true, // Enable background color
                               fillColor: Colors.white,
                               hintText: 'Username',
@@ -382,16 +379,16 @@ class _PrifileScreenState extends State<ProfileScreen> {
                             ),
                           ),
                         ),
-                        SizedBox(
+                        const SizedBox(
                           height: 10,
                         ),
-                        Text(
+                        const Text(
                           'Email',
                           style: TextStyle(
                               fontSize: 16, fontWeight: FontWeight.w600),
                         ),
                         Container(
-                          padding: EdgeInsets.symmetric(horizontal: 3),
+                          padding: const EdgeInsets.symmetric(horizontal: 3),
                           decoration: BoxDecoration(
                               color: Colors.white,
                               borderRadius: BorderRadius.circular(8)),
@@ -408,7 +405,7 @@ class _PrifileScreenState extends State<ProfileScreen> {
                               return null;
                             },
                             enabled: isEdited,
-                            decoration: InputDecoration(
+                            decoration: const InputDecoration(
                               filled: true, // Enable background color
                               fillColor: Colors.white,
                               hintText: 'user.name@gmail.com',
@@ -417,16 +414,16 @@ class _PrifileScreenState extends State<ProfileScreen> {
                             ),
                           ),
                         ),
-                        SizedBox(
+                        const SizedBox(
                           height: 10,
                         ),
-                        Text(
+                        const Text(
                           'Phone Number',
                           style: TextStyle(
                               fontSize: 16, fontWeight: FontWeight.w600),
                         ),
                         Container(
-                          padding: EdgeInsets.symmetric(horizontal: 3),
+                          padding: const EdgeInsets.symmetric(horizontal: 3),
                           decoration: BoxDecoration(
                               color: Colors.white,
                               borderRadius: BorderRadius.circular(8)),
@@ -446,7 +443,7 @@ class _PrifileScreenState extends State<ProfileScreen> {
                               return null; // Return null if the input is valid
                             },
                             enabled: isEdited,
-                            decoration: InputDecoration(
+                            decoration: const InputDecoration(
                               filled: true,
                               fillColor: Colors.white,
                               hintText: 'Enter your Phone Number',
@@ -454,7 +451,7 @@ class _PrifileScreenState extends State<ProfileScreen> {
                             ),
                           ),
                         ),
-                        SizedBox(
+                        const SizedBox(
                           height: 30,
                         ),
                         if (!isEdited)
@@ -467,10 +464,10 @@ class _PrifileScreenState extends State<ProfileScreen> {
                                   width: screenWidth * 0.4,
                                   height: screenHeight * 0.055,
                                   decoration: BoxDecoration(
-                                    color: Color(0xff7647EB),
+                                    color: const Color(0xff7647EB),
                                     borderRadius: BorderRadius.circular(8),
                                   ),
-                                  child: Center(
+                                  child: const Center(
                                       child: Text(
                                     'Edit Profile',
                                     style: TextStyle(color: Colors.white),
@@ -496,7 +493,7 @@ class _PrifileScreenState extends State<ProfileScreen> {
                                             ),
                                             title: Column(
                                               children: [
-                                                Text(
+                                                const Text(
                                                   'Are you Sure',
                                                   style: TextStyle(
                                                     fontSize: 18,
@@ -504,9 +501,9 @@ class _PrifileScreenState extends State<ProfileScreen> {
                                                   ),
                                                   textAlign: TextAlign.center,
                                                 ),
-                                                Text(
+                                                const Text(
                                                   'Do you want to logout ?',
-                                                  style: const TextStyle(
+                                                  style: TextStyle(
                                                     fontWeight:
                                                         FontWeight.normal,
                                                     color: Colors.black,
@@ -536,11 +533,10 @@ class _PrifileScreenState extends State<ProfileScreen> {
                                                               BorderRadius
                                                                   .circular(5),
                                                         ),
-                                                        child: Center(
+                                                        child: const Center(
                                                           child: Text(
                                                             'Cancel',
-                                                            style:
-                                                                const TextStyle(
+                                                            style: TextStyle(
                                                               fontSize: 14,
                                                               color:
                                                                   Colors.white,
@@ -564,11 +560,10 @@ class _PrifileScreenState extends State<ProfileScreen> {
                                                               BorderRadius
                                                                   .circular(5),
                                                         ),
-                                                        child: Center(
+                                                        child: const Center(
                                                           child: Text(
                                                             'Logout',
-                                                            style:
-                                                                const TextStyle(
+                                                            style: TextStyle(
                                                               fontSize: 14,
                                                               color:
                                                                   Colors.white,
@@ -602,10 +597,10 @@ class _PrifileScreenState extends State<ProfileScreen> {
                                   width: screenWidth * 0.4,
                                   height: screenHeight * 0.055,
                                   decoration: BoxDecoration(
-                                    color: Color(0xffEC5851),
+                                    color: const Color(0xffEC5851),
                                     borderRadius: BorderRadius.circular(8),
                                   ),
-                                  child: Center(
+                                  child: const Center(
                                       child: Text(
                                     'Log Out',
                                     style: TextStyle(color: Colors.white),
@@ -628,10 +623,10 @@ class _PrifileScreenState extends State<ProfileScreen> {
                                   width: screenWidth * 0.4,
                                   height: screenHeight * 0.055,
                                   decoration: BoxDecoration(
-                                    color: Color(0xff7647EB),
+                                    color: const Color(0xff7647EB),
                                     borderRadius: BorderRadius.circular(8),
                                   ),
-                                  child: Center(
+                                  child: const Center(
                                       child: Text(
                                     'Save Changes',
                                     style: TextStyle(color: Colors.white),

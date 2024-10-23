@@ -1,5 +1,3 @@
-// ignore_for_file: use_build_context_synchronously, duplicate_ignore, unused_local_variable
-
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
@@ -40,9 +38,11 @@ class AttendanceService {
         'userId': userId,
       });
 
+      // ignore: use_build_context_synchronously
       Navigator.pop(context);
 
       _showAlertDialog(
+        // ignore: use_build_context_synchronously
         context: context,
         title: 'Successful',
         titleColor: Colors.green,
@@ -56,6 +56,7 @@ class AttendanceService {
         },
       );
     } catch (e) {
+      // ignore: use_build_context_synchronously
       Navigator.pop(context);
       String errorMessage = 'Something went wrong!';
 
@@ -245,10 +246,6 @@ class _CheckinScreenState extends State<CheckinScreen> {
     if (permission == LocationPermission.deniedForever) {
       return;
     }
-
-    Position position = await Geolocator.getCurrentPosition(
-      desiredAccuracy: LocationAccuracy.high,
-    );
   }
 
   @override
@@ -441,7 +438,7 @@ class _CheckinScreenState extends State<CheckinScreen> {
                         double targetLatitude = 33.6084548;
                         double targetLongitude = 73.0171062;
 
-                        double distanceInMeters = Geolocator.distanceBetween(
+                        Geolocator.distanceBetween(
                           currentPosition.latitude,
                           currentPosition.longitude,
                           targetLatitude,
@@ -636,8 +633,7 @@ class _CheckinScreenState extends State<CheckinScreen> {
                                               double targetLongitude =
                                                   73.0171062;
 
-                                              double distanceInMeters =
-                                                  Geolocator.distanceBetween(
+                                              Geolocator.distanceBetween(
                                                 currentPosition.latitude,
                                                 currentPosition.longitude,
                                                 targetLatitude,
