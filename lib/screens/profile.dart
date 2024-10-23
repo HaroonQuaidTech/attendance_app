@@ -225,7 +225,9 @@ class _PrifileScreenState extends State<ProfileScreen> {
                         const Text(
                           'Profile',
                           style: TextStyle(
-                              fontSize: 22, fontWeight: FontWeight.w600),
+                            fontSize: 22,
+                            fontWeight: FontWeight.w600,
+                          ),
                         ),
                         GestureDetector(
                           onTap: () {
