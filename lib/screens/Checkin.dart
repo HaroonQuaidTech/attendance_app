@@ -1,4 +1,5 @@
-import 'dart:developer';
+// ignore_for_file: use_build_context_synchronously, duplicate_ignore, unused_local_variable
+
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
@@ -39,12 +40,12 @@ class AttendanceService {
         'userId': userId,
       });
 
-      log("Checked in successfully");
-      // ignore: use_build_context_synchronously
+  
+    
       Navigator.pop(context);
 
       _showAlertDialog(
-        // ignore: use_build_context_synchronously
+    
         context: context,
         title: 'Successful',
         titleColor: Colors.green,
@@ -58,7 +59,7 @@ class AttendanceService {
         },
       );
     } catch (e) {
-      // ignore: use_build_context_synchronously
+
       Navigator.pop(context);
       String errorMessage = 'Something went wrong!';
 
@@ -67,7 +68,7 @@ class AttendanceService {
       }
 
       _showAlertDialog(
-        // ignore: use_build_context_synchronously
+      
         context: context,
         title: 'Error',
         titleColor: Colors.red,
@@ -76,7 +77,7 @@ class AttendanceService {
         closeCallback: () {},
       );
 
-      log("Error checking out: $e");
+   
     }
   }
 
@@ -105,7 +106,7 @@ class AttendanceService {
         'checkOut': checkOutTime,
       });
 
-      log("Checked out successfully");
+  
 
       // ignore: use_build_context_synchronously
       Navigator.pop(context);
@@ -143,7 +144,7 @@ class AttendanceService {
         closeCallback: () {},
       );
 
-      log("Error checking out: $e");
+
     }
   }
 }
@@ -206,7 +207,7 @@ void _showAlertDialog({
       );
     },
   ).then((_) {
-    closeCallback(); // Call the callback after closing the alert dialog
+    closeCallback(); 
   });
 }
 
@@ -263,11 +264,11 @@ class _CheckinScreenState extends State<CheckinScreen> {
     bool serviceEnabled;
     LocationPermission permission;
 
-    // Test if location services are enabled
+  
     serviceEnabled = await Geolocator.isLocationServiceEnabled();
     if (!serviceEnabled) {
-      // Location services are not enabled don't continue
-      log('Location services are disabled.');
+    
+    
       return;
     }
 
@@ -275,24 +276,24 @@ class _CheckinScreenState extends State<CheckinScreen> {
     if (permission == LocationPermission.denied) {
       permission = await Geolocator.requestPermission();
       if (permission == LocationPermission.denied) {
-        // Permissions are denied, next time you could try requesting permissions again
-        log('Location permissions are denied');
+       
+       
         return;
       }
     }
 
     if (permission == LocationPermission.deniedForever) {
-      // Permissions are denied forever, handle appropriately
-      log('Location permissions are permanently denied, we cannot request permissions.');
+     
+   
       return;
     }
 
-    // When we reach here, permissions are granted and we can get the location
+   
     Position position = await Geolocator.getCurrentPosition(
       desiredAccuracy: LocationAccuracy.high,
     );
 
-    log('Current location: ${position.latitude}, ${position.longitude}');
+   
   }
 
   @override
@@ -489,7 +490,7 @@ class _CheckinScreenState extends State<CheckinScreen> {
                           targetLatitude,
                           targetLongitude,
                         );
-                        log('Distance to target: $distanceInMeters meters');
+                      
 
                         // ignore: use_build_context_synchronously
                         await _attendanceService.checkIn(context, userId);
@@ -585,7 +586,7 @@ class _CheckinScreenState extends State<CheckinScreen> {
                             return Stack(
                               alignment: Alignment.center,
                               clipBehavior: Clip
-                                  .none, // Ensures the icon can overflow outside the dialog
+                                  .none, 
                               children: [
                                 AlertDialog(
                                   contentPadding: EdgeInsets.only(
@@ -686,7 +687,7 @@ class _CheckinScreenState extends State<CheckinScreen> {
                                                 targetLongitude,
                                               );
 
-                                              log('Distance to target: $distanceInMeters meters');
+                                            
 
                                               await _attendanceService.checkOut(
                                                   // ignore: use_build_context_synchronously

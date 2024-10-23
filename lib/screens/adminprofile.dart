@@ -17,7 +17,7 @@ class _PrifileScreenState extends State<AdminProfileScreen> {
     showDialog(
       context: context,
       barrierDismissible:
-          false, // Prevents closing the dialog by tapping outside
+          false, 
       builder: (BuildContext context) {
         return Center(
           child: CircularProgressIndicator(),
@@ -27,7 +27,7 @@ class _PrifileScreenState extends State<AdminProfileScreen> {
 
     await Future.delayed(Duration(seconds: 2));
 
-    // Navigate to the login screen after the delay
+
     Navigator.pushReplacement(
       context,
       MaterialPageRoute(builder: (context) => Splashscreen()),
@@ -231,7 +231,7 @@ class _PrifileScreenState extends State<AdminProfileScreen> {
               width: 20,
             ),
             Text(
-            'Logo out',
+            'Log out',
               style: TextStyle(fontSize: 16, fontWeight: FontWeight.w600),
             ),
             Spacer(),
