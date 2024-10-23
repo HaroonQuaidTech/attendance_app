@@ -4,12 +4,12 @@ import 'package:intl/intl.dart';
 
 class DailyEmptyAttendance extends StatefulWidget {
   final DateTime? selectedDay;
-  final String? checkInTime; // Add a parameter to pass the check-in time.
+  final String? checkInTime; 
 
   const DailyEmptyAttendance({
     super.key,
     required this.selectedDay,
-    this.checkInTime, // Nullable to allow empty or missing data.
+    this.checkInTime,
   });
 
   @override
@@ -25,33 +25,33 @@ class _DailyAttendanceState extends State<DailyEmptyAttendance> {
     final double screenHeight = screenSize.height;
     final double screenWidth = screenSize.width;
 
-    // Determine the message and color based on the selected day and check-in time.
+    
     String message;
     Color containerColor;
 
-    // Get the current date
+    
     final DateTime currentDate = DateTime.now();
 
-    // Check if the selected day is a weekend
+    
     if (widget.selectedDay != null &&
         (widget.selectedDay!.weekday == DateTime.saturday ||
             widget.selectedDay!.weekday == DateTime.sunday)) {
       message = 'Weekend Days';
-      containerColor = Colors.blueGrey; // Grey color for the container
+      containerColor = Colors.blueGrey; 
     } else {
-      // Handle weekdays
+     
       if (widget.selectedDay!.isAfter(currentDate)) {
-        // If the selected day is after the current day
+    
         message = 'No Data Available';
-        containerColor = const Color(0xffEC5851); // Set container color
+        containerColor = const Color(0xffEC5851); 
       } else if (widget.checkInTime == null || widget.checkInTime!.isEmpty) {
-        // If there is no check-in time
+   
         message = 'Leave/Day off';
-        containerColor = const Color(0xffEC5851); // Set container color
+        containerColor = const Color(0xffEC5851); 
       } else {
-        // If there is a check-in time
+      
         message = 'Checked in at ${widget.checkInTime}';
-        containerColor = const Color(0xffEC5851); // Set container color
+        containerColor = const Color(0xffEC5851); 
       }
     }
 
@@ -73,7 +73,7 @@ class _DailyAttendanceState extends State<DailyEmptyAttendance> {
                 width: 53,
                 height: 55,
                 decoration: BoxDecoration(
-                  color: containerColor, // Dynamically set container color
+                  color: containerColor,
                   borderRadius: BorderRadius.circular(6),
                 ),
                 child: Column(
@@ -106,7 +106,7 @@ class _DailyAttendanceState extends State<DailyEmptyAttendance> {
           const SizedBox(width: 50),
           Center(
             child: Text(
-              message, // Display the appropriate message.
+              message, 
               style: const TextStyle(
                 fontSize: 22,
                 fontWeight: FontWeight.w600,

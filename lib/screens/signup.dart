@@ -150,11 +150,11 @@ class _LoginScreenState extends State<SignUpScreen> {
                           child: TextFormField(
                             controller: _nameController,
                             decoration: InputDecoration(
-                              filled: true, // Enable background color
+                              filled: true, 
                               fillColor: Colors.white,
                               hintText: 'Enter your Name',
                               border: InputBorder.none,
-                              // Outlined border
+                       
                             ),
                           ),
                         ),
@@ -174,11 +174,11 @@ class _LoginScreenState extends State<SignUpScreen> {
                           child: TextFormField(
                             controller: _emailController,
                             decoration: InputDecoration(
-                              filled: true, // Enable background color
+                              filled: true, 
                               fillColor: Colors.white,
                               hintText: 'Enter your Email Address',
                               border: InputBorder.none,
-                              // Outlined border
+                     
                             ),
                           ),
                         ),
@@ -199,7 +199,7 @@ class _LoginScreenState extends State<SignUpScreen> {
                             decoration: InputDecoration(
                                 suffixIconConstraints:
                                     BoxConstraints(maxHeight: 20),
-                                filled: true, // Enable background color
+                                filled: true, 
                                 fillColor: Colors.white,
                                 hintText: 'Enter your Password',
                                 border: InputBorder.none,
