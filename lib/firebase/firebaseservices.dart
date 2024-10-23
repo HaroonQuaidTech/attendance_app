@@ -14,8 +14,6 @@ class FirebaseAuthServices {
         email: email,
         password: password,
       );
-      // saving firestore
-      //  String? token =  await FirebaseMessaging.instance.getToken();
 
       try {
         await _firestore.collection("Users").doc(userCredential.user!.uid).set({
@@ -39,11 +37,7 @@ class FirebaseAuthServices {
         email: email,
         password: password,
       );
-      //     String? token =  await FirebaseMessaging.instance.getToken();
-      //  await FirebaseFirestore.instance
-      //   .collection('Users')
-      //   .doc(userCredential.user!.uid)
-      //   .update({'token': token});
+
       return userCredential;
     } on FirebaseAuthException catch (e) {
       throw Exception(e.code);
