@@ -368,35 +368,36 @@ class _CheckinScreenState extends State<CheckinScreen> {
                                 height: 0,
                               ),
                             ),
-                          Container(
-                            width: 50,
-                            height: 50,
-                            decoration: BoxDecoration(
-                              color: Colors.grey[200], // light background color
-                              borderRadius:
-                                  BorderRadius.circular(12), // rounded corners
-                              boxShadow: const [
-                                BoxShadow(
-                                  color: Colors.black12,
-                                  offset: Offset(2, 2),
-                                  blurRadius: 4,
+                          GestureDetector(
+                            onTap: () {
+                              Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                  builder: (context) =>
+                                      const NotificationScreen(),
                                 ),
-                              ],
-                            ),
-                            child: GestureDetector(
-                              onTap: () {
-                                Navigator.push(
-                                  context,
-                                  MaterialPageRoute(
-                                    builder: (context) =>
-                                        const NotificationScreen(),
+                              );
+                            },
+                            child: Container(
+                              height: 50,
+                              width: 50,
+                              decoration: BoxDecoration(
+                                color: const Color(0xffE6E8FD),
+                                borderRadius: BorderRadius.circular(12),
+                                boxShadow: const [
+                                  BoxShadow(
+                                    color: Colors.black12,
+                                    offset: Offset(2, 2),
+                                    blurRadius: 4,
                                   ),
-                                );
-                              },
-                              child: Image.asset(
-                                'assets/notification_icon.png',
-                                height: 30,
-                                width: 30,
+                                ],
+                              ),
+                              child: Center(
+                                child: Image.asset(
+                                  'assets/notification_icon.png',
+                                  height: 30,
+                                  width: 30,
+                                ),
                               ),
                             ),
                           ),
