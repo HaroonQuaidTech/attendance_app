@@ -40,12 +40,9 @@ class AttendanceService {
         'userId': userId,
       });
 
-  
-    
       Navigator.pop(context);
 
       _showAlertDialog(
-    
         context: context,
         title: 'Successful',
         titleColor: Colors.green,
@@ -59,7 +56,6 @@ class AttendanceService {
         },
       );
     } catch (e) {
-
       Navigator.pop(context);
       String errorMessage = 'Something went wrong!';
 
@@ -68,7 +64,7 @@ class AttendanceService {
       }
 
       _showAlertDialog(
-      
+        // ignore: use_build_context_synchronously
         context: context,
         title: 'Error',
         titleColor: Colors.red,
@@ -76,8 +72,6 @@ class AttendanceService {
         message: errorMessage,
         closeCallback: () {},
       );
-
-   
     }
   }
 
@@ -106,45 +100,16 @@ class AttendanceService {
         'checkOut': checkOutTime,
       });
 
-  
-
       // ignore: use_build_context_synchronously
       Navigator.pop(context);
-
-      _showAlertDialog(
-        // ignore: use_build_context_synchronously
-        context: context,
-        title: 'Successful',
-        titleColor: Colors.green,
-        image: 'assets/success_alert.png',
-        message: 'Checked out successfully!',
-        closeCallback: () {
-          Navigator.pushReplacement(
-            context,
-            MaterialPageRoute(builder: (context) => const HomeScreen()),
-          );
-        },
-      );
     } catch (e) {
       // ignore: use_build_context_synchronously
-      Navigator.pop(context); // Ensure the loading indicator is dismissed
+      Navigator.pop(context);
       String errorMessage = 'Something went wrong!';
 
       if (e is FirebaseAuthException) {
         errorMessage = e.message ?? errorMessage;
       }
-
-      _showAlertDialog(
-        // ignore: use_build_context_synchronously
-        context: context,
-        title: 'Error',
-        titleColor: Colors.red,
-        image: 'assets/failed_alert.png',
-        message: errorMessage,
-        closeCallback: () {},
-      );
-
-
     }
   }
 }
@@ -207,7 +172,7 @@ void _showAlertDialog({
       );
     },
   ).then((_) {
-    closeCallback(); 
+    closeCallback(); // Call the callback after closing the alert dialog
   });
 }
 
@@ -264,11 +229,8 @@ class _CheckinScreenState extends State<CheckinScreen> {
     bool serviceEnabled;
     LocationPermission permission;
 
-  
     serviceEnabled = await Geolocator.isLocationServiceEnabled();
     if (!serviceEnabled) {
-    
-    
       return;
     }
 
@@ -276,24 +238,17 @@ class _CheckinScreenState extends State<CheckinScreen> {
     if (permission == LocationPermission.denied) {
       permission = await Geolocator.requestPermission();
       if (permission == LocationPermission.denied) {
-       
-       
         return;
       }
     }
 
     if (permission == LocationPermission.deniedForever) {
-     
-   
       return;
     }
 
-   
     Position position = await Geolocator.getCurrentPosition(
       desiredAccuracy: LocationAccuracy.high,
     );
-
-   
   }
 
   @override
@@ -490,7 +445,6 @@ class _CheckinScreenState extends State<CheckinScreen> {
                           targetLatitude,
                           targetLongitude,
                         );
-                      
 
                         // ignore: use_build_context_synchronously
                         await _attendanceService.checkIn(context, userId);
@@ -585,8 +539,7 @@ class _CheckinScreenState extends State<CheckinScreen> {
                           builder: (BuildContext context) {
                             return Stack(
                               alignment: Alignment.center,
-                              clipBehavior: Clip
-                                  .none, 
+                              clipBehavior: Clip.none,
                               children: [
                                 AlertDialog(
                                   contentPadding: EdgeInsets.only(
@@ -663,7 +616,9 @@ class _CheckinScreenState extends State<CheckinScreen> {
                                               ),
                                             ),
                                           ),
-                                          const SizedBox(width: 10,),
+                                          const SizedBox(
+                                            width: 10,
+                                          ),
                                           GestureDetector(
                                             onTap: () async {
                                               Position currentPosition =
@@ -686,8 +641,6 @@ class _CheckinScreenState extends State<CheckinScreen> {
                                                 targetLatitude,
                                                 targetLongitude,
                                               );
-
-                                            
 
                                               await _attendanceService.checkOut(
                                                   // ignore: use_build_context_synchronously
@@ -729,8 +682,8 @@ class _CheckinScreenState extends State<CheckinScreen> {
                                   ),
                                 ),
                                 Positioned(
-                                  top: MediaQuery.of(context).size.height *
-                                      0.34, // Responsive top position for the image
+                                  top:
+                                      MediaQuery.of(context).size.height * 0.34,
                                   child: Image.asset(
                                     'assets/warning_alert.png',
                                     width: MediaQuery.of(context).size.width *
@@ -822,9 +775,7 @@ class _CheckinScreenState extends State<CheckinScreen> {
                   const SizedBox(
                     height: 30,
                   ),
-
                   const Spacer(),
-
                   SizedBox(
                     height: 140,
                     child: Padding(
@@ -924,9 +875,10 @@ class _CheckinScreenState extends State<CheckinScreen> {
                               mainAxisAlignment: MainAxisAlignment.spaceAround,
                               children: [
                                 Image.asset(
-                                  'assets/totalhours.png',
-                                  height: 42,
-                                  width: 42,
+                                  'assets/total_hrs.png',
+                                  height: 45,
+                                  width: 45,
+                                  color: const Color(0xff7647EB),
                                 ),
                                 Text(
                                   totalHours,
