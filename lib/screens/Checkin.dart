@@ -42,21 +42,6 @@ class AttendanceService {
       log("Checked in successfully");
       // ignore: use_build_context_synchronously
       Navigator.pop(context);
-
-      _showAlertDialog(
-        // ignore: use_build_context_synchronously
-        context: context,
-        title: 'Successful',
-        titleColor: Colors.green,
-        image: 'assets/success_alert.png',
-        message: 'Checked in successfully!',
-        closeCallback: () {
-          Navigator.pushReplacement(
-            context,
-            MaterialPageRoute(builder: (context) => const HomeScreen()),
-          );
-        },
-      );
     } catch (e) {
       // ignore: use_build_context_synchronously
       Navigator.pop(context);
@@ -65,16 +50,6 @@ class AttendanceService {
       if (e is FirebaseAuthException) {
         errorMessage = e.message ?? errorMessage;
       }
-
-      _showAlertDialog(
-        // ignore: use_build_context_synchronously
-        context: context,
-        title: 'Error',
-        titleColor: Colors.red,
-        image: 'assets/failed_alert.png',
-        message: errorMessage,
-        closeCallback: () {},
-      );
 
       log("Error checking out: $e");
     }
@@ -109,105 +84,18 @@ class AttendanceService {
 
       // ignore: use_build_context_synchronously
       Navigator.pop(context);
-
-      _showAlertDialog(
-        // ignore: use_build_context_synchronously
-        context: context,
-        title: 'Successful',
-        titleColor: Colors.green,
-        image: 'assets/success_alert.png',
-        message: 'Checked out successfully!',
-        closeCallback: () {
-          Navigator.pushReplacement(
-            context,
-            MaterialPageRoute(builder: (context) => const HomeScreen()),
-          );
-        },
-      );
     } catch (e) {
       // ignore: use_build_context_synchronously
-      Navigator.pop(context); // Ensure the loading indicator is dismissed
+      Navigator.pop(context);
       String errorMessage = 'Something went wrong!';
 
       if (e is FirebaseAuthException) {
         errorMessage = e.message ?? errorMessage;
       }
 
-      _showAlertDialog(
-        // ignore: use_build_context_synchronously
-        context: context,
-        title: 'Error',
-        titleColor: Colors.red,
-        image: 'assets/failed_alert.png',
-        message: errorMessage,
-        closeCallback: () {},
-      );
-
       log("Error checking out: $e");
     }
   }
-}
-
-void _showAlertDialog({
-  required BuildContext context,
-  required String title,
-  required Color titleColor,
-  required String message,
-  required String image,
-  required VoidCallback closeCallback,
-}) {
-  showDialog(
-    context: context,
-    barrierDismissible: false,
-    builder: (BuildContext context) {
-      return Stack(
-        alignment: Alignment.topCenter,
-        children: [
-          AlertDialog(
-            contentPadding: const EdgeInsets.only(top: 60.0),
-            backgroundColor: Colors.white,
-            shape: RoundedRectangleBorder(
-              borderRadius: BorderRadius.circular(15),
-            ),
-            title: Column(
-              children: [
-                Text(
-                  title,
-                  style: TextStyle(
-                    fontSize: 18,
-                    fontWeight: FontWeight.bold,
-                    color: titleColor,
-                  ),
-                  textAlign: TextAlign.center,
-                ),
-                const SizedBox(height: 10),
-                Text(
-                  message,
-                  style: const TextStyle(
-                    fontWeight: FontWeight.normal,
-                    color: Colors.black,
-                    fontSize: 14,
-                  ),
-                  textAlign: TextAlign.center,
-                ),
-                const SizedBox(height: 15),
-              ],
-            ),
-          ),
-          Positioned(
-            top: 260,
-            child: Image.asset(
-              image,
-              width: 60,
-              height: 60,
-            ),
-          ),
-        ],
-      );
-    },
-  ).then((_) {
-    closeCallback(); // Call the callback after closing the alert dialog
-  });
 }
 
 class CheckinScreen extends StatefulWidget {
@@ -727,8 +615,8 @@ class _CheckinScreenState extends State<CheckinScreen> {
                                   ),
                                 ),
                                 Positioned(
-                                  top: MediaQuery.of(context).size.height *
-                                      0.34, // Responsive top position for the image
+                                  top:
+                                      MediaQuery.of(context).size.height * 0.34,
                                   child: Image.asset(
                                     'assets/warning_alert.png',
                                     width: MediaQuery.of(context).size.width *
@@ -820,9 +708,7 @@ class _CheckinScreenState extends State<CheckinScreen> {
                   const SizedBox(
                     height: 30,
                   ),
-
                   const Spacer(),
-
                   SizedBox(
                     height: 140,
                     child: Padding(
@@ -922,9 +808,10 @@ class _CheckinScreenState extends State<CheckinScreen> {
                               mainAxisAlignment: MainAxisAlignment.spaceAround,
                               children: [
                                 Image.asset(
-                                  'assets/totalhours.png',
-                                  height: 42,
-                                  width: 42,
+                                  'assets/total_hrs.png',
+                                  height: 45,
+                                  width: 45,
+                                  color: const Color(0xff7647EB),
                                 ),
                                 Text(
                                   totalHours,

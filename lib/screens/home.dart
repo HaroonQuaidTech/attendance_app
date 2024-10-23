@@ -262,55 +262,6 @@ class _HomeScreenState extends State<HomeScreen> {
     }
   }
 
-  Widget _buildSegmentNavigator(String text, int index, Icon icon) {
-    final Size screenSize = MediaQuery.of(context).size;
-    final double screenWidth = screenSize.width;
-    double baseFontSize = 16;
-    double responsiveFontSize = baseFontSize * (screenWidth / 375);
-    bool isSelected = _selectedIndex == index;
-    if (index == 1) const StatsticsScreen();
-    if (index == 2) ProfileScreen;
-    return Expanded(
-      child: GestureDetector(
-        onTap: () => _onItemTapped(index),
-        child: Container(
-          padding: const EdgeInsets.symmetric(vertical: 10.0),
-          margin: const EdgeInsets.symmetric(vertical: 8.0, horizontal: 5.0),
-          decoration: BoxDecoration(
-            color: isSelected ? Colors.white : Colors.transparent,
-            borderRadius: BorderRadius.circular(48.0),
-          ),
-          child: Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 10.0),
-            child: Row(
-              children: [
-                Icon(
-                  icon.icon,
-                  color: isSelected
-                      ? const Color(0xff7647EB)
-                      : const Color(0xffA4A4A4),
-                ),
-                const SizedBox(
-                  width: 5,
-                ),
-                Text(
-                  text,
-                  style: TextStyle(
-                      color: isSelected
-                          ? const Color(0xff7647EB)
-                          : const Color(0xffA4A4A4),
-                      fontWeight:
-                          isSelected ? FontWeight.bold : FontWeight.normal,
-                      fontSize: responsiveFontSize),
-                ),
-              ],
-            ),
-          ),
-        ),
-      ),
-    );
-  }
-
   @override
   Widget build(BuildContext context) {
     // ignore: deprecated_member_use
@@ -959,15 +910,86 @@ class _HomeScreenState extends State<HomeScreen> {
                 ),
               ],
             ),
-            child: Row(
-              children: [
-                _buildSegmentNavigator('Home', 0, const Icon(Icons.home)),
-                _buildSegmentNavigator(
-                    'Stats', 1, const Icon(Icons.graphic_eq_outlined)),
-                _buildSegmentNavigator('Profile', 2, const Icon(Icons.person)),
-              ],
+            child: Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 5),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  _buildSegmentNavigator(
+                    'Home',
+                    0,
+                    Image.asset('assets/home_selected.png'),
+                    'assets/home.png',
+                  ),
+                  _buildSegmentNavigator(
+                      'Stats',
+                      1,
+                      Image.asset('assets/stats_selected.png'),
+                      'assets/stats.png'),
+                  _buildSegmentNavigator(
+                      'Profile',
+                      2,
+                      Image.asset('assets/profile_selected.png'),
+                      'assets/profile.png'),
+                ],
+              ),
             ),
           ),
+        ),
+      ),
+    );
+  }
+
+  Widget _buildSegmentNavigator(
+      String text, int index, Image image, String asset) {
+    final Size screenSize = MediaQuery.of(context).size;
+    final double screenWidth = screenSize.width;
+    double baseFontSize = 16;
+    double responsiveFontSize = baseFontSize * (screenWidth / 375);
+    bool isSelected = _selectedIndex == index;
+    if (index == 1) const StatsticsScreen();
+    if (index == 2) ProfileScreen;
+    return GestureDetector(
+      onTap: () => _onItemTapped(index),
+      child: Container(
+        height: 50,
+        decoration: BoxDecoration(
+          color: isSelected ? Colors.white : Colors.transparent,
+          borderRadius: BorderRadius.circular(48.0),
+        ),
+        child: Row(
+          children: [
+            const SizedBox(width: 20),
+            SizedBox(
+              child: isSelected
+                  ? Image(
+                      image: image.image,
+                      color: const Color(0xff7647EB),
+                      width: 30,
+                      height: 30,
+                    )
+                  : Image.asset(
+                      width: 30,
+                      height: 30,
+                      asset,
+                      color: const Color(0xffA4A4A4),
+                    ),
+            ),
+            SizedBox(width: isSelected ? 5 : 0),
+            isSelected
+                ? Text(
+                    text,
+                    style: TextStyle(
+                        color: isSelected
+                            ? const Color(0xff7647EB)
+                            : const Color(0xffA4A4A4),
+                        fontWeight:
+                            isSelected ? FontWeight.bold : FontWeight.normal,
+                        fontSize: responsiveFontSize),
+                  )
+                : Container(),
+            const SizedBox(width: 20),
+          ],
         ),
       ),
     );
