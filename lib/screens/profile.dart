@@ -62,10 +62,6 @@ class _PrifileScreenState extends State<ProfileScreen> {
       });
 
       Navigator.of(context).pop();
-      // Navigator.pushReplacement(
-      //   context,
-      //   MaterialPageRoute(builder: (context) => Splashscreen()),
-      // );
 
       showToastMessage('Profile and Data Updated successfully');
     } catch (e) {

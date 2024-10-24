@@ -30,7 +30,10 @@ class _StatsticsScreenState extends State<StatsticsScreen> {
 //----------------------------------------------------------------------------
 
   Widget _buildWeeklyAttendance(
-      String text, Color color, String dropdownValue2) {
+    String text,
+    Color color,
+    String dropdownValue2,
+  ) {
     return Container(
         padding: const EdgeInsets.all(12),
         width: double.infinity,
@@ -42,18 +45,19 @@ class _StatsticsScreenState extends State<StatsticsScreen> {
               color: Colors.grey.withOpacity(0.2),
               spreadRadius: 2,
               blurRadius: 4,
-              offset: const Offset(0, 2), // changes position of shadow
+              offset: const Offset(0, 2),
             ),
           ],
         ),
         child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
           Text(
             text,
-            style: const TextStyle(fontWeight: FontWeight.w600, fontSize: 18),
+            style: const TextStyle(
+              fontWeight: FontWeight.w600,
+              fontSize: 18,
+            ),
           ),
-          const SizedBox(
-            height: 10,
-          ),
+          const SizedBox(height: 10),
           //----------------------------------------
           WeeklyAttendance(
             color: color,
