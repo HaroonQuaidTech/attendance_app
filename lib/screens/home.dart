@@ -329,10 +329,8 @@ class _HomeScreenState extends State<HomeScreen> {
                               exit(0);
                             },
                             child: Container(
-                              width: MediaQuery.of(context).size.width *
-                                  0.3, // Responsive width
-                              height: MediaQuery.of(context).size.height *
-                                  0.05, // Responsive height
+                              width: MediaQuery.of(context).size.width * 0.3,
+                              height: MediaQuery.of(context).size.height * 0.05,
                               decoration: BoxDecoration(
                                 color: const Color(0xff7647EB),
                                 borderRadius: BorderRadius.circular(5),
