@@ -1,7 +1,6 @@
 // ignore_for_file: prefer_const_constructors
 
 
-
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
@@ -21,25 +20,28 @@ class _StatusBuilerState extends State<StatusBuilderWeekly> {
   Future<List<Map<String, dynamic>?>> _getAttendanceDetails(String uid) async {
     List<Map<String, dynamic>?> attendanceList = [];
     final now = DateTime.now();
-    DateFormat('yMMMd').format(DateTime.now());
-    final weekStart = now.subtract(Duration(days: now.weekday - 1));
-    weekStart.add(const Duration(days: 6));
 
+ 
     DateTime startOfWeek = now.subtract(Duration(days: now.weekday - 1));
 
+  
     for (int i = 0; i < 5; i++) {
-      final date = weekStart.add(Duration(days: i));
-      if (date.weekday == DateTime.saturday ||
-          date.weekday == DateTime.sunday) {
+      DateTime currentDay = startOfWeek.add(Duration(days: i));
+
+    
+      if (currentDay.weekday == DateTime.saturday ||
+          currentDay.weekday == DateTime.sunday) {
         continue;
       }
 
-      DateTime currentDay = startOfWeek.add(Duration(days: i));
+    
       String formattedDate = DateFormat('yMMMd').format(currentDay);
+
+  
       final DocumentSnapshot<Map<String, dynamic>> snapshot =
           await FirebaseFirestore.instance
               .collection('AttendanceDetails')
-              .doc(userId)
+              .doc(uid) 
               .collection('dailyattendance')
               .doc(formattedDate)
               .get();
@@ -50,18 +52,6 @@ class _StatusBuilerState extends State<StatusBuilderWeekly> {
         attendanceList.add(null);
       }
     }
-    final todayDate = DateFormat('yMMMd').format(now);
-    final todayCheckIn = await FirebaseFirestore.instance
-        .collection('AttendanceDetails')
-        .doc(uid)
-        .collection('dailyattendance')
-        .doc(todayDate)
-        .get();
-
-    if (!todayCheckIn.exists) {
-      attendanceList.insert(0, {'missingCheckIn': true});
-    }
-
     return attendanceList;
   }
 
@@ -104,25 +94,22 @@ class _StatusBuilerState extends State<StatusBuilderWeekly> {
   }
 
   double _calculateWeeklyHours(List<Map<String, dynamic>?> weeklyData) {
-  int totalMinutes = 0;
+    int totalMinutes = 0;
 
-  for (var data in weeklyData) {
-    if (data == null) continue;
-    final checkIn = (data['checkIn'] as Timestamp?)?.toDate();
-    final checkOut = (data['checkOut'] as Timestamp?)?.toDate();
+    for (var data in weeklyData) {
+      if (data == null) continue;
+      final checkIn = (data['checkIn'] as Timestamp?)?.toDate();
+      final checkOut = (data['checkOut'] as Timestamp?)?.toDate();
 
-    if (checkIn != null && checkOut != null) {
-      final duration = checkOut.difference(checkIn);
-      totalMinutes += duration.inMinutes;
+      if (checkIn != null && checkOut != null) {
+        final duration = checkOut.difference(checkIn);
+        totalMinutes += duration.inMinutes;
+      }
     }
+
+    final double totalHours = totalMinutes / 60;
+    return totalHours;
   }
-
-
-  final double totalHours = totalMinutes / 60;
-  return totalHours;
-}
-
-
 
   Widget _buildEmptyAttendanceContainer(
     int index,
@@ -266,7 +253,11 @@ class _StatusBuilerState extends State<StatusBuilderWeekly> {
         }
 
         if (snapshot.hasError) {
-         return Center(child: Text('Error Something went wrong Check Your Internet Connection',style: TextStyle(color: Colors.red),));
+          return Center(
+              child: Text(
+            'Error Something went wrong Check Your Internet Connection',
+            style: TextStyle(color: Colors.red),
+          ));
         }
 
         if (!snapshot.hasData || snapshot.data == null) {
@@ -285,11 +276,11 @@ class _StatusBuilerState extends State<StatusBuilderWeekly> {
             itemCount: weeklyData.length,
             itemBuilder: (context, index) {
               final data = weeklyData[index];
+
               final DateTime date = DateTime.now()
                   .subtract(Duration(days: DateTime.now().weekday - 1 - index));
 
               if (date.isAfter(DateTime.now())) {
-                // If the date is in the future, return the null attendance container
                 return _buildNullAttendanceContainer(index);
               }
 
@@ -342,12 +333,12 @@ class _StatusBuilerState extends State<StatusBuilderWeekly> {
                 if (checkInDateTime.isBefore(onTimeDateTime)) {
                   containerColor = Color(0xff22Af41); // On time
                 } else if (checkInDateTime.isAfter(lateArrivalDateTime)) {
-                  containerColor = Color(0xffF6C15B);  // Late arrival
+                  containerColor = Color(0xffF6C15B); // Late arrival
                 } else {
                   containerColor = const Color(0xff8E71DF); // Default color
                 }
               } else {
-                containerColor = Color(0xffEC5851);  // No check-in
+                containerColor = Color(0xffEC5851); // No check-in
               }
 
               if (checkOut != null) {
@@ -514,13 +505,18 @@ class _StatusBuilerState extends State<StatusBuilderWeekly> {
               future: _getAttendanceDetails(userId),
               builder: (context, snapshot) {
                 if (snapshot.hasError) {
-                  return Center(child: Text('Error Something went wrong Check Your Internet Connection',style: TextStyle(color: Colors.red),));
+                  return Center(
+                      child: Text(
+                    'Error Something went wrong Check Your Internet Connection',
+                    style: TextStyle(color: Colors.red),
+                  ));
                 }
 
                 if (!snapshot.hasData || snapshot.data == null) {
                   return Center(child: Text('.'));
                 }
                 final weeklyData = snapshot.data!;
+
                 final totalTime = _calculateWeeklyMins(weeklyData);
                 final totalHours = (totalTime / 60).toStringAsFixed(2);
                 final totalMinutes = _calculateWeeklyMins(weeklyData);
@@ -530,7 +526,6 @@ class _StatusBuilerState extends State<StatusBuilderWeekly> {
                 const double maxHours = 45; //weekly hours
 
                 final double progress = totalHourss / maxHours;
-                
 
                 return Padding(
                   padding: const EdgeInsets.only(top: 20.0),
@@ -646,9 +641,7 @@ class _StatusBuilerState extends State<StatusBuilderWeekly> {
                                               '$startFormatted - $endFormatted',
                                               style: TextStyle(
                                                   fontWeight: FontWeight.w600,
-                                                  fontSize: 15
-                                                  
-                                                  ),
+                                                  fontSize: 15),
                                             ),
                                           ],
                                         ),

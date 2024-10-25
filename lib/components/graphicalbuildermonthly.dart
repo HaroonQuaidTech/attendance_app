@@ -59,6 +59,7 @@ class _GraphicalbuilerState extends State<GraphicalbuilerMonthly> {
       "Week 2": 0,
       "Week 3": 0,
       "Week 4": 0,
+      "Week 5": 0,
     };
 
     for (var entry in data) {
@@ -86,6 +87,10 @@ class _GraphicalbuilerState extends State<GraphicalbuilerMonthly> {
           case 4:
             monthlyHours["Week 4"] =
                 (monthlyHours["Week 4"] ?? 0) + duration.inHours.toDouble();
+            break;
+              case 5:
+            monthlyHours["Week 5"] =
+                (monthlyHours["Week 5"] ?? 0) + duration.inHours.toDouble();
             break;
         }
       }
@@ -134,21 +139,26 @@ class _GraphicalbuilerState extends State<GraphicalbuilerMonthly> {
     return attendanceStats;
   }
 
-  int getLateArrivalCount(List<Map<String, dynamic>> attendanceData) {
-    int lateCount = 0;
+ int getLateArrivalCount(List<Map<String, dynamic>> attendanceData) {
+  int lateCount = 0;
+  DateTime now = DateTime.now();
 
-    for (var entry in attendanceData) {
-      if (entry['checkIn'] != null) {
-        DateTime checkInTime = (entry['checkIn'] as Timestamp).toDate();
+  for (var entry in attendanceData) {
+    if (entry['checkIn'] != null) {
+      DateTime checkInTime = (entry['checkIn'] as Timestamp).toDate();
+      DateTime checkInDate = DateTime(checkInTime.year, checkInTime.month, checkInTime.day);
 
-        if (checkInTime.isAfter(DateTime(
-            checkInTime.year, checkInTime.month, checkInTime.day, 8, 15))) {
+      // Only count if the date is today or in the past
+      if (checkInDate.isBefore(now) || checkInDate.isAtSameMomentAs(now)) {
+        if (checkInTime.isAfter(DateTime(checkInTime.year, checkInTime.month, checkInTime.day, 8, 15))) {
           lateCount++;
         }
       }
     }
-    return lateCount;
   }
+
+  return lateCount;
+}
 
   int getEarlyOutCount(List<Map<String, dynamic>> attendanceData) {
     int earlyCount = 0;
@@ -360,6 +370,12 @@ class _GraphicalbuilerState extends State<GraphicalbuilerMonthly> {
                                               color: Colors.black,
                                               fontSize: 15,
                                               fontWeight: FontWeight.w600));
+                                                 case 4:
+                                      return Text('Week 5',
+                                          style: TextStyle(
+                                              color: Colors.black,
+                                              fontSize: 15,
+                                              fontWeight: FontWeight.w600));
                                     default:
                                       return Text('');
                                   }
@@ -415,6 +431,18 @@ class _GraphicalbuilerState extends State<GraphicalbuilerMonthly> {
                             BarChartGroupData(x: 3, barRods: [
                               BarChartRodData(
                                 toY: monthlyHours["Week 4"]!,
+                                color: Color(0xff9478F7),
+                                width: 22,
+                                backDrawRodData: BackgroundBarChartRodData(
+                                  show: true,
+                                  toY: 45,
+                                  color: Colors.white,
+                                ),
+                              ),
+                            ]),
+                                 BarChartGroupData(x: 4, barRods: [
+                              BarChartRodData(
+                                toY: monthlyHours["Week 5"]!,
                                 color: Color(0xff9478F7),
                                 width: 22,
                                 backDrawRodData: BackgroundBarChartRodData(
