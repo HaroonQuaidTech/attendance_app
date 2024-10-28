@@ -1007,10 +1007,9 @@ class _PrifileScreenState extends State<ProfileScreen> {
                                                         .height *
                                                     (280 / 812),
                                                 child: Image.asset(
-                                                  'assets/warning_alert.png',
-                                                  width: 60, // Adjust as needed
-                                                  height:
-                                                      60, // Adjust as needed
+                                                  'assets/warning.png',
+                                                  width: 60,
+                                                  height: 60,
                                                 ),
                                               ),
                                             ],
