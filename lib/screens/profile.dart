@@ -1,5 +1,4 @@
 import 'dart:developer';
-
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_storage/firebase_storage.dart';
@@ -604,7 +603,9 @@ class _PrifileScreenState extends State<ProfileScreen> {
             child: SafeArea(
               child: Padding(
                 padding: const EdgeInsets.symmetric(
-                    horizontal: 20.0, vertical: 10.0),
+                  horizontal: 20.0,
+                  vertical: 10.0,
+                ),
                 child: Form(
                   key: _formKey,
                   child: Column(
@@ -647,7 +648,10 @@ class _PrifileScreenState extends State<ProfileScreen> {
                             const Text(
                               'Profile',
                               style: TextStyle(
-                                  fontSize: 22, fontWeight: FontWeight.w600),
+                                fontSize: 22,
+                                fontWeight: FontWeight.w600,
+                                height: 0,
+                              ),
                             ),
                             GestureDetector(
                               onTap: () {
@@ -736,23 +740,24 @@ class _PrifileScreenState extends State<ProfileScreen> {
                               bottom: 5,
                               right: 4,
                               child: Container(
-                                  width: 40,
-                                  height: 40,
-                                  decoration: BoxDecoration(
-                                      color: Colors.transparent,
-                                      borderRadius: BorderRadius.circular(20)),
-                                  child: IconButton(
-                                      onPressed: _pickImage,
-                                      icon: const Icon(
-                                        Icons.camera_enhance,
-                                        size: 28,
-                                      ))),
+                                width: 40,
+                                height: 40,
+                                decoration: BoxDecoration(
+                                  color: Colors.transparent,
+                                  borderRadius: BorderRadius.circular(20),
+                                ),
+                                child: IconButton(
+                                  onPressed: _pickImage,
+                                  icon: const Icon(
+                                    Icons.camera_enhance,
+                                    size: 28,
+                                  ),
+                                ),
+                              ),
                             ),
                         ],
                       ),
-                      const SizedBox(
-                        height: 30,
-                      ),
+                      const SizedBox(height: 30),
                       Container(
                         padding: const EdgeInsets.symmetric(
                             vertical: 20, horizontal: 10),
@@ -771,29 +776,22 @@ class _PrifileScreenState extends State<ProfileScreen> {
                                 height: 0,
                               ),
                             ),
-                            Container(
-                              padding:
-                                  const EdgeInsets.symmetric(horizontal: 3),
-                              decoration: BoxDecoration(
-                                  color: Colors.white,
-                                  borderRadius: BorderRadius.circular(8)),
-                              child: TextFormField(
-                                controller: _nameController,
-                                validator: (value) {
-                                  if (value == null || value.isEmpty) {
-                                    return 'Username cannot be empty';
-                                  } else if (value.length < 3) {
-                                    return 'Username must be at least 3 characters long';
-                                  }
-                                  return null;
-                                },
-                                enabled: isEdited,
-                                decoration: const InputDecoration(
-                                  filled: true,
-                                  fillColor: Colors.white,
-                                  hintText: 'Username',
-                                  border: InputBorder.none,
-                                ),
+                            TextFormField(
+                              controller: _nameController,
+                              validator: (value) {
+                                if (value == null || value.isEmpty) {
+                                  return 'Username cannot be empty';
+                                } else if (value.length < 3) {
+                                  return 'Username must be at least 3 characters long';
+                                }
+                                return null;
+                              },
+                              enabled: isEdited,
+                              decoration: const InputDecoration(
+                                filled: true,
+                                fillColor: Colors.white,
+                                hintText: 'Username',
+                                border: InputBorder.none,
                               ),
                             ),
                             const SizedBox(
@@ -804,27 +802,20 @@ class _PrifileScreenState extends State<ProfileScreen> {
                               style: TextStyle(
                                   fontSize: 16, fontWeight: FontWeight.w600),
                             ),
-                            Container(
-                              padding:
-                                  const EdgeInsets.symmetric(horizontal: 3),
-                              decoration: BoxDecoration(
-                                  color: Colors.white,
-                                  borderRadius: BorderRadius.circular(8)),
-                              child: TextFormField(
-                                controller: _passwordController,
-                                validator: (value) {
-                                  if (value == null || value.isEmpty) {
-                                    return 'Password cannot be empty';
-                                  }
-                                  return null;
-                                },
-                                enabled: isEdited,
-                                decoration: const InputDecoration(
-                                  filled: true,
-                                  fillColor: Colors.white,
-                                  hintText: 'New password',
-                                  border: InputBorder.none,
-                                ),
+                            TextFormField(
+                              controller: _passwordController,
+                              obscureText: true,
+                              validator: (value) {
+                                if (value == null || value.isEmpty) {
+                                  return 'Password cannot be empty';
+                                }
+                                return null;
+                              },
+                              decoration: const InputDecoration(
+                                filled: true,
+                                fillColor: Colors.white,
+                                hintText: 'New password',
+                                border: InputBorder.none,
                               ),
                             ),
                             const SizedBox(
@@ -833,7 +824,10 @@ class _PrifileScreenState extends State<ProfileScreen> {
                             const Text(
                               'Phone Number',
                               style: TextStyle(
-                                  fontSize: 16, fontWeight: FontWeight.w600),
+                                fontSize: 16,
+                                fontWeight: FontWeight.w600,
+                                height: 0,
+                              ),
                             ),
                             Container(
                               padding:
@@ -855,7 +849,7 @@ class _PrifileScreenState extends State<ProfileScreen> {
                                   } else if (value.length != 10) {
                                     return 'Phone number must be 10 digits long';
                                   }
-                                  return null; // Return null if the input is valid
+                                  return null;
                                 },
                                 enabled: isEdited,
                                 decoration: const InputDecoration(
@@ -866,9 +860,7 @@ class _PrifileScreenState extends State<ProfileScreen> {
                                 ),
                               ),
                             ),
-                            const SizedBox(
-                              height: 30,
-                            ),
+                            const SizedBox(height: 30),
                             if (!isEdited)
                               Row(
                                 mainAxisAlignment:
@@ -894,125 +886,153 @@ class _PrifileScreenState extends State<ProfileScreen> {
                                     onTap: () {
                                       showDialog(
                                         context: context,
+                                        barrierDismissible: false,
                                         builder: (BuildContext context) {
-                                          return Stack(
-                                            alignment: Alignment.topCenter,
-                                            children: [
-                                              AlertDialog(
-                                                contentPadding:
-                                                    const EdgeInsets.only(
-                                                        top: 60.0),
-                                                backgroundColor: Colors.white,
-                                                shape: RoundedRectangleBorder(
-                                                  borderRadius:
-                                                      BorderRadius.circular(15),
-                                                ),
-                                                title: Column(
-                                                  children: [
-                                                    const Text(
-                                                      'Are you Sure',
-                                                      style: TextStyle(
-                                                        fontSize: 18,
-                                                        fontWeight:
-                                                            FontWeight.bold,
-                                                      ),
-                                                      textAlign:
-                                                          TextAlign.center,
-                                                    ),
-                                                    const Text(
-                                                      'Do you want to logout ?',
-                                                      style: TextStyle(
-                                                        fontWeight:
-                                                            FontWeight.normal,
-                                                        color: Colors.black,
-                                                        fontSize: 14,
-                                                      ),
-                                                      textAlign:
-                                                          TextAlign.center,
-                                                    ),
-                                                    const SizedBox(height: 15),
-                                                    Row(
-                                                      mainAxisAlignment:
-                                                          MainAxisAlignment
-                                                              .spaceBetween,
-                                                      children: [
-                                                        GestureDetector(
-                                                          onTap: () {
-                                                            Navigator.of(
-                                                                    context)
-                                                                .pop();
-                                                          },
-                                                          child: Container(
-                                                            width: 110,
-                                                            height: 30,
-                                                            decoration:
-                                                                BoxDecoration(
-                                                              color: Colors
-                                                                  .grey[400],
-                                                              borderRadius:
-                                                                  BorderRadius
-                                                                      .circular(
-                                                                          5),
-                                                            ),
-                                                            child: const Center(
-                                                              child: Text(
-                                                                'Cancel',
-                                                                style:
-                                                                    TextStyle(
-                                                                  fontSize: 14,
-                                                                  color: Colors
-                                                                      .white,
-                                                                ),
-                                                              ),
-                                                            ),
-                                                          ),
-                                                        ),
-                                                        GestureDetector(
-                                                          onTap: () {
-                                                            _logout(context);
-                                                          },
-                                                          child: Container(
-                                                            width: 110,
-                                                            height: 30,
-                                                            decoration:
-                                                                BoxDecoration(
-                                                              color: const Color(
-                                                                  0xff7647EB),
-                                                              borderRadius:
-                                                                  BorderRadius
-                                                                      .circular(
-                                                                          5),
-                                                            ),
-                                                            child: const Center(
-                                                              child: Text(
-                                                                'Logout',
-                                                                style:
-                                                                    TextStyle(
-                                                                  fontSize: 14,
-                                                                  color: Colors
-                                                                      .white,
-                                                                ),
-                                                              ),
-                                                            ),
-                                                          ),
-                                                        ),
+                                          return Dialog(
+                                            shape: RoundedRectangleBorder(
+                                              borderRadius:
+                                                  BorderRadius.circular(12),
+                                            ),
+                                            child: Column(
+                                              mainAxisSize: MainAxisSize.min,
+                                              children: [
+                                                Container(
+                                                  height: 10,
+                                                  decoration:
+                                                      const BoxDecoration(
+                                                    gradient: LinearGradient(
+                                                      colors: [
+                                                        Color(0xff4D3D79),
+                                                        Color(0xff8E71DF),
                                                       ],
+                                                      begin:
+                                                          Alignment.centerLeft,
+                                                      end:
+                                                          Alignment.centerRight,
                                                     ),
-                                                  ],
+                                                    borderRadius:
+                                                        BorderRadius.vertical(
+                                                      top: Radius.circular(12),
+                                                    ),
+                                                  ),
                                                 ),
-                                              ),
-                                              Positioned(
-                                                top: MediaQuery.of(context)
-                                                        .size
-                                                        .height *
-                                                    (280 / 812),
-                                                child: Image.asset(
-                                                  'assets/warning.png',
-                                                  width: 60,
-                                                  height: 60,
+                                                Container(
+                                                  padding:
+                                                      const EdgeInsets.all(20),
+                                                  child: Column(
+                                                    mainAxisSize:
+                                                        MainAxisSize.min,
+                                                    children: [
+                                                      Image.asset(
+                                                        "assets/warning.png",
+                                                        width: 50,
+                                                        height: 50,
+                                                      ),
+                                                      const SizedBox(
+                                                          height: 10),
+                                                      const Text(
+                                                        'Are you sure ?',
+                                                        style: TextStyle(
+                                                          fontSize: 18,
+                                                          fontWeight:
+                                                              FontWeight.bold,
+                                                          height: 0,
+                                                        ),
+                                                        textAlign:
+                                                            TextAlign.center,
+                                                      ),
+                                                      const SizedBox(
+                                                          height: 10),
+                                                      const Text(
+                                                        'Do you want to continue ?',
+                                                        style: TextStyle(
+                                                          fontSize: 10,
+                                                          color: Colors.grey,
+                                                          height: 0,
+                                                        ),
+                                                        textAlign:
+                                                            TextAlign.center,
+                                                      ),
+                                                      const SizedBox(
+                                                          height: 20),
+                                                      Row(
+                                                        mainAxisAlignment:
+                                                            MainAxisAlignment
+                                                                .spaceBetween,
+                                                        children: [
+                                                          GestureDetector(
+                                                            onTap: () {
+                                                              Navigator.of(
+                                                                      context)
+                                                                  .pop();
+                                                            },
+                                                            child: Container(
+                                                              width: 110,
+                                                              height: 30,
+                                                              decoration:
+                                                                  BoxDecoration(
+                                                                color: const Color(
+                                                                    0xffECECEC),
+                                                                borderRadius:
+                                                                    BorderRadius
+                                                                        .circular(
+                                                                            10),
+                                                              ),
+                                                              child:
+                                                                  const Center(
+                                                                child: Text(
+                                                                  'Cancel',
+                                                                  style:
+                                                                      TextStyle(
+                                                                    fontSize:
+                                                                        14,
+                                                                    color: Colors
+                                                                        .black,
+                                                                    height: 0,
+                                                                  ),
+                                                                ),
+                                                              ),
+                                                            ),
+                                                          ),
+                                                          GestureDetector(
+                                                            onTap: () {
+                                                              _logout(context);
+                                                            },
+                                                            child: Container(
+                                                              width: 110,
+                                                              height: 30,
+                                                              decoration:
+                                                                  BoxDecoration(
+                                                                color: const Color(
+                                                                    0xff7647EB),
+                                                                borderRadius:
+                                                                    BorderRadius
+                                                                        .circular(
+                                                                            10),
+                                                              ),
+                                                              child:
+                                                                  const Center(
+                                                                child: Text(
+                                                                  'Logout',
+                                                                  style:
+                                                                      TextStyle(
+                                                                    fontSize:
+                                                                        14,
+                                                                    color: Colors
+                                                                        .white,
+                                                                    height: 0,
+                                                                  ),
+                                                                ),
+                                                              ),
+                                                            ),
+                                                          ),
+                                                        ],
+                                                      ),
+                                                    ],
+                                                  ),
                                                 ),
-                                              ),
-                                            ],
+                                              ],
+                                            ),
                                           );
                                         },
                                       );

@@ -46,17 +46,15 @@ class _LoginScreenState extends State<LoginScreen> {
     );
 
     try {
-      // Try signing in
       final userCredential = await FirebaseAuth.instance
           .signInWithEmailAndPassword(email: email, password: password);
       log(userCredential.toString());
 
-      // ignore: use_build_context_synchronously
-      Navigator.pop(context); // Close the loading indicator
+      Navigator.pop(context);
       _showAlertDialog(
         title: 'Successful',
         titlecolor: Colors.green,
-        image: 'assets/success_alert.png',
+        image: 'assets/success.png',
         message: 'Login Successfully',
         buttontext: 'Continue',
         closeCallback: () {
@@ -80,7 +78,7 @@ class _LoginScreenState extends State<LoginScreen> {
       _showAlertDialog(
         title: 'Error',
         titlecolor: Colors.red,
-        image: 'assets/failed_alert.png',
+        image: 'assets/failed.png',
         message: 'Something went wrong !',
         buttontext: 'Try Again',
         closeCallback: () {},
