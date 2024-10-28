@@ -1,5 +1,7 @@
 // ignore_for_file: prefer_const_constructors, prefer_const_literals_to_create_immutables, unnecessary_string_interpolations, depend_on_referenced_packages, unused_local_variable
 
+import 'dart:developer';
+
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
@@ -88,7 +90,7 @@ class _GraphicalbuilerState extends State<GraphicalbuilerMonthly> {
             monthlyHours["Week 4"] =
                 (monthlyHours["Week 4"] ?? 0) + duration.inHours.toDouble();
             break;
-              case 5:
+          case 5:
             monthlyHours["Week 5"] =
                 (monthlyHours["Week 5"] ?? 0) + duration.inHours.toDouble();
             break;
@@ -116,7 +118,7 @@ class _GraphicalbuilerState extends State<GraphicalbuilerMonthly> {
       if (checkIn != null && checkOut != null) {
         final checkInTime = TimeOfDay.fromDateTime(checkIn);
         final checkOutTime = TimeOfDay.fromDateTime(checkOut);
-         if ((checkInTime.hour == 7 && checkInTime.minute >= 50) ||
+        if ((checkInTime.hour == 7 && checkInTime.minute >= 50) ||
             (checkInTime.hour == 8 && checkInTime.minute <= 10)) {
           attendanceStats["On Time"] = (attendanceStats["On Time"] ?? 0) + 1;
         }
@@ -139,26 +141,28 @@ class _GraphicalbuilerState extends State<GraphicalbuilerMonthly> {
     return attendanceStats;
   }
 
- int getLateArrivalCount(List<Map<String, dynamic>> attendanceData) {
-  int lateCount = 0;
-  DateTime now = DateTime.now();
+  int getLateArrivalCount(List<Map<String, dynamic>> attendanceData) {
+    int lateCount = 0;
+    DateTime now = DateTime.now();
 
-  for (var entry in attendanceData) {
-    if (entry['checkIn'] != null) {
-      DateTime checkInTime = (entry['checkIn'] as Timestamp).toDate();
-      DateTime checkInDate = DateTime(checkInTime.year, checkInTime.month, checkInTime.day);
+    for (var entry in attendanceData) {
+      if (entry['checkIn'] != null) {
+        DateTime checkInTime = (entry['checkIn'] as Timestamp).toDate();
+        DateTime checkInDate =
+            DateTime(checkInTime.year, checkInTime.month, checkInTime.day);
 
-      // Only count if the date is today or in the past
-      if (checkInDate.isBefore(now) || checkInDate.isAtSameMomentAs(now)) {
-        if (checkInTime.isAfter(DateTime(checkInTime.year, checkInTime.month, checkInTime.day, 8, 15))) {
-          lateCount++;
+        // Only count if the date is today or in the past
+        if (checkInDate.isBefore(now) || checkInDate.isAtSameMomentAs(now)) {
+          if (checkInTime.isAfter(DateTime(
+              checkInTime.year, checkInTime.month, checkInTime.day, 8, 15))) {
+            lateCount++;
+          }
         }
       }
     }
+    log('Late count Monthly: $lateCount');
+    return lateCount;
   }
-
-  return lateCount;
-}
 
   int getEarlyOutCount(List<Map<String, dynamic>> attendanceData) {
     int earlyCount = 0;
@@ -174,10 +178,11 @@ class _GraphicalbuilerState extends State<GraphicalbuilerMonthly> {
         }
       }
     }
-
+    log('Early count Monthly: $earlyCount');
     return earlyCount;
   }
-    int getOnTimeCount(List<Map<String, dynamic>> data) {
+
+  int getOnTimeCount(List<Map<String, dynamic>> data) {
     int onTimeCount = 0;
 
     for (var entry in data) {
@@ -201,14 +206,39 @@ class _GraphicalbuilerState extends State<GraphicalbuilerMonthly> {
     int absentCount = 0;
 
     for (var record in attendanceData) {
-      if (record['checkIn'] == null ||
+      DateTime? recordDate =
+          record['date'] != null ? DateTime.parse(record['date']) : null;
+
+      // Skip if the date is Saturday or Sunday
+      if (recordDate != null &&
+          (recordDate.weekday == DateTime.saturday ||
+              recordDate.weekday == DateTime.sunday)) {
+        continue;
+      }
+
+      // Count as absent if both checkIn and checkOut are null
+      if ((record['checkIn'] == null && record['checkOut'] == null) ||
           (record['status'] != null &&
               record['status'].toString().toLowerCase() == 'absent')) {
         absentCount++;
       }
     }
 
+    log('Absent count Monthly: $absentCount');
     return absentCount;
+  }
+
+  int getPresentCount(List<dynamic> attendanceData) {
+    int presentCount = 0;
+
+    for (var record in attendanceData) {
+      if (record['checkIn'] != null) {
+        presentCount++;
+      }
+    }
+
+    log('Present count Monthly: $presentCount');
+    return presentCount;
   }
 
   Map<String, double> weeklyHours = {
@@ -216,7 +246,7 @@ class _GraphicalbuilerState extends State<GraphicalbuilerMonthly> {
     'Absent': 0,
     'Late Arrival': 0,
     'Early Out': 0,
-     'On Time': 0, 
+    'On Time': 0,
   };
   @override
   void initState() {
@@ -261,14 +291,13 @@ class _GraphicalbuilerState extends State<GraphicalbuilerMonthly> {
             calculateMonthlyHours(snapshot.data!);
         Map<String, double> monthlyAttendanceStats =
             calculateAttendanceStats(snapshot.data!);
-     
 
         Map<String, double> pieChartData = {
-          'Present': monthlyHours.values.reduce((a, b) => a + b).toDouble(),
+          'Present': getPresentCount(snapshot.data!).toDouble(),
           'Absent': getAbsentCount(snapshot.data!) * 9.0,
           'Late Arrival': getLateArrivalCount(snapshot.data!).toDouble(),
           'Early Out': getEarlyOutCount(snapshot.data!).toDouble(),
-            'On Time': getOnTimeCount(snapshot.data!).toDouble(),
+          'On Time': getOnTimeCount(snapshot.data!).toDouble(),
         };
 
         return Container(
@@ -350,32 +379,32 @@ class _GraphicalbuilerState extends State<GraphicalbuilerMonthly> {
                                       return Text('Week 1',
                                           style: TextStyle(
                                               color: Colors.black,
-                                              fontSize: 15,
-                                              fontWeight: FontWeight.w600));
+                                              fontSize: 13,
+                                              fontWeight: FontWeight.w400));
                                     case 1:
                                       return Text('Week 2',
                                           style: TextStyle(
                                               color: Colors.black,
-                                              fontSize: 15,
-                                              fontWeight: FontWeight.w600));
+                                              fontSize: 13,
+                                              fontWeight: FontWeight.w400));
                                     case 2:
                                       return Text('Week 3',
                                           style: TextStyle(
                                               color: Colors.black,
-                                              fontSize: 15,
+                                              fontSize: 13,
                                               fontWeight: FontWeight.w600));
                                     case 3:
                                       return Text('Week 4',
                                           style: TextStyle(
                                               color: Colors.black,
-                                              fontSize: 15,
-                                              fontWeight: FontWeight.w600));
-                                                 case 4:
+                                              fontSize: 13,
+                                              fontWeight: FontWeight.w400));
+                                    case 4:
                                       return Text('Week 5',
                                           style: TextStyle(
                                               color: Colors.black,
-                                              fontSize: 15,
-                                              fontWeight: FontWeight.w600));
+                                              fontSize: 13,
+                                              fontWeight: FontWeight.w400));
                                     default:
                                       return Text('');
                                   }
@@ -440,7 +469,7 @@ class _GraphicalbuilerState extends State<GraphicalbuilerMonthly> {
                                 ),
                               ),
                             ]),
-                                 BarChartGroupData(x: 4, barRods: [
+                            BarChartGroupData(x: 4, barRods: [
                               BarChartRodData(
                                 toY: monthlyHours["Week 5"]!,
                                 color: Color(0xff9478F7),
@@ -499,7 +528,7 @@ class _GraphicalbuilerState extends State<GraphicalbuilerMonthly> {
                             Color(0xffEC5851), // Absent
                             Color(0xffF6C15B), // Late Arrival
                             Color(0xffF07E25), // Early Out
-                                Color(0xff22AF41),  //oN TIME
+                            Color(0xff22AF41), //oN TIME
                           ],
                           chartRadius: MediaQuery.of(context).size.width / 1.7,
                           legendOptions: LegendOptions(
