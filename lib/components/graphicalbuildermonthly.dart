@@ -1,5 +1,7 @@
 // ignore_for_file: prefer_const_constructors, prefer_const_literals_to_create_immutables, unnecessary_string_interpolations, depend_on_referenced_packages, unused_local_variable
 
+import 'dart:developer';
+
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
@@ -148,17 +150,18 @@ class _GraphicalbuilerState extends State<GraphicalbuilerMonthly> {
         DateTime checkInDate =
             DateTime(checkInTime.year, checkInTime.month, checkInTime.day);
 
-      // Only count if the date is today or in the past
-      if (checkInDate.isBefore(now) || checkInDate.isAtSameMomentAs(now)) {
-        if (checkInTime.isAfter(DateTime(checkInTime.year, checkInTime.month, checkInTime.day, 8, 15))) {
-          lateCount++;
+        // Only count if the date is today or in the past
+        if (checkInDate.isBefore(now) || checkInDate.isAtSameMomentAs(now)) {
+          if (checkInTime.isAfter(DateTime(
+              checkInTime.year, checkInTime.month, checkInTime.day, 8, 15))) {
+            lateCount++;
+          }
         }
       }
     }
-  }
 
-  return lateCount;
-}
+    return lateCount;
+  }
 
   int getEarlyOutCount(List<Map<String, dynamic>> attendanceData) {
     int earlyCount = 0;
@@ -277,7 +280,6 @@ class _GraphicalbuilerState extends State<GraphicalbuilerMonthly> {
             calculateMonthlyHours(snapshot.data!);
         Map<String, double> monthlyAttendanceStats =
             calculateAttendanceStats(snapshot.data!);
-     
 
         Map<String, double> pieChartData = {
           'Present': getPresentCount(snapshot.data!).toDouble(),
@@ -387,7 +389,7 @@ class _GraphicalbuilerState extends State<GraphicalbuilerMonthly> {
                                               color: Colors.black,
                                               fontSize: 15,
                                               fontWeight: FontWeight.w600));
-                                                 case 4:
+                                    case 4:
                                       return Text('Week 5',
                                           style: TextStyle(
                                               color: Colors.black,
