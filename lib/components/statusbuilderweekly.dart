@@ -1,7 +1,3 @@
-// ignore_for_file: prefer_const_constructors
-
-
-
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
@@ -50,17 +46,7 @@ class _StatusBuilerState extends State<StatusBuilderWeekly> {
         attendanceList.add(null);
       }
     }
-    final todayDate = DateFormat('yMMMd').format(now);
-    final todayCheckIn = await FirebaseFirestore.instance
-        .collection('AttendanceDetails')
-        .doc(uid)
-        .collection('dailyattendance')
-        .doc(todayDate)
-        .get();
-
-    if (!todayCheckIn.exists) {
-      attendanceList.insert(0, {'missingCheckIn': true});
-    }
+    DateFormat('yMMMd').format(now);
 
     return attendanceList;
   }
@@ -104,25 +90,22 @@ class _StatusBuilerState extends State<StatusBuilderWeekly> {
   }
 
   double _calculateWeeklyHours(List<Map<String, dynamic>?> weeklyData) {
-  int totalMinutes = 0;
+    int totalMinutes = 0;
 
-  for (var data in weeklyData) {
-    if (data == null) continue;
-    final checkIn = (data['checkIn'] as Timestamp?)?.toDate();
-    final checkOut = (data['checkOut'] as Timestamp?)?.toDate();
+    for (var data in weeklyData) {
+      if (data == null) continue;
+      final checkIn = (data['checkIn'] as Timestamp?)?.toDate();
+      final checkOut = (data['checkOut'] as Timestamp?)?.toDate();
 
-    if (checkIn != null && checkOut != null) {
-      final duration = checkOut.difference(checkIn);
-      totalMinutes += duration.inMinutes;
+      if (checkIn != null && checkOut != null) {
+        final duration = checkOut.difference(checkIn);
+        totalMinutes += duration.inMinutes;
+      }
     }
+
+    final double totalHours = totalMinutes / 60;
+    return totalHours;
   }
-
-
-  final double totalHours = totalMinutes / 60;
-  return totalHours;
-}
-
-
 
   Widget _buildEmptyAttendanceContainer(
     int index,
@@ -266,7 +249,11 @@ class _StatusBuilerState extends State<StatusBuilderWeekly> {
         }
 
         if (snapshot.hasError) {
-         return Center(child: Text('Error Something went wrong Check Your Internet Connection',style: TextStyle(color: Colors.red),));
+          return const Center(
+              child: Text(
+            'Error Something went wrong Check Your Internet Connection',
+            style: TextStyle(color: Colors.red),
+          ));
         }
 
         if (!snapshot.hasData || snapshot.data == null) {
@@ -340,14 +327,14 @@ class _StatusBuilerState extends State<StatusBuilderWeekly> {
                 );
 
                 if (checkInDateTime.isBefore(onTimeDateTime)) {
-                  containerColor = Color(0xff22Af41); // On time
+                  containerColor = const Color(0xff22Af41); // On time
                 } else if (checkInDateTime.isAfter(lateArrivalDateTime)) {
-                  containerColor = Color(0xffF6C15B);  // Late arrival
+                  containerColor = const Color(0xffF6C15B); // Late arrival
                 } else {
                   containerColor = const Color(0xff8E71DF); // Default color
                 }
               } else {
-                containerColor = Color(0xffEC5851);  // No check-in
+                containerColor = const Color(0xffEC5851); // No check-in
               }
 
               if (checkOut != null) {
@@ -514,11 +501,15 @@ class _StatusBuilerState extends State<StatusBuilderWeekly> {
               future: _getAttendanceDetails(userId),
               builder: (context, snapshot) {
                 if (snapshot.hasError) {
-                  return Center(child: Text('Error Something went wrong Check Your Internet Connection',style: TextStyle(color: Colors.red),));
+                  return const Center(
+                      child: Text(
+                    'Error Something went wrong Check Your Internet Connection',
+                    style: TextStyle(color: Colors.red),
+                  ));
                 }
 
                 if (!snapshot.hasData || snapshot.data == null) {
-                  return Center(child: Text('.'));
+                  return const Center(child: Text('.'));
                 }
                 final weeklyData = snapshot.data!;
                 final totalTime = _calculateWeeklyMins(weeklyData);
@@ -530,7 +521,6 @@ class _StatusBuilerState extends State<StatusBuilderWeekly> {
                 const double maxHours = 45; //weekly hours
 
                 final double progress = totalHourss / maxHours;
-                
 
                 return Padding(
                   padding: const EdgeInsets.only(top: 20.0),
@@ -539,13 +529,13 @@ class _StatusBuilerState extends State<StatusBuilderWeekly> {
                       width: double.infinity,
                       decoration: BoxDecoration(
                         borderRadius: BorderRadius.circular(20),
-                        color: Color(0xffEFF1FF),
+                        color: const Color(0xffEFF1FF),
                         boxShadow: [
                           BoxShadow(
                             color: Colors.grey.withOpacity(0.2),
                             spreadRadius: 2,
                             blurRadius: 4,
-                            offset: Offset(0, 2),
+                            offset: const Offset(0, 2),
                           ),
                         ],
                       ),
@@ -555,13 +545,13 @@ class _StatusBuilerState extends State<StatusBuilderWeekly> {
                           child: Column(
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
-                                Text(
+                                const Text(
                                   'Weekly Times Log',
                                   style: TextStyle(
                                       fontWeight: FontWeight.w600,
                                       fontSize: 18),
                                 ),
-                                SizedBox(height: 20),
+                                const SizedBox(height: 20),
                                 Row(
                                   mainAxisAlignment:
                                       MainAxisAlignment.spaceBetween,
@@ -582,7 +572,7 @@ class _StatusBuilerState extends State<StatusBuilderWeekly> {
                                           crossAxisAlignment:
                                               CrossAxisAlignment.start,
                                           children: [
-                                            Text(
+                                            const Text(
                                               'Time in Mints',
                                               style: TextStyle(
                                                   fontWeight: FontWeight.w500,
@@ -590,18 +580,18 @@ class _StatusBuilerState extends State<StatusBuilderWeekly> {
                                             ),
                                             Text(
                                               '$totalTime Mints',
-                                              style: TextStyle(
+                                              style: const TextStyle(
                                                   fontWeight: FontWeight.w600,
                                                   fontSize: 20),
                                             ),
                                             LinearProgressIndicator(
                                               value: totalMinutes / maxMinutes,
                                               backgroundColor: Colors.grey[300],
-                                              color: Color(0xff9478F7),
+                                              color: const Color(0xff9478F7),
                                             ),
                                             Text(
                                               '$startFormatted - $endFormatted',
-                                              style: TextStyle(
+                                              style: const TextStyle(
                                                   fontWeight: FontWeight.w600,
                                                   fontSize: 15),
                                             ),
@@ -625,7 +615,7 @@ class _StatusBuilerState extends State<StatusBuilderWeekly> {
                                           crossAxisAlignment:
                                               CrossAxisAlignment.start,
                                           children: [
-                                            Text(
+                                            const Text(
                                               'Time in Hours',
                                               style: TextStyle(
                                                   fontWeight: FontWeight.w500,
@@ -633,22 +623,20 @@ class _StatusBuilerState extends State<StatusBuilderWeekly> {
                                             ),
                                             Text(
                                               '$totalHours Hours',
-                                              style: TextStyle(
+                                              style: const TextStyle(
                                                   fontWeight: FontWeight.w600,
                                                   fontSize: 20),
                                             ),
                                             LinearProgressIndicator(
                                               value: progress,
                                               backgroundColor: Colors.grey[300],
-                                              color: Color(0xff9478F7),
+                                              color: const Color(0xff9478F7),
                                             ),
                                             Text(
                                               '$startFormatted - $endFormatted',
-                                              style: TextStyle(
+                                              style: const TextStyle(
                                                   fontWeight: FontWeight.w600,
-                                                  fontSize: 15
-                                                  
-                                                  ),
+                                                  fontSize: 15),
                                             ),
                                           ],
                                         ),
@@ -656,24 +644,24 @@ class _StatusBuilerState extends State<StatusBuilderWeekly> {
                                     ),
                                   ],
                                 ),
-                                SizedBox(height: 14),
+                                const SizedBox(height: 14),
                               ]))),
                 );
               }),
-          SizedBox(height: 20),
+          const SizedBox(height: 20),
           Container(
-            padding: EdgeInsets.all(12),
+            padding: const EdgeInsets.all(12),
             height: MediaQuery.of(context).size.height * 0.68,
             width: double.infinity,
             decoration: BoxDecoration(
               borderRadius: BorderRadius.circular(20),
-              color: Color(0xffEFF1FF),
+              color: const Color(0xffEFF1FF),
               boxShadow: [
                 BoxShadow(
                   color: Colors.grey.withOpacity(0.2),
                   spreadRadius: 2,
                   blurRadius: 4,
-                  offset: Offset(0, 2),
+                  offset: const Offset(0, 2),
                 ),
               ],
             ),
@@ -682,11 +670,11 @@ class _StatusBuilerState extends State<StatusBuilderWeekly> {
               children: [
                 Text(
                   'Weekly Attendance: ${'$startFormatted - $endFormatted'}',
-                  style: TextStyle(fontWeight: FontWeight.w600, fontSize: 18),
+                  style: const TextStyle(fontWeight: FontWeight.w600, fontSize: 18),
                 ),
-                SizedBox(height: 10),
-                _buildAttendance(color: Color(0xff9478F7), data: []),
-                SizedBox(height: 10),
+                const SizedBox(height: 10),
+                _buildAttendance(color: const Color(0xff9478F7), data: []),
+                const SizedBox(height: 10),
               ],
             ),
           ),
