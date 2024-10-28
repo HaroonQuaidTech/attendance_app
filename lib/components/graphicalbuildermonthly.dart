@@ -1,4 +1,4 @@
-import 'dart:developer';
+// ignore_for_file: prefer_const_constructors, prefer_const_literals_to_create_immutables, unnecessary_string_interpolations, depend_on_referenced_packages, unused_local_variable
 
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -148,18 +148,17 @@ class _GraphicalbuilerState extends State<GraphicalbuilerMonthly> {
         DateTime checkInDate =
             DateTime(checkInTime.year, checkInTime.month, checkInTime.day);
 
-        // Only count if the date is today or in the past
-        if (checkInDate.isBefore(now) || checkInDate.isAtSameMomentAs(now)) {
-          if (checkInTime.isAfter(DateTime(
-              checkInTime.year, checkInTime.month, checkInTime.day, 8, 15))) {
-            lateCount++;
-          }
+      // Only count if the date is today or in the past
+      if (checkInDate.isBefore(now) || checkInDate.isAtSameMomentAs(now)) {
+        if (checkInTime.isAfter(DateTime(checkInTime.year, checkInTime.month, checkInTime.day, 8, 15))) {
+          lateCount++;
         }
       }
     }
-
-    return lateCount;
   }
+
+  return lateCount;
+}
 
   int getEarlyOutCount(List<Map<String, dynamic>> attendanceData) {
     int earlyCount = 0;
@@ -201,20 +200,8 @@ class _GraphicalbuilerState extends State<GraphicalbuilerMonthly> {
 
   int getAbsentCount(List<dynamic> attendanceData) {
     int absentCount = 0;
-    final DateFormat dateFormat = DateFormat('yyyy-MM-dd');
 
     for (var record in attendanceData) {
-      if (record['date'] != null) {
-        DateTime date = dateFormat.parse(record['date']);
-
-        // Skip Saturdays (6) and Sundays (7)
-        if (date.weekday == DateTime.saturday ||
-            date.weekday == DateTime.sunday) {
-          continue;
-        }
-      }
-
-      // Increment absentCount if checkIn is null or status is 'absent'
       if (record['checkIn'] == null ||
           (record['status'] != null &&
               record['status'].toString().toLowerCase() == 'absent')) {
@@ -223,7 +210,21 @@ class _GraphicalbuilerState extends State<GraphicalbuilerMonthly> {
       log("absent: $absentCount");
     }
 
+    log('----Absent Count Monthly-----: $absentCount');
     return absentCount;
+  }
+
+  int getPresentCount(List<dynamic> attendanceData) {
+    int presentCount = 0;
+
+    for (var record in attendanceData) {
+      if (record['checkIn'] != null) {
+        presentCount++;
+      }
+    }
+
+    log('Present count Monthly: $presentCount');
+    return presentCount;
   }
 
   Map<String, double> weeklyHours = {
@@ -274,11 +275,13 @@ class _GraphicalbuilerState extends State<GraphicalbuilerMonthly> {
         // Get the monthly hours and attendance stats
         Map<String, double> monthlyHours =
             calculateMonthlyHours(snapshot.data!);
-        calculateAttendanceStats(snapshot.data!);
+        Map<String, double> monthlyAttendanceStats =
+            calculateAttendanceStats(snapshot.data!);
+     
 
         Map<String, double> pieChartData = {
-          'Present': monthlyHours.values.reduce((a, b) => a + b).toDouble(),
-          'Absent': getAbsentCount(snapshot.data!) * 9.0,
+          'Present': getPresentCount(snapshot.data!).toDouble(),
+          'Absent': getAbsentCount(snapshot.data!).toDouble(),
           'Late Arrival': getLateArrivalCount(snapshot.data!).toDouble(),
           'Early Out': getEarlyOutCount(snapshot.data!).toDouble(),
           'On Time': getOnTimeCount(snapshot.data!).toDouble(),
@@ -364,32 +367,32 @@ class _GraphicalbuilerState extends State<GraphicalbuilerMonthly> {
                                       return const Text('Week 1',
                                           style: TextStyle(
                                               color: Colors.black,
-                                              fontSize: 15,
-                                              fontWeight: FontWeight.w600));
+                                              fontSize: 13,
+                                              fontWeight: FontWeight.w400));
                                     case 1:
                                       return const Text('Week 2',
                                           style: TextStyle(
                                               color: Colors.black,
-                                              fontSize: 15,
-                                              fontWeight: FontWeight.w600));
+                                              fontSize: 13,
+                                              fontWeight: FontWeight.w400));
                                     case 2:
                                       return const Text('Week 3',
                                           style: TextStyle(
                                               color: Colors.black,
-                                              fontSize: 15,
-                                              fontWeight: FontWeight.w600));
+                                              fontSize: 13,
+                                              fontWeight: FontWeight.w400));
                                     case 3:
                                       return const Text('Week 4',
                                           style: TextStyle(
                                               color: Colors.black,
                                               fontSize: 15,
                                               fontWeight: FontWeight.w600));
-                                    case 4:
-                                      return const Text('Week 5',
+                                                 case 4:
+                                      return Text('Week 5',
                                           style: TextStyle(
                                               color: Colors.black,
-                                              fontSize: 15,
-                                              fontWeight: FontWeight.w600));
+                                              fontSize: 13,
+                                              fontWeight: FontWeight.w400));
                                     default:
                                       return const Text('');
                                   }
