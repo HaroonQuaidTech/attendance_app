@@ -56,7 +56,7 @@ class _LoginScreenState extends State<LoginScreen> {
       _showAlertDialog(
         title: 'Successful',
         titlecolor: Colors.green,
-        image: 'assets/success_alert.png',
+        image: 'assets/success.png',
         message: 'Login Successfully',
         buttontext: 'Continue',
         closeCallback: () {
@@ -80,7 +80,7 @@ class _LoginScreenState extends State<LoginScreen> {
       _showAlertDialog(
         title: 'Error',
         titlecolor: Colors.red,
-        image: 'assets/failed_alert.png',
+        image: 'assets/failed.png',
         message: 'Something went wrong !',
         buttontext: 'Try Again',
         closeCallback: () {},
