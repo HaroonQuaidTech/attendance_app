@@ -60,14 +60,21 @@ class _GraphicalbuilerState extends State<GraphicalbuilerWeekly> {
 
   Map<int, double> calculateWeeklyHourss(List<Map<String, dynamic>> data) {
     Map<int, double> weeklyHours = {1: 0, 2: 0, 3: 0, 4: 0, 5: 0};
+    DateTime currentDate = DateTime.now();
 
     for (var entry in data) {
+      // Ensure checkIn is present
       final checkIn = (entry['checkIn'] as Timestamp?)?.toDate();
       final checkOut = (entry['checkOut'] as Timestamp?)?.toDate();
 
-      if (checkIn != null && checkOut != null) {
+      // Skip future check-ins
+      if (checkIn != null &&
+          checkOut != null &&
+          checkIn.isBefore(currentDate)) {
         final duration = checkOut.difference(checkIn);
         final dayOfWeek = checkIn.weekday;
+
+        // Add hours only for past and present days
         weeklyHours[dayOfWeek] =
             (weeklyHours[dayOfWeek] ?? 0) + duration.inHours.toDouble();
       }
@@ -193,19 +200,20 @@ class _GraphicalbuilerState extends State<GraphicalbuilerWeekly> {
     }
     return earlyCount;
   }
-
   int getAbsentCount(List<dynamic> attendanceData) {
     int absentCount = 0;
 
     for (var record in attendanceData) {
       if (record['checkIn'] == null ||
           (record['status'] != null &&
-              record['status'].toString().toLowerCase() == 'Absent')) {
+              record['status'].toString().toLowerCase() == 'absent')) {
         absentCount++;
       }
     }
+
     return absentCount;
   }
+
 
   int getOnTimeCount(List<Map<String, dynamic>> data) {
     int onTimeCount = 0;
@@ -232,7 +240,7 @@ class _GraphicalbuilerState extends State<GraphicalbuilerWeekly> {
     'Absent': 0, // days absent
     'Late Arrival': 0, // late days
     'Early Out': 0, // early check-outs
-    'On Time': 0, // early check-outs
+    'On Time': 0, // early on time
   };
   @override
   void initState() {
@@ -361,16 +369,12 @@ class _GraphicalbuilerState extends State<GraphicalbuilerWeekly> {
                                     int currentDayOfWeek =
                                         DateTime.now().weekday;
 
-                                    if (currentDayOfWeek > 5) {
-                                      currentDayOfWeek = 5;
-                                    }
+                                    bool isPastOrCurrentDay =
+                                        dayIndex < currentDayOfWeek;
 
-                                    if (dayIndex >= currentDayOfWeek) {
-                                      return const Text('');
-                                    }
-
-                                    Color textColor =
-                                        hasData ? Colors.black : Colors.red;
+                                    Color textColor = isPastOrCurrentDay
+                                        ? (hasData ? Colors.black : Colors.red)
+                                        : Colors.grey;
 
                                     switch (dayIndex) {
                                       case 0:
@@ -490,7 +494,7 @@ class _GraphicalbuilerState extends State<GraphicalbuilerWeekly> {
                               Color(0xffEC5851), // Absent
                               Color(0xffF6C15B), // Late Arrival
                               Color(0xffF07E25), // EARLY OUT
-                              Color(0xff22AF41),  //oN TIME
+                              Color(0xff22AF41), //oN TIME
                             ],
                             chartRadius:
                                 MediaQuery.of(context).size.width / 1.7,
@@ -506,9 +510,6 @@ class _GraphicalbuilerState extends State<GraphicalbuilerWeekly> {
                             chartValuesOptions: ChartValuesOptions(
                               showChartValues: false,
                             ),
-                            totalValue: pieChartData.values.isNotEmpty
-                                ? pieChartData.values.reduce((a, b) => a + b)
-                                : 1,
                           ),
                   ],
                 ),
