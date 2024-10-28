@@ -25,7 +25,6 @@ class HomeScreen extends StatefulWidget {
 class _HomeScreenState extends State<HomeScreen> {
   Map<String, dynamic>? data;
   List<Map<String, dynamic>> weeklyData = [];
-
   final String userId = FirebaseAuth.instance.currentUser!.uid;
   User? user = FirebaseAuth.instance.currentUser;
   final FirebaseAuth _auth = FirebaseAuth.instance;
@@ -36,10 +35,7 @@ class _HomeScreenState extends State<HomeScreen> {
   DateTime _focusedDay = DateTime.now();
   DateTime _selectedDay = DateTime.now();
 
-  final Map<DateTime, List<Color>> _events = {
-    DateTime.utc(2024, 10, 1): [const Color(0xff8E71DF)],
-    DateTime.utc(2024, 10, 2): [const Color(0xffF6C15B)],
-  };
+  final Map<DateTime, List<Color>> _events = {};
 
   List<Color> _getEventsForDay(DateTime day) {
     return _events[day] ?? [];

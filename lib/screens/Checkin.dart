@@ -203,7 +203,6 @@ class _CheckinScreenState extends State<CheckinScreen> {
     }
     return null;
   }
-
   String _formatTime(DateTime? dateTime) {
     if (dateTime == null) return '--:--';
     final DateFormat formatter =
