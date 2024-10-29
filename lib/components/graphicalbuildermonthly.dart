@@ -20,7 +20,6 @@ class _GraphicalbuilerState extends State<GraphicalbuilerMonthly> {
       String userId) async {
     try {
       DateTime now = DateTime.now();
-      DateTime firstDayOfMonth = DateTime(now.year, now.month, 1);
       DateTime lastDayOfMonth =
           DateTime(now.year, now.month + 1, 0); // Last day of the current month
 
@@ -154,7 +153,7 @@ class _GraphicalbuilerState extends State<GraphicalbuilerMonthly> {
         }
       }
     }
-
+    log("----Late Count Monthly----: $lateCount");
     return lateCount;
   }
 
@@ -198,32 +197,26 @@ class _GraphicalbuilerState extends State<GraphicalbuilerMonthly> {
     int absentCount = 0;
 
     for (var record in attendanceData) {
-      // Parse the date only if it exists and is in a proper format
-      DateTime? recordDate;
-      try {
-        recordDate =
-            record['date'] != null ? DateTime.parse(record['date']) : null;
-      } catch (e) {
-        log('Invalid date format: ${record['date']}');
-        continue; // Skip records with invalid date format
+      String? dateString = record['date'];
+      DateTime? date;
+
+      if (dateString != null && dateString.isNotEmpty) {
+        date = DateFormat('yyyy-MM-dd').parse(dateString, true);
       }
 
-      // Skip past dates and weekends (Saturday and Sunday)
-      if (recordDate != null &&
-          (recordDate.isBefore(today) ||
-              recordDate.weekday == DateTime.saturday ||
-              recordDate.weekday == DateTime.sunday)) {
-        continue; // Skip the record
+      if (date != null &&
+          (date.weekday == DateTime.saturday ||
+              date.weekday == DateTime.sunday)) {
+        continue;
       }
 
-      // Only count as absent if both checkIn and checkOut are null
       if ((record['checkIn'] == null || record['checkIn'] == '') &&
           (record['checkOut'] == null || record['checkOut'] == '')) {
         absentCount++;
       }
-      log("absent: $absentCount");
     }
 
+    log("----Absent Count Monthly----: $absentCount");
     return absentCount;
   }
 
@@ -291,7 +284,7 @@ class _GraphicalbuilerState extends State<GraphicalbuilerMonthly> {
 
         Map<String, double> pieChartData = {
           'Present': getPresentCount(snapshot.data!).toDouble(),
-          'Absent': 3,
+          'Absent': getAbsentCount(snapshot.data!).toDouble(),
           'Late Arrival': getLateArrivalCount(snapshot.data!).toDouble(),
           'Early Out': getEarlyOutCount(snapshot.data!).toDouble(),
           'On Time': getOnTimeCount(snapshot.data!).toDouble(),
@@ -395,8 +388,8 @@ class _GraphicalbuilerState extends State<GraphicalbuilerMonthly> {
                                       return const Text('Week 4',
                                           style: TextStyle(
                                               color: Colors.black,
-                                              fontSize: 15,
-                                              fontWeight: FontWeight.w600));
+                                              fontSize: 13,
+                                              fontWeight: FontWeight.w400));
                                     case 4:
                                       return const Text('Week 5',
                                           style: TextStyle(
