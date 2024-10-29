@@ -46,17 +46,15 @@ class _LoginScreenState extends State<LoginScreen> {
     );
 
     try {
+      // Try signing in
       final userCredential = await FirebaseAuth.instance
           .signInWithEmailAndPassword(email: email, password: password);
       log(userCredential.toString());
 
-      Navigator.pop(context);
       _showAlertDialog(
-        title: 'Successful',
-        titlecolor: Colors.green,
+        title: 'Success',
         image: 'assets/success.png',
         message: 'Login Successfully',
-        buttontext: 'Continue',
         closeCallback: () {
           Navigator.pushReplacement(
             context,
@@ -67,9 +65,8 @@ class _LoginScreenState extends State<LoginScreen> {
         },
       );
     } catch (e) {
-      // ignore: use_build_context_synchronously
       Navigator.pop(context);
-      String errorMessage = 'The provided credentials are incorrect';
+      String errorMessage = 'Invalid Credentials';
 
       if (e is FirebaseAuthException) {
         errorMessage = e.message ?? errorMessage;
@@ -77,10 +74,8 @@ class _LoginScreenState extends State<LoginScreen> {
 
       _showAlertDialog(
         title: 'Error',
-        titlecolor: Colors.red,
         image: 'assets/failed.png',
-        message: 'Something went wrong !',
-        buttontext: 'Try Again',
+        message: errorMessage,
         closeCallback: () {},
       );
     }
@@ -88,82 +83,81 @@ class _LoginScreenState extends State<LoginScreen> {
 
   void _showAlertDialog({
     required String title,
-    required Color titlecolor,
     required String message,
     required String image,
-    required String buttontext,
     required CloseCallback closeCallback,
   }) {
     showDialog(
       context: context,
       barrierDismissible: false,
       builder: (BuildContext context) {
-        return Stack(
-          alignment: Alignment.topCenter,
-          children: [
-            AlertDialog(
-              contentPadding: const EdgeInsets.only(top: 60.0),
-              backgroundColor: Colors.white,
-              shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(15),
-              ),
-              title: Column(
-                children: [
-                  Text(
-                    title,
-                    style: TextStyle(
-                      fontSize: 18,
-                      fontWeight: FontWeight.bold,
-                      color: titlecolor,
+        Future.delayed(const Duration(seconds: 3), () {
+          if (mounted) {
+            Navigator.of(context).pop(true);
+            closeCallback();
+          }
+        });
+        return PopScope(
+          canPop: false,
+          child: Dialog(
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(12),
+            ),
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                Container(
+                  height: 10,
+                  decoration: const BoxDecoration(
+                    gradient: LinearGradient(
+                      colors: [
+                        Color(0xff4D3D79),
+                        Color(0xff8E71DF),
+                      ],
+                      begin: Alignment.centerLeft,
+                      end: Alignment.centerRight,
                     ),
-                    textAlign: TextAlign.center,
-                  ),
-                  const SizedBox(height: 10),
-                  Text(
-                    message,
-                    style: const TextStyle(
-                      fontWeight: FontWeight.normal,
-                      color: Colors.black,
-                      fontSize: 14,
+                    borderRadius: BorderRadius.vertical(
+                      top: Radius.circular(12),
                     ),
-                    textAlign: TextAlign.center,
                   ),
-                  const SizedBox(height: 15),
-                  GestureDetector(
-                    onTap: () {
-                      Navigator.of(context).pop(true);
-                      closeCallback();
-                    },
-                    child: Container(
-                      width: 150,
-                      height: 30,
-                      decoration: BoxDecoration(
-                        color: const Color(0xff7647EB),
-                        borderRadius: BorderRadius.circular(5),
+                ),
+                Container(
+                  padding: const EdgeInsets.all(20),
+                  child: Column(
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      Image.asset(
+                        image,
+                        width: 50,
+                        height: 50,
                       ),
-                      child: Center(
-                        child: Text(
-                          buttontext,
-                          style: const TextStyle(
-                            fontSize: 14,
-                            color: Colors.white,
-                          ),
+                      const SizedBox(height: 20),
+                      Text(
+                        title,
+                        style: const TextStyle(
+                          fontSize: 18,
+                          fontWeight: FontWeight.bold,
+                          height: 0,
                         ),
+                        textAlign: TextAlign.center,
                       ),
-                    ),
+                      const SizedBox(height: 10),
+                      Text(
+                        message,
+                        style: const TextStyle(
+                          fontSize: 14,
+                          color: Colors.grey,
+                          height: 0,
+                        ),
+                        textAlign: TextAlign.center,
+                      ),
+                    ],
                   ),
-                ],
-              ),
+                ),
+              ],
             ),
-            Positioned(
-              top: MediaQuery.of(context).size.height * (280 / 812),
-              child: Image.asset(
-                image,
-                width: 60, // Adjust as needed
-                height: 60, // Adjust as needed
-              ),
-            ),
-          ],
+          ),
         );
       },
     );

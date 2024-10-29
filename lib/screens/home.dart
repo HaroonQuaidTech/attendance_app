@@ -306,7 +306,7 @@ class _HomeScreenState extends State<HomeScreen> {
                         ),
                         const SizedBox(height: 10),
                         const Text(
-                          'Do you want to continue ?',
+                          'Do you want to exit app ?',
                           style: TextStyle(
                             fontSize: 10,
                             color: Colors.grey,
@@ -952,7 +952,7 @@ class _HomeScreenState extends State<HomeScreen> {
     double responsiveFontSize = baseFontSize * (screenWidth / 375);
     bool isSelected = _selectedIndex == index;
     if (index == 1) const StatsticsScreen();
-    if (index == 2) const ProfileScreen();
+    if (index == 2) ProfileScreen;
     return GestureDetector(
       onTap: () => _onItemTapped(index),
       child: Container(

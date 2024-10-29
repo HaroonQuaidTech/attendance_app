@@ -1,7 +1,4 @@
-// ignore_for_file: prefer_const_constructors, prefer_const_literals_to_create_immutables, unnecessary_string_interpolations, depend_on_referenced_packages, unused_local_variable
-
 import 'dart:developer';
-
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
@@ -213,7 +210,6 @@ class _GraphicalbuilerState extends State<GraphicalbuilerMonthly> {
       log("absent: $absentCount");
     }
 
-    log('----Absent Count Monthly-----: $absentCount');
     return absentCount;
   }
 
@@ -278,12 +274,11 @@ class _GraphicalbuilerState extends State<GraphicalbuilerMonthly> {
         // Get the monthly hours and attendance stats
         Map<String, double> monthlyHours =
             calculateMonthlyHours(snapshot.data!);
-        Map<String, double> monthlyAttendanceStats =
-            calculateAttendanceStats(snapshot.data!);
+        calculateAttendanceStats(snapshot.data!);
 
         Map<String, double> pieChartData = {
           'Present': getPresentCount(snapshot.data!).toDouble(),
-          'Absent': getAbsentCount(snapshot.data!).toDouble(),
+          'Absent': 3,
           'Late Arrival': getLateArrivalCount(snapshot.data!).toDouble(),
           'Early Out': getEarlyOutCount(snapshot.data!).toDouble(),
           'On Time': getOnTimeCount(snapshot.data!).toDouble(),
@@ -390,7 +385,7 @@ class _GraphicalbuilerState extends State<GraphicalbuilerMonthly> {
                                               fontSize: 15,
                                               fontWeight: FontWeight.w600));
                                     case 4:
-                                      return Text('Week 5',
+                                      return const Text('Week 5',
                                           style: TextStyle(
                                               color: Colors.black,
                                               fontSize: 13,
