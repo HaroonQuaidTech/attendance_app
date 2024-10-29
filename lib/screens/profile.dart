@@ -39,7 +39,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
 
   Future<void> _loadUserProfile() async {
     try {
-      // Ensure the widget is still mounted before updating state
+
       if (mounted) {
         setState(() {
           _isLoading = true;
@@ -70,7 +70,6 @@ class _ProfileScreenState extends State<ProfileScreen> {
         errorMessage = e.message ?? errorMessage;
       }
 
-      // Ensure the widget is mounted before using context
       if (mounted) {
         Navigator.pop(context);
         _showAlertDialog(
