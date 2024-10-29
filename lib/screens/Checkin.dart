@@ -38,25 +38,22 @@ class AttendanceService {
         'userId': userId,
       });
 
-      // ignore: use_build_context_synchronously
-      Navigator.pop(context);
-
       _showAlertDialog(
-        // ignore: use_build_context_synchronously
         context: context,
-        title: 'Successful',
-        titleColor: Colors.green,
-        image: 'assets/success_alert.png',
-        message: 'Checked in successfully!',
+        mounted: true,
+        title: 'Checked In',
+        image: 'assets/checkin_alert.png',
+        message: 'Successfully checkedin',
         closeCallback: () {
           Navigator.pushReplacement(
             context,
-            MaterialPageRoute(builder: (context) => const HomeScreen()),
+            MaterialPageRoute(
+              builder: (context) => const HomeScreen(),
+            ),
           );
         },
       );
     } catch (e) {
-      // ignore: use_build_context_synchronously
       Navigator.pop(context);
       String errorMessage = 'Something went wrong!';
 
@@ -65,11 +62,10 @@ class AttendanceService {
       }
 
       _showAlertDialog(
-        // ignore: use_build_context_synchronously
         context: context,
+        mounted: true,
         title: 'Error',
-        titleColor: Colors.red,
-        image: 'assets/failed_alert.png',
+        image: 'assets/failed.png',
         message: errorMessage,
         closeCallback: () {},
       );
@@ -101,16 +97,37 @@ class AttendanceService {
         'checkOut': checkOutTime,
       });
 
-      // ignore: use_build_context_synchronously
-      Navigator.pop(context);
+      _showAlertDialog(
+        context: context,
+        mounted: true,
+        title: 'Checked Out',
+        image: 'assets/checkout_alert.png',
+        message: 'Successfully checkedout',
+        closeCallback: () {
+          Navigator.pushReplacement(
+            context,
+            MaterialPageRoute(
+              builder: (context) => const HomeScreen(),
+            ),
+          );
+        },
+      );
     } catch (e) {
-      // ignore: use_build_context_synchronously
       Navigator.pop(context);
       String errorMessage = 'Something went wrong!';
 
       if (e is FirebaseAuthException) {
         errorMessage = e.message ?? errorMessage;
       }
+
+      _showAlertDialog(
+        context: context,
+        mounted: true,
+        title: 'Error',
+        image: 'assets/failed.png',
+        message: errorMessage,
+        closeCallback: () {},
+      );
     }
   }
 }
@@ -118,63 +135,85 @@ class AttendanceService {
 void _showAlertDialog({
   required BuildContext context,
   required String title,
-  required Color titleColor,
   required String message,
   required String image,
-  required VoidCallback closeCallback,
+  required CloseCallback closeCallback,
+  required bool mounted,
 }) {
   showDialog(
     context: context,
     barrierDismissible: false,
     builder: (BuildContext context) {
-      return Stack(
-        alignment: Alignment.topCenter,
-        children: [
-          AlertDialog(
-            contentPadding: const EdgeInsets.only(top: 60.0),
-            backgroundColor: Colors.white,
-            shape: RoundedRectangleBorder(
-              borderRadius: BorderRadius.circular(15),
-            ),
-            title: Column(
-              children: [
-                Text(
-                  title,
-                  style: TextStyle(
-                    fontSize: 18,
-                    fontWeight: FontWeight.bold,
-                    color: titleColor,
-                  ),
-                  textAlign: TextAlign.center,
-                ),
-                const SizedBox(height: 10),
-                Text(
-                  message,
-                  style: const TextStyle(
-                    fontWeight: FontWeight.normal,
-                    color: Colors.black,
-                    fontSize: 14,
-                  ),
-                  textAlign: TextAlign.center,
-                ),
-                const SizedBox(height: 15),
-              ],
-            ),
+      Future.delayed(const Duration(seconds: 3), () {
+        if (mounted) {
+          Navigator.of(context).pop(true);
+          closeCallback();
+        }
+      });
+      return PopScope(
+        canPop: false,
+        child: Dialog(
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(12),
           ),
-          Positioned(
-            top: 260,
-            child: Image.asset(
-              image,
-              width: 60,
-              height: 60,
-            ),
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              Container(
+                height: 10,
+                decoration: const BoxDecoration(
+                  gradient: LinearGradient(
+                    colors: [
+                      Color(0xff4D3D79),
+                      Color(0xff8E71DF),
+                    ],
+                    begin: Alignment.centerLeft,
+                    end: Alignment.centerRight,
+                  ),
+                  borderRadius: BorderRadius.vertical(
+                    top: Radius.circular(12),
+                  ),
+                ),
+              ),
+              Container(
+                padding: const EdgeInsets.all(20),
+                child: Column(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    Image.asset(
+                      image,
+                      width: 50,
+                      height: 50,
+                    ),
+                    const SizedBox(height: 20),
+                    Text(
+                      title,
+                      style: const TextStyle(
+                        fontSize: 18,
+                        fontWeight: FontWeight.bold,
+                        height: 0,
+                      ),
+                      textAlign: TextAlign.center,
+                    ),
+                    const SizedBox(height: 10),
+                    Text(
+                      message,
+                      style: const TextStyle(
+                        fontSize: 14,
+                        color: Colors.grey,
+                        height: 0,
+                      ),
+                      textAlign: TextAlign.center,
+                    ),
+                  ],
+                ),
+              ),
+            ],
           ),
-        ],
+        ),
       );
     },
-  ).then((_) {
-    closeCallback(); // Call the callback after closing the alert dialog
-  });
+  );
 }
 
 class CheckinScreen extends StatefulWidget {
@@ -203,6 +242,7 @@ class _CheckinScreenState extends State<CheckinScreen> {
     }
     return null;
   }
+
   String _formatTime(DateTime? dateTime) {
     if (dateTime == null) return '--:--';
     final DateFormat formatter =
@@ -534,162 +574,146 @@ class _CheckinScreenState extends State<CheckinScreen> {
                       onTap: () async {
                         showDialog(
                           context: context,
+                          barrierDismissible: false,
                           builder: (BuildContext context) {
-                            return Stack(
-                              alignment: Alignment.center,
-                              clipBehavior: Clip.none,
-                              children: [
-                                AlertDialog(
-                                  contentPadding: EdgeInsets.only(
-                                      top: MediaQuery.of(context).size.height *
-                                          0.1),
-                                  backgroundColor: Colors.white,
-                                  shape: RoundedRectangleBorder(
-                                    borderRadius: BorderRadius.circular(15),
-                                  ),
-                                  title: Column(
-                                    children: [
-                                      Text(
-                                        'Are you Sure',
-                                        style: TextStyle(
-                                          fontSize: MediaQuery.of(context)
-                                                  .size
-                                                  .width *
-                                              0.05, // Responsive font size
-                                          fontWeight: FontWeight.bold,
-                                        ),
-                                        textAlign: TextAlign.center,
-                                      ),
-                                      Text(
-                                        'Do you want to checkout ?',
-                                        style: TextStyle(
-                                          fontWeight: FontWeight.normal,
-                                          color: Colors.black,
-                                          fontSize: MediaQuery.of(context)
-                                                  .size
-                                                  .width *
-                                              0.04, // Responsive font size
-                                        ),
-                                        textAlign: TextAlign.center,
-                                      ),
-                                      SizedBox(
-                                          height: MediaQuery.of(context)
-                                                  .size
-                                                  .height *
-                                              0.02),
-                                      Row(
-                                        mainAxisAlignment:
-                                            MainAxisAlignment.spaceBetween,
-                                        children: [
-                                          GestureDetector(
-                                            onTap: () {
-                                              Navigator.of(context).pop();
-                                            },
-                                            child: Container(
-                                              width: MediaQuery.of(context)
-                                                      .size
-                                                      .width *
-                                                  0.3, // Responsive width
-                                              height: MediaQuery.of(context)
-                                                      .size
-                                                      .height *
-                                                  0.05, // Responsive height
-                                              decoration: BoxDecoration(
-                                                color: Colors.grey[400],
-                                                borderRadius:
-                                                    BorderRadius.circular(5),
-                                              ),
-                                              child: Center(
-                                                child: Text(
-                                                  'Cancel',
-                                                  style: TextStyle(
-                                                    fontSize: MediaQuery.of(
-                                                                context)
-                                                            .size
-                                                            .width *
-                                                        0.04, // Responsive font size
-                                                    color: Colors.white,
-                                                  ),
-                                                ),
-                                              ),
-                                            ),
-                                          ),
-                                          const SizedBox(
-                                            width: 10,
-                                          ),
-                                          GestureDetector(
-                                            onTap: () async {
-                                              Position currentPosition =
-                                                  await Geolocator
-                                                      .getCurrentPosition(
-                                                desiredAccuracy:
-                                                    LocationAccuracy.high,
-                                              );
-
-                                              // Target coordinates
-                                              double targetLatitude =
-                                                  33.6084548;
-                                              double targetLongitude =
-                                                  73.0171062;
-
-                                              Geolocator.distanceBetween(
-                                                currentPosition.latitude,
-                                                currentPosition.longitude,
-                                                targetLatitude,
-                                                targetLongitude,
-                                              );
-
-                                              await _attendanceService.checkOut(
-                                                  // ignore: use_build_context_synchronously
-                                                  context,
-                                                  userId);
-                                            },
-                                            child: Container(
-                                              width: MediaQuery.of(context)
-                                                      .size
-                                                      .width *
-                                                  0.3, // Responsive width
-                                              height: MediaQuery.of(context)
-                                                      .size
-                                                      .height *
-                                                  0.05, // Responsive height
-                                              decoration: BoxDecoration(
-                                                color: const Color(0xff7647EB),
-                                                borderRadius:
-                                                    BorderRadius.circular(5),
-                                              ),
-                                              child: Center(
-                                                child: Text(
-                                                  'Checkout',
-                                                  style: TextStyle(
-                                                    fontSize: MediaQuery.of(
-                                                                context)
-                                                            .size
-                                                            .width *
-                                                        0.04, // Responsive font size
-                                                    color: Colors.white,
-                                                  ),
-                                                ),
-                                              ),
-                                            ),
-                                          ),
+                            return Dialog(
+                              shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(12),
+                              ),
+                              child: Column(
+                                mainAxisSize: MainAxisSize.min,
+                                children: [
+                                  Container(
+                                    height: 10,
+                                    decoration: const BoxDecoration(
+                                      gradient: LinearGradient(
+                                        colors: [
+                                          Color(0xff4D3D79),
+                                          Color(0xff8E71DF),
                                         ],
+                                        begin: Alignment.centerLeft,
+                                        end: Alignment.centerRight,
                                       ),
-                                    ],
+                                      borderRadius: BorderRadius.vertical(
+                                        top: Radius.circular(12),
+                                      ),
+                                    ),
                                   ),
-                                ),
-                                Positioned(
-                                  top:
-                                      MediaQuery.of(context).size.height * 0.34,
-                                  child: Image.asset(
-                                    'assets/warning_alert.png',
-                                    width: MediaQuery.of(context).size.width *
-                                        0.15, // Responsive width
-                                    height: MediaQuery.of(context).size.width *
-                                        0.15, // Responsive height
+                                  Container(
+                                    padding: const EdgeInsets.all(20),
+                                    child: Column(
+                                      mainAxisSize: MainAxisSize.min,
+                                      children: [
+                                        Image.asset(
+                                          "assets/warning.png",
+                                          width: 50,
+                                          height: 50,
+                                        ),
+                                        const SizedBox(height: 10),
+                                        const Text(
+                                          'Are you sure ?',
+                                          style: TextStyle(
+                                            fontSize: 18,
+                                            fontWeight: FontWeight.bold,
+                                            height: 0,
+                                          ),
+                                          textAlign: TextAlign.center,
+                                        ),
+                                        const SizedBox(height: 10),
+                                        const Text(
+                                          'Do you want to checkout ?',
+                                          style: TextStyle(
+                                            fontSize: 10,
+                                            color: Colors.grey,
+                                            height: 0,
+                                          ),
+                                          textAlign: TextAlign.center,
+                                        ),
+                                        const SizedBox(height: 20),
+                                        Row(
+                                          mainAxisAlignment:
+                                              MainAxisAlignment.spaceBetween,
+                                          children: [
+                                            GestureDetector(
+                                              onTap: () {
+                                                Navigator.of(context).pop();
+                                              },
+                                              child: Container(
+                                                width: 110,
+                                                height: 30,
+                                                decoration: BoxDecoration(
+                                                  color:
+                                                      const Color(0xffECECEC),
+                                                  borderRadius:
+                                                      BorderRadius.circular(10),
+                                                ),
+                                                child: const Center(
+                                                  child: Text(
+                                                    'Cancel',
+                                                    style: TextStyle(
+                                                      fontSize: 14,
+                                                      color: Colors.black,
+                                                      height: 0,
+                                                    ),
+                                                  ),
+                                                ),
+                                              ),
+                                            ),
+                                            GestureDetector(
+                                              onTap: () async {
+                                                Position currentPosition =
+                                                    await Geolocator
+                                                        .getCurrentPosition(
+                                                  desiredAccuracy:
+                                                      LocationAccuracy.high,
+                                                );
+
+                                                // Target coordinates
+                                                double targetLatitude =
+                                                    33.6084548;
+                                                double targetLongitude =
+                                                    73.0171062;
+
+                                                Geolocator.distanceBetween(
+                                                  currentPosition.latitude,
+                                                  currentPosition.longitude,
+                                                  targetLatitude,
+                                                  targetLongitude,
+                                                );
+
+                                                await _attendanceService.checkOut(
+                                                    // ignore: use_build_context_synchronously
+                                                    context,
+                                                    userId);
+                                              },
+                                              child: Container(
+                                                width: 110,
+                                                height: 30,
+                                                decoration: BoxDecoration(
+                                                  color:
+                                                      const Color(0xff7647EB),
+                                                  borderRadius:
+                                                      BorderRadius.circular(10),
+                                                ),
+                                                child: const Center(
+                                                  child: Text(
+                                                    'Checkout',
+                                                    style: TextStyle(
+                                                      fontSize: 14,
+                                                      color: Colors.white,
+                                                      height: 0,
+                                                    ),
+                                                  ),
+                                                ),
+                                              ),
+                                            ),
+                                          ],
+                                        ),
+                                      ],
+                                    ),
                                   ),
-                                ),
-                              ],
+                                ],
+                              ),
                             );
                           },
                         );

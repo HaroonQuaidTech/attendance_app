@@ -259,105 +259,118 @@ class _HomeScreenState extends State<HomeScreen> {
       onWillPop: () async {
         bool exitApp = await showDialog(
           context: context,
+          barrierDismissible: false,
           builder: (BuildContext context) {
-            return Stack(
-              alignment: Alignment.center,
-              clipBehavior: Clip.none,
-              children: [
-                AlertDialog(
-                  contentPadding: EdgeInsets.only(
-                      top: MediaQuery.of(context).size.height * 0.1),
-                  backgroundColor: Colors.white,
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(15),
-                  ),
-                  title: Column(
-                    children: [
-                      Text(
-                        'Are you Sure',
-                        style: TextStyle(
-                          fontSize: MediaQuery.of(context).size.width *
-                              0.05, // Responsive font size
-                          fontWeight: FontWeight.bold,
-                        ),
-                        textAlign: TextAlign.center,
-                      ),
-                      Text(
-                        'Do you want to exit the app?',
-                        style: TextStyle(
-                          fontWeight: FontWeight.normal,
-                          color: Colors.black,
-                          fontSize: MediaQuery.of(context).size.width * 0.04,
-                        ),
-                        textAlign: TextAlign.center,
-                      ),
-                      SizedBox(
-                          height: MediaQuery.of(context).size.height * 0.02),
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                          GestureDetector(
-                            onTap: () {
-                              Navigator.of(context).pop();
-                            },
-                            child: Container(
-                              width: MediaQuery.of(context).size.width * 0.3,
-                              height: MediaQuery.of(context).size.height * 0.05,
-                              decoration: BoxDecoration(
-                                color: Colors.grey[400],
-                                borderRadius: BorderRadius.circular(5),
-                              ),
-                              child: Center(
-                                child: Text(
-                                  'Cancel',
-                                  style: TextStyle(
-                                    fontSize:
-                                        MediaQuery.of(context).size.width *
-                                            0.04,
-                                    color: Colors.white,
-                                  ),
-                                ),
-                              ),
-                            ),
-                          ),
-                          GestureDetector(
-                            onTap: () {
-                              exit(0);
-                            },
-                            child: Container(
-                              width: MediaQuery.of(context).size.width * 0.3,
-                              height: MediaQuery.of(context).size.height * 0.05,
-                              decoration: BoxDecoration(
-                                color: const Color(0xff7647EB),
-                                borderRadius: BorderRadius.circular(5),
-                              ),
-                              child: Center(
-                                child: Text(
-                                  'Continue',
-                                  style: TextStyle(
-                                    fontSize:
-                                        MediaQuery.of(context).size.width *
-                                            0.04, // Responsive font size
-                                    color: Colors.white,
-                                  ),
-                                ),
-                              ),
-                            ),
-                          ),
+            return Dialog(
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(12),
+              ),
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  Container(
+                    height: 10,
+                    decoration: const BoxDecoration(
+                      gradient: LinearGradient(
+                        colors: [
+                          Color(0xff4D3D79),
+                          Color(0xff8E71DF),
                         ],
+                        begin: Alignment.centerLeft,
+                        end: Alignment.centerRight,
                       ),
-                    ],
+                      borderRadius: BorderRadius.vertical(
+                        top: Radius.circular(12),
+                      ),
+                    ),
                   ),
-                ),
-                Positioned(
-                  top: MediaQuery.of(context).size.height * 0.34,
-                  child: Image.asset(
-                    'assets/warning_alert.png',
-                    width: MediaQuery.of(context).size.width * 0.15,
-                    height: MediaQuery.of(context).size.width * 0.15,
+                  Container(
+                    padding: const EdgeInsets.all(20),
+                    child: Column(
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        Image.asset(
+                          "assets/warning.png",
+                          width: 50,
+                          height: 50,
+                        ),
+                        const SizedBox(height: 10),
+                        const Text(
+                          'Are you sure ?',
+                          style: TextStyle(
+                            fontSize: 18,
+                            fontWeight: FontWeight.bold,
+                            height: 0,
+                          ),
+                          textAlign: TextAlign.center,
+                        ),
+                        const SizedBox(height: 10),
+                        const Text(
+                          'Do you want to exit app ?',
+                          style: TextStyle(
+                            fontSize: 10,
+                            color: Colors.grey,
+                            height: 0,
+                          ),
+                          textAlign: TextAlign.center,
+                        ),
+                        const SizedBox(height: 20),
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            GestureDetector(
+                              onTap: () {
+                                Navigator.of(context).pop();
+                              },
+                              child: Container(
+                                width: 110,
+                                height: 30,
+                                decoration: BoxDecoration(
+                                  color: const Color(0xffECECEC),
+                                  borderRadius: BorderRadius.circular(10),
+                                ),
+                                child: const Center(
+                                  child: Text(
+                                    'Cancel',
+                                    style: TextStyle(
+                                      fontSize: 14,
+                                      color: Colors.black,
+                                      height: 0,
+                                    ),
+                                  ),
+                                ),
+                              ),
+                            ),
+                            GestureDetector(
+                              onTap: () {
+                                exit(0);
+                              },
+                              child: Container(
+                                width: 110,
+                                height: 30,
+                                decoration: BoxDecoration(
+                                  color: const Color(0xff7647EB),
+                                  borderRadius: BorderRadius.circular(10),
+                                ),
+                                child: const Center(
+                                  child: Text(
+                                    'Continue',
+                                    style: TextStyle(
+                                      fontSize: 14,
+                                      color: Colors.white,
+                                      height: 0,
+                                    ),
+                                  ),
+                                ),
+                              ),
+                            ),
+                          ],
+                        ),
+                      ],
+                    ),
                   ),
-                ),
-              ],
+                ],
+              ),
             );
           },
         );
@@ -897,7 +910,7 @@ class _HomeScreenState extends State<HomeScreen> {
                   color: Colors.grey.withOpacity(0.2),
                   spreadRadius: 2,
                   blurRadius: 4,
-                  offset: const Offset(0, 2), // changes position of shadow
+                  offset: const Offset(0, 2),
                 ),
               ],
             ),

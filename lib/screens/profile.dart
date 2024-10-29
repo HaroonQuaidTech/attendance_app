@@ -1,5 +1,4 @@
 import 'dart:developer';
-
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_storage/firebase_storage.dart';
@@ -10,14 +9,16 @@ import 'package:quaidtech/screens/login.dart';
 import 'package:quaidtech/screens/notification.dart';
 import 'dart:io';
 
+typedef CloseCallback = Function();
+
 class ProfileScreen extends StatefulWidget {
   const ProfileScreen({super.key});
 
   @override
-  State<ProfileScreen> createState() => _PrifileScreenState();
+  State<ProfileScreen> createState() => _ProfileScreenState();
 }
 
-class _PrifileScreenState extends State<ProfileScreen> {
+class _ProfileScreenState extends State<ProfileScreen> {
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
   final TextEditingController _nameController = TextEditingController();
   final TextEditingController _phoneController = TextEditingController();
@@ -28,6 +29,7 @@ class _PrifileScreenState extends State<ProfileScreen> {
   File? _selectedImage;
   String? _imageUrl;
   bool _isLoading = false;
+  bool _isPasswordVisible = false;
 
   @override
   void initState() {
@@ -58,76 +60,20 @@ class _PrifileScreenState extends State<ProfileScreen> {
         }
       }
     } catch (e) {
-      showDialog(
-        context: context,
-        barrierDismissible: false,
-        builder: (BuildContext context) {
-          Future.delayed(const Duration(seconds: 3), () {
-            if (mounted) {
-              Navigator.of(context).pop(true);
-            }
-          });
-          return Dialog(
-            shape: RoundedRectangleBorder(
-              borderRadius: BorderRadius.circular(12),
-            ),
-            child: Column(
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                Container(
-                  height: 10,
-                  decoration: const BoxDecoration(
-                    gradient: LinearGradient(
-                      colors: [
-                        Color(0xff4D3D79),
-                        Color(0xff8E71DF),
-                      ],
-                      begin: Alignment.centerLeft,
-                      end: Alignment.centerRight,
-                    ),
-                    borderRadius: BorderRadius.vertical(
-                      top: Radius.circular(12),
-                    ),
-                  ),
-                ),
-                Container(
-                  padding: const EdgeInsets.all(20),
-                  child: Column(
-                    mainAxisSize: MainAxisSize.min,
-                    children: [
-                      Image.asset(
-                        "assets/success.png",
-                        width: 50,
-                        height: 50,
-                      ),
-                      const SizedBox(height: 20),
-                      const Text(
-                        'Success',
-                        style: TextStyle(
-                          fontSize: 18,
-                          fontWeight: FontWeight.bold,
-                          height: 0,
-                        ),
-                        textAlign: TextAlign.center,
-                      ),
-                      const SizedBox(height: 10),
-                      const Text(
-                        'Profile Updated Successfully',
-                        style: TextStyle(
-                          fontSize: 14,
-                          color: Colors.grey,
-                          height: 0,
-                        ),
-                        textAlign: TextAlign.center,
-                      ),
-                    ],
-                  ),
-                ),
-              ],
-            ),
-          );
-        },
+      Navigator.pop(context);
+      String errorMessage = 'Something went wrong';
+
+      if (e is FirebaseAuthException) {
+        errorMessage = e.message ?? errorMessage;
+      }
+
+      _showAlertDialog(
+        title: 'Error',
+        image: 'assets/failed.png',
+        message: errorMessage,
+        closeCallback: () {},
       );
+      log(e.toString());
     } finally {
       setState(() {
         _isLoading = false;
@@ -145,76 +91,24 @@ class _PrifileScreenState extends State<ProfileScreen> {
         await _uploadImageToFirebase(image);
       }
     } catch (e) {
-      showDialog(
-        context: context,
-        barrierDismissible: false,
-        builder: (BuildContext context) {
-          Future.delayed(const Duration(seconds: 3), () {
-            if (mounted) {
-              Navigator.of(context).pop(true);
-            }
-          });
-          return Dialog(
-            shape: RoundedRectangleBorder(
-              borderRadius: BorderRadius.circular(12),
-            ),
-            child: Column(
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                Container(
-                  height: 10,
-                  decoration: const BoxDecoration(
-                    gradient: LinearGradient(
-                      colors: [
-                        Color(0xff4D3D79),
-                        Color(0xff8E71DF),
-                      ],
-                      begin: Alignment.centerLeft,
-                      end: Alignment.centerRight,
-                    ),
-                    borderRadius: BorderRadius.vertical(
-                      top: Radius.circular(12),
-                    ),
-                  ),
-                ),
-                Container(
-                  padding: const EdgeInsets.all(20),
-                  child: Column(
-                    mainAxisSize: MainAxisSize.min,
-                    children: [
-                      Image.asset(
-                        "assets/failed.png",
-                        width: 50,
-                        height: 50,
-                      ),
-                      const SizedBox(height: 20),
-                      const Text(
-                        'Error',
-                        style: TextStyle(
-                          fontSize: 18,
-                          fontWeight: FontWeight.bold,
-                          height: 0,
-                        ),
-                        textAlign: TextAlign.center,
-                      ),
-                      const SizedBox(height: 10),
-                      const Text(
-                        'Failed to pick image',
-                        style: TextStyle(
-                          fontSize: 14,
-                          color: Colors.grey,
-                          height: 0,
-                        ),
-                        textAlign: TextAlign.center,
-                      ),
-                    ],
-                  ),
-                ),
-              ],
-            ),
-          );
-        },
+      Navigator.pop(context);
+      String errorMessage = 'Something went wrong';
+
+      if (e is FirebaseAuthException) {
+        errorMessage = e.message ?? errorMessage;
+      }
+
+      _showAlertDialog(
+        title: 'Error',
+        image: 'assets/failed.png',
+        message: errorMessage,
+        closeCallback: () {},
       );
+      log(e.toString());
+    } finally {
+      setState(() {
+        _isLoading = false;
+      });
     }
   }
 
@@ -241,147 +135,21 @@ class _PrifileScreenState extends State<ProfileScreen> {
       setState(() {
         _imageUrl = imageUrl;
       });
-      showDialog(
-        context: context,
-        barrierDismissible: false,
-        builder: (BuildContext context) {
-          Future.delayed(const Duration(seconds: 3), () {
-            if (mounted) {
-              Navigator.of(context).pop(true);
-            }
-          });
-          return Dialog(
-            shape: RoundedRectangleBorder(
-              borderRadius: BorderRadius.circular(12),
-            ),
-            child: Column(
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                Container(
-                  height: 10,
-                  decoration: const BoxDecoration(
-                    gradient: LinearGradient(
-                      colors: [
-                        Color(0xff4D3D79),
-                        Color(0xff8E71DF),
-                      ],
-                      begin: Alignment.centerLeft,
-                      end: Alignment.centerRight,
-                    ),
-                    borderRadius: BorderRadius.vertical(
-                      top: Radius.circular(12),
-                    ),
-                  ),
-                ),
-                Container(
-                  padding: const EdgeInsets.all(20),
-                  child: Column(
-                    mainAxisSize: MainAxisSize.min,
-                    children: [
-                      Image.asset(
-                        "assets/success.png",
-                        width: 50,
-                        height: 50,
-                      ),
-                      const SizedBox(height: 20),
-                      const Text(
-                        'Success',
-                        style: TextStyle(
-                          fontSize: 18,
-                          fontWeight: FontWeight.bold,
-                          height: 0,
-                        ),
-                        textAlign: TextAlign.center,
-                      ),
-                      const SizedBox(height: 10),
-                      const Text(
-                        'Image uploaded successfully',
-                        style: TextStyle(
-                          fontSize: 14,
-                          color: Colors.grey,
-                          height: 0,
-                        ),
-                        textAlign: TextAlign.center,
-                      ),
-                    ],
-                  ),
-                ),
-              ],
-            ),
-          );
-        },
-      );
     } catch (e) {
-      showDialog(
-        context: context,
-        barrierDismissible: false,
-        builder: (BuildContext context) {
-          Future.delayed(const Duration(seconds: 3), () {
-            if (mounted) {
-              Navigator.of(context).pop(true);
-            }
-          });
-          return Dialog(
-            shape: RoundedRectangleBorder(
-              borderRadius: BorderRadius.circular(12),
-            ),
-            child: Column(
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                Container(
-                  height: 10,
-                  decoration: const BoxDecoration(
-                    gradient: LinearGradient(
-                      colors: [
-                        Color(0xff4D3D79),
-                        Color(0xff8E71DF),
-                      ],
-                      begin: Alignment.centerLeft,
-                      end: Alignment.centerRight,
-                    ),
-                    borderRadius: BorderRadius.vertical(
-                      top: Radius.circular(12),
-                    ),
-                  ),
-                ),
-                Container(
-                  padding: const EdgeInsets.all(20),
-                  child: Column(
-                    mainAxisSize: MainAxisSize.min,
-                    children: [
-                      Image.asset(
-                        "assets/failed.png",
-                        width: 50,
-                        height: 50,
-                      ),
-                      const SizedBox(height: 20),
-                      const Text(
-                        'Error',
-                        style: TextStyle(
-                          fontSize: 18,
-                          fontWeight: FontWeight.bold,
-                          height: 0,
-                        ),
-                        textAlign: TextAlign.center,
-                      ),
-                      const SizedBox(height: 10),
-                      const Text(
-                        'Failed to upload image',
-                        style: TextStyle(
-                          fontSize: 14,
-                          color: Colors.grey,
-                          height: 0,
-                        ),
-                        textAlign: TextAlign.center,
-                      ),
-                    ],
-                  ),
-                ),
-              ],
-            ),
-          );
-        },
+      Navigator.pop(context);
+      String errorMessage = 'Something went wrong';
+
+      if (e is FirebaseAuthException) {
+        errorMessage = e.message ?? errorMessage;
+      }
+
+      _showAlertDialog(
+        title: 'Error',
+        image: 'assets/failed.png',
+        message: errorMessage,
+        closeCallback: () {},
       );
+      log(e.toString());
     } finally {
       setState(() {
         _isLoading = false;
@@ -403,151 +171,43 @@ class _PrifileScreenState extends State<ProfileScreen> {
       final user = _auth.currentUser;
       log('Current user email: ${user?.email}');
 
+      // Update the Firestore data
       await FirebaseFirestore.instance.collection("Users").doc(uid).set({
         'name': name,
         'phone': phone,
       }, SetOptions(merge: true));
 
-      showDialog(
-        context: context,
-        barrierDismissible: false,
-        builder: (BuildContext context) {
-          Future.delayed(const Duration(seconds: 3), () {
-            if (mounted) {
-              Navigator.of(context).pop(true);
-            }
-          });
-          return Dialog(
-            shape: RoundedRectangleBorder(
-              borderRadius: BorderRadius.circular(12),
-            ),
-            child: Column(
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                Container(
-                  height: 10,
-                  decoration: const BoxDecoration(
-                    gradient: LinearGradient(
-                      colors: [
-                        Color(0xff4D3D79),
-                        Color(0xff8E71DF),
-                      ],
-                      begin: Alignment.centerLeft,
-                      end: Alignment.centerRight,
-                    ),
-                    borderRadius: BorderRadius.vertical(
-                      top: Radius.circular(12),
-                    ),
-                  ),
-                ),
-                Container(
-                  padding: const EdgeInsets.all(20),
-                  child: Column(
-                    mainAxisSize: MainAxisSize.min,
-                    children: [
-                      Image.asset(
-                        "assets/success.png",
-                        width: 50,
-                        height: 50,
-                      ),
-                      const SizedBox(height: 20),
-                      const Text(
-                        'Success',
-                        style: TextStyle(
-                          fontSize: 18,
-                          fontWeight: FontWeight.bold,
-                          height: 0,
-                        ),
-                        textAlign: TextAlign.center,
-                      ),
-                      const SizedBox(height: 10),
-                      const Text(
-                        'Profile Updated Successfully',
-                        style: TextStyle(
-                          fontSize: 14,
-                          color: Colors.grey,
-                          height: 0,
-                        ),
-                        textAlign: TextAlign.center,
-                      ),
-                    ],
-                  ),
-                ),
-              ],
+      if (password.isNotEmpty && user != null) {
+        await user.updatePassword(password);
+        log('Password updated successfully');
+      }
+
+      _showAlertDialog(
+        title: 'Success',
+        image: 'assets/success.png',
+        message: 'Profile Updated',
+        closeCallback: () {
+          Navigator.pushReplacement(
+            context,
+            MaterialPageRoute(
+              builder: (context) => const HomeScreen(),
             ),
           );
         },
       );
     } catch (e) {
-      showDialog(
-        context: context,
-        barrierDismissible: false,
-        builder: (BuildContext context) {
-          Future.delayed(const Duration(seconds: 3), () {
-            if (mounted) {
-              Navigator.of(context).pop(true);
-            }
-          });
-          return Dialog(
-            shape: RoundedRectangleBorder(
-              borderRadius: BorderRadius.circular(12),
-            ),
-            child: Column(
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                Container(
-                  height: 10,
-                  decoration: const BoxDecoration(
-                    gradient: LinearGradient(
-                      colors: [
-                        Color(0xff4D3D79),
-                        Color(0xff8E71DF),
-                      ],
-                      begin: Alignment.centerLeft,
-                      end: Alignment.centerRight,
-                    ),
-                    borderRadius: BorderRadius.vertical(
-                      top: Radius.circular(12),
-                    ),
-                  ),
-                ),
-                Container(
-                  padding: const EdgeInsets.all(20),
-                  child: Column(
-                    mainAxisSize: MainAxisSize.min,
-                    children: [
-                      Image.asset(
-                        "assets/failed.png",
-                        width: 50,
-                        height: 50,
-                      ),
-                      const SizedBox(height: 20),
-                      const Text(
-                        'Error',
-                        style: TextStyle(
-                          fontSize: 18,
-                          fontWeight: FontWeight.bold,
-                          height: 0,
-                        ),
-                        textAlign: TextAlign.center,
-                      ),
-                      const SizedBox(height: 10),
-                      const Text(
-                        'Something Went Wrong',
-                        style: TextStyle(
-                          fontSize: 14,
-                          color: Colors.grey,
-                          height: 0,
-                        ),
-                        textAlign: TextAlign.center,
-                      ),
-                    ],
-                  ),
-                ),
-              ],
-            ),
-          );
-        },
+      Navigator.pop(context);
+      String errorMessage = 'Something went wrong';
+
+      if (e is FirebaseAuthException) {
+        errorMessage = e.message ?? errorMessage;
+      }
+
+      _showAlertDialog(
+        title: 'Error',
+        image: 'assets/failed.png',
+        message: errorMessage,
+        closeCallback: () {},
       );
       log(e.toString());
     } finally {
@@ -558,6 +218,37 @@ class _PrifileScreenState extends State<ProfileScreen> {
   }
 
   Future<void> _logout(BuildContext context) async {
+    _showLoaderDialog(context);
+
+    try {
+      await _auth.signOut();
+
+      Navigator.of(context).pop();
+
+      _showAlertDialog(
+        title: 'Log out',
+        image: 'assets/logout.png',
+        message: 'You have successfully logged out',
+        closeCallback: () {
+          Navigator.of(context).pushAndRemoveUntil(
+            MaterialPageRoute(builder: (context) => const LoginScreen()),
+            (Route<dynamic> route) => false,
+          );
+        },
+      );
+    } catch (e) {
+      Navigator.of(context).pop();
+
+      _showAlertDialog(
+        title: 'Error',
+        image: 'assets/error.png',
+        message: 'Failed to log out. Please try again.',
+        closeCallback: () {},
+      );
+    }
+  }
+
+  void _showLoaderDialog(BuildContext context) {
     showDialog(
       context: context,
       barrierDismissible: false,
@@ -566,14 +257,6 @@ class _PrifileScreenState extends State<ProfileScreen> {
           child: CircularProgressIndicator(),
         );
       },
-    );
-    await _auth.signOut();
-
-    Navigator.of(
-      context,
-    ).pushAndRemoveUntil(
-      MaterialPageRoute(builder: (context) => const LoginScreen()),
-      (Route<dynamic> route) => false,
     );
   }
 
@@ -591,6 +274,84 @@ class _PrifileScreenState extends State<ProfileScreen> {
     super.dispose();
   }
 
+  void _showAlertDialog({
+    required String title,
+    required String message,
+    required String image,
+    required CloseCallback closeCallback,
+  }) {
+    showDialog(
+      context: context,
+      barrierDismissible: false,
+      builder: (BuildContext context) {
+        Future.delayed(const Duration(seconds: 3), () {
+          if (mounted) {
+            Navigator.of(context).pop(true);
+          }
+        });
+        return Dialog(
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(12),
+          ),
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              Container(
+                height: 10,
+                decoration: const BoxDecoration(
+                  gradient: LinearGradient(
+                    colors: [
+                      Color(0xff4D3D79),
+                      Color(0xff8E71DF),
+                    ],
+                    begin: Alignment.centerLeft,
+                    end: Alignment.centerRight,
+                  ),
+                  borderRadius: BorderRadius.vertical(
+                    top: Radius.circular(12),
+                  ),
+                ),
+              ),
+              Container(
+                padding: const EdgeInsets.all(20),
+                child: Column(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    Image.asset(
+                      image,
+                      width: 50,
+                      height: 50,
+                    ),
+                    const SizedBox(height: 20),
+                    Text(
+                      title,
+                      style: const TextStyle(
+                        fontSize: 18,
+                        fontWeight: FontWeight.bold,
+                        height: 0,
+                      ),
+                      textAlign: TextAlign.center,
+                    ),
+                    const SizedBox(height: 10),
+                    Text(
+                      message,
+                      style: const TextStyle(
+                        fontSize: 14,
+                        color: Colors.grey,
+                        height: 0,
+                      ),
+                      textAlign: TextAlign.center,
+                    ),
+                  ],
+                ),
+              ),
+            ],
+          ),
+        );
+      },
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     final Size screenSize = MediaQuery.of(context).size;
@@ -604,7 +365,9 @@ class _PrifileScreenState extends State<ProfileScreen> {
             child: SafeArea(
               child: Padding(
                 padding: const EdgeInsets.symmetric(
-                    horizontal: 20.0, vertical: 10.0),
+                  horizontal: 20.0,
+                  vertical: 10.0,
+                ),
                 child: Form(
                   key: _formKey,
                   child: Column(
@@ -647,7 +410,10 @@ class _PrifileScreenState extends State<ProfileScreen> {
                             const Text(
                               'Profile',
                               style: TextStyle(
-                                  fontSize: 22, fontWeight: FontWeight.w600),
+                                fontSize: 22,
+                                fontWeight: FontWeight.w600,
+                                height: 0,
+                              ),
                             ),
                             GestureDetector(
                               onTap: () {
@@ -733,26 +499,24 @@ class _PrifileScreenState extends State<ProfileScreen> {
                                     ),
                           if (isEdited != false)
                             Positioned(
-                              bottom: 5,
-                              right: 4,
-                              child: Container(
-                                  width: 40,
-                                  height: 40,
-                                  decoration: BoxDecoration(
-                                      color: Colors.transparent,
-                                      borderRadius: BorderRadius.circular(20)),
-                                  child: IconButton(
-                                      onPressed: _pickImage,
-                                      icon: const Icon(
-                                        Icons.camera_enhance,
-                                        size: 28,
-                                      ))),
+                              bottom: 0,
+                              right: 5,
+                              child: IconButton(
+                                onPressed: _pickImage,
+                                icon: CircleAvatar(
+                                    radius: 20,
+                                    backgroundColor: const Color(0xff7647EB),
+                                    child: Image.asset(
+                                      "assets/camera.png",
+                                      width: 20,
+                                      height: 20,
+                                      color: Colors.white,
+                                    )),
+                              ),
                             ),
                         ],
                       ),
-                      const SizedBox(
-                        height: 30,
-                      ),
+                      const SizedBox(height: 20),
                       Container(
                         padding: const EdgeInsets.symmetric(
                             vertical: 20, horizontal: 10),
@@ -771,104 +535,97 @@ class _PrifileScreenState extends State<ProfileScreen> {
                                 height: 0,
                               ),
                             ),
-                            Container(
-                              padding:
-                                  const EdgeInsets.symmetric(horizontal: 3),
-                              decoration: BoxDecoration(
-                                  color: Colors.white,
-                                  borderRadius: BorderRadius.circular(8)),
-                              child: TextFormField(
-                                controller: _nameController,
-                                validator: (value) {
-                                  if (value == null || value.isEmpty) {
-                                    return 'Username cannot be empty';
-                                  } else if (value.length < 3) {
-                                    return 'Username must be at least 3 characters long';
-                                  }
-                                  return null;
-                                },
-                                enabled: isEdited,
-                                decoration: const InputDecoration(
-                                  filled: true,
-                                  fillColor: Colors.white,
-                                  hintText: 'Username',
-                                  border: InputBorder.none,
+                            TextFormField(
+                              controller: _nameController,
+                              enabled: isEdited,
+                              validator: (value) {
+                                if (value == null || value.isEmpty) {
+                                  return 'Username cannot be empty';
+                                }
+                                if (value.length < 5) {
+                                  return 'Username must be at least 5 characters long';
+                                }
+                                return null;
+                              },
+                              decoration: InputDecoration(
+                                filled: true,
+                                fillColor: Colors.white,
+                                border: OutlineInputBorder(
+                                  borderRadius: BorderRadius.circular(8.0),
+                                  borderSide: BorderSide.none,
                                 ),
                               ),
                             ),
-                            const SizedBox(
-                              height: 10,
-                            ),
+                            const SizedBox(height: 10),
                             const Text(
                               'Password',
                               style: TextStyle(
-                                  fontSize: 16, fontWeight: FontWeight.w600),
+                                fontSize: 16,
+                                fontWeight: FontWeight.w600,
+                                height: 0,
+                              ),
                             ),
-                            Container(
-                              padding:
-                                  const EdgeInsets.symmetric(horizontal: 3),
-                              decoration: BoxDecoration(
-                                  color: Colors.white,
-                                  borderRadius: BorderRadius.circular(8)),
-                              child: TextFormField(
-                                controller: _passwordController,
-                                validator: (value) {
-                                  if (value == null || value.isEmpty) {
-                                    return 'Password cannot be empty';
-                                  }
-                                  return null;
-                                },
-                                enabled: isEdited,
-                                decoration: const InputDecoration(
-                                  filled: true,
-                                  fillColor: Colors.white,
-                                  hintText: 'New password',
-                                  border: InputBorder.none,
+                            TextFormField(
+                              controller: _passwordController,
+                              obscureText: !_isPasswordVisible,
+                              enabled: isEdited,
+                              validator: (value) {
+                                if (value == null || value.isEmpty) {
+                                  return 'Password cannot be empty';
+                                }
+                                return null;
+                              },
+                              decoration: InputDecoration(
+                                filled: true,
+                                fillColor: Colors.white,
+                                hintText: 'New Password',
+                                border: OutlineInputBorder(
+                                  borderRadius: BorderRadius.circular(8.0),
+                                  borderSide: BorderSide.none,
+                                ),
+                                suffixIcon: IconButton(
+                                  icon: Icon(
+                                    _isPasswordVisible
+                                        ? Icons.visibility_off
+                                        : Icons.visibility,
+                                  ),
+                                  onPressed: () {
+                                    setState(() {
+                                      _isPasswordVisible = !_isPasswordVisible;
+                                    });
+                                  },
                                 ),
                               ),
                             ),
-                            const SizedBox(
-                              height: 10,
-                            ),
+                            const SizedBox(height: 10),
                             const Text(
                               'Phone Number',
                               style: TextStyle(
-                                  fontSize: 16, fontWeight: FontWeight.w600),
+                                fontSize: 16,
+                                fontWeight: FontWeight.w600,
+                                height: 0,
+                              ),
                             ),
-                            Container(
-                              padding:
-                                  const EdgeInsets.symmetric(horizontal: 3),
-                              decoration: BoxDecoration(
-                                  color: Colors.white,
-                                  borderRadius: BorderRadius.circular(8)),
-                              child: TextFormField(
-                                controller: _phoneController,
-
-                                keyboardType: TextInputType
-                                    .phone, // Set keyboard type to phone
-                                validator: (value) {
-                                  if (value == null || value.isEmpty) {
-                                    return 'Phone number cannot be empty';
-                                  } else if (!RegExp(r'^[0-9]+$')
-                                      .hasMatch(value)) {
-                                    return 'Phone number can only contain digits';
-                                  } else if (value.length != 10) {
-                                    return 'Phone number must be 10 digits long';
-                                  }
-                                  return null; // Return null if the input is valid
-                                },
-                                enabled: isEdited,
-                                decoration: const InputDecoration(
-                                  filled: true,
-                                  fillColor: Colors.white,
-                                  hintText: 'Enter your Phone Number',
-                                  border: InputBorder.none,
+                            TextFormField(
+                              controller: _phoneController,
+                              keyboardType: TextInputType.phone,
+                              enabled: isEdited,
+                              validator: (value) {
+                                if (value == null || value.isEmpty) {
+                                  return 'Phone cannot be empty';
+                                }
+                                return null;
+                              },
+                              decoration: InputDecoration(
+                                filled: true,
+                                fillColor: Colors.white,
+                                border: OutlineInputBorder(
+                                  borderRadius: BorderRadius.circular(8.0),
+                                  borderSide: BorderSide.none,
                                 ),
                               ),
                             ),
-                            const SizedBox(
-                              height: 30,
-                            ),
+                            const SizedBox(height: 30),
                             if (!isEdited)
                               Row(
                                 mainAxisAlignment:
@@ -892,130 +649,7 @@ class _PrifileScreenState extends State<ProfileScreen> {
                                   ),
                                   GestureDetector(
                                     onTap: () {
-                                      showDialog(
-                                        context: context,
-                                        builder: (BuildContext context) {
-                                          return Stack(
-                                            alignment: Alignment.topCenter,
-                                            children: [
-                                              AlertDialog(
-                                                contentPadding:
-                                                    const EdgeInsets.only(
-                                                        top: 60.0),
-                                                backgroundColor: Colors.white,
-                                                shape: RoundedRectangleBorder(
-                                                  borderRadius:
-                                                      BorderRadius.circular(15),
-                                                ),
-                                                title: Column(
-                                                  children: [
-                                                    const Text(
-                                                      'Are you Sure',
-                                                      style: TextStyle(
-                                                        fontSize: 18,
-                                                        fontWeight:
-                                                            FontWeight.bold,
-                                                      ),
-                                                      textAlign:
-                                                          TextAlign.center,
-                                                    ),
-                                                    const Text(
-                                                      'Do you want to logout ?',
-                                                      style: TextStyle(
-                                                        fontWeight:
-                                                            FontWeight.normal,
-                                                        color: Colors.black,
-                                                        fontSize: 14,
-                                                      ),
-                                                      textAlign:
-                                                          TextAlign.center,
-                                                    ),
-                                                    const SizedBox(height: 15),
-                                                    Row(
-                                                      mainAxisAlignment:
-                                                          MainAxisAlignment
-                                                              .spaceBetween,
-                                                      children: [
-                                                        GestureDetector(
-                                                          onTap: () {
-                                                            Navigator.of(
-                                                                    context)
-                                                                .pop();
-                                                          },
-                                                          child: Container(
-                                                            width: 110,
-                                                            height: 30,
-                                                            decoration:
-                                                                BoxDecoration(
-                                                              color: Colors
-                                                                  .grey[400],
-                                                              borderRadius:
-                                                                  BorderRadius
-                                                                      .circular(
-                                                                          5),
-                                                            ),
-                                                            child: const Center(
-                                                              child: Text(
-                                                                'Cancel',
-                                                                style:
-                                                                    TextStyle(
-                                                                  fontSize: 14,
-                                                                  color: Colors
-                                                                      .white,
-                                                                ),
-                                                              ),
-                                                            ),
-                                                          ),
-                                                        ),
-                                                        GestureDetector(
-                                                          onTap: () {
-                                                            _logout(context);
-                                                          },
-                                                          child: Container(
-                                                            width: 110,
-                                                            height: 30,
-                                                            decoration:
-                                                                BoxDecoration(
-                                                              color: const Color(
-                                                                  0xff7647EB),
-                                                              borderRadius:
-                                                                  BorderRadius
-                                                                      .circular(
-                                                                          5),
-                                                            ),
-                                                            child: const Center(
-                                                              child: Text(
-                                                                'Logout',
-                                                                style:
-                                                                    TextStyle(
-                                                                  fontSize: 14,
-                                                                  color: Colors
-                                                                      .white,
-                                                                ),
-                                                              ),
-                                                            ),
-                                                          ),
-                                                        ),
-                                                      ],
-                                                    ),
-                                                  ],
-                                                ),
-                                              ),
-                                              Positioned(
-                                                top: MediaQuery.of(context)
-                                                        .size
-                                                        .height *
-                                                    (280 / 812),
-                                                child: Image.asset(
-                                                  'assets/warning.png',
-                                                  width: 60,
-                                                  height: 60,
-                                                ),
-                                              ),
-                                            ],
-                                          );
-                                        },
-                                      );
+                                      _logout(context);
                                     },
                                     child: Container(
                                       width: screenWidth * 0.4,
