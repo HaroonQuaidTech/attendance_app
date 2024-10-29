@@ -39,7 +39,6 @@ class _ProfileScreenState extends State<ProfileScreen> {
 
   Future<void> _loadUserProfile() async {
     try {
-
       if (mounted) {
         setState(() {
           _isLoading = true;
