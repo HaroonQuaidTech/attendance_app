@@ -24,8 +24,7 @@ class _GraphicalbuilerState extends State<GraphicalbuilerMonthly> {
     try {
       DateTime now = DateTime.now();
       DateTime firstDayOfMonth = DateTime(now.year, now.month, 1);
-      DateTime lastDayOfMonth =
-          DateTime(now.year, now.month + 1, 0); // Last day of the current month
+      DateTime lastDayOfMonth = DateTime(now.year, now.month + 1, 0);
 
       List<Future<DocumentSnapshot>> futures = [];
 
@@ -42,7 +41,6 @@ class _GraphicalbuilerState extends State<GraphicalbuilerMonthly> {
 
       List<DocumentSnapshot> snapshots = await Future.wait(futures);
 
-      // Parse the snapshots into a list of maps
       List<Map<String, dynamic>> monthlyData = snapshots.map((doc) {
         return doc.exists
             ? Map<String, dynamic>.from(doc.data() as Map)
@@ -51,7 +49,7 @@ class _GraphicalbuilerState extends State<GraphicalbuilerMonthly> {
 
       return monthlyData;
     } catch (e) {
-      return null; // Return null if an error occurs
+      return null;
     }
   }
 
@@ -70,8 +68,7 @@ class _GraphicalbuilerState extends State<GraphicalbuilerMonthly> {
 
       if (checkIn != null && checkOut != null) {
         final duration = checkOut.difference(checkIn);
-        int weekNumber =
-            ((checkIn.day - 1) / 7).floor() + 1; // Determine week number
+        int weekNumber = ((checkIn.day - 1) / 7).floor() + 1;
 
         switch (weekNumber) {
           case 1:
@@ -151,7 +148,6 @@ class _GraphicalbuilerState extends State<GraphicalbuilerMonthly> {
         DateTime checkInDate =
             DateTime(checkInTime.year, checkInTime.month, checkInTime.day);
 
-        // Only count if the date is today or in the past
         if (checkInDate.isBefore(now) || checkInDate.isAtSameMomentAs(now)) {
           if (checkInTime.isAfter(DateTime(
               checkInTime.year, checkInTime.month, checkInTime.day, 8, 15))) {
@@ -168,7 +164,6 @@ class _GraphicalbuilerState extends State<GraphicalbuilerMonthly> {
     int earlyCount = 0;
 
     for (var entry in attendanceData) {
-      // Check if 'checkOut' is not null before processing
       if (entry['checkOut'] != null) {
         DateTime checkOutTime = (entry['checkOut'] as Timestamp).toDate();
 
@@ -191,7 +186,6 @@ class _GraphicalbuilerState extends State<GraphicalbuilerMonthly> {
       if (checkIn != null) {
         final checkInTime = TimeOfDay.fromDateTime(checkIn);
 
-        // Check if the check-in is between 7:50 and 8:10 for "On Time"
         if ((checkInTime.hour == 7 && checkInTime.minute >= 50) ||
             (checkInTime.hour == 8 && checkInTime.minute <= 10)) {
           onTimeCount++;
@@ -207,27 +201,24 @@ class _GraphicalbuilerState extends State<GraphicalbuilerMonthly> {
     DateTime today = DateTime.now();
 
     for (var record in attendanceData) {
-      // Parse the date only if it exists and is in a proper format
       DateTime? recordDate;
       try {
         recordDate =
             record['date'] != null ? DateTime.parse(record['date']) : null;
       } catch (e) {
-        log('Invalid date format: ${record['date']}');
-        continue; // Skip records with invalid date format
+        continue;
       }
 
-      // Skip past dates and weekends (Saturday and Sunday)
-      if (recordDate != null &&
-          (recordDate.isBefore(today) ||
-              recordDate.weekday == DateTime.saturday ||
-              recordDate.weekday == DateTime.sunday)) {
-        continue; // Skip the record
+      // Skip null dates, weekends, and future dates
+      if (recordDate == null ||
+          recordDate.isAfter(today) ||
+          recordDate.weekday == DateTime.saturday ||
+          recordDate.weekday == DateTime.sunday) {
+        continue;
       }
 
-      // Only count as absent if both checkIn and checkOut are null
-      if ((record['checkIn'] == null || record['checkIn'] == '') &&
-          (record['checkOut'] == null || record['checkOut'] == '')) {
+      // Count as absent if checkIn is null on a valid weekday
+      if (record['checkIn'] == null) {
         absentCount++;
       }
     }
@@ -294,7 +285,6 @@ class _GraphicalbuilerState extends State<GraphicalbuilerMonthly> {
           );
         }
 
-        // Get the monthly hours and attendance stats
         Map<String, double> monthlyHours =
             calculateMonthlyHours(snapshot.data!);
         Map<String, double> monthlyAttendanceStats =
