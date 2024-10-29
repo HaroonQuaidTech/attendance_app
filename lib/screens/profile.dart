@@ -37,21 +37,25 @@ class _ProfileScreenState extends State<ProfileScreen> {
     _loadUserProfile();
   }
 
-  Future<void> _loadUserProfile() async {
-    try {
+Future<void> _loadUserProfile() async {
+  try {
+    // Ensure the widget is still mounted before updating state
+    if (mounted) {
       setState(() {
         _isLoading = true;
       });
+    }
 
-      final user = _auth.currentUser;
-      if (user != null) {
-        final docSnapshot = await FirebaseFirestore.instance
-            .collection('Users')
-            .doc(user.uid)
-            .get();
+    final user = _auth.currentUser;
+    if (user != null) {
+      final docSnapshot = await FirebaseFirestore.instance
+          .collection('Users')
+          .doc(user.uid)
+          .get();
 
-        if (docSnapshot.exists) {
-          final data = docSnapshot.data()!;
+      if (docSnapshot.exists) {
+        final data = docSnapshot.data()!;
+        if (mounted) {
           setState(() {
             _imageUrl = data['profileImageUrl'];
             _nameController.text = data['name'] ?? '';
@@ -59,27 +63,33 @@ class _ProfileScreenState extends State<ProfileScreen> {
           });
         }
       }
-    } catch (e) {
+    }
+  } catch (e) {
+    String errorMessage = 'Something went wrong';
+    if (e is FirebaseAuthException) {
+      errorMessage = e.message ?? errorMessage;
+    }
+
+    // Ensure the widget is mounted before using context
+    if (mounted) {
       Navigator.pop(context);
-      String errorMessage = 'Something went wrong';
-
-      if (e is FirebaseAuthException) {
-        errorMessage = e.message ?? errorMessage;
-      }
-
       _showAlertDialog(
         title: 'Error',
         image: 'assets/failed.png',
         message: errorMessage,
         closeCallback: () {},
       );
-      log(e.toString());
-    } finally {
+    }
+    log(e.toString());
+  } finally {
+    if (mounted) {
       setState(() {
         _isLoading = false;
       });
     }
   }
+}
+
 
   Future<void> _pickImage() async {
     try {
@@ -218,17 +228,21 @@ class _ProfileScreenState extends State<ProfileScreen> {
   }
 
   Future<void> _logout(BuildContext context) async {
-    _showLoaderDialog(context);
-
     try {
+      setState(() {
+        _isLoading = true;
+      });
+
       await _auth.signOut();
 
-      Navigator.of(context).pop();
+      setState(() {
+        _isLoading = false;
+      });
 
       _showAlertDialog(
-        title: 'Log out',
+        title: 'Logged Out',
         image: 'assets/logout.png',
-        message: 'You have successfully logged out',
+        message: 'You have successfully logged out.',
         closeCallback: () {
           Navigator.of(context).pushAndRemoveUntil(
             MaterialPageRoute(builder: (context) => const LoginScreen()),
@@ -237,7 +251,9 @@ class _ProfileScreenState extends State<ProfileScreen> {
         },
       );
     } catch (e) {
-      Navigator.of(context).pop();
+      setState(() {
+        _isLoading = false;
+      });
 
       _showAlertDialog(
         title: 'Error',
@@ -246,18 +262,6 @@ class _ProfileScreenState extends State<ProfileScreen> {
         closeCallback: () {},
       );
     }
-  }
-
-  void _showLoaderDialog(BuildContext context) {
-    showDialog(
-      context: context,
-      barrierDismissible: false,
-      builder: (BuildContext context) {
-        return const Center(
-          child: CircularProgressIndicator(),
-        );
-      },
-    );
   }
 
   void _toggleEdit() {
@@ -287,65 +291,69 @@ class _ProfileScreenState extends State<ProfileScreen> {
         Future.delayed(const Duration(seconds: 3), () {
           if (mounted) {
             Navigator.of(context).pop(true);
+            closeCallback();
           }
         });
-        return Dialog(
-          shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(12),
-          ),
-          child: Column(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              Container(
-                height: 10,
-                decoration: const BoxDecoration(
-                  gradient: LinearGradient(
-                    colors: [
-                      Color(0xff4D3D79),
-                      Color(0xff8E71DF),
+        return PopScope(
+          canPop: false,
+          child: Dialog(
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(12),
+            ),
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                Container(
+                  height: 10,
+                  decoration: const BoxDecoration(
+                    gradient: LinearGradient(
+                      colors: [
+                        Color(0xff4D3D79),
+                        Color(0xff8E71DF),
+                      ],
+                      begin: Alignment.centerLeft,
+                      end: Alignment.centerRight,
+                    ),
+                    borderRadius: BorderRadius.vertical(
+                      top: Radius.circular(12),
+                    ),
+                  ),
+                ),
+                Container(
+                  padding: const EdgeInsets.all(20),
+                  child: Column(
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      Image.asset(
+                        image,
+                        width: 50,
+                        height: 50,
+                      ),
+                      const SizedBox(height: 20),
+                      Text(
+                        title,
+                        style: const TextStyle(
+                          fontSize: 18,
+                          fontWeight: FontWeight.bold,
+                          height: 0,
+                        ),
+                        textAlign: TextAlign.center,
+                      ),
+                      const SizedBox(height: 10),
+                      Text(
+                        message,
+                        style: const TextStyle(
+                          fontSize: 10,
+                          color: Colors.grey,
+                          height: 0,
+                        ),
+                        textAlign: TextAlign.center,
+                      ),
                     ],
-                    begin: Alignment.centerLeft,
-                    end: Alignment.centerRight,
-                  ),
-                  borderRadius: BorderRadius.vertical(
-                    top: Radius.circular(12),
                   ),
                 ),
-              ),
-              Container(
-                padding: const EdgeInsets.all(20),
-                child: Column(
-                  mainAxisSize: MainAxisSize.min,
-                  children: [
-                    Image.asset(
-                      image,
-                      width: 50,
-                      height: 50,
-                    ),
-                    const SizedBox(height: 20),
-                    Text(
-                      title,
-                      style: const TextStyle(
-                        fontSize: 18,
-                        fontWeight: FontWeight.bold,
-                        height: 0,
-                      ),
-                      textAlign: TextAlign.center,
-                    ),
-                    const SizedBox(height: 10),
-                    Text(
-                      message,
-                      style: const TextStyle(
-                        fontSize: 14,
-                        color: Colors.grey,
-                        height: 0,
-                      ),
-                      textAlign: TextAlign.center,
-                    ),
-                  ],
-                ),
-              ),
-            ],
+              ],
+            ),
           ),
         );
       },
@@ -649,7 +657,158 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                   ),
                                   GestureDetector(
                                     onTap: () {
-                                      _logout(context);
+                                      showDialog(
+                                        context: context,
+                                        barrierDismissible: false,
+                                        builder: (BuildContext context) {
+                                          return Dialog(
+                                            shape: RoundedRectangleBorder(
+                                              borderRadius:
+                                                  BorderRadius.circular(12),
+                                            ),
+                                            child: Column(
+                                              mainAxisSize: MainAxisSize.min,
+                                              children: [
+                                                Container(
+                                                  height: 10,
+                                                  decoration:
+                                                      const BoxDecoration(
+                                                    gradient: LinearGradient(
+                                                      colors: [
+                                                        Color(0xff4D3D79),
+                                                        Color(0xff8E71DF),
+                                                      ],
+                                                      begin:
+                                                          Alignment.centerLeft,
+                                                      end:
+                                                          Alignment.centerRight,
+                                                    ),
+                                                    borderRadius:
+                                                        BorderRadius.vertical(
+                                                      top: Radius.circular(12),
+                                                    ),
+                                                  ),
+                                                ),
+                                                Container(
+                                                  padding:
+                                                      const EdgeInsets.all(20),
+                                                  child: Column(
+                                                    mainAxisSize:
+                                                        MainAxisSize.min,
+                                                    children: [
+                                                      Image.asset(
+                                                        "assets/warning.png",
+                                                        width: 50,
+                                                        height: 50,
+                                                      ),
+                                                      const SizedBox(
+                                                          height: 10),
+                                                      const Text(
+                                                        'Are you sure ?',
+                                                        style: TextStyle(
+                                                          fontSize: 18,
+                                                          fontWeight:
+                                                              FontWeight.bold,
+                                                          height: 0,
+                                                        ),
+                                                        textAlign:
+                                                            TextAlign.center,
+                                                      ),
+                                                      const SizedBox(
+                                                          height: 10),
+                                                      const Text(
+                                                        'Do you want to logout ?',
+                                                        style: TextStyle(
+                                                          fontSize: 10,
+                                                          color: Colors.grey,
+                                                          height: 0,
+                                                        ),
+                                                        textAlign:
+                                                            TextAlign.center,
+                                                      ),
+                                                      const SizedBox(
+                                                          height: 20),
+                                                      Row(
+                                                        mainAxisAlignment:
+                                                            MainAxisAlignment
+                                                                .spaceBetween,
+                                                        children: [
+                                                          GestureDetector(
+                                                            onTap: () {
+                                                              Navigator.of(
+                                                                      context)
+                                                                  .pop();
+                                                            },
+                                                            child: Container(
+                                                              width: 110,
+                                                              height: 30,
+                                                              decoration:
+                                                                  BoxDecoration(
+                                                                color: const Color(
+                                                                    0xffECECEC),
+                                                                borderRadius:
+                                                                    BorderRadius
+                                                                        .circular(
+                                                                            10),
+                                                              ),
+                                                              child:
+                                                                  const Center(
+                                                                child: Text(
+                                                                  'Cancel',
+                                                                  style:
+                                                                      TextStyle(
+                                                                    fontSize:
+                                                                        14,
+                                                                    color: Colors
+                                                                        .black,
+                                                                    height: 0,
+                                                                  ),
+                                                                ),
+                                                              ),
+                                                            ),
+                                                          ),
+                                                          GestureDetector(
+                                                            onTap: () {
+                                                              _logout(context);
+                                                            },
+                                                            child: Container(
+                                                              width: 110,
+                                                              height: 30,
+                                                              decoration:
+                                                                  BoxDecoration(
+                                                                color: const Color(
+                                                                    0xff7647EB),
+                                                                borderRadius:
+                                                                    BorderRadius
+                                                                        .circular(
+                                                                            10),
+                                                              ),
+                                                              child:
+                                                                  const Center(
+                                                                child: Text(
+                                                                  'Logout',
+                                                                  style:
+                                                                      TextStyle(
+                                                                    fontSize:
+                                                                        14,
+                                                                    color: Colors
+                                                                        .white,
+                                                                    height: 0,
+                                                                  ),
+                                                                ),
+                                                              ),
+                                                            ),
+                                                          ),
+                                                        ],
+                                                      ),
+                                                    ],
+                                                  ),
+                                                ),
+                                              ],
+                                            ),
+                                          );
+                                        },
+                                      );
                                     },
                                     child: Container(
                                       width: screenWidth * 0.4,

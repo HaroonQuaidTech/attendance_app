@@ -814,20 +814,17 @@ class _HomeScreenState extends State<HomeScreen> {
                       ),
                     );
                   } else if (checkIn == null && checkOut == null) {
-                    // Display Check-In Button
                     return DraggableFab(
                       child: Container(
                         margin: const EdgeInsets.only(bottom: 20.0),
                         child: Stack(
                           alignment: Alignment.center,
                           children: [
-                            // Outer Circle
                             Material(
-                              elevation: 4.0, // Adjust elevation as needed
+                              elevation: 4.0,
                               shape: const CircleBorder(),
                               child: CircleAvatar(
-                                radius:
-                                    45, // This defines the size of the CircleAvatar (90 width and height)
+                                radius: 45,
                                 backgroundColor: Colors.white,
                                 child: Container(
                                   decoration: BoxDecoration(
@@ -840,7 +837,6 @@ class _HomeScreenState extends State<HomeScreen> {
                                 ),
                               ),
                             ),
-                            // Middle Circle
                             Container(
                               width: 60,
                               height: 60,
@@ -864,8 +860,7 @@ class _HomeScreenState extends State<HomeScreen> {
                               },
                               backgroundColor: const Color(0xffEFF1FF),
                               shape: RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(
-                                    300), // Set border radius
+                                borderRadius: BorderRadius.circular(300),
                               ),
                               child: Column(
                                 mainAxisAlignment: MainAxisAlignment.center,
@@ -952,7 +947,7 @@ class _HomeScreenState extends State<HomeScreen> {
     double responsiveFontSize = baseFontSize * (screenWidth / 375);
     bool isSelected = _selectedIndex == index;
     if (index == 1) const StatsticsScreen();
-    if (index == 2) ProfileScreen;
+    if (index == 2) const ProfileScreen();
     return GestureDetector(
       onTap: () => _onItemTapped(index),
       child: Container(
