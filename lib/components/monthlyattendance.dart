@@ -12,25 +12,19 @@ Future<Map<String, int>> fetchMonthlyAttendance(String userId) async {
       .collection('dailyattendance');
 
   try {
-    // Fetch attendance records for the current month up to the current date
     final querySnapshot = await attendanceCollection
         .where('checkIn', isGreaterThanOrEqualTo: startOfMonth)
-        .where('checkIn',
-            isLessThanOrEqualTo: now) // Only consider past and current dates
+        .where('checkIn', isLessThanOrEqualTo: now)
         .get();
 
-    // Get the current day of the month (this ensures we don't count future absences)
     final currentDayOfMonth = now.day;
 
-    // If there are no records for the month, assume all days up to today are absences
     if (querySnapshot.docs.isEmpty) {
       return {'present': 0, 'late': 0, 'absent': currentDayOfMonth};
     }
 
-    // Define late arrival threshold (8:15 AM)
     final lateThreshold = DateTime(now.year, now.month, now.day, 8, 15);
 
-    // Initialize attendance counters
     Map<String, int> counts = {
       'present': 0,
       'late': 0,
