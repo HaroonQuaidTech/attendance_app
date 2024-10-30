@@ -37,59 +37,56 @@ class _ProfileScreenState extends State<ProfileScreen> {
     _loadUserProfile();
   }
 
-Future<void> _loadUserProfile() async {
-  try {
-    // Ensure the widget is still mounted before updating state
-    if (mounted) {
-      setState(() {
-        _isLoading = true;
-      });
-    }
+  Future<void> _loadUserProfile() async {
+    try {
+      if (mounted) {
+        setState(() {
+          _isLoading = true;
+        });
+      }
 
-    final user = _auth.currentUser;
-    if (user != null) {
-      final docSnapshot = await FirebaseFirestore.instance
-          .collection('Users')
-          .doc(user.uid)
-          .get();
+      final user = _auth.currentUser;
+      if (user != null) {
+        final docSnapshot = await FirebaseFirestore.instance
+            .collection('Users')
+            .doc(user.uid)
+            .get();
 
-      if (docSnapshot.exists) {
-        final data = docSnapshot.data()!;
-        if (mounted) {
-          setState(() {
-            _imageUrl = data['profileImageUrl'];
-            _nameController.text = data['name'] ?? '';
-            _phoneController.text = data['phone'] ?? '';
-          });
+        if (docSnapshot.exists) {
+          final data = docSnapshot.data()!;
+          if (mounted) {
+            setState(() {
+              _imageUrl = data['profileImageUrl'];
+              _nameController.text = data['name'] ?? '';
+              _phoneController.text = data['phone'] ?? '';
+            });
+          }
         }
       }
-    }
-  } catch (e) {
-    String errorMessage = 'Something went wrong';
-    if (e is FirebaseAuthException) {
-      errorMessage = e.message ?? errorMessage;
-    }
+    } catch (e) {
+      String errorMessage = 'Something went wrong';
+      if (e is FirebaseAuthException) {
+        errorMessage = e.message ?? errorMessage;
+      }
 
-    // Ensure the widget is mounted before using context
-    if (mounted) {
-      Navigator.pop(context);
-      _showAlertDialog(
-        title: 'Error',
-        image: 'assets/failed.png',
-        message: errorMessage,
-        closeCallback: () {},
-      );
-    }
-    log(e.toString());
-  } finally {
-    if (mounted) {
-      setState(() {
-        _isLoading = false;
-      });
+      if (mounted) {
+        Navigator.pop(context);
+        _showAlertDialog(
+          title: 'Error',
+          image: 'assets/failed.png',
+          message: errorMessage,
+          closeCallback: () {},
+        );
+      }
+      log(e.toString());
+    } finally {
+      if (mounted) {
+        setState(() {
+          _isLoading = false;
+        });
+      }
     }
   }
-}
-
 
   Future<void> _pickImage() async {
     try {
