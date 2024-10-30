@@ -23,10 +23,14 @@ class _GraphicalbuilerState extends State<GraphicalbuilerWeekly> {
       DateTime now = DateTime.now();
       DateTime monday = now.subtract(Duration(days: now.weekday - 1));
 
-      List<DateTime> weekDates =
-          List.generate(5, (index) => monday.add(Duration(days: index)));
+      List<DateTime> validDates = List.generate(5, (index) {
+        DateTime date = monday.add(Duration(days: index));
+        return date.isAfter(now) || date.weekday >= DateTime.saturday
+            ? null
+            : date;
+      }).whereType<DateTime>().toList();
 
-      List<String> formattedDates = weekDates.map((date) {
+      List<String> formattedDates = validDates.map((date) {
         return DateFormat('yMMMd').format(date);
       }).toList();
 
@@ -43,11 +47,14 @@ class _GraphicalbuilerState extends State<GraphicalbuilerWeekly> {
       List<DocumentSnapshot> snapshots = await Future.wait(futures);
 
       List<Map<String, dynamic>> weeklyData = snapshots.map((doc) {
-        return doc.exists
-            ? Map<String, dynamic>.from(doc.data() as Map)
-            : Map<String, dynamic>.from({});
+        if (doc.exists && doc.data() != null) {
+          return Map<String, dynamic>.from(doc.data() as Map<dynamic, dynamic>);
+        } else {
+          return <String, dynamic>{};
+        }
       }).toList();
 
+      log("Data: $weeklyData");
       return weeklyData;
     } catch (e) {
       log('Error fetching weekly attendance: $e');
@@ -178,6 +185,7 @@ class _GraphicalbuilerState extends State<GraphicalbuilerWeekly> {
         }
       }
     }
+    log('Late count weekly: $lateCount');
     return lateCount;
   }
 
@@ -195,6 +203,7 @@ class _GraphicalbuilerState extends State<GraphicalbuilerWeekly> {
         }
       }
     }
+    log('Early count weekly: $earlyCount');
     return earlyCount;
   }
 
@@ -208,7 +217,7 @@ class _GraphicalbuilerState extends State<GraphicalbuilerWeekly> {
         absentCount++;
       }
     }
-
+    log('Absent count weekly: $absentCount');
     return absentCount;
   }
 
@@ -228,7 +237,7 @@ class _GraphicalbuilerState extends State<GraphicalbuilerWeekly> {
         }
       }
     }
-
+    log('OnTime count weekly: $onTimeCount');
     return onTimeCount;
   }
 
