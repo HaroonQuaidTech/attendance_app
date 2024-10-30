@@ -200,6 +200,7 @@ class _GraphicalbuilerState extends State<GraphicalbuilerWeekly> {
     }
     return earlyCount;
   }
+
   int getAbsentCount(List<dynamic> attendanceData) {
     int absentCount = 0;
 
@@ -213,7 +214,6 @@ class _GraphicalbuilerState extends State<GraphicalbuilerWeekly> {
 
     return absentCount;
   }
-
 
   int getOnTimeCount(List<Map<String, dynamic>> data) {
     int onTimeCount = 0;
@@ -235,7 +235,7 @@ class _GraphicalbuilerState extends State<GraphicalbuilerWeekly> {
     return onTimeCount;
   }
 
-    int getPresentCount(List<dynamic> attendanceData) {
+  int getPresentCount(List<dynamic> attendanceData) {
     int presentCount = 0;
 
     for (var record in attendanceData) {
