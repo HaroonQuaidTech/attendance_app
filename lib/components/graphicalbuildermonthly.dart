@@ -20,15 +20,13 @@ class _GraphicalbuilerState extends State<GraphicalbuilerMonthly> {
       String userId) async {
     try {
       DateTime now = DateTime.now();
-      DateTime lastDayOfMonth =
-          DateTime(now.year, now.month + 1, 0); // Last day of the current month
+      DateTime lastDayOfMonth = DateTime(now.year, now.month + 1, 0);
 
       List<Future<DocumentSnapshot>> futures = [];
 
       for (int i = 1; i <= lastDayOfMonth.day; i++) {
         DateTime date = DateTime(now.year, now.month, i);
 
-        // Skip weekends and future dates
         if (date.weekday == DateTime.saturday ||
             date.weekday == DateTime.sunday ||
             date.isAfter(now)) {
