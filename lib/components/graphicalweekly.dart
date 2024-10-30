@@ -1,4 +1,7 @@
+// ignore_for_file: prefer_const_constructors, prefer_const_literals_to_create_immutables, unnecessary_string_interpolations, depend_on_referenced_packages
+
 import 'dart:developer';
+
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
@@ -23,19 +26,13 @@ class _GraphicalbuilerState extends State<GraphicalbuilerWeekly> {
       DateTime now = DateTime.now();
       DateTime monday = now.subtract(Duration(days: now.weekday - 1));
 
-   
-      List<DateTime> validDates = List.generate(5, (index) {
-        DateTime date = monday.add(Duration(days: index));
-        return date.isAfter(now) || date.weekday >= DateTime.saturday
-            ? null
-            : date;
-      }).whereType<DateTime>().toList(); 
+      List<DateTime> weekDates =
+          List.generate(5, (index) => monday.add(Duration(days: index)));
 
-      List<String> formattedDates = validDates.map((date) {
+      List<String> formattedDates = weekDates.map((date) {
         return DateFormat('yMMMd').format(date);
       }).toList();
 
-     
       List<Future<DocumentSnapshot>> futures =
           formattedDates.map((formattedDate) {
         return FirebaseFirestore.instance
@@ -49,14 +46,11 @@ class _GraphicalbuilerState extends State<GraphicalbuilerWeekly> {
       List<DocumentSnapshot> snapshots = await Future.wait(futures);
 
       List<Map<String, dynamic>> weeklyData = snapshots.map((doc) {
-        if (doc.exists && doc.data() != null) {
-          return Map<String, dynamic>.from(doc.data() as Map<dynamic, dynamic>);
-        } else {
-          return <String, dynamic>{};
-        }
+        return doc.exists
+            ? Map<String, dynamic>.from(doc.data() as Map)
+            : Map<String, dynamic>.from({});
       }).toList();
 
-      log("Data: $weeklyData");
       return weeklyData;
     } catch (e) {
       log('Error fetching weekly attendance: $e');
@@ -187,7 +181,6 @@ class _GraphicalbuilerState extends State<GraphicalbuilerWeekly> {
         }
       }
     }
-    log('Late count weekly: $lateCount');
     return lateCount;
   }
 
@@ -205,7 +198,6 @@ class _GraphicalbuilerState extends State<GraphicalbuilerWeekly> {
         }
       }
     }
-    log('Early count weekly: $earlyCount');
     return earlyCount;
   }
 
@@ -219,7 +211,7 @@ class _GraphicalbuilerState extends State<GraphicalbuilerWeekly> {
         absentCount++;
       }
     }
-    log('Absent count weekly: $absentCount');
+
     return absentCount;
   }
 
@@ -239,7 +231,7 @@ class _GraphicalbuilerState extends State<GraphicalbuilerWeekly> {
         }
       }
     }
-    log('OnTime count weekly: $onTimeCount');
+
     return onTimeCount;
   }
 
@@ -284,15 +276,15 @@ class _GraphicalbuilerState extends State<GraphicalbuilerWeekly> {
         future: fetchWeeklyAttendance(userId),
         builder: (context, snapshot) {
           if (snapshot.connectionState == ConnectionState.waiting) {
-            return const Padding(
-              padding: EdgeInsets.only(top: 240.0),
+            return Padding(
+              padding: const EdgeInsets.only(top: 240.0),
               child: CircularProgressIndicator(),
             );
           } else if (snapshot.hasError) {
-            return const Text('Error loading data');
+            return Text('Error loading data');
           } else if (!snapshot.hasData || snapshot.data!.isEmpty) {
-            return const Padding(
-              padding: EdgeInsets.only(top: 80.0),
+            return Padding(
+              padding: const EdgeInsets.only(top: 80.0),
               child: Text('No attendance data available'),
             );
           }
@@ -313,7 +305,7 @@ class _GraphicalbuilerState extends State<GraphicalbuilerWeekly> {
               borderRadius: BorderRadius.circular(12),
             ),
             child: Column(children: [
-              const SizedBox(
+              SizedBox(
                 height: 20,
               ),
               Container(
@@ -321,13 +313,13 @@ class _GraphicalbuilerState extends State<GraphicalbuilerWeekly> {
                 width: double.infinity,
                 decoration: BoxDecoration(
                   borderRadius: BorderRadius.circular(20),
-                  color: const Color(0xffEFF1FF),
+                  color: Color(0xffEFF1FF),
                   boxShadow: [
                     BoxShadow(
                       color: Colors.grey.withOpacity(0.2),
                       spreadRadius: 2,
                       blurRadius: 4,
-                      offset: const Offset(0, 2), // changes position of shadow
+                      offset: Offset(0, 2), // changes position of shadow
                     ),
                   ],
                 ),
@@ -337,7 +329,7 @@ class _GraphicalbuilerState extends State<GraphicalbuilerWeekly> {
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      const Text(
+                      Text(
                         'Weekly',
                         style: TextStyle(
                             fontWeight: FontWeight.w600, fontSize: 18),
@@ -347,18 +339,17 @@ class _GraphicalbuilerState extends State<GraphicalbuilerWeekly> {
                           Container(
                             height: 18,
                             width: 16,
-                            decoration:
-                                const BoxDecoration(color: Color(0xff9478F7)),
+                            decoration: BoxDecoration(color: Color(0xff9478F7)),
                           ),
-                          const SizedBox(width: 10),
-                          const Text(
+                          SizedBox(width: 10),
+                          Text(
                             'TAT (Turn Around Time)',
                             style: TextStyle(
                                 fontWeight: FontWeight.w600, fontSize: 18),
                           ),
                         ],
                       ),
-                      const SizedBox(height: 20),
+                      SizedBox(height: 20),
                       Expanded(
                         child: BarChart(
                           BarChartData(
@@ -371,7 +362,7 @@ class _GraphicalbuilerState extends State<GraphicalbuilerWeekly> {
                                   showTitles: true,
                                   getTitlesWidget: (value, meta) {
                                     return Text('${value.toInt()}H',
-                                        style: const TextStyle(
+                                        style: TextStyle(
                                             color: Colors.black,
                                             fontSize: 15,
                                             fontWeight: FontWeight.w600));
@@ -430,20 +421,20 @@ class _GraphicalbuilerState extends State<GraphicalbuilerWeekly> {
                                                 fontSize: 15,
                                                 fontWeight: FontWeight.w600));
                                       default:
-                                        return const Text('');
+                                        return Text('');
                                     }
                                   },
                                 ),
                               ),
-                              topTitles: const AxisTitles(
+                              topTitles: AxisTitles(
                                 sideTitles: SideTitles(showTitles: false),
                               ),
-                              rightTitles: const AxisTitles(
+                              rightTitles: AxisTitles(
                                 sideTitles: SideTitles(showTitles: false),
                               ),
                             ),
                             borderData: FlBorderData(show: false),
-                            gridData: const FlGridData(show: false),
+                            gridData: FlGridData(show: false),
                             barGroups: [
                               for (int day = 1; day <= 5; day++)
                                 BarChartGroupData(x: day - 1, barRods: [
@@ -451,7 +442,7 @@ class _GraphicalbuilerState extends State<GraphicalbuilerWeekly> {
                                     toY: weeklyHours[day] ?? 0,
                                     color: (weeklyHours[day] ?? 0) == 0
                                         ? Colors.red
-                                        : const Color(0xff9478F7),
+                                        : Color(0xff9478F7),
                                     width: 22,
                                     backDrawRodData:
                                         (weeklyHours[day] ?? 0) == 0
@@ -469,29 +460,29 @@ class _GraphicalbuilerState extends State<GraphicalbuilerWeekly> {
                           ),
                         ),
                       ),
-                      const SizedBox(height: 14),
+                      SizedBox(height: 14),
 
                       //----------------------dot indicators--------------------------------
                     ],
                   ),
                 ),
               ),
-              const SizedBox(
+              SizedBox(
                 height: 24,
               ),
               Container(
-                padding: const EdgeInsets.all(12),
+                padding: EdgeInsets.all(12),
                 height: 430,
                 width: double.infinity,
                 decoration: BoxDecoration(
                   borderRadius: BorderRadius.circular(20),
-                  color: const Color(0xffEFF1FF),
+                  color: Color(0xffEFF1FF),
                   boxShadow: [
                     BoxShadow(
                       color: Colors.grey.withOpacity(0.2),
                       spreadRadius: 2,
                       blurRadius: 4,
-                      offset: const Offset(0, 2),
+                      offset: Offset(0, 2),
                     ),
                   ],
                 ),
@@ -499,19 +490,19 @@ class _GraphicalbuilerState extends State<GraphicalbuilerWeekly> {
                   mainAxisAlignment: MainAxisAlignment.center,
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    const Text(
+                    Text(
                       'Weekly',
                       style: TextStyle(
                         fontSize: 20,
                         fontWeight: FontWeight.w600,
                       ),
                     ),
-                    const SizedBox(height: 20),
+                    SizedBox(height: 20),
                     pieChartData.isEmpty
-                        ? const Center(child: Text('No data available'))
+                        ? Center(child: Text('No data available'))
                         : PieChart(
                             dataMap: pieChartData,
-                            colorList: const [
+                            colorList: [
                               Color(0xff9478F7), // Present
                               Color(0xffEC5851), // Absent
                               Color(0xffF6C15B), // Late Arrival
@@ -520,7 +511,7 @@ class _GraphicalbuilerState extends State<GraphicalbuilerWeekly> {
                             ],
                             chartRadius:
                                 MediaQuery.of(context).size.width / 1.7,
-                            legendOptions: const LegendOptions(
+                            legendOptions: LegendOptions(
                               legendPosition: LegendPosition.top,
                               showLegendsInRow: true,
                               showLegends: true,
@@ -529,7 +520,7 @@ class _GraphicalbuilerState extends State<GraphicalbuilerWeekly> {
                                 fontWeight: FontWeight.bold,
                               ),
                             ),
-                            chartValuesOptions: const ChartValuesOptions(
+                            chartValuesOptions: ChartValuesOptions(
                               showChartValues: false,
                             ),
                           ),
