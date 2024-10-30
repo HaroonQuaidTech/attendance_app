@@ -26,8 +26,16 @@ class _GraphicalbuilerState extends State<GraphicalbuilerMonthly> {
       List<Future<DocumentSnapshot>> futures = [];
 
       for (int i = 1; i <= lastDayOfMonth.day; i++) {
-        String formattedDate =
-            DateFormat('yMMMd').format(DateTime(now.year, now.month, i));
+        DateTime date = DateTime(now.year, now.month, i);
+
+        // Skip weekends and future dates
+        if (date.weekday == DateTime.saturday ||
+            date.weekday == DateTime.sunday ||
+            date.isAfter(now)) {
+          continue;
+        }
+
+        String formattedDate = DateFormat('yMMMd').format(date);
         futures.add(FirebaseFirestore.instance
             .collection('AttendanceDetails')
             .doc(userId)
@@ -203,7 +211,8 @@ class _GraphicalbuilerState extends State<GraphicalbuilerMonthly> {
         absentCount++;
       }
     }
-    log("Late Count Monthly: $absentCount");
+
+    log("----Absent Count Monthly----: $absentCount");
     return absentCount;
   }
 
