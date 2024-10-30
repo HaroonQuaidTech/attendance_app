@@ -235,6 +235,19 @@ class _GraphicalbuilerState extends State<GraphicalbuilerWeekly> {
     return onTimeCount;
   }
 
+    int getPresentCount(List<dynamic> attendanceData) {
+    int presentCount = 0;
+
+    for (var record in attendanceData) {
+      if (record['checkIn'] != null) {
+        presentCount++;
+      }
+    }
+
+    log('Present count weekly: $presentCount');
+    return presentCount;
+  }
+
   Map<String, double> weeklyHoursss = {
     'Present': 0, // hours present
     'Absent': 0, // days absent
@@ -280,8 +293,8 @@ class _GraphicalbuilerState extends State<GraphicalbuilerWeekly> {
           Map<int, double> weeklyHours = calculateWeeklyHourss(snapshot.data!);
 
           Map<String, double> pieChartData = {
-            'Present': weeklyHours.values.reduce((a, b) => a + b).toDouble(),
-            'Absent': getAbsentCount(snapshot.data!) * 9.0,
+            'Present': getPresentCount(snapshot.data!).toDouble(),
+            'Absent': getAbsentCount(snapshot.data!).toDouble(),
             'Late Arrival': getLateArrivalCount(snapshot.data!).toDouble(),
             'Early Out': getEarlyOutCount(snapshot.data!).toDouble(),
             'On Time': getOnTimeCount(snapshot.data!).toDouble(),

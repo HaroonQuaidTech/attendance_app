@@ -153,7 +153,7 @@ class _GraphicalbuilerState extends State<GraphicalbuilerMonthly> {
         }
       }
     }
-    log("----Late Count Monthly----: $lateCount");
+    log("Late Count Monthly: $lateCount");
     return lateCount;
   }
 
@@ -197,30 +197,13 @@ class _GraphicalbuilerState extends State<GraphicalbuilerMonthly> {
     int absentCount = 0;
 
     for (var record in attendanceData) {
-      String? dateString = record['date'];
-      DateTime? date;
-
-      if (dateString != null && dateString.isNotEmpty) {
-        try {
-          date = DateFormat('yyyy-MM-dd').parse(dateString, true);
-        } catch (e) {
-          continue;
-        }
-      }
-
-      if (date != null &&
-          (date.weekday == DateTime.saturday ||
-              date.weekday == DateTime.sunday)) {
-        continue;
-      }
-
-      if ((record['checkIn'] == null || record['checkIn'] == '') &&
-          (record['checkOut'] == null || record['checkOut'] == '')) {
+      if (record['checkIn'] == null ||
+          (record['status'] != null &&
+              record['status'].toString().toLowerCase() == 'absent')) {
         absentCount++;
       }
     }
-
-    log("----Absent Count Monthly----: $absentCount");
+    log("Late Count Monthly: $absentCount");
     return absentCount;
   }
 
