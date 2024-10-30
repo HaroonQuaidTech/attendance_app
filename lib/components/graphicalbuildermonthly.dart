@@ -178,7 +178,7 @@ class _GraphicalbuilerState extends State<GraphicalbuilerMonthly> {
         }
       }
     }
-
+    log("Early Count Monthly: $earlyCount");
     return earlyCount;
   }
 
@@ -197,7 +197,7 @@ class _GraphicalbuilerState extends State<GraphicalbuilerMonthly> {
         }
       }
     }
-
+    log("OnTime Count Monthly: $onTimeCount");
     return onTimeCount;
   }
 
@@ -212,7 +212,7 @@ class _GraphicalbuilerState extends State<GraphicalbuilerMonthly> {
       }
     }
 
-    log("----Absent Count Monthly----: $absentCount");
+    log("Absent Count Monthly: $absentCount");
     return absentCount;
   }
 
