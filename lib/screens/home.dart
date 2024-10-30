@@ -166,16 +166,31 @@ class _HomeScreenState extends State<HomeScreen> {
   Future<void> _loadUserProfile() async {
     final user = _auth.currentUser;
     if (user != null) {
-      final docSnapshot = await FirebaseFirestore.instance
-          .collection('Users')
-          .doc(user.uid)
-          .get();
+      int retries = 3;
+      int delay = 1000;
 
-      if (docSnapshot.exists) {
-        final data = docSnapshot.data()!;
-        setState(() {
-          _imageUrl = data['profileImageUrl'];
-        });
+      for (int i = 0; i < retries; i++) {
+        try {
+          final docSnapshot = await FirebaseFirestore.instance
+              .collection('Users')
+              .doc(user.uid)
+              .get();
+
+          if (docSnapshot.exists) {
+            final data = docSnapshot.data()!;
+            setState(() {
+              _imageUrl = data['profileImageUrl'];
+            });
+          }
+          return;
+        } on FirebaseException catch (e) {
+          if (e.code == 'unavailable' && i < retries - 1) {
+            await Future.delayed(Duration(milliseconds: delay));
+            delay *= 2;
+          } else {
+            rethrow;
+          }
+        }
       }
     }
   }

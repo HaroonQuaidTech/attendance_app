@@ -201,7 +201,11 @@ class _GraphicalbuilerState extends State<GraphicalbuilerMonthly> {
       DateTime? date;
 
       if (dateString != null && dateString.isNotEmpty) {
-        date = DateFormat('yyyy-MM-dd').parse(dateString, true);
+        try {
+          date = DateFormat('yyyy-MM-dd').parse(dateString, true);
+        } catch (e) {
+          continue;
+        }
       }
 
       if (date != null &&
