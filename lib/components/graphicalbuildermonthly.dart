@@ -26,8 +26,16 @@ class _GraphicalbuilerState extends State<GraphicalbuilerMonthly> {
       List<Future<DocumentSnapshot>> futures = [];
 
       for (int i = 1; i <= lastDayOfMonth.day; i++) {
-        String formattedDate =
-            DateFormat('yMMMd').format(DateTime(now.year, now.month, i));
+        DateTime date = DateTime(now.year, now.month, i);
+
+        // Skip weekends and future dates
+        if (date.weekday == DateTime.saturday ||
+            date.weekday == DateTime.sunday ||
+            date.isAfter(now)) {
+          continue;
+        }
+
+        String formattedDate = DateFormat('yMMMd').format(date);
         futures.add(FirebaseFirestore.instance
             .collection('AttendanceDetails')
             .doc(userId)
@@ -197,30 +205,13 @@ class _GraphicalbuilerState extends State<GraphicalbuilerMonthly> {
     int absentCount = 0;
 
     for (var record in attendanceData) {
-      String? dateString = record['date'];
-      DateTime? date;
-
-      if (dateString != null && dateString.isNotEmpty) {
-        try {
-          date = DateFormat('yyyy-MM-dd').parse(dateString, true);
-        } catch (e) {
-          continue;
-        }
-      }
-
-      if (date != null &&
-          (date.weekday == DateTime.saturday ||
-              date.weekday == DateTime.sunday)) {
-        continue;
-      }
-
-      if ((record['checkIn'] == null || record['checkIn'] == '') &&
-          (record['checkOut'] == null || record['checkOut'] == '')) {
+      if (record['checkIn'] == null ||
+          (record['status'] != null &&
+              record['status'].toString().toLowerCase() == 'absent')) {
         absentCount++;
       }
     }
-
-    log("----Absent Count Monthly----: $absentCount");
+    log("Absent Count Monthly: $absentCount");
     return absentCount;
   }
 
