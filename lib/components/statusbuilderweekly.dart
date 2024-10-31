@@ -14,6 +14,7 @@ class StatusBuilderWeekly extends StatefulWidget {
 
 class _StatusBuilerState extends State<StatusBuilderWeekly> {
   final String userId = FirebaseAuth.instance.currentUser!.uid;
+
   Future<List<Map<String, dynamic>?>> _getAttendanceDetails(String uid) async {
     List<Map<String, dynamic>?> attendanceList = [];
     final now = DateTime.now();
@@ -489,6 +490,7 @@ class _StatusBuilerState extends State<StatusBuilderWeekly> {
     final endOfWeek = startOfWeek.add(const Duration(days: 4));
     final String startFormatted = DateFormat('dd MMM').format(startOfWeek);
     final String endFormatted = DateFormat('dd MMM').format(endOfWeek);
+    double containerHeight;
 
     return Padding(
         padding: const EdgeInsets.only(top: 20.0),
@@ -648,7 +650,12 @@ class _StatusBuilerState extends State<StatusBuilderWeekly> {
           const SizedBox(height: 20),
           Container(
             padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 12),
-            height: MediaQuery.of(context).size.height * 0.67,
+            height: (MediaQuery.of(context).size.height < 600)
+                ? MediaQuery.of(context).size.height * 0.6 // for small screens
+                : (MediaQuery.of(context).size.height < 800)
+                    ? MediaQuery.of(context).size.height *
+                        0.65 // for medium screens
+                    : MediaQuery.of(context).size.height * 0.7,
             width: double.infinity,
             decoration: BoxDecoration(
               borderRadius: BorderRadius.circular(20),
