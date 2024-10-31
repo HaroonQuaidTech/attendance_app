@@ -1,5 +1,6 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class Splashscreen extends StatefulWidget {
   const Splashscreen({super.key});
@@ -12,9 +13,12 @@ class _SplashscreenState extends State<Splashscreen> {
   void _checkUserLogin() async {
     await Future.delayed(const Duration(seconds: 3));
 
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    bool rememberMe = prefs.getBool('rememberMe') ?? false;
+
     User? user = FirebaseAuth.instance.currentUser;
 
-    if (user != null) {
+    if (user != null && rememberMe) {
       Navigator.pushReplacementNamed(context, 'home');
     } else {
       Navigator.pushReplacementNamed(context, 'login');

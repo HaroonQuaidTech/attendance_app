@@ -3,6 +3,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:quaidtech/screens/home.dart';
 import 'package:quaidtech/screens/signup.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 typedef CloseCallback = Function();
 
@@ -34,7 +35,6 @@ class _LoginScreenState extends State<LoginScreen> {
     String email = _emailController.text;
     String password = _passwordController.text;
 
-    // Show loading indicator
     showDialog(
       context: context,
       barrierDismissible: false,
@@ -46,10 +46,13 @@ class _LoginScreenState extends State<LoginScreen> {
     );
 
     try {
-      // Try signing in
       final userCredential = await FirebaseAuth.instance
           .signInWithEmailAndPassword(email: email, password: password);
       log(userCredential.toString());
+
+      // Save the remember me preference
+      SharedPreferences prefs = await SharedPreferences.getInstance();
+      await prefs.setBool('rememberMe', _isCheck);
 
       _showAlertDialog(
         title: 'Success',
@@ -97,66 +100,63 @@ class _LoginScreenState extends State<LoginScreen> {
             closeCallback();
           }
         });
-        return PopScope(
-          canPop: false,
-          child: Dialog(
-            shape: RoundedRectangleBorder(
-              borderRadius: BorderRadius.circular(12),
-            ),
-            child: Column(
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                Container(
-                  height: 10,
-                  decoration: const BoxDecoration(
-                    gradient: LinearGradient(
-                      colors: [
-                        Color(0xff4D3D79),
-                        Color(0xff8E71DF),
-                      ],
-                      begin: Alignment.centerLeft,
-                      end: Alignment.centerRight,
-                    ),
-                    borderRadius: BorderRadius.vertical(
-                      top: Radius.circular(12),
-                    ),
-                  ),
-                ),
-                Container(
-                  padding: const EdgeInsets.all(20),
-                  child: Column(
-                    mainAxisSize: MainAxisSize.min,
-                    children: [
-                      Image.asset(
-                        image,
-                        width: 50,
-                        height: 50,
-                      ),
-                      const SizedBox(height: 20),
-                      Text(
-                        title,
-                        style: const TextStyle(
-                          fontSize: 18,
-                          fontWeight: FontWeight.bold,
-                          height: 0,
-                        ),
-                        textAlign: TextAlign.center,
-                      ),
-                      const SizedBox(height: 10),
-                      Text(
-                        message,
-                        style: const TextStyle(
-                          fontSize: 14,
-                          color: Colors.grey,
-                          height: 0,
-                        ),
-                        textAlign: TextAlign.center,
-                      ),
+        return Dialog(
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(12),
+          ),
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              Container(
+                height: 10,
+                decoration: const BoxDecoration(
+                  gradient: LinearGradient(
+                    colors: [
+                      Color(0xff4D3D79),
+                      Color(0xff8E71DF),
                     ],
+                    begin: Alignment.centerLeft,
+                    end: Alignment.centerRight,
+                  ),
+                  borderRadius: BorderRadius.vertical(
+                    top: Radius.circular(12),
                   ),
                 ),
-              ],
-            ),
+              ),
+              Container(
+                padding: const EdgeInsets.all(20),
+                child: Column(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    Image.asset(
+                      image,
+                      width: 50,
+                      height: 50,
+                    ),
+                    const SizedBox(height: 20),
+                    Text(
+                      title,
+                      style: const TextStyle(
+                        fontSize: 18,
+                        fontWeight: FontWeight.bold,
+                        height: 0,
+                      ),
+                      textAlign: TextAlign.center,
+                    ),
+                    const SizedBox(height: 10),
+                    Text(
+                      message,
+                      style: const TextStyle(
+                        fontSize: 14,
+                        color: Colors.grey,
+                        height: 0,
+                      ),
+                      textAlign: TextAlign.center,
+                    ),
+                  ],
+                ),
+              ),
+            ],
           ),
         );
       },
