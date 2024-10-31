@@ -44,17 +44,31 @@ class _HomeScreenState extends State<HomeScreen> {
   Future<Map<String, dynamic>?> _getAttendanceDetails(
       String uid, DateTime day) async {
     String formattedDate = DateFormat('yMMMd').format(day);
+    int retries = 3;
+    int delayMilliseconds = 500; // Initial delay time for backoff
 
-    final DocumentSnapshot<Map<String, dynamic>> snapshot =
-        await FirebaseFirestore.instance
-            .collection('AttendanceDetails')
-            .doc(userId)
-            .collection('dailyattendance')
-            .doc(formattedDate)
-            .get();
+    for (int attempt = 0; attempt < retries; attempt++) {
+      try {
+        final DocumentSnapshot<Map<String, dynamic>> snapshot =
+            await FirebaseFirestore.instance
+                .collection('AttendanceDetails')
+                .doc(uid)
+                .collection('dailyattendance')
+                .doc(formattedDate)
+                .get();
 
-    if (snapshot.exists) {
-      return snapshot.data();
+        if (snapshot.exists) {
+          return snapshot.data();
+        }
+        return null;
+      } on FirebaseException catch (e) {
+        if (e.code == 'unavailable' && attempt < retries - 1) {
+          await Future.delayed(Duration(milliseconds: delayMilliseconds));
+          delayMilliseconds *= 2; // Exponential backoff
+        } else {
+          rethrow;
+        }
+      }
     }
     return null;
   }

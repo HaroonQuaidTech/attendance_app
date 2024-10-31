@@ -647,8 +647,8 @@ class _StatusBuilerState extends State<StatusBuilderWeekly> {
               }),
           const SizedBox(height: 20),
           Container(
-            padding: const EdgeInsets.all(12),
-            height: MediaQuery.of(context).size.height * 0.68,
+            padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 12),
+            height: MediaQuery.of(context).size.height * 0.67,
             width: double.infinity,
             decoration: BoxDecoration(
               borderRadius: BorderRadius.circular(20),
@@ -672,7 +672,6 @@ class _StatusBuilerState extends State<StatusBuilderWeekly> {
                 ),
                 const SizedBox(height: 10),
                 _buildAttendance(color: const Color(0xff9478F7), data: []),
-                const SizedBox(height: 10),
               ],
             ),
           ),
