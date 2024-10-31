@@ -490,7 +490,6 @@ class _StatusBuilerState extends State<StatusBuilderWeekly> {
     final endOfWeek = startOfWeek.add(const Duration(days: 4));
     final String startFormatted = DateFormat('dd MMM').format(startOfWeek);
     final String endFormatted = DateFormat('dd MMM').format(endOfWeek);
-    double containerHeight;
 
     return Padding(
         padding: const EdgeInsets.only(top: 20.0),
