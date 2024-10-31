@@ -9,9 +9,7 @@ import 'package:intl/intl.dart';
 typedef CloseCallback = Function();
 
 class AttendanceService {
-  final FirebaseFirestore _firestore = FirebaseFirestore.instance;
-
-  Future<void> checkIn(BuildContext context, String userId) async {
+  Future<void> checkin(BuildContext context, String userId) async {
     showDialog(
       context: context,
       barrierDismissible: false,
@@ -21,21 +19,19 @@ class AttendanceService {
         );
       },
     );
+
     try {
       Timestamp checkInTime = Timestamp.now();
       DateTime now = DateTime.now();
-
       String formattedDate = DateFormat('yMMMd').format(now);
 
-      await _firestore
+      await FirebaseFirestore.instance
           .collection("AttendanceDetails")
           .doc(userId)
           .collection("dailyattendance")
           .doc(formattedDate)
-          .set({
+          .update({
         'checkIn': checkInTime,
-        'checkOut': null,
-        'userId': userId,
       });
 
       _showAlertDialog(
@@ -473,7 +469,6 @@ class _CheckinScreenState extends State<CheckinScreen> {
                           desiredAccuracy: LocationAccuracy.high,
                         );
 
-                        // Target coordinates
                         double targetLatitude = 33.6084548;
                         double targetLongitude = 73.0171062;
 
@@ -484,14 +479,7 @@ class _CheckinScreenState extends State<CheckinScreen> {
                           targetLongitude,
                         );
 
-                        // ignore: use_build_context_synchronously
-                        await _attendanceService.checkIn(context, userId);
-
-                        if (mounted) {
-                          // ignore: use_build_context_synchronously
-                          Navigator.of(context).pop(true);
-                          CloseCallback;
-                        }
+                        await _attendanceService.checkOut(context, userId);
                       },
                       child: Stack(
                         alignment: Alignment.center,
@@ -532,7 +520,7 @@ class _CheckinScreenState extends State<CheckinScreen> {
                                   color: const Color(0xff7647EB), width: 2),
                             ),
                           ),
-                          // Inner Circle with Icon and Text
+
                           Container(
                             width: 115,
                             height: 115,
@@ -668,7 +656,6 @@ class _CheckinScreenState extends State<CheckinScreen> {
                                                       LocationAccuracy.high,
                                                 );
 
-                                                // Target coordinates
                                                 double targetLatitude =
                                                     33.6084548;
                                                 double targetLongitude =
@@ -681,10 +668,8 @@ class _CheckinScreenState extends State<CheckinScreen> {
                                                   targetLongitude,
                                                 );
 
-                                                await _attendanceService.checkOut(
-                                                    // ignore: use_build_context_synchronously
-                                                    context,
-                                                    userId);
+                                                await _attendanceService
+                                                    .checkOut(context, userId);
                                               },
                                               child: Container(
                                                 width: 110,
