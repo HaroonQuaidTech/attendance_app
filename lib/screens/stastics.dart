@@ -1,5 +1,3 @@
-// ignore_for_file: prefer_const_constructors, prefer_const_literals_to_create_immutables
-
 import 'package:flutter/material.dart';
 import 'package:quaidtech/components/graphicalbuildermonthly.dart';
 import 'package:quaidtech/components/graphicalweekly.dart';
@@ -24,10 +22,7 @@ class _StatsticsScreenState extends State<StatsticsScreen> {
   String dropdownValue2 = 'Select';
   String dropdownValue3 = 'Select Month';
   String dropdownValue4 = 'Select Year';
-
   int _selectedIndex = 0;
-
-//----------------------------------------------------------------------------
 
   Widget _buildWeeklyAttendance(
     String text,
@@ -58,7 +53,6 @@ class _StatsticsScreenState extends State<StatsticsScreen> {
             ),
           ),
           const SizedBox(height: 10),
-          //----------------------------------------
           WeeklyAttendance(
             color: color,
             dropdownValue2: dropdownValue2,
@@ -69,29 +63,26 @@ class _StatsticsScreenState extends State<StatsticsScreen> {
   Widget _buildMonthlyAttendance(
       String text, Color color, String dropdownValue2) {
     return Container(
-        padding: EdgeInsets.all(12),
+        padding: const EdgeInsets.all(12),
         width: double.infinity,
         decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(20),
-          color: Color(0xffEFF1FF),
+          color: const Color(0xffEFF1FF),
           boxShadow: [
             BoxShadow(
               color: Colors.grey.withOpacity(0.2),
               spreadRadius: 2,
               blurRadius: 4,
-              offset: Offset(0, 2), // changes position of shadow
+              offset: const Offset(0, 2),
             ),
           ],
         ),
         child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
           Text(
             text,
-            style: TextStyle(fontWeight: FontWeight.w600, fontSize: 18),
+            style: const TextStyle(fontWeight: FontWeight.w600, fontSize: 18),
           ),
-          SizedBox(
-            height: 10,
-          ),
-          //----------------------------------------
+          const SizedBox(height: 10),
           MonthlyAttendance(
             color: color,
             dropdownValue2: dropdownValue2,
@@ -137,26 +128,26 @@ class _StatsticsScreenState extends State<StatsticsScreen> {
     switch (dropdownValue2) {
       case 'Late Arrival':
         detailsType = 'Late Arrival Details';
-        detailsColor = Color(0xffF6C15B);
+        detailsColor = const Color(0xffF6C15B);
         break;
       case 'Absent':
         detailsType = 'Absent Details';
-        detailsColor = Color(0xffEC5851);
+        detailsColor = const Color(0xffEC5851);
         break;
       case 'On Time':
         detailsType = 'On Time Details';
-        detailsColor = Color(0xff22AF41);
+        detailsColor = const Color(0xff22AF41);
         break;
       case 'Early Out':
         detailsType = 'Early Out Details';
-        detailsColor = Color(0xffF07E25);
+        detailsColor = const Color(0xffF07E25);
         break;
       case 'Present':
         detailsType = 'Present Details';
-        detailsColor = Color(0xff8E71DF);
+        detailsColor = const Color(0xff8E71DF);
         break;
       default:
-        return SizedBox.shrink();
+        return const SizedBox.shrink();
     }
 
     return isWeekly
@@ -247,8 +238,6 @@ class _StatsticsScreenState extends State<StatsticsScreen> {
                 ),
               ),
               const SizedBox(height: 20),
-
-              //-----------------------------Filter container-------------------------------------------
               Expanded(
                 child: SingleChildScrollView(
                   child: Column(
@@ -265,8 +254,7 @@ class _StatsticsScreenState extends State<StatsticsScreen> {
                                 color: Colors.grey.withOpacity(0.2),
                                 spreadRadius: 2,
                                 blurRadius: 4,
-                                offset: const Offset(
-                                    0, 2), // changes position of shadow
+                                offset: const Offset(0, 2),
                               ),
                             ],
                           ),
@@ -287,7 +275,6 @@ class _StatsticsScreenState extends State<StatsticsScreen> {
                                     mainAxisAlignment:
                                         MainAxisAlignment.spaceBetween,
                                     children: [
-                                      // First Dropdown
                                       Expanded(
                                         child: Container(
                                           height: 50,
@@ -328,7 +315,6 @@ class _StatsticsScreenState extends State<StatsticsScreen> {
                                         ),
                                       ),
                                       const SizedBox(width: 16),
-                                      // Second Dropdown
                                       Expanded(
                                         child: Container(
                                           height: 50,
@@ -377,15 +363,13 @@ class _StatsticsScreenState extends State<StatsticsScreen> {
                                 ]),
                           ),
                         ),
-
-                      SizedBox(
+                      const SizedBox(
                         height: 20,
                       ),
                       Padding(
                         padding: const EdgeInsets.only(top: 20.0),
                         child: Column(
                           children: [
-                            // Check for Weekly or Monthly Attendance
                             if (_selectedIndex != 1)
                               if (dropdownValue1 == 'Weekly') ...[
                                 _buildAttendanceBasedOnSelection(dropdownValue2,
@@ -397,8 +381,6 @@ class _StatsticsScreenState extends State<StatsticsScreen> {
                           ],
                         ),
                       ),
-
-                      //------------------------------------ygrt----------------------------------------------------
                       if (dropdownValue2 != 'Present' &&
                           dropdownValue2 != 'On Time' &&
                           dropdownValue2 != 'Absent' &&
@@ -415,8 +397,7 @@ class _StatsticsScreenState extends State<StatsticsScreen> {
                                 color: Colors.grey.withOpacity(0.2),
                                 spreadRadius: 2,
                                 blurRadius: 4,
-                                offset: const Offset(
-                                    0, 2), // changes position of shadow
+                                offset: const Offset(0, 2),
                               ),
                             ],
                           ),
@@ -427,7 +408,6 @@ class _StatsticsScreenState extends State<StatsticsScreen> {
                             ],
                           ),
                         ),
-
                       if (dropdownValue2 != 'Present' &&
                           dropdownValue2 != 'On Time' &&
                           dropdownValue2 != 'Absent' &&
@@ -442,11 +422,10 @@ class _StatsticsScreenState extends State<StatsticsScreen> {
                           dropdownValue2 != 'Late Arrival')
                         if (dropdownValue1 == 'Monthly' && _selectedIndex == 0)
                           const StatusBuiler(),
-
                       if (dropdownValue1 == 'Weekly' && _selectedIndex == 1)
-                        GraphicalbuilerWeekly(),
+                        const GraphicalbuilerWeekly(),
                       if (dropdownValue1 == 'Monthly' && _selectedIndex == 1)
-                        GraphicalbuilerMonthly()
+                        const GraphicalbuilerMonthly()
                     ],
                   ),
                 ),

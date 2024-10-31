@@ -835,10 +835,10 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                       }
                                     },
                                     child: Container(
-                                      width: screenWidth * 0.3,
+                                      width: screenWidth * 0.4,
                                       height: screenHeight * 0.055,
                                       decoration: BoxDecoration(
-                                        color: const Color(0xffECECEC),
+                                        color: Colors.grey[400],
                                         borderRadius: BorderRadius.circular(8),
                                       ),
                                       child: const Center(
@@ -857,7 +857,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                       _passwordController.text,
                                     ),
                                     child: Container(
-                                      width: screenWidth * 0.3,
+                                      width: screenWidth * 0.4,
                                       height: screenHeight * 0.055,
                                       decoration: BoxDecoration(
                                         color: const Color(0xff7647EB),
