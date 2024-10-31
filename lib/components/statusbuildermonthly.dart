@@ -377,7 +377,11 @@ class _StatusBuilerState extends State<StatusBuiler> {
           );
         }
         if (snapshot.hasError) {
-          return Center(child: Text('Error Something went wrong Check Your Internet Connection',style: TextStyle(color: Colors.red),));
+          return Center(
+              child: Text(
+            'Error Something went wrong Check Your Internet Connection',
+            style: TextStyle(color: Colors.red),
+          ));
         }
 
         if (!snapshot.hasData || snapshot.data == null) {
@@ -440,47 +444,52 @@ class _StatusBuilerState extends State<StatusBuiler> {
     );
   }
 
-Color _determineContainerColor(DateTime? checkIn, DateTime? checkOut) {
-  if (checkIn != null) {
-    final TimeOfDay checkInTime = TimeOfDay.fromDateTime(checkIn);
-    final TimeOfDay earlyOnTime = TimeOfDay(hour: 7, minute: 50);
-    final TimeOfDay lateOnTime = TimeOfDay(hour: 8, minute: 10);
-    final TimeOfDay exactCheckIn = TimeOfDay(hour: 8, minute: 0);
-    final TimeOfDay lateArrival = TimeOfDay(hour: 8, minute: 10);
+  Color _determineContainerColor(DateTime? checkIn, DateTime? checkOut) {
+    if (checkIn != null) {
+      final TimeOfDay checkInTime = TimeOfDay.fromDateTime(checkIn);
+      final TimeOfDay earlyOnTime = TimeOfDay(hour: 7, minute: 50);
+      final TimeOfDay lateOnTime = TimeOfDay(hour: 8, minute: 10);
+      final TimeOfDay exactCheckIn = TimeOfDay(hour: 8, minute: 0);
+      final TimeOfDay lateArrival = TimeOfDay(hour: 8, minute: 10);
 
-    // On Time (between 7:50 AM and 8:10 AM)
-    if ((checkInTime.hour == earlyOnTime.hour && checkInTime.minute >= earlyOnTime.minute) ||
-        (checkInTime.hour == lateOnTime.hour && checkInTime.minute <= lateOnTime.minute) ||
-        (checkInTime.hour > earlyOnTime.hour && checkInTime.hour < lateOnTime.hour)) {
-      return Color(0xff22AF41); // On Time (Green)
+      // On Time (between 7:50 AM and 8:10 AM)
+      if ((checkInTime.hour == earlyOnTime.hour &&
+              checkInTime.minute >= earlyOnTime.minute) ||
+          (checkInTime.hour == lateOnTime.hour &&
+              checkInTime.minute <= lateOnTime.minute) ||
+          (checkInTime.hour > earlyOnTime.hour &&
+              checkInTime.hour < lateOnTime.hour)) {
+        return Color(0xff22AF41); // On Time (Green)
+      }
+      // Late Arrival (after 8:10 AM)
+      else if (checkInTime.hour > lateArrival.hour ||
+          (checkInTime.hour == lateArrival.hour &&
+              checkInTime.minute > lateArrival.minute)) {
+        return Color(0xffF6C15B); // Late (Orange)
+      }
+      // Exactly at 8:00 AM
+      else if (checkInTime.hour == exactCheckIn.hour &&
+          checkInTime.minute == exactCheckIn.minute) {
+        return Color(0xff8E71DF); // Check-in at 8 AM (Purple)
+      }
     }
-    // Late Arrival (after 8:10 AM)
-    else if (checkInTime.hour > lateArrival.hour ||
-        (checkInTime.hour == lateArrival.hour && checkInTime.minute > lateArrival.minute)) {
-      return Color(0xffF6C15B); // Late (Orange)
+
+    if (checkOut != null) {
+      final TimeOfDay checkOutTime = TimeOfDay.fromDateTime(checkOut);
+      final TimeOfDay earlyCheckout = TimeOfDay(hour: 17, minute: 0);
+
+      // Early Check-Out (before 5:00 PM)
+      if (checkOutTime.hour < earlyCheckout.hour ||
+          (checkOutTime.hour == earlyCheckout.hour &&
+              checkOutTime.minute < earlyCheckout.minute)) {
+        return Color.fromARGB(255, 223, 103, 11); // Early Check-Out (Maroon)
+      }
     }
-    // Exactly at 8:00 AM
-    else if (checkInTime.hour == exactCheckIn.hour && checkInTime.minute == exactCheckIn.minute) {
-      return Color(0xff8E71DF); // Check-in at 8 AM (Purple)
-    }
+
+    // If neither check-in nor check-out is recorded, consider the user present
+
+    return Color(0xff8E71DF); // Default Color
   }
-
-  if (checkOut != null) {
-    final TimeOfDay checkOutTime = TimeOfDay.fromDateTime(checkOut);
-    final TimeOfDay earlyCheckout = TimeOfDay(hour: 17, minute: 0);
-
-    // Early Check-Out (before 5:00 PM)
-    if (checkOutTime.hour < earlyCheckout.hour ||
-        (checkOutTime.hour == earlyCheckout.hour && checkOutTime.minute < earlyCheckout.minute)) {
-      return Color.fromARGB(255, 223, 103, 11); // Early Check-Out (Maroon)
-    }
-  }
-
-  // If neither check-in nor check-out is recorded, consider the user present
-
-
-  return Color(0xff8E71DF); // Default Color
-}
 
   Widget _buildAttendanceRow({
     required String formattedDate,
@@ -750,7 +759,11 @@ Color _determineContainerColor(DateTime? checkIn, DateTime? checkOut) {
           ),
           Container(
             padding: EdgeInsets.all(12),
-            height: MediaQuery.of(context).size.height * 3.66,
+            height: (screenHeight < 600)
+                ? screenHeight * 0.6 * 3.66 // for small screens
+                : (screenHeight < 800)
+                    ? screenHeight * 0.65 * 3.66 // for medium screens
+                    : screenHeight * 0.7 * 3.66, // for large screens
             decoration: BoxDecoration(
               borderRadius: BorderRadius.circular(20),
               color: Color(0xffEFF1FF),
