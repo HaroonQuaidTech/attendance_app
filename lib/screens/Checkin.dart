@@ -9,7 +9,7 @@ import 'package:intl/intl.dart';
 typedef CloseCallback = Function();
 
 class AttendanceService {
-  Future<void> checkin(BuildContext context, String userId) async {
+  Future<void> checkIn(BuildContext context, String userId) async {
     showDialog(
       context: context,
       barrierDismissible: false,
@@ -19,10 +19,10 @@ class AttendanceService {
         );
       },
     );
-
     try {
       Timestamp checkInTime = Timestamp.now();
       DateTime now = DateTime.now();
+
       String formattedDate = DateFormat('yMMMd').format(now);
 
       await FirebaseFirestore.instance
@@ -30,8 +30,10 @@ class AttendanceService {
           .doc(userId)
           .collection("dailyattendance")
           .doc(formattedDate)
-          .update({
+          .set({
         'checkIn': checkInTime,
+        'checkOut': null,
+        'userId': userId,
       });
 
       _showAlertDialog(
@@ -479,7 +481,7 @@ class _CheckinScreenState extends State<CheckinScreen> {
                           targetLongitude,
                         );
 
-                        await _attendanceService.checkOut(context, userId);
+                        await _attendanceService.checkIn(context, userId);
                       },
                       child: Stack(
                         alignment: Alignment.center,
