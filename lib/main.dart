@@ -1,5 +1,3 @@
-// ignore_for_file: library_private_types_in_public_api, use_key_in_widget_constructors
-
 import 'package:flutter/material.dart';
 import 'package:quaidtech/screens/Checkin.dart';
 import 'package:quaidtech/screens/home.dart';
@@ -17,12 +15,14 @@ void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp();
 
-  runApp(MyApp());
+  runApp(const MyApp());
 }
 
 class MyApp extends StatefulWidget {
+  const MyApp({super.key});
+
   @override
-  _MyAppState createState() => _MyAppState();
+  State<MyApp> createState() => _MyAppState();
 }
 
 class _MyAppState extends State<MyApp> {
