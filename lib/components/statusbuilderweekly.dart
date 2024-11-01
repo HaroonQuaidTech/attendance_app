@@ -497,17 +497,30 @@ class _StatusBuilerState extends State<StatusBuilderWeekly> {
           FutureBuilder(
               future: _getAttendanceDetails(userId),
               builder: (context, snapshot) {
+                if (snapshot.connectionState == ConnectionState.waiting) {
+                  return const Center(
+                    child: CircularProgressIndicator(),
+                  );
+                }
+
                 if (snapshot.hasError) {
                   return const Center(
-                      child: Text(
-                    'Error Something went wrong Check Your Internet Connection',
-                    style: TextStyle(color: Colors.red),
-                  ));
+                    child: Text(
+                      'Error: Something went wrong. Check Your Internet Connection.',
+                      style: TextStyle(color: Colors.red),
+                    ),
+                  );
                 }
 
                 if (!snapshot.hasData || snapshot.data == null) {
-                  return const Center(child: Text('.'));
+                  return const Center(
+                    child: Text(
+                      'No Data Available',
+                      style: TextStyle(color: Colors.grey),
+                    ),
+                  );
                 }
+
                 final weeklyData = snapshot.data!;
 
                 final totalTime = _calculateWeeklyMins(weeklyData);

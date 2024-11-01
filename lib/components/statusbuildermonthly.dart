@@ -604,7 +604,7 @@ class _StatusBuilerState extends State<StatusBuiler> {
                 }
 
                 if (!snapshot.hasData || snapshot.data == null) {
-                  return Center(child: Text('.'));
+                  return Center(child: CircularProgressIndicator());
                 }
                 final List<Map<String, dynamic>?> allData = snapshot.data ?? [];
 
@@ -760,10 +760,10 @@ class _StatusBuilerState extends State<StatusBuiler> {
           Container(
             padding: EdgeInsets.all(12),
             height: (screenHeight < 600)
-                ? screenHeight * 0.6 * 3.66 // for small screens
+                ? screenHeight * 3.66 // for small screens
                 : (screenHeight < 800)
-                    ? screenHeight * 0.65 * 3.66 // for medium screens
-                    : screenHeight * 0.7 * 3.66, // for large screens
+                    ? screenHeight * 3.9 // for medium screens
+                    : screenHeight * 4.2, // for large screens
             decoration: BoxDecoration(
               borderRadius: BorderRadius.circular(20),
               color: Color(0xffEFF1FF),
