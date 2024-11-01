@@ -18,26 +18,14 @@ class _StatusBuilerState extends State<StatusBuiler> {
   Future<List<Map<String, dynamic>?>> _getMonthlyAttendanceDetails(
       String uid) async {
     List<Map<String, dynamic>?> monthlyAttendanceList = [];
-
     final now = DateTime.now();
-
-    // Get the first and last day of the current month
     final firstDayOfMonth = DateTime(now.year, now.month, 1);
     final lastDayOfMonth = DateTime(now.year, now.month + 1, 0);
-
-    // Loop through each day of the current month
     for (int i = 0;
         i <= lastDayOfMonth.difference(firstDayOfMonth).inDays;
         i++) {
       final date = firstDayOfMonth.add(Duration(days: i));
-
-      // Skip weekends (Saturdays and Sundays)
-
       final formattedDate = DateFormat('yMMMd').format(date);
-
-      // Fetch attendance data for the day
-
-      // Fetch attendance data for the day
       final DocumentSnapshot<Map<String, dynamic>> snapshot =
           await FirebaseFirestore.instance
               .collection('AttendanceDetails')
@@ -48,23 +36,19 @@ class _StatusBuilerState extends State<StatusBuiler> {
 
       if (snapshot.exists) {
         final data = snapshot.data();
-
-        // Check if the user has checked in, if not mark it as empty attendance
         final checkIn = (data?['checkIn'] as Timestamp?)?.toDate();
         if (checkIn == null) {
           monthlyAttendanceList.add({
             'date': formattedDate,
-            'status': 'Absent', // or handle it as you need
+            'status': 'Absent',
           });
         } else {
-          // If check-in exists, add the attendance data
           monthlyAttendanceList.add(data);
         }
       } else {
-        // If no data exists for the day, mark it as absent (or empty)
         monthlyAttendanceList.add({
           'date': formattedDate,
-          'status': 'Absent', // Handle missing attendance as 'Absent'
+          'status': 'Absent',
         });
       }
     }
@@ -74,8 +58,6 @@ class _StatusBuilerState extends State<StatusBuiler> {
 
   Future<Map<String, dynamic>> _getMonthlyData(String userId) async {
     final attendanceData = await _getMonthlyAttendanceDetails(userId);
-    // Fetch any other data you need here (like total hours or any other metrics)
-    // For example:
     final totalHoursData = _calculateMonthlyTotal(attendanceData);
     return {
       'attendanceData': attendanceData,
@@ -93,14 +75,11 @@ class _StatusBuilerState extends State<StatusBuiler> {
     if (checkIn == null || checkOut == null) {
       return "00:00";
     }
-
     Duration duration = checkOut.difference(checkIn);
     int hours = duration.inHours;
     int minutes = duration.inMinutes.remainder(60);
-
     final String formattedHours = hours.toString().padLeft(2, '0');
     final String formattedMinutes = minutes.toString().padLeft(2, '0');
-
     return '$formattedHours:$formattedMinutes';
   }
 
@@ -121,7 +100,6 @@ class _StatusBuilerState extends State<StatusBuiler> {
     return totalMinutes;
   }
 
-
   double _calculateMonthlyHours(List<Map<String, dynamic>?> monthlyData) {
     int totalMinutes = 0;
 
@@ -140,16 +118,12 @@ class _StatusBuilerState extends State<StatusBuiler> {
     return totalHours;
   }
 
-//-------------------------1
   Widget _buildEmptyAttendanceContainer(
     int index,
   ) {
     final DateTime now = DateTime.now();
-
     final DateTime firstDayOfMonth = DateTime(now.year, now.month, 1);
-
     final DateTime date = firstDayOfMonth.add(Duration(days: index));
-
     final String day = DateFormat('EE').format(date);
     final String formattedDate = DateFormat('dd').format(date);
 
@@ -212,11 +186,8 @@ class _StatusBuilerState extends State<StatusBuiler> {
     int index,
   ) {
     final DateTime now = DateTime.now();
-
     final DateTime firstDayOfMonth = DateTime(now.year, now.month, 1);
-
     final DateTime date = firstDayOfMonth.add(Duration(days: index));
-
     final String day = DateFormat('EE').format(date);
     final String formattedDate = DateFormat('dd').format(date);
 
@@ -276,11 +247,8 @@ class _StatusBuilerState extends State<StatusBuiler> {
     int index,
   ) {
     final DateTime now = DateTime.now();
-
     final DateTime firstDayOfMonth = DateTime(now.year, now.month, 1);
-
     final DateTime date = firstDayOfMonth.add(Duration(days: index));
-
     final String day = DateFormat('EE').format(date);
     final String formattedDate = DateFormat('dd').format(date);
 
@@ -340,17 +308,13 @@ class _StatusBuilerState extends State<StatusBuiler> {
 
   String getCurrentMonthDateRange() {
     final now = DateTime.now();
-
     final firstDayOfMonth = DateTime(now.year, now.month, 1);
     final lastDayOfMonth = DateTime(now.year, now.month + 1, 0);
-
-    // Format the dates
     final formattedFirstDay = DateFormat('dd MMM').format(firstDayOfMonth);
     final formattedLastDay = DateFormat('dd MMM').format(lastDayOfMonth);
 
     return '$formattedFirstDay - $formattedLastDay';
   }
-
 
   Widget _buildAttendance({
     required Color color,
@@ -369,36 +333,30 @@ class _StatusBuilerState extends State<StatusBuiler> {
       child: ListView.builder(
         itemCount: data.length,
         itemBuilder: (context, index) {
-          final attendanceRecord =
-              data[index]; // Rename variable to avoid shadowing
+          final attendanceRecord = data[index];
           final DateTime now = DateTime.now();
           final DateTime firstDayOfMonth = DateTime(now.year, now.month, 1);
           final DateTime date = firstDayOfMonth.add(Duration(days: index));
           final String day = DateFormat('EE').format(date);
           final String formattedDate = DateFormat('dd').format(date);
 
-          // Check if the date is a weekend
           if (date.weekday == DateTime.saturday ||
               date.weekday == DateTime.sunday) {
             return _buildWeekendContainer(index);
           }
 
-          // Check if the date is in the future or the data is null
           if (date.isAfter(now) || attendanceRecord == null) {
             return _buildHNullAttendanceContainer(index);
           }
 
-          // Extract check-in and check-out times
           final checkIn = (attendanceRecord['checkIn'] as Timestamp?)?.toDate();
           final checkOut =
               (attendanceRecord['checkOut'] as Timestamp?)?.toDate();
 
-          // Handle cases where both check-in and check-out are null
           if (checkIn == null && checkOut == null) {
             return _buildEmptyAttendanceContainer(index);
           }
 
-          // Calculate total hours worked
           final totalHours = _calculateTotalHours(checkIn, checkOut);
           final Color containerColor =
               _determineContainerColor(checkIn, checkOut);
@@ -424,25 +382,20 @@ class _StatusBuilerState extends State<StatusBuiler> {
       const TimeOfDay exactCheckIn = TimeOfDay(hour: 8, minute: 0);
       const TimeOfDay lateArrival = TimeOfDay(hour: 8, minute: 10);
 
-      // On Time (between 7:50 AM and 8:10 AM)
       if ((checkInTime.hour == earlyOnTime.hour &&
               checkInTime.minute >= earlyOnTime.minute) ||
           (checkInTime.hour == lateOnTime.hour &&
               checkInTime.minute <= lateOnTime.minute) ||
           (checkInTime.hour > earlyOnTime.hour &&
               checkInTime.hour < lateOnTime.hour)) {
-        return const Color(0xff22AF41); // On Time (Green)
-      }
-      // Late Arrival (after 8:10 AM)
-      else if (checkInTime.hour > lateArrival.hour ||
+        return const Color(0xff22AF41);
+      } else if (checkInTime.hour > lateArrival.hour ||
           (checkInTime.hour == lateArrival.hour &&
               checkInTime.minute > lateArrival.minute)) {
-        return const Color(0xffF6C15B); // Late (Orange)
-      }
-      // Exactly at 8:00 AM
-      else if (checkInTime.hour == exactCheckIn.hour &&
+        return const Color(0xffF6C15B);
+      } else if (checkInTime.hour == exactCheckIn.hour &&
           checkInTime.minute == exactCheckIn.minute) {
-        return const Color(0xff8E71DF); // Check-in at 8 AM (Purple)
+        return const Color(0xff8E71DF);
       }
     }
 
@@ -450,17 +403,14 @@ class _StatusBuilerState extends State<StatusBuiler> {
       final TimeOfDay checkOutTime = TimeOfDay.fromDateTime(checkOut);
       const TimeOfDay earlyCheckout = TimeOfDay(hour: 17, minute: 0);
 
-      // Early Check-Out (before 5:00 PM)
       if (checkOutTime.hour < earlyCheckout.hour ||
           (checkOutTime.hour == earlyCheckout.hour &&
               checkOutTime.minute < earlyCheckout.minute)) {
-        return const Color.fromARGB(255, 223, 103, 11); // Early Check-Out (Maroon)
+        return const Color.fromARGB(255, 223, 103, 11);
       }
     }
 
-    // If neither check-in nor check-out is recorded, consider the user present
-
-    return const Color(0xff8E71DF); // Default Color
+    return const Color(0xff8E71DF);
   }
 
   Widget _buildAttendanceRow({
@@ -722,10 +672,10 @@ class _StatusBuilerState extends State<StatusBuiler> {
                   Container(
                     padding: const EdgeInsets.all(12),
                     height: (screenHeight < 600)
-                        ? screenHeight * 3.66 // for small screens
+                        ? screenHeight * 3.66
                         : (screenHeight < 800)
-                            ? screenHeight * 3.6 // for medium screens
-                            : screenHeight * 3.8, // for large screens
+                            ? screenHeight * 3.6
+                            : screenHeight * 3.8,
                     decoration: BoxDecoration(
                       borderRadius: BorderRadius.circular(20),
                       color: const Color(0xffEFF1FF),
