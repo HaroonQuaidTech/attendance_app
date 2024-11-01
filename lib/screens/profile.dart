@@ -225,16 +225,17 @@ class _ProfileScreenState extends State<ProfileScreen> {
   }
 
   Future<void> _logout(BuildContext context) async {
+    showDialog(
+      context: context,
+      barrierDismissible: false,
+      builder: (BuildContext context) {
+        return const Center(
+          child: CircularProgressIndicator(),
+        );
+      },
+    );
     try {
-      setState(() {
-        _isLoading = true;
-      });
-
       await _auth.signOut();
-
-      setState(() {
-        _isLoading = false;
-      });
 
       _showAlertDialog(
         title: 'Logged Out',
@@ -248,10 +249,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
         },
       );
     } catch (e) {
-      setState(() {
-        _isLoading = false;
-      });
-
+      Navigator.pop(context);
       _showAlertDialog(
         title: 'Error',
         image: 'assets/error.png',
