@@ -1,4 +1,3 @@
-// ignore_for_file: prefer_const_constructors, prefer_const_literals_to_create_immutables, use_super_parameters, unused_local_variable, unnecessary_string_interpolations, depend_on_referenced_packages, unnecessary_null_comparison, prefer_const_declarations, unnecessary_brace_in_string_interps, unused_element
 import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
@@ -7,8 +6,8 @@ import 'package:intl/intl.dart';
 
 class StatusBuiler extends StatefulWidget {
   const StatusBuiler({
-    Key? key,
-  }) : super(key: key);
+    super.key,
+  });
 
   @override
   State<StatusBuiler> createState() => _StatusBuilerState();
@@ -122,22 +121,6 @@ class _StatusBuilerState extends State<StatusBuiler> {
     return totalMinutes;
   }
 
-  int _calculateMonthlyMins(List<Map<String, dynamic>?> weeklyData) {
-    int totalMinutes = 0;
-
-    for (var data in weeklyData) {
-      if (data == null) continue;
-      final checkIn = (data['checkIn'] as Timestamp?)?.toDate();
-      final checkOut = (data['checkOut'] as Timestamp?)?.toDate();
-
-      if (checkIn != null && checkOut != null) {
-        final duration = checkOut.difference(checkIn);
-        totalMinutes += duration.inMinutes;
-      }
-    }
-
-    return totalMinutes;
-  }
 
   double _calculateMonthlyHours(List<Map<String, dynamic>?> monthlyData) {
     int totalMinutes = 0;
@@ -171,8 +154,8 @@ class _StatusBuilerState extends State<StatusBuiler> {
     final String formattedDate = DateFormat('dd').format(date);
 
     return Container(
-      padding: EdgeInsets.all(12),
-      margin: EdgeInsets.only(bottom: 10),
+      padding: const EdgeInsets.all(12),
+      margin: const EdgeInsets.only(bottom: 10),
       height: 82,
       width: 360,
       decoration: BoxDecoration(
@@ -196,14 +179,14 @@ class _StatusBuilerState extends State<StatusBuiler> {
                   children: [
                     Text(
                       formattedDate,
-                      style: TextStyle(
+                      style: const TextStyle(
                           fontSize: 22,
                           fontWeight: FontWeight.w600,
                           color: Colors.white),
                     ),
                     Text(
                       day,
-                      style: TextStyle(
+                      style: const TextStyle(
                           fontSize: 12,
                           fontWeight: FontWeight.w400,
                           color: Colors.white),
@@ -213,8 +196,8 @@ class _StatusBuilerState extends State<StatusBuiler> {
               ),
             ],
           ),
-          Padding(
-            padding: const EdgeInsets.only(left: 50.0),
+          const Padding(
+            padding: EdgeInsets.only(left: 50.0),
             child: Text(
               'Leave/Day off',
               style: TextStyle(fontSize: 22, fontWeight: FontWeight.bold),
@@ -238,8 +221,8 @@ class _StatusBuilerState extends State<StatusBuiler> {
     final String formattedDate = DateFormat('dd').format(date);
 
     return Container(
-      padding: EdgeInsets.symmetric(horizontal: 12),
-      margin: EdgeInsets.only(bottom: 10),
+      padding: const EdgeInsets.symmetric(horizontal: 12),
+      margin: const EdgeInsets.only(bottom: 10),
       height: 82,
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(12),
@@ -251,7 +234,7 @@ class _StatusBuilerState extends State<StatusBuiler> {
             width: 53,
             height: 55,
             decoration: BoxDecoration(
-                color: Color(0xff8E71DF),
+                color: const Color(0xff8E71DF),
                 borderRadius: BorderRadius.circular(6)),
             child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
@@ -259,14 +242,14 @@ class _StatusBuilerState extends State<StatusBuiler> {
               children: [
                 Text(
                   formattedDate,
-                  style: TextStyle(
+                  style: const TextStyle(
                       fontSize: 22,
                       fontWeight: FontWeight.w600,
                       color: Colors.white),
                 ),
                 Text(
                   day,
-                  style: TextStyle(
+                  style: const TextStyle(
                     fontSize: 12,
                     fontWeight: FontWeight.w400,
                     color: Colors.white,
@@ -275,8 +258,8 @@ class _StatusBuilerState extends State<StatusBuiler> {
               ],
             ),
           ),
-          SizedBox(width: 30),
-          Text(
+          const SizedBox(width: 30),
+          const Text(
             'Data Not Available',
             style: TextStyle(
               fontSize: 22,
@@ -302,8 +285,8 @@ class _StatusBuilerState extends State<StatusBuiler> {
     final String formattedDate = DateFormat('dd').format(date);
 
     return Container(
-      padding: EdgeInsets.symmetric(horizontal: 12),
-      margin: EdgeInsets.only(bottom: 10),
+      padding: const EdgeInsets.symmetric(horizontal: 12),
+      margin: const EdgeInsets.only(bottom: 10),
       height: 82,
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(12),
@@ -322,14 +305,14 @@ class _StatusBuilerState extends State<StatusBuiler> {
               children: [
                 Text(
                   formattedDate,
-                  style: TextStyle(
+                  style: const TextStyle(
                       fontSize: 22,
                       fontWeight: FontWeight.w600,
                       color: Colors.white),
                 ),
                 Text(
                   day,
-                  style: TextStyle(
+                  style: const TextStyle(
                     fontSize: 12,
                     fontWeight: FontWeight.w400,
                     color: Colors.white,
@@ -338,9 +321,9 @@ class _StatusBuilerState extends State<StatusBuiler> {
               ],
             ),
           ),
-          SizedBox(width: 30),
-          Padding(
-            padding: const EdgeInsets.only(left: 20.0),
+          const SizedBox(width: 30),
+          const Padding(
+            padding: EdgeInsets.only(left: 20.0),
             child: Text(
               'Weekend Days',
               style: TextStyle(
@@ -368,16 +351,13 @@ class _StatusBuilerState extends State<StatusBuiler> {
     return '$formattedFirstDay - $formattedLastDay';
   }
 
-  Future<void> _refresh() {
-    return Future.delayed(Duration(seconds: 1));
-  }
 
   Widget _buildAttendance({
     required Color color,
     required List<Map<String, dynamic>?> data,
   }) {
     if (data.isEmpty) {
-      return Center(
+      return const Center(
         child: Text(
           'No attendance data found.',
           style: TextStyle(fontSize: 20),
@@ -439,10 +419,10 @@ class _StatusBuilerState extends State<StatusBuiler> {
   Color _determineContainerColor(DateTime? checkIn, DateTime? checkOut) {
     if (checkIn != null) {
       final TimeOfDay checkInTime = TimeOfDay.fromDateTime(checkIn);
-      final TimeOfDay earlyOnTime = TimeOfDay(hour: 7, minute: 50);
-      final TimeOfDay lateOnTime = TimeOfDay(hour: 8, minute: 10);
-      final TimeOfDay exactCheckIn = TimeOfDay(hour: 8, minute: 0);
-      final TimeOfDay lateArrival = TimeOfDay(hour: 8, minute: 10);
+      const TimeOfDay earlyOnTime = TimeOfDay(hour: 7, minute: 50);
+      const TimeOfDay lateOnTime = TimeOfDay(hour: 8, minute: 10);
+      const TimeOfDay exactCheckIn = TimeOfDay(hour: 8, minute: 0);
+      const TimeOfDay lateArrival = TimeOfDay(hour: 8, minute: 10);
 
       // On Time (between 7:50 AM and 8:10 AM)
       if ((checkInTime.hour == earlyOnTime.hour &&
@@ -451,36 +431,36 @@ class _StatusBuilerState extends State<StatusBuiler> {
               checkInTime.minute <= lateOnTime.minute) ||
           (checkInTime.hour > earlyOnTime.hour &&
               checkInTime.hour < lateOnTime.hour)) {
-        return Color(0xff22AF41); // On Time (Green)
+        return const Color(0xff22AF41); // On Time (Green)
       }
       // Late Arrival (after 8:10 AM)
       else if (checkInTime.hour > lateArrival.hour ||
           (checkInTime.hour == lateArrival.hour &&
               checkInTime.minute > lateArrival.minute)) {
-        return Color(0xffF6C15B); // Late (Orange)
+        return const Color(0xffF6C15B); // Late (Orange)
       }
       // Exactly at 8:00 AM
       else if (checkInTime.hour == exactCheckIn.hour &&
           checkInTime.minute == exactCheckIn.minute) {
-        return Color(0xff8E71DF); // Check-in at 8 AM (Purple)
+        return const Color(0xff8E71DF); // Check-in at 8 AM (Purple)
       }
     }
 
     if (checkOut != null) {
       final TimeOfDay checkOutTime = TimeOfDay.fromDateTime(checkOut);
-      final TimeOfDay earlyCheckout = TimeOfDay(hour: 17, minute: 0);
+      const TimeOfDay earlyCheckout = TimeOfDay(hour: 17, minute: 0);
 
       // Early Check-Out (before 5:00 PM)
       if (checkOutTime.hour < earlyCheckout.hour ||
           (checkOutTime.hour == earlyCheckout.hour &&
               checkOutTime.minute < earlyCheckout.minute)) {
-        return Color.fromARGB(255, 223, 103, 11); // Early Check-Out (Maroon)
+        return const Color.fromARGB(255, 223, 103, 11); // Early Check-Out (Maroon)
       }
     }
 
     // If neither check-in nor check-out is recorded, consider the user present
 
-    return Color(0xff8E71DF); // Default Color
+    return const Color(0xff8E71DF); // Default Color
   }
 
   Widget _buildAttendanceRow({
@@ -492,8 +472,8 @@ class _StatusBuilerState extends State<StatusBuiler> {
     required Color containerColor,
   }) {
     return Container(
-      padding: EdgeInsets.all(12),
-      margin: EdgeInsets.only(bottom: 10),
+      padding: const EdgeInsets.all(12),
+      margin: const EdgeInsets.only(bottom: 10),
       height: 82,
       width: 360,
       decoration: BoxDecoration(
@@ -529,12 +509,12 @@ class _StatusBuilerState extends State<StatusBuiler> {
         children: [
           Text(
             formattedDate,
-            style: TextStyle(
+            style: const TextStyle(
                 fontSize: 22, fontWeight: FontWeight.w600, color: Colors.white),
           ),
           Text(
             day,
-            style: TextStyle(
+            style: const TextStyle(
                 fontSize: 12, fontWeight: FontWeight.w400, color: Colors.white),
           ),
         ],
@@ -550,12 +530,12 @@ class _StatusBuilerState extends State<StatusBuiler> {
           timeOrHours is DateTime
               ? _formatTime(timeOrHours)
               : timeOrHours.toString(),
-          style: TextStyle(
+          style: const TextStyle(
               fontSize: 14, fontWeight: FontWeight.w800, color: Colors.black),
         ),
         Text(
           label,
-          style: TextStyle(
+          style: const TextStyle(
               fontSize: 12, fontWeight: FontWeight.w600, color: Colors.black),
         ),
       ],
@@ -577,13 +557,9 @@ class _StatusBuilerState extends State<StatusBuiler> {
     final double screenWidth = screenSize.width;
     final now = DateTime.now();
     final startOfWeek = now.subtract(Duration(days: now.weekday - 1));
-    final endOfWeek = startOfWeek.add(Duration(days: 6));
-    final String startFormatted = DateFormat('dd MMM').format(startOfWeek);
-    final String endFormatted = DateFormat('dd MMM').format(endOfWeek);
-    final DateTime previousWeekStart = DateTime(now.year, 9, 2);
-    final DateTime previousWeekEnd = DateTime(now.year, 9, 6);
-    final DateTime newWeekStart = DateTime(now.year, 9, 9);
-    final DateTime newWeekEnd = DateTime(now.year, 9, 13);
+    final endOfWeek = startOfWeek.add(const Duration(days: 6));
+    DateFormat('dd MMM').format(startOfWeek);
+    DateFormat('dd MMM').format(endOfWeek);
     return Padding(
       padding: const EdgeInsets.only(top: 20.0),
       child: Column(
@@ -596,8 +572,8 @@ class _StatusBuilerState extends State<StatusBuiler> {
               }
 
               if (!snapshot.hasData || snapshot.data == null) {
-                return Padding(
-                  padding: const EdgeInsets.only(top: 150.0),
+                return const Padding(
+                  padding: EdgeInsets.only(top: 150.0),
                   child: Center(child: CircularProgressIndicator()),
                 );
               }
@@ -612,8 +588,8 @@ class _StatusBuilerState extends State<StatusBuiler> {
               final totalHours = (totalTime / 60).toStringAsFixed(2);
               final totalMinutes = _calculateMonthlyTotal(monthlyData);
               final totalHourss = _calculateMonthlyHours(monthlyData);
-              final int maxMinutes = 10392;
-              final double maxHours = 173.2;
+              const int maxMinutes = 10392;
+              const double maxHours = 173.2;
               double progressValue =
                   maxHours != 0 ? totalHourss / maxHours : 0.0;
 
@@ -624,13 +600,13 @@ class _StatusBuilerState extends State<StatusBuiler> {
                     width: double.infinity,
                     decoration: BoxDecoration(
                       borderRadius: BorderRadius.circular(20),
-                      color: Color(0xffEFF1FF),
+                      color: const Color(0xffEFF1FF),
                       boxShadow: [
                         BoxShadow(
                           color: Colors.grey.withOpacity(0.2),
                           spreadRadius: 2,
                           blurRadius: 4,
-                          offset: Offset(0, 2),
+                          offset: const Offset(0, 2),
                         ),
                       ],
                     ),
@@ -640,12 +616,12 @@ class _StatusBuilerState extends State<StatusBuiler> {
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          Text(
+                          const Text(
                             'Monthly Times Log',
                             style: TextStyle(
                                 fontWeight: FontWeight.w600, fontSize: 18),
                           ),
-                          SizedBox(height: 20),
+                          const SizedBox(height: 20),
                           Row(
                             mainAxisAlignment: MainAxisAlignment.spaceBetween,
                             children: [
@@ -665,7 +641,7 @@ class _StatusBuilerState extends State<StatusBuiler> {
                                     crossAxisAlignment:
                                         CrossAxisAlignment.start,
                                     children: [
-                                      Text(
+                                      const Text(
                                         'Time in Minutes',
                                         style: TextStyle(
                                             fontWeight: FontWeight.w500,
@@ -673,18 +649,18 @@ class _StatusBuilerState extends State<StatusBuiler> {
                                       ),
                                       Text(
                                         '$totalTime Minutes',
-                                        style: TextStyle(
+                                        style: const TextStyle(
                                             fontWeight: FontWeight.w600,
                                             fontSize: 20),
                                       ),
                                       LinearProgressIndicator(
                                         value: totalMinutes / maxMinutes,
                                         backgroundColor: Colors.grey[300],
-                                        color: Color(0xff9478F7),
+                                        color: const Color(0xff9478F7),
                                       ),
                                       Text(
-                                        '${getCurrentMonthDateRange()}',
-                                        style: TextStyle(
+                                        getCurrentMonthDateRange(),
+                                        style: const TextStyle(
                                             fontWeight: FontWeight.w600,
                                             fontSize: 15),
                                       ),
@@ -708,7 +684,7 @@ class _StatusBuilerState extends State<StatusBuiler> {
                                     crossAxisAlignment:
                                         CrossAxisAlignment.start,
                                     children: [
-                                      Text(
+                                      const Text(
                                         'Time in Hours',
                                         style: TextStyle(
                                             fontWeight: FontWeight.w500,
@@ -716,18 +692,18 @@ class _StatusBuilerState extends State<StatusBuiler> {
                                       ),
                                       Text(
                                         '$totalHours Hours',
-                                        style: TextStyle(
+                                        style: const TextStyle(
                                             fontWeight: FontWeight.w600,
                                             fontSize: 20),
                                       ),
                                       LinearProgressIndicator(
                                         value: progressValue,
                                         backgroundColor: Colors.grey[300],
-                                        color: Color(0xff9478F7),
+                                        color: const Color(0xff9478F7),
                                       ),
                                       Text(
-                                        '${getCurrentMonthDateRange()}',
-                                        style: TextStyle(
+                                        getCurrentMonthDateRange(),
+                                        style: const TextStyle(
                                             fontWeight: FontWeight.w600,
                                             fontSize: 15),
                                       ),
@@ -737,14 +713,14 @@ class _StatusBuilerState extends State<StatusBuiler> {
                               ),
                             ],
                           ),
-                          SizedBox(height: 14),
+                          const SizedBox(height: 14),
                         ],
                       ),
                     ),
                   ),
                   const SizedBox(height: 20),
                   Container(
-                    padding: EdgeInsets.all(12),
+                    padding: const EdgeInsets.all(12),
                     height: (screenHeight < 600)
                         ? screenHeight * 3.66 // for small screens
                         : (screenHeight < 800)
@@ -752,13 +728,13 @@ class _StatusBuilerState extends State<StatusBuiler> {
                             : screenHeight * 3.8, // for large screens
                     decoration: BoxDecoration(
                       borderRadius: BorderRadius.circular(20),
-                      color: Color(0xffEFF1FF),
+                      color: const Color(0xffEFF1FF),
                       boxShadow: [
                         BoxShadow(
                           color: Colors.grey.withOpacity(0.2),
                           spreadRadius: 2,
                           blurRadius: 4,
-                          offset: Offset(0, 2),
+                          offset: const Offset(0, 2),
                         ),
                       ],
                     ),
@@ -767,15 +743,15 @@ class _StatusBuilerState extends State<StatusBuiler> {
                       children: [
                         Text(
                           'Monthly Attendance: ${getCurrentMonthDateRange()}',
-                          style: TextStyle(
+                          style: const TextStyle(
                               fontWeight: FontWeight.w600, fontSize: 18),
                         ),
-                        SizedBox(height: 10),
+                        const SizedBox(height: 10),
                         _buildAttendance(
-                            color: Color(0xff9478F7),
+                            color: const Color(0xff9478F7),
                             data:
                                 attendanceData), // Pass the attendance data here
-                        SizedBox(height: 10),
+                        const SizedBox(height: 10),
                       ],
                     ),
                   ),
