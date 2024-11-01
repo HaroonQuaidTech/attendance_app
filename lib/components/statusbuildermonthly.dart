@@ -73,6 +73,17 @@ class _StatusBuilerState extends State<StatusBuiler> {
     return monthlyAttendanceList;
   }
 
+  Future<Map<String, dynamic>> _getMonthlyData(String userId) async {
+    final attendanceData = await _getMonthlyAttendanceDetails(userId);
+    // Fetch any other data you need here (like total hours or any other metrics)
+    // For example:
+    final totalHoursData = _calculateMonthlyTotal(attendanceData);
+    return {
+      'attendanceData': attendanceData,
+      'totalHours': totalHoursData,
+    };
+  }
+
   String _formatTime(DateTime? dateTime) {
     if (dateTime == null) return 'Not Available';
     final DateFormat formatter = DateFormat('hh:mm a');
@@ -365,82 +376,63 @@ class _StatusBuilerState extends State<StatusBuiler> {
     required Color color,
     required List<Map<String, dynamic>?> data,
   }) {
-    return FutureBuilder<List<Map<String, dynamic>?>>(
-      future: _getMonthlyAttendanceDetails(userId),
-      builder: (context, snapshot) {
-        if (snapshot.connectionState == ConnectionState.waiting) {
-          return Padding(
-            padding: const EdgeInsets.only(top: 360.0),
-            child: Center(
-              child: CircularProgressIndicator(),
-            ),
+    if (data.isEmpty) {
+      return Center(
+        child: Text(
+          'No attendance data found.',
+          style: TextStyle(fontSize: 20),
+        ),
+      );
+    }
+
+    return Expanded(
+      child: ListView.builder(
+        itemCount: data.length,
+        itemBuilder: (context, index) {
+          final attendanceRecord =
+              data[index]; // Rename variable to avoid shadowing
+          final DateTime now = DateTime.now();
+          final DateTime firstDayOfMonth = DateTime(now.year, now.month, 1);
+          final DateTime date = firstDayOfMonth.add(Duration(days: index));
+          final String day = DateFormat('EE').format(date);
+          final String formattedDate = DateFormat('dd').format(date);
+
+          // Check if the date is a weekend
+          if (date.weekday == DateTime.saturday ||
+              date.weekday == DateTime.sunday) {
+            return _buildWeekendContainer(index);
+          }
+
+          // Check if the date is in the future or the data is null
+          if (date.isAfter(now) || attendanceRecord == null) {
+            return _buildHNullAttendanceContainer(index);
+          }
+
+          // Extract check-in and check-out times
+          final checkIn = (attendanceRecord['checkIn'] as Timestamp?)?.toDate();
+          final checkOut =
+              (attendanceRecord['checkOut'] as Timestamp?)?.toDate();
+
+          // Handle cases where both check-in and check-out are null
+          if (checkIn == null && checkOut == null) {
+            return _buildEmptyAttendanceContainer(index);
+          }
+
+          // Calculate total hours worked
+          final totalHours = _calculateTotalHours(checkIn, checkOut);
+          final Color containerColor =
+              _determineContainerColor(checkIn, checkOut);
+
+          return _buildAttendanceRow(
+            formattedDate: formattedDate,
+            day: day,
+            checkIn: checkIn,
+            checkOut: checkOut,
+            totalHours: totalHours,
+            containerColor: containerColor,
           );
-        }
-        if (snapshot.hasError) {
-          return Center(
-              child: Text(
-            'Error Something went wrong Check Your Internet Connection',
-            style: TextStyle(color: Colors.red),
-          ));
-        }
-
-        if (!snapshot.hasData || snapshot.data == null) {
-          return Padding(
-            padding: const EdgeInsets.only(top: 100.0),
-            child: Center(
-              child: Text(
-                'No attendance data found.',
-                style: TextStyle(fontSize: 20),
-              ),
-            ),
-          );
-        }
-
-        final attendanceData = snapshot.data!;
-        return Expanded(
-          child: ListView.builder(
-            itemCount: attendanceData.length,
-            itemBuilder: (context, index) {
-              final data = attendanceData[index];
-              final DateTime now = DateTime.now();
-              final DateTime firstDayOfMonth = DateTime(now.year, now.month, 1);
-              final DateTime date = firstDayOfMonth.add(Duration(days: index));
-              final String day = DateFormat('EE').format(date);
-              final String formattedDate = DateFormat('dd').format(date);
-              if (date.weekday == DateTime.saturday ||
-                  date.weekday == DateTime.sunday) {
-                return _buildWeekendContainer(index);
-              }
-
-              if (date.isAfter(now) ||
-                  date.weekday == DateTime.saturday ||
-                  date.weekday == DateTime.sunday ||
-                  data == null) {
-                return _buildHNullAttendanceContainer(index);
-              }
-
-              final checkIn = (data['checkIn'] as Timestamp?)?.toDate();
-              final checkOut = (data['checkOut'] as Timestamp?)?.toDate();
-              if (checkIn == null && checkOut == null) {
-                return _buildEmptyAttendanceContainer(index);
-              }
-
-              final totalHours = _calculateTotalHours(checkIn, checkOut);
-              Color containerColor =
-                  _determineContainerColor(checkIn, checkOut);
-
-              return _buildAttendanceRow(
-                formattedDate: formattedDate,
-                day: day,
-                checkIn: checkIn,
-                checkOut: checkOut,
-                totalHours: totalHours,
-                containerColor: containerColor,
-              );
-            },
-          ),
-        );
-      },
+        },
+      ),
     );
   }
 
@@ -592,13 +584,12 @@ class _StatusBuilerState extends State<StatusBuiler> {
     final DateTime previousWeekEnd = DateTime(now.year, 9, 6);
     final DateTime newWeekStart = DateTime(now.year, 9, 9);
     final DateTime newWeekEnd = DateTime(now.year, 9, 13);
-
     return Padding(
       padding: const EdgeInsets.only(top: 20.0),
       child: Column(
         children: [
-          FutureBuilder(
-            future: _getMonthlyAttendanceDetails(userId),
+          FutureBuilder<Map<String, dynamic>>(
+            future: _getMonthlyData(userId),
             builder: (context, snapshot) {
               if (snapshot.hasError) {
                 return Center(child: Text('Error: ${snapshot.error}'));
@@ -606,23 +597,17 @@ class _StatusBuilerState extends State<StatusBuiler> {
 
               if (!snapshot.hasData || snapshot.data == null) {
                 return Padding(
-                  padding: const EdgeInsets.only(top: 220.0),
+                  padding: const EdgeInsets.only(top: 150.0),
                   child: Center(child: CircularProgressIndicator()),
                 );
               }
 
-              final List<Map<String, dynamic>?> allData = snapshot.data ?? [];
-              final List<Map<String, dynamic>?> newWeekData =
-                  allData.where((data) {
-                final dateStr = data?['date'] as String?;
-                if (dateStr == null) return false;
-                final DateTime date =
-                    DateTime.tryParse(dateStr) ?? DateTime.now();
-                return date.isAfter(newWeekStart.subtract(Duration(days: 1))) &&
-                    date.isBefore(newWeekEnd.add(Duration(days: 1)));
-              }).toList();
+              final attendanceData = snapshot.data!['attendanceData']
+                  as List<Map<String, dynamic>?>;
+              final monthlyData = snapshot.data!['monthlyData']
+                      as List<Map<String, dynamic>?>? ??
+                  [];
 
-              final monthlyData = snapshot.data!;
               final totalTime = _calculateMonthlyTotal(monthlyData);
               final totalHours = (totalTime / 60).toStringAsFixed(2);
               final totalMinutes = _calculateMonthlyTotal(monthlyData);
@@ -681,13 +666,13 @@ class _StatusBuilerState extends State<StatusBuiler> {
                                         CrossAxisAlignment.start,
                                     children: [
                                       Text(
-                                        'Time in Mints',
+                                        'Time in Minutes',
                                         style: TextStyle(
                                             fontWeight: FontWeight.w500,
                                             fontSize: 14),
                                       ),
                                       Text(
-                                        '$totalTime Mints',
+                                        '$totalTime Minutes',
                                         style: TextStyle(
                                             fontWeight: FontWeight.w600,
                                             fontSize: 20),
@@ -786,7 +771,10 @@ class _StatusBuilerState extends State<StatusBuiler> {
                               fontWeight: FontWeight.w600, fontSize: 18),
                         ),
                         SizedBox(height: 10),
-                        _buildAttendance(color: Color(0xff9478F7), data: []),
+                        _buildAttendance(
+                            color: Color(0xff9478F7),
+                            data:
+                                attendanceData), // Pass the attendance data here
                         SizedBox(height: 10),
                       ],
                     ),
