@@ -241,7 +241,7 @@ class _StatusBuilerState extends State<StatusBuilderWeekly> {
         if (snapshot.connectionState == ConnectionState.waiting) {
           return const Padding(
             padding: EdgeInsets.only(top: 200.0),
-            child: Center(child: CircularProgressIndicator()),
+            child: Center(child: Text('.')),
           );
         }
 
@@ -492,50 +492,55 @@ class _StatusBuilerState extends State<StatusBuilderWeekly> {
     final String endFormatted = DateFormat('dd MMM').format(endOfWeek);
 
     return Padding(
-        padding: const EdgeInsets.only(top: 20.0),
-        child: Column(children: [
+      padding: const EdgeInsets.only(top: 20.0),
+      child: Column(
+        children: [
           FutureBuilder(
-              future: _getAttendanceDetails(userId),
-              builder: (context, snapshot) {
-                if (snapshot.connectionState == ConnectionState.waiting) {
-                  return const Center(
+            future: _getAttendanceDetails(userId),
+            builder: (context, snapshot) {
+              if (snapshot.connectionState == ConnectionState.waiting) {
+                return const Padding(
+                  padding: EdgeInsets.only(top: 220.0),
+                  child: Center(
                     child: CircularProgressIndicator(),
-                  );
-                }
+                  ),
+                );
+              }
 
-                if (snapshot.hasError) {
-                  return const Center(
-                    child: Text(
-                      'Error: Something went wrong. Check Your Internet Connection.',
-                      style: TextStyle(color: Colors.red),
-                    ),
-                  );
-                }
+              if (snapshot.hasError) {
+                return const Center(
+                  child: Text(
+                    'Error: Something went wrong. Check Your Internet Connection.',
+                    style: TextStyle(color: Colors.red),
+                  ),
+                );
+              }
 
-                if (!snapshot.hasData || snapshot.data == null) {
-                  return const Center(
-                    child: Text(
-                      'No Data Available',
-                      style: TextStyle(color: Colors.grey),
-                    ),
-                  );
-                }
+              if (!snapshot.hasData || snapshot.data == null) {
+                return const Center(
+                  child: Text(
+                    'No Data Available',
+                    style: TextStyle(color: Colors.grey),
+                  ),
+                );
+              }
 
-                final weeklyData = snapshot.data!;
+              final weeklyData = snapshot.data!;
+              final totalTime = _calculateWeeklyMins(weeklyData);
+              final totalHours = (totalTime / 60).toStringAsFixed(2);
+              final totalMinutes = _calculateWeeklyMins(weeklyData);
+              final totalHourss = _calculateWeeklyHours(weeklyData);
 
-                final totalTime = _calculateWeeklyMins(weeklyData);
-                final totalHours = (totalTime / 60).toStringAsFixed(2);
-                final totalMinutes = _calculateWeeklyMins(weeklyData);
-                final totalHourss = _calculateWeeklyHours(weeklyData);
+              const int maxMinutes = 2700; // weekly minutes
+              const double maxHours = 45; // weekly hours
 
-                const int maxMinutes = 2700; //weekly minutes
-                const double maxHours = 45; //weekly hours
+              final double progress = totalHourss / maxHours;
 
-                final double progress = totalHourss / maxHours;
-
-                return Padding(
-                  padding: const EdgeInsets.only(top: 20.0),
-                  child: Container(
+              return Column(
+                children: [
+                  Padding(
+                    padding: const EdgeInsets.only(top: 3.0),
+                    child: Container(
                       height: 207,
                       width: double.infinity,
                       decoration: BoxDecoration(
@@ -551,149 +556,156 @@ class _StatusBuilerState extends State<StatusBuilderWeekly> {
                         ],
                       ),
                       child: Padding(
-                          padding: const EdgeInsets.symmetric(
-                              horizontal: 10.0, vertical: 10.0),
-                          child: Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
+                        padding: const EdgeInsets.symmetric(
+                            horizontal: 10.0, vertical: 10.0),
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            const Text(
+                              'Weekly Times Log',
+                              style: TextStyle(
+                                  fontWeight: FontWeight.w600, fontSize: 18),
+                            ),
+                            const SizedBox(height: 20),
+                            Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
                               children: [
-                                const Text(
-                                  'Weekly Times Log',
-                                  style: TextStyle(
-                                      fontWeight: FontWeight.w600,
-                                      fontSize: 18),
-                                ),
-                                const SizedBox(height: 20),
-                                Row(
-                                  mainAxisAlignment:
-                                      MainAxisAlignment.spaceBetween,
-                                  children: [
-                                    Container(
-                                      height: screenHeight * 0.15,
-                                      width: screenWidth * 0.43,
-                                      decoration: BoxDecoration(
-                                        borderRadius: BorderRadius.circular(12),
-                                        color: Colors.white,
-                                      ),
-                                      child: Padding(
-                                        padding: const EdgeInsets.symmetric(
-                                            horizontal: 10.0),
-                                        child: Column(
-                                          mainAxisAlignment:
-                                              MainAxisAlignment.spaceAround,
-                                          crossAxisAlignment:
-                                              CrossAxisAlignment.start,
-                                          children: [
-                                            const Text(
-                                              'Time in Mints',
-                                              style: TextStyle(
-                                                  fontWeight: FontWeight.w500,
-                                                  fontSize: 14),
-                                            ),
-                                            Text(
-                                              '$totalTime Mints',
-                                              style: const TextStyle(
-                                                  fontWeight: FontWeight.w600,
-                                                  fontSize: 20),
-                                            ),
-                                            LinearProgressIndicator(
-                                              value: totalMinutes / maxMinutes,
-                                              backgroundColor: Colors.grey[300],
-                                              color: const Color(0xff9478F7),
-                                            ),
-                                            Text(
-                                              '$startFormatted - $endFormatted',
-                                              style: const TextStyle(
-                                                  fontWeight: FontWeight.w600,
-                                                  fontSize: 15),
-                                            ),
-                                          ],
+                                Container(
+                                  height: screenHeight * 0.15,
+                                  width: screenWidth * 0.43,
+                                  decoration: BoxDecoration(
+                                    borderRadius: BorderRadius.circular(12),
+                                    color: Colors.white,
+                                  ),
+                                  child: Padding(
+                                    padding: const EdgeInsets.symmetric(
+                                        horizontal: 10.0),
+                                    child: Column(
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.spaceAround,
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.start,
+                                      children: [
+                                        const Text(
+                                          'Time in Mints',
+                                          style: TextStyle(
+                                              fontWeight: FontWeight.w500,
+                                              fontSize: 14),
                                         ),
-                                      ),
-                                    ),
-                                    Container(
-                                      height: screenHeight * 0.15,
-                                      width: screenWidth * 0.43,
-                                      decoration: BoxDecoration(
-                                        borderRadius: BorderRadius.circular(12),
-                                        color: Colors.white,
-                                      ),
-                                      child: Padding(
-                                        padding: const EdgeInsets.symmetric(
-                                            horizontal: 10.0),
-                                        child: Column(
-                                          mainAxisAlignment:
-                                              MainAxisAlignment.spaceAround,
-                                          crossAxisAlignment:
-                                              CrossAxisAlignment.start,
-                                          children: [
-                                            const Text(
-                                              'Time in Hours',
-                                              style: TextStyle(
-                                                  fontWeight: FontWeight.w500,
-                                                  fontSize: 14),
-                                            ),
-                                            Text(
-                                              '$totalHours Hours',
-                                              style: const TextStyle(
-                                                  fontWeight: FontWeight.w600,
-                                                  fontSize: 20),
-                                            ),
-                                            LinearProgressIndicator(
-                                              value: progress,
-                                              backgroundColor: Colors.grey[300],
-                                              color: const Color(0xff9478F7),
-                                            ),
-                                            Text(
-                                              '$startFormatted - $endFormatted',
-                                              style: const TextStyle(
-                                                  fontWeight: FontWeight.w600,
-                                                  fontSize: 15),
-                                            ),
-                                          ],
+                                        Text(
+                                          '$totalTime Mints',
+                                          style: const TextStyle(
+                                              fontWeight: FontWeight.w600,
+                                              fontSize: 20),
                                         ),
-                                      ),
+                                        LinearProgressIndicator(
+                                          value: totalMinutes / maxMinutes,
+                                          backgroundColor: Colors.grey[300],
+                                          color: const Color(0xff9478F7),
+                                        ),
+                                        Text(
+                                          '$startFormatted - $endFormatted',
+                                          style: const TextStyle(
+                                              fontWeight: FontWeight.w600,
+                                              fontSize: 15),
+                                        ),
+                                      ],
                                     ),
-                                  ],
+                                  ),
                                 ),
-                                const SizedBox(height: 14),
-                              ]))),
-                );
-              }),
-          const SizedBox(height: 20),
-          Container(
-            padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 12),
-            height: (MediaQuery.of(context).size.height < 600)
-                ? MediaQuery.of(context).size.height * 0.6 // for small screens
-                : (MediaQuery.of(context).size.height < 800)
-                    ? MediaQuery.of(context).size.height *
-                        0.65 // for medium screens
-                    : MediaQuery.of(context).size.height * 0.7,
-            width: double.infinity,
-            decoration: BoxDecoration(
-              borderRadius: BorderRadius.circular(20),
-              color: const Color(0xffEFF1FF),
-              boxShadow: [
-                BoxShadow(
-                  color: Colors.grey.withOpacity(0.2),
-                  spreadRadius: 2,
-                  blurRadius: 4,
-                  offset: const Offset(0, 2),
-                ),
-              ],
-            ),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text(
-                  'Weekly Attendance: ${'$startFormatted - $endFormatted'}',
-                  style: const TextStyle(
-                      fontWeight: FontWeight.w600, fontSize: 18),
-                ),
-                const SizedBox(height: 10),
-                _buildAttendance(color: const Color(0xff9478F7), data: []),
-              ],
-            ),
+                                Container(
+                                  height: screenHeight * 0.15,
+                                  width: screenWidth * 0.43,
+                                  decoration: BoxDecoration(
+                                    borderRadius: BorderRadius.circular(12),
+                                    color: Colors.white,
+                                  ),
+                                  child: Padding(
+                                    padding: const EdgeInsets.symmetric(
+                                        horizontal: 10.0),
+                                    child: Column(
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.spaceAround,
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.start,
+                                      children: [
+                                        const Text(
+                                          'Time in Hours',
+                                          style: TextStyle(
+                                              fontWeight: FontWeight.w500,
+                                              fontSize: 14),
+                                        ),
+                                        Text(
+                                          '$totalHours Hours',
+                                          style: const TextStyle(
+                                              fontWeight: FontWeight.w600,
+                                              fontSize: 20),
+                                        ),
+                                        LinearProgressIndicator(
+                                          value: progress,
+                                          backgroundColor: Colors.grey[300],
+                                          color: const Color(0xff9478F7),
+                                        ),
+                                        Text(
+                                          '$startFormatted - $endFormatted',
+                                          style: const TextStyle(
+                                              fontWeight: FontWeight.w600,
+                                              fontSize: 15),
+                                        ),
+                                      ],
+                                    ),
+                                  ),
+                                ),
+                              ],
+                            ),
+                            const SizedBox(height: 14),
+                          ],
+                        ),
+                      ),
+                    ),
+                  ),
+                  const SizedBox(height: 20),
+                  Container(
+                    padding: const EdgeInsets.symmetric(
+                        horizontal: 12, vertical: 12),
+                    height: (MediaQuery.of(context).size.height < 600)
+                        ? MediaQuery.of(context).size.height * 0.70
+                        : (MediaQuery.of(context).size.height < 800)
+                            ? MediaQuery.of(context).size.height * 0.665
+                            : MediaQuery.of(context).size.height * 0.66,
+                    width: double.infinity,
+                    decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(20),
+                      color: const Color(0xffEFF1FF),
+                      boxShadow: [
+                        BoxShadow(
+                          color: Colors.grey.withOpacity(0.2),
+                          spreadRadius: 2,
+                          blurRadius: 4,
+                          offset: const Offset(0, 2),
+                        ),
+                      ],
+                    ),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(
+                          'Weekly Attendance: ${'$startFormatted - $endFormatted'}',
+                          style: const TextStyle(
+                              fontWeight: FontWeight.w600, fontSize: 18),
+                        ),
+                        const SizedBox(height: 10),
+                        _buildAttendance(
+                            color: const Color(0xff9478F7), data: []),
+                      ],
+                    ),
+                  ),
+                ],
+              );
+            },
           ),
-        ]));
+        ],
+      ),
+    );
   }
 }
