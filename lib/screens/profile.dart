@@ -178,7 +178,6 @@ class _ProfileScreenState extends State<ProfileScreen> {
       final user = _auth.currentUser;
       log('Current user email: ${user?.email}');
 
-      // Update the Firestore data
       await FirebaseFirestore.instance.collection("Users").doc(uid).set({
         'name': name,
         'phone': phone,
@@ -236,17 +235,11 @@ class _ProfileScreenState extends State<ProfileScreen> {
     );
     try {
       await _auth.signOut();
-
       _showAlertDialog(
         title: 'Logged Out',
         image: 'assets/logout.png',
         message: 'You have successfully logged out.',
-        closeCallback: () {
-          Navigator.of(context).pushAndRemoveUntil(
-            MaterialPageRoute(builder: (context) => const LoginScreen()),
-            (Route<dynamic> route) => false,
-          );
-        },
+        closeCallback: () {},
       );
     } catch (e) {
       Navigator.pop(context);
@@ -257,6 +250,127 @@ class _ProfileScreenState extends State<ProfileScreen> {
         closeCallback: () {},
       );
     }
+  }
+
+  void _showLogoutConfirmationDialog(BuildContext context) {
+    showDialog(
+      context: context,
+      barrierDismissible: false,
+      builder: (BuildContext context) {
+        return Dialog(
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(12),
+          ),
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              Container(
+                height: 10,
+                decoration: const BoxDecoration(
+                  gradient: LinearGradient(
+                    colors: [
+                      Color(0xff4D3D79),
+                      Color(0xff8E71DF),
+                    ],
+                    begin: Alignment.centerLeft,
+                    end: Alignment.centerRight,
+                  ),
+                  borderRadius: BorderRadius.vertical(
+                    top: Radius.circular(12),
+                  ),
+                ),
+              ),
+              Container(
+                padding: const EdgeInsets.all(20),
+                child: Column(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    Image.asset(
+                      "assets/warning.png",
+                      width: 50,
+                      height: 50,
+                    ),
+                    const SizedBox(height: 10),
+                    const Text(
+                      'Are you sure ?',
+                      style: TextStyle(
+                        fontSize: 18,
+                        fontWeight: FontWeight.bold,
+                        height: 1.2,
+                      ),
+                      textAlign: TextAlign.center,
+                    ),
+                    const SizedBox(height: 10),
+                    const Text(
+                      'Do you want to logout ?',
+                      style: TextStyle(
+                        fontSize: 10,
+                        color: Colors.grey,
+                        height: 1.2,
+                      ),
+                      textAlign: TextAlign.center,
+                    ),
+                    const SizedBox(height: 20),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        GestureDetector(
+                          onTap: () {
+                            Navigator.of(context).pop();
+                          },
+                          child: Container(
+                            width: 110,
+                            height: 30,
+                            decoration: BoxDecoration(
+                              color: const Color(0xffECECEC),
+                              borderRadius: BorderRadius.circular(10),
+                            ),
+                            child: const Center(
+                              child: Text(
+                                'Cancel',
+                                style: TextStyle(
+                                  fontSize: 14,
+                                  color: Colors.black,
+                                  height: 1.2,
+                                ),
+                              ),
+                            ),
+                          ),
+                        ),
+                        GestureDetector(
+                          onTap: () {
+                            Navigator.pop(context);
+                            _logout(context);
+                          },
+                          child: Container(
+                            width: 110,
+                            height: 30,
+                            decoration: BoxDecoration(
+                              color: const Color(0xff7647EB),
+                              borderRadius: BorderRadius.circular(10),
+                            ),
+                            child: const Center(
+                              child: Text(
+                                'Logout',
+                                style: TextStyle(
+                                  fontSize: 14,
+                                  color: Colors.white,
+                                  height: 1.2,
+                                ),
+                              ),
+                            ),
+                          ),
+                        ),
+                      ],
+                    ),
+                  ],
+                ),
+              ),
+            ],
+          ),
+        );
+      },
+    );
   }
 
   void _toggleEdit() {
@@ -285,8 +399,15 @@ class _ProfileScreenState extends State<ProfileScreen> {
       builder: (BuildContext context) {
         Future.delayed(const Duration(seconds: 3), () {
           if (mounted) {
-            Navigator.of(context).pop(true);
             closeCallback();
+            if (title == 'Logged Out') {
+              Navigator.of(context).pushAndRemoveUntil(
+                MaterialPageRoute(builder: (context) => const LoginScreen()),
+                (Route<dynamic> route) => false,
+              );
+            } else {
+              Navigator.pop(context);
+            }
           }
         });
         return PopScope(
@@ -652,158 +773,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                   ),
                                   GestureDetector(
                                     onTap: () {
-                                      showDialog(
-                                        context: context,
-                                        barrierDismissible: false,
-                                        builder: (BuildContext context) {
-                                          return Dialog(
-                                            shape: RoundedRectangleBorder(
-                                              borderRadius:
-                                                  BorderRadius.circular(12),
-                                            ),
-                                            child: Column(
-                                              mainAxisSize: MainAxisSize.min,
-                                              children: [
-                                                Container(
-                                                  height: 10,
-                                                  decoration:
-                                                      const BoxDecoration(
-                                                    gradient: LinearGradient(
-                                                      colors: [
-                                                        Color(0xff4D3D79),
-                                                        Color(0xff8E71DF),
-                                                      ],
-                                                      begin:
-                                                          Alignment.centerLeft,
-                                                      end:
-                                                          Alignment.centerRight,
-                                                    ),
-                                                    borderRadius:
-                                                        BorderRadius.vertical(
-                                                      top: Radius.circular(12),
-                                                    ),
-                                                  ),
-                                                ),
-                                                Container(
-                                                  padding:
-                                                      const EdgeInsets.all(20),
-                                                  child: Column(
-                                                    mainAxisSize:
-                                                        MainAxisSize.min,
-                                                    children: [
-                                                      Image.asset(
-                                                        "assets/warning.png",
-                                                        width: 50,
-                                                        height: 50,
-                                                      ),
-                                                      const SizedBox(
-                                                          height: 10),
-                                                      const Text(
-                                                        'Are you sure ?',
-                                                        style: TextStyle(
-                                                          fontSize: 18,
-                                                          fontWeight:
-                                                              FontWeight.bold,
-                                                          height: 0,
-                                                        ),
-                                                        textAlign:
-                                                            TextAlign.center,
-                                                      ),
-                                                      const SizedBox(
-                                                          height: 10),
-                                                      const Text(
-                                                        'Do you want to logout ?',
-                                                        style: TextStyle(
-                                                          fontSize: 10,
-                                                          color: Colors.grey,
-                                                          height: 0,
-                                                        ),
-                                                        textAlign:
-                                                            TextAlign.center,
-                                                      ),
-                                                      const SizedBox(
-                                                          height: 20),
-                                                      Row(
-                                                        mainAxisAlignment:
-                                                            MainAxisAlignment
-                                                                .spaceBetween,
-                                                        children: [
-                                                          GestureDetector(
-                                                            onTap: () {
-                                                              Navigator.of(
-                                                                      context)
-                                                                  .pop();
-                                                            },
-                                                            child: Container(
-                                                              width: 110,
-                                                              height: 30,
-                                                              decoration:
-                                                                  BoxDecoration(
-                                                                color: const Color(
-                                                                    0xffECECEC),
-                                                                borderRadius:
-                                                                    BorderRadius
-                                                                        .circular(
-                                                                            10),
-                                                              ),
-                                                              child:
-                                                                  const Center(
-                                                                child: Text(
-                                                                  'Cancel',
-                                                                  style:
-                                                                      TextStyle(
-                                                                    fontSize:
-                                                                        14,
-                                                                    color: Colors
-                                                                        .black,
-                                                                    height: 0,
-                                                                  ),
-                                                                ),
-                                                              ),
-                                                            ),
-                                                          ),
-                                                          GestureDetector(
-                                                            onTap: () {
-                                                              _logout(context);
-                                                            },
-                                                            child: Container(
-                                                              width: 110,
-                                                              height: 30,
-                                                              decoration:
-                                                                  BoxDecoration(
-                                                                color: const Color(
-                                                                    0xff7647EB),
-                                                                borderRadius:
-                                                                    BorderRadius
-                                                                        .circular(
-                                                                            10),
-                                                              ),
-                                                              child:
-                                                                  const Center(
-                                                                child: Text(
-                                                                  'Logout',
-                                                                  style:
-                                                                      TextStyle(
-                                                                    fontSize:
-                                                                        14,
-                                                                    color: Colors
-                                                                        .white,
-                                                                    height: 0,
-                                                                  ),
-                                                                ),
-                                                              ),
-                                                            ),
-                                                          ),
-                                                        ],
-                                                      ),
-                                                    ],
-                                                  ),
-                                                ),
-                                              ],
-                                            ),
-                                          );
-                                        },
-                                      );
+                                      _showLogoutConfirmationDialog(context);
                                     },
                                     child: Container(
                                       width: screenWidth * 0.4,
