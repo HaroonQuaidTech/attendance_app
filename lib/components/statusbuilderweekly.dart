@@ -48,6 +48,15 @@ class _StatusBuilerState extends State<StatusBuilderWeekly> {
     return attendanceList;
   }
 
+  Future<Map<String, dynamic>> _getWeeklyData(String userId) async {
+    final attendanceData = await _getAttendanceDetails(userId);
+    final totalHoursData = _calculateWeeklyHours(attendanceData);
+    return {
+      'attendanceData': attendanceData,
+      'totalHours': totalHoursData,
+    };
+  }
+
   String _formatTime(DateTime? dateTime) {
     if (dateTime == null) return 'Not Available';
     final DateFormat formatter = DateFormat('hh:mm a');
@@ -235,248 +244,172 @@ class _StatusBuilerState extends State<StatusBuilderWeekly> {
     required Color color,
     required List<Map<String, dynamic>?> data,
   }) {
-    return FutureBuilder<List<Map<String, dynamic>?>>(
-      future: _getAttendanceDetails(userId),
-      builder: (context, snapshot) {
-        if (snapshot.connectionState == ConnectionState.waiting) {
-          return const Padding(
-            padding: EdgeInsets.only(top: 200.0),
-            child: Center(child: Text('.')),
+    return Expanded(
+      child: ListView.builder(
+        itemCount: data.length,
+        itemBuilder: (context, index) {
+          final attendanceRecord = data[index];
+          final DateTime date = DateTime.now().subtract(
+            Duration(days: DateTime.now().weekday - 1 - index),
           );
-        }
 
-        if (snapshot.hasError) {
-          return const Center(
-              child: Text(
-            'Error Something went wrong Check Your Internet Connection',
-            style: TextStyle(color: Colors.red),
-          ));
-        }
+          // Skip future dates
+          if (date.isAfter(DateTime.now())) {
+            return _buildNullAttendanceContainer(index);
+          }
 
-        if (!snapshot.hasData || snapshot.data == null) {
-          return const Padding(
-            padding: EdgeInsets.only(top: 100.0),
-            child: Center(
-                child: Text('No attendance data found.',
-                    style: TextStyle(fontSize: 20))),
+          final String day = DateFormat('EE').format(date);
+          final String formattedDate = DateFormat('dd').format(date);
+
+          // Skip weekends
+          if (date.weekday == DateTime.saturday ||
+              date.weekday == DateTime.sunday) {
+            return const SizedBox.shrink();
+          }
+
+          // Attendance times
+          final checkIn =
+              (attendanceRecord?['checkIn'] as Timestamp?)?.toDate();
+          final checkOut =
+              (attendanceRecord?['checkOut'] as Timestamp?)?.toDate();
+
+          // Handle empty attendance
+          if (checkIn == null && checkOut == null) {
+            return _buildEmptyAttendanceContainer(index);
+          }
+
+          // Calculate total hours and determine container color
+          final totalHours = _calculateTotalHours(checkIn, checkOut);
+          Color containerColor = _determineContainerColor(checkIn, checkOut);
+
+          return Container(
+            padding: const EdgeInsets.all(12),
+            margin: const EdgeInsets.only(bottom: 10),
+            height: 82,
+            width: 360,
+            decoration: BoxDecoration(
+              borderRadius: BorderRadius.circular(12),
+              color: Colors.white,
+            ),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: [
+                _buildDateColumn(formattedDate, day, containerColor),
+                _buildTimeColumn(checkIn, 'Check In'),
+                const VerticalDivider(color: Colors.black, width: 1),
+                _buildTimeColumn(checkOut, 'Check Out'),
+                const VerticalDivider(color: Colors.black, width: 1),
+                _buildHoursColumn(totalHours),
+              ],
+            ),
           );
-        }
+        },
+      ),
+    );
+  }
 
-        final weeklyData = snapshot.data!;
+  Color _determineContainerColor(DateTime? checkIn, DateTime? checkOut) {
+    const TimeOfDay onTime = TimeOfDay(hour: 8, minute: 14);
+    const TimeOfDay lateArrival = TimeOfDay(hour: 8, minute: 15);
+    const TimeOfDay earlyCheckout = TimeOfDay(hour: 17, minute: 0);
 
-        return Expanded(
-          child: ListView.builder(
-            itemCount: weeklyData.length,
-            itemBuilder: (context, index) {
-              final data = weeklyData[index];
+    Color containerColor = const Color(0xffEC5851); // Default: No check-in
 
-              final DateTime date = DateTime.now()
-                  .subtract(Duration(days: DateTime.now().weekday - 1 - index));
+    if (checkIn != null) {
+      final TimeOfDay checkInTime = TimeOfDay.fromDateTime(checkIn);
+      if (checkInTime.hour < onTime.hour ||
+          (checkInTime.hour == onTime.hour &&
+              checkInTime.minute <= onTime.minute)) {
+        containerColor = const Color(0xff22Af41); // On time
+      } else if (checkInTime.hour > lateArrival.hour ||
+          (checkInTime.hour == lateArrival.hour &&
+              checkInTime.minute >= lateArrival.minute)) {
+        containerColor = const Color(0xffF6C15B); // Late arrival
+      }
+    }
 
-              if (date.isAfter(DateTime.now())) {
-                return _buildNullAttendanceContainer(index);
-              }
+    if (checkOut != null) {
+      final TimeOfDay checkOutTime = TimeOfDay.fromDateTime(checkOut);
+      if (checkOutTime.hour < earlyCheckout.hour ||
+          (checkOutTime.hour == earlyCheckout.hour &&
+              checkOutTime.minute < earlyCheckout.minute)) {
+        containerColor = const Color(0xffF07E25); // Early check-out
+      }
+    }
 
-              final String day = DateFormat('EE').format(date);
-              final String formattedDate = DateFormat('dd').format(date);
-              if (date.weekday == DateTime.saturday ||
-                  date.weekday == DateTime.sunday) {
-                return const SizedBox.shrink();
-              }
+    return containerColor;
+  }
 
-              // Check if date is in the future
-              final checkIn = (data?['checkIn'] as Timestamp?)?.toDate();
-              final checkOut = (data?['checkOut'] as Timestamp?)?.toDate();
-
-              if (checkIn == null && checkOut == null) {
-                return _buildEmptyAttendanceContainer(index);
-              }
-
-              final totalHours = _calculateTotalHours(checkIn, checkOut);
-              Color containerColor;
-
-              if (checkIn != null) {
-                final TimeOfDay checkInTime = TimeOfDay.fromDateTime(checkIn);
-                const TimeOfDay onTime = TimeOfDay(hour: 8, minute: 14);
-                const TimeOfDay lateArrival = TimeOfDay(hour: 8, minute: 15);
-
-                final DateTime today = DateTime.now();
-                final DateTime checkInDateTime = DateTime(
-                  today.year,
-                  today.month,
-                  today.day,
-                  checkInTime.hour,
-                  checkInTime.minute,
-                );
-                final DateTime onTimeDateTime = DateTime(
-                  today.year,
-                  today.month,
-                  today.day,
-                  onTime.hour,
-                  onTime.minute,
-                );
-                final DateTime lateArrivalDateTime = DateTime(
-                  today.year,
-                  today.month,
-                  today.day,
-                  lateArrival.hour,
-                  lateArrival.minute,
-                );
-
-                if (checkInDateTime.isBefore(onTimeDateTime)) {
-                  containerColor = const Color(0xff22Af41); // On time
-                } else if (checkInDateTime.isAfter(lateArrivalDateTime)) {
-                  containerColor = const Color(0xffF6C15B); // Late arrival
-                } else {
-                  containerColor = const Color(0xff8E71DF); // Default color
-                }
-              } else {
-                containerColor = const Color(0xffEC5851); // No check-in
-              }
-
-              if (checkOut != null) {
-                final TimeOfDay checkOutTime = TimeOfDay.fromDateTime(checkOut);
-                const TimeOfDay earlyCheckout = TimeOfDay(hour: 17, minute: 0);
-
-                final DateTime today = DateTime.now();
-                final DateTime checkOutDateTime = DateTime(
-                  today.year,
-                  today.month,
-                  today.day,
-                  checkOutTime.hour,
-                  checkOutTime.minute,
-                );
-                final DateTime earlyCheckoutDateTime = DateTime(
-                  today.year,
-                  today.month,
-                  today.day,
-                  earlyCheckout.hour,
-                  earlyCheckout.minute,
-                );
-
-                if (checkOutDateTime.isBefore(earlyCheckoutDateTime)) {
-                  containerColor = const Color(0xffF07E25); // Early check-out
-                }
-              }
-
-              return Container(
-                padding: const EdgeInsets.all(12),
-                margin: const EdgeInsets.only(bottom: 10),
-                height: 82,
-                width: 360,
-                decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(12),
-                  color: Colors.white,
-                ),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  crossAxisAlignment: CrossAxisAlignment.center,
-                  children: [
-                    Column(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        Container(
-                          width: 53,
-                          height: 55,
-                          decoration: BoxDecoration(
-                              color: containerColor,
-                              borderRadius: BorderRadius.circular(6)),
-                          child: Column(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            children: [
-                              Text(
-                                formattedDate,
-                                style: const TextStyle(
-                                    fontSize: 22,
-                                    fontWeight: FontWeight.w600,
-                                    color: Colors.white),
-                              ),
-                              Text(
-                                day,
-                                style: const TextStyle(
-                                    fontSize: 12,
-                                    fontWeight: FontWeight.w400,
-                                    color: Colors.white),
-                              ),
-                            ],
-                          ),
-                        ),
-                      ],
-                    ),
-                    Column(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        Text(
-                          checkIn != null ? _formatTime(checkIn) : '--:--',
-                          style: const TextStyle(
-                              fontSize: 14,
-                              fontWeight: FontWeight.bold,
-                              color: Colors.black),
-                        ),
-                        const Text(
-                          'Check In',
-                          style: TextStyle(
-                              fontSize: 10,
-                              fontWeight: FontWeight.w600,
-                              color: Colors.black),
-                        ),
-                      ],
-                    ),
-                    Container(
-                      width: 1,
-                      height: 50,
-                      color: Colors.black,
-                    ),
-                    Column(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        Text(
-                          checkOut != null ? _formatTime(checkOut) : '--:--',
-                          style: const TextStyle(
-                              fontSize: 14,
-                              fontWeight: FontWeight.bold,
-                              color: Colors.black),
-                        ),
-                        const Text(
-                          'Check Out',
-                          style: TextStyle(
-                              fontSize: 10,
-                              fontWeight: FontWeight.w600,
-                              color: Colors.black),
-                        ),
-                      ],
-                    ),
-                    Container(
-                      width: 1,
-                      height: 50,
-                      color: Colors.black,
-                    ),
-                    Column(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        Text(
-                          totalHours,
-                          style: const TextStyle(
-                              fontSize: 14,
-                              fontWeight: FontWeight.bold,
-                              color: Colors.black),
-                        ),
-                        const Text(
-                          'Total Hrs',
-                          style: TextStyle(
-                              fontSize: 10,
-                              fontWeight: FontWeight.w600,
-                              color: Colors.black),
-                        ),
-                      ],
-                    ),
-                  ],
-                ),
-              );
-            },
+  Widget _buildDateColumn(
+      String formattedDate, String day, Color containerColor) {
+    return Column(
+      mainAxisAlignment: MainAxisAlignment.center,
+      children: [
+        Container(
+          width: 53,
+          height: 55,
+          decoration: BoxDecoration(
+            color: containerColor,
+            borderRadius: BorderRadius.circular(6),
           ),
-        );
-      },
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Text(
+                formattedDate,
+                style: const TextStyle(
+                    fontSize: 22,
+                    fontWeight: FontWeight.w600,
+                    color: Colors.white),
+              ),
+              Text(
+                day,
+                style: const TextStyle(
+                    fontSize: 12,
+                    fontWeight: FontWeight.w400,
+                    color: Colors.white),
+              ),
+            ],
+          ),
+        ),
+      ],
+    );
+  }
+
+  Widget _buildTimeColumn(DateTime? time, String label) {
+    return Column(
+      mainAxisAlignment: MainAxisAlignment.center,
+      children: [
+        Text(
+          time != null ? _formatTime(time) : '--:--',
+          style: const TextStyle(
+              fontSize: 14, fontWeight: FontWeight.bold, color: Colors.black),
+        ),
+        Text(
+          label,
+          style: const TextStyle(
+              fontSize: 10, fontWeight: FontWeight.w600, color: Colors.black),
+        ),
+      ],
+    );
+  }
+
+  Widget _buildHoursColumn(String totalHours) {
+    return Column(
+      mainAxisAlignment: MainAxisAlignment.center,
+      children: [
+        Text(
+          totalHours,
+          style: const TextStyle(
+              fontSize: 14, fontWeight: FontWeight.bold, color: Colors.black),
+        ),
+        const Text(
+          'Total Hrs',
+          style: TextStyle(
+              fontSize: 10, fontWeight: FontWeight.w600, color: Colors.black),
+        ),
+      ],
     );
   }
 
@@ -496,11 +429,11 @@ class _StatusBuilerState extends State<StatusBuilderWeekly> {
       child: Column(
         children: [
           FutureBuilder(
-            future: _getAttendanceDetails(userId),
+            future: _getWeeklyData(userId),
             builder: (context, snapshot) {
               if (snapshot.connectionState == ConnectionState.waiting) {
                 return const Padding(
-                  padding: EdgeInsets.only(top: 220.0),
+                  padding: EdgeInsets.only(top: 150.0),
                   child: Center(
                     child: CircularProgressIndicator(),
                   ),
@@ -525,7 +458,14 @@ class _StatusBuilerState extends State<StatusBuilderWeekly> {
                 );
               }
 
-              final weeklyData = snapshot.data!;
+              // Extracting data from the snapshot
+              final attendanceData = snapshot.data!['attendanceData']
+                  as List<Map<String, dynamic>?>;
+              final weeklyData = snapshot.data!['weeklyData']
+                      as List<Map<String, dynamic>?>? ??
+                  [];
+
+              // Calculating total time and hours
               final totalTime = _calculateWeeklyMins(weeklyData);
               final totalHours = (totalTime / 60).toStringAsFixed(2);
               final totalMinutes = _calculateWeeklyMins(weeklyData);
@@ -536,11 +476,12 @@ class _StatusBuilerState extends State<StatusBuilderWeekly> {
 
               final double progress = totalHourss / maxHours;
 
-              return Column(
-                children: [
-                  Padding(
-                    padding: const EdgeInsets.only(top: 3.0),
-                    child: Container(
+              return Padding(
+                padding: const EdgeInsets.only(top: 0.0),
+                child: Column(
+                  children: [
+                    // Weekly Times Log Container
+                    Container(
                       height: 207,
                       width: double.infinity,
                       decoration: BoxDecoration(
@@ -570,6 +511,7 @@ class _StatusBuilerState extends State<StatusBuilderWeekly> {
                             Row(
                               mainAxisAlignment: MainAxisAlignment.spaceBetween,
                               children: [
+                                // Time in Minutes Container
                                 Container(
                                   height: screenHeight * 0.15,
                                   width: screenWidth * 0.43,
@@ -613,6 +555,7 @@ class _StatusBuilerState extends State<StatusBuilderWeekly> {
                                     ),
                                   ),
                                 ),
+                                // Time in Hours Container
                                 Container(
                                   height: screenHeight * 0.15,
                                   width: screenWidth * 0.43,
@@ -663,44 +606,50 @@ class _StatusBuilerState extends State<StatusBuilderWeekly> {
                         ),
                       ),
                     ),
-                  ),
-                  const SizedBox(height: 20),
-                  Container(
-                    padding: const EdgeInsets.symmetric(
-                        horizontal: 12, vertical: 12),
-                    height: (MediaQuery.of(context).size.height < 600)
-                        ? MediaQuery.of(context).size.height * 0.70
-                        : (MediaQuery.of(context).size.height < 800)
-                            ? MediaQuery.of(context).size.height * 0.665
-                            : MediaQuery.of(context).size.height * 0.66,
-                    width: double.infinity,
-                    decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(20),
-                      color: const Color(0xffEFF1FF),
-                      boxShadow: [
-                        BoxShadow(
-                          color: Colors.grey.withOpacity(0.2),
-                          spreadRadius: 2,
-                          blurRadius: 4,
-                          offset: const Offset(0, 2),
-                        ),
-                      ],
+                    const SizedBox(height: 20),
+
+                    // Weekly Attendance Container
+                    Container(
+                      padding: const EdgeInsets.symmetric(
+                          horizontal: 12, vertical: 12),
+                      height: (MediaQuery.of(context).size.height < 600)
+                          ? MediaQuery.of(context).size.height * 0.70
+                          : (MediaQuery.of(context).size.height < 800)
+                              ? MediaQuery.of(context).size.height * 0.65
+                              : MediaQuery.of(context).size.height * 0.7,
+                      width: double.infinity,
+                      decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(20),
+                        color: const Color(0xffEFF1FF),
+                        boxShadow: [
+                          BoxShadow(
+                            color: const Color.fromARGB(255, 139, 80, 80)
+                                .withOpacity(0.2),
+                            spreadRadius: 2,
+                            blurRadius: 4,
+                            offset: const Offset(0, 2),
+                          ),
+                        ],
+                      ),
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text(
+                            'Weekly Attendance: ${'$startFormatted - $endFormatted'}',
+                            style: const TextStyle(
+                                fontWeight: FontWeight.w600, fontSize: 18),
+                          ),
+                          const SizedBox(height: 10),
+                          _buildAttendance(
+                            color: const Color(0xff9478F7),
+                            data: attendanceData,
+                          ),
+                          const SizedBox(height: 10),
+                        ],
+                      ),
                     ),
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Text(
-                          'Weekly Attendance: ${'$startFormatted - $endFormatted'}',
-                          style: const TextStyle(
-                              fontWeight: FontWeight.w600, fontSize: 18),
-                        ),
-                        const SizedBox(height: 10),
-                        _buildAttendance(
-                            color: const Color(0xff9478F7), data: []),
-                      ],
-                    ),
-                  ),
-                ],
+                  ],
+                ),
               );
             },
           ),
