@@ -339,7 +339,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                         ),
                         GestureDetector(
                           onTap: () {
-                             Navigator.pop(context);
+                            Navigator.pop(context);
                             _logout(context);
                           },
                           child: Container(
