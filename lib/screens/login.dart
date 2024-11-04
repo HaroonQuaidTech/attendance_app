@@ -50,7 +50,6 @@ class _LoginScreenState extends State<LoginScreen> {
           .signInWithEmailAndPassword(email: email, password: password);
       log(userCredential.toString());
 
-      // Save the remember me preference
       SharedPreferences prefs = await SharedPreferences.getInstance();
       await prefs.setBool('rememberMe', _isCheck);
 

@@ -5,10 +5,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:intl/intl.dart';
 
 class StatusBuiler extends StatefulWidget {
-  const StatusBuiler({
-    super.key,
-  });
-
+  const StatusBuiler({super.key});
   @override
   State<StatusBuiler> createState() => _StatusBuilerState();
 }
@@ -33,7 +30,6 @@ class _StatusBuilerState extends State<StatusBuiler> {
               .collection('dailyattendance')
               .doc(formattedDate)
               .get();
-
       if (snapshot.exists) {
         final data = snapshot.data();
         final checkIn = (data?['checkIn'] as Timestamp?)?.toDate();
@@ -52,17 +48,7 @@ class _StatusBuilerState extends State<StatusBuiler> {
         });
       }
     }
-
     return monthlyAttendanceList;
-  }
-
-  Future<Map<String, dynamic>> _getMonthlyData(String userId) async {
-    final attendanceData = await _getMonthlyAttendanceDetails(userId);
-    final totalHoursData = _calculateMonthlyTotal(attendanceData);
-    return {
-      'attendanceData': attendanceData,
-      'totalHours': totalHoursData,
-    };
   }
 
   String _formatTime(DateTime? dateTime) {
@@ -85,48 +71,39 @@ class _StatusBuilerState extends State<StatusBuiler> {
 
   int _calculateMonthlyTotal(List<Map<String, dynamic>?> monthlyData) {
     int totalMinutes = 0;
-
     for (var data in monthlyData) {
       if (data == null) continue;
       final checkIn = (data['checkIn'] as Timestamp?)?.toDate();
       final checkOut = (data['checkOut'] as Timestamp?)?.toDate();
-
       if (checkIn != null && checkOut != null) {
         final duration = checkOut.difference(checkIn);
         totalMinutes += duration.inMinutes;
       }
     }
-
     return totalMinutes;
   }
 
   double _calculateMonthlyHours(List<Map<String, dynamic>?> monthlyData) {
     int totalMinutes = 0;
-
     for (var data in monthlyData) {
       if (data == null) continue;
       final checkIn = (data['checkIn'] as Timestamp?)?.toDate();
       final checkOut = (data['checkOut'] as Timestamp?)?.toDate();
-
       if (checkIn != null && checkOut != null) {
         final duration = checkOut.difference(checkIn);
         totalMinutes += duration.inMinutes;
       }
     }
-
     final double totalHours = totalMinutes / 60;
     return totalHours;
   }
 
-  Widget _buildEmptyAttendanceContainer(
-    int index,
-  ) {
+  Widget _buildEmptyAttendanceContainer(int index) {
     final DateTime now = DateTime.now();
     final DateTime firstDayOfMonth = DateTime(now.year, now.month, 1);
     final DateTime date = firstDayOfMonth.add(Duration(days: index));
     final String day = DateFormat('EE').format(date);
     final String formattedDate = DateFormat('dd').format(date);
-
     return Container(
       padding: const EdgeInsets.all(12),
       margin: const EdgeInsets.only(bottom: 10),
@@ -182,15 +159,12 @@ class _StatusBuilerState extends State<StatusBuiler> {
     );
   }
 
-  Widget _buildHNullAttendanceContainer(
-    int index,
-  ) {
+  Widget _buildHNullAttendanceContainer(int index) {
     final DateTime now = DateTime.now();
     final DateTime firstDayOfMonth = DateTime(now.year, now.month, 1);
     final DateTime date = firstDayOfMonth.add(Duration(days: index));
     final String day = DateFormat('EE').format(date);
     final String formattedDate = DateFormat('dd').format(date);
-
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: 12),
       margin: const EdgeInsets.only(bottom: 10),
@@ -243,15 +217,12 @@ class _StatusBuilerState extends State<StatusBuiler> {
     );
   }
 
-  Widget _buildWeekendContainer(
-    int index,
-  ) {
+  Widget _buildWeekendContainer(int index) {
     final DateTime now = DateTime.now();
     final DateTime firstDayOfMonth = DateTime(now.year, now.month, 1);
     final DateTime date = firstDayOfMonth.add(Duration(days: index));
     final String day = DateFormat('EE').format(date);
     final String formattedDate = DateFormat('dd').format(date);
-
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: 12),
       margin: const EdgeInsets.only(bottom: 10),
@@ -312,14 +283,11 @@ class _StatusBuilerState extends State<StatusBuiler> {
     final lastDayOfMonth = DateTime(now.year, now.month + 1, 0);
     final formattedFirstDay = DateFormat('dd MMM').format(firstDayOfMonth);
     final formattedLastDay = DateFormat('dd MMM').format(lastDayOfMonth);
-
     return '$formattedFirstDay - $formattedLastDay';
   }
 
-  Widget _buildAttendance({
-    required Color color,
-    required List<Map<String, dynamic>?> data,
-  }) {
+  Widget _buildAttendance(
+      {required Color color, required List<Map<String, dynamic>?> data}) {
     if (data.isEmpty) {
       return const Center(
         child: Text(
@@ -328,7 +296,6 @@ class _StatusBuilerState extends State<StatusBuiler> {
         ),
       );
     }
-
     return Expanded(
       child: ListView.builder(
         itemCount: data.length,
@@ -339,28 +306,22 @@ class _StatusBuilerState extends State<StatusBuiler> {
           final DateTime date = firstDayOfMonth.add(Duration(days: index));
           final String day = DateFormat('EE').format(date);
           final String formattedDate = DateFormat('dd').format(date);
-
           if (date.weekday == DateTime.saturday ||
               date.weekday == DateTime.sunday) {
             return _buildWeekendContainer(index);
           }
-
           if (date.isAfter(now) || attendanceRecord == null) {
             return _buildHNullAttendanceContainer(index);
           }
-
           final checkIn = (attendanceRecord['checkIn'] as Timestamp?)?.toDate();
           final checkOut =
               (attendanceRecord['checkOut'] as Timestamp?)?.toDate();
-
           if (checkIn == null && checkOut == null) {
             return _buildEmptyAttendanceContainer(index);
           }
-
           final totalHours = _calculateTotalHours(checkIn, checkOut);
           final Color containerColor =
               _determineContainerColor(checkIn, checkOut);
-
           return _buildAttendanceRow(
             formattedDate: formattedDate,
             day: day,
@@ -381,7 +342,6 @@ class _StatusBuilerState extends State<StatusBuiler> {
       const TimeOfDay lateOnTime = TimeOfDay(hour: 8, minute: 10);
       const TimeOfDay exactCheckIn = TimeOfDay(hour: 8, minute: 0);
       const TimeOfDay lateArrival = TimeOfDay(hour: 8, minute: 10);
-
       if ((checkInTime.hour == earlyOnTime.hour &&
               checkInTime.minute >= earlyOnTime.minute) ||
           (checkInTime.hour == lateOnTime.hour &&
@@ -398,18 +358,15 @@ class _StatusBuilerState extends State<StatusBuiler> {
         return const Color(0xff8E71DF);
       }
     }
-
     if (checkOut != null) {
       final TimeOfDay checkOutTime = TimeOfDay.fromDateTime(checkOut);
       const TimeOfDay earlyCheckout = TimeOfDay(hour: 17, minute: 0);
-
       if (checkOutTime.hour < earlyCheckout.hour ||
           (checkOutTime.hour == earlyCheckout.hour &&
               checkOutTime.minute < earlyCheckout.minute)) {
         return const Color.fromARGB(255, 223, 103, 11);
       }
     }
-
     return const Color(0xff8E71DF);
   }
 
@@ -500,6 +457,15 @@ class _StatusBuilerState extends State<StatusBuiler> {
     );
   }
 
+  Future<Map<String, dynamic>> _getMonthlyData(String userId) async {
+    final attendanceData = await _getMonthlyAttendanceDetails(userId);
+    final totalHoursData = _calculateMonthlyTotal(attendanceData);
+    return {
+      'attendanceData': attendanceData,
+      'totalHours': totalHoursData,
+    };
+  }
+
   @override
   Widget build(BuildContext context) {
     final Size screenSize = MediaQuery.of(context).size;
@@ -520,20 +486,17 @@ class _StatusBuilerState extends State<StatusBuiler> {
               if (snapshot.hasError) {
                 return Center(child: Text('Error: ${snapshot.error}'));
               }
-
               if (!snapshot.hasData || snapshot.data == null) {
                 return const Padding(
                   padding: EdgeInsets.only(top: 150.0),
                   child: Center(child: CircularProgressIndicator()),
                 );
               }
-
               final attendanceData = snapshot.data!['attendanceData']
                   as List<Map<String, dynamic>?>;
               final monthlyData = snapshot.data!['monthlyData']
                       as List<Map<String, dynamic>?>? ??
                   [];
-
               final totalTime = _calculateMonthlyTotal(monthlyData);
               final totalHours = (totalTime / 60).toStringAsFixed(2);
               final totalMinutes = _calculateMonthlyTotal(monthlyData);
@@ -542,7 +505,6 @@ class _StatusBuilerState extends State<StatusBuiler> {
               const double maxHours = 173.2;
               double progressValue =
                   maxHours != 0 ? totalHourss / maxHours : 0.0;
-
               return Column(
                 children: [
                   Container(
@@ -699,8 +661,7 @@ class _StatusBuilerState extends State<StatusBuiler> {
                         const SizedBox(height: 10),
                         _buildAttendance(
                             color: const Color(0xff9478F7),
-                            data:
-                                attendanceData), // Pass the attendance data here
+                            data: attendanceData),
                         const SizedBox(height: 10),
                       ],
                     ),
