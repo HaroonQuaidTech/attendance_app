@@ -17,49 +17,48 @@ class StatusBuilderWeekly extends StatefulWidget {
 class _StatusBuilerState extends State<StatusBuilderWeekly> {
   final String userId = FirebaseAuth.instance.currentUser!.uid;
 
-  Future<List<Map<String, dynamic>?>> _getAttendanceDetails(String uid) async {
-    List<Map<String, dynamic>?> attendanceList = [];
+  Future<List<Map<String, dynamic>>> _getWeeklyAttendanceDetails(
+      String uid) async {
+    List<Map<String, dynamic>> fiveDayAttendanceList = [];
     final now = DateTime.now();
+    final startOfWeek = now.subtract(Duration(days: now.weekday - 1));
 
-    // Calculate the start of the week (Monday)
-    DateTime startOfWeek = now.subtract(Duration(days: now.weekday - 1));
-
-    // Create a list of promises for fetching attendance data
-    List<Future<void>> fetchPromises = [];
-
-    for (int i = 0; i < 5; i++) {
-      DateTime currentDay = startOfWeek.add(Duration(days: i));
-
-      // Skip weekends (Saturday and Sunday)
-      if (currentDay.weekday == DateTime.saturday ||
-          currentDay.weekday == DateTime.sunday) {
-        attendanceList.add(null);
-        continue;
-      }
-
-      String formattedDate = DateFormat('yMMMd').format(currentDay);
-
-      // Fetch data asynchronously
-      fetchPromises.add(FirebaseFirestore.instance
+    final List<Future<DocumentSnapshot<Map<String, dynamic>>>> snapshotFutures =
+        List.generate(5, (i) {
+      final date = startOfWeek.add(Duration(days: i));
+      final formattedDate = DateFormat('yMMMd').format(date);
+      return FirebaseFirestore.instance
           .collection('AttendanceDetails')
           .doc(uid)
           .collection('dailyattendance')
           .doc(formattedDate)
-          .get()
-          .then((snapshot) {
-        // Add data to the attendance list
-        attendanceList.add(snapshot.exists ? snapshot.data() : null);
-      }));
+          .get();
+    });
+
+    final snapshots = await Future.wait(snapshotFutures);
+
+    for (int i = 0; i < snapshots.length; i++) {
+      final date = startOfWeek.add(Duration(days: i));
+      final formattedDate = DateFormat('yMMMd').format(date);
+      final snapshot = snapshots[i];
+      final data = snapshot.data();
+      final checkIn = (data?['checkIn'] as Timestamp?)?.toDate();
+
+      if (snapshot.exists && checkIn != null) {
+        fiveDayAttendanceList.add(data!);
+      } else {
+        fiveDayAttendanceList.add({
+          'date': formattedDate,
+          'status': 'Absent',
+        });
+      }
     }
 
-    // Wait for all fetch operations to complete
-    await Future.wait(fetchPromises);
-
-    return attendanceList;
+    return fiveDayAttendanceList;
   }
 
   Future<Map<String, dynamic>> _getWeeklyData(String userId) async {
-    final attendanceData = await _getAttendanceDetails(userId);
+    final attendanceData = await _getWeeklyAttendanceDetails(userId);
     final totalHoursData = _calculateWeeklyHours(attendanceData);
     return {
       'attendanceData': attendanceData,

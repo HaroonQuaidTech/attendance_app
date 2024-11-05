@@ -192,14 +192,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
         title: 'Success',
         image: 'assets/success.png',
         message: 'Profile Updated',
-        closeCallback: () {
-          Navigator.pushReplacement(
-            context,
-            MaterialPageRoute(
-              builder: (context) => const HomeScreen(),
-            ),
-          );
-        },
+        closeCallback: () {},
       );
     } catch (e) {
       Navigator.pop(context);
@@ -224,16 +217,10 @@ class _ProfileScreenState extends State<ProfileScreen> {
   }
 
   Future<void> _logout(BuildContext context) async {
-    showDialog(
-      context: context,
-      barrierDismissible: false,
-      builder: (BuildContext context) {
-        return const Center(
-          child: CircularProgressIndicator(),
-        );
-      },
-    );
     try {
+      setState(() {
+        _isLoading = true;
+      });
       await _auth.signOut();
       _showAlertDialog(
         title: 'Logged Out',
@@ -249,6 +236,11 @@ class _ProfileScreenState extends State<ProfileScreen> {
         message: 'Failed to log out. Please try again.',
         closeCallback: () {},
       );
+      log(e.toString());
+    } finally {
+      setState(() {
+        _isLoading = false;
+      });
     }
   }
 
@@ -405,6 +397,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                 MaterialPageRoute(builder: (context) => const LoginScreen()),
                 (Route<dynamic> route) => false,
               );
+            } else if (message == 'Profile Updated') {
             } else {
               Navigator.pop(context);
             }

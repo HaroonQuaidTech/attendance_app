@@ -13,41 +13,42 @@ class StatusBuiler extends StatefulWidget {
 
 class _StatusBuilerState extends State<StatusBuiler> {
   final String userId = FirebaseAuth.instance.currentUser!.uid;
+
   Future<List<Map<String, dynamic>>> _getMonthlyAttendanceDetails(
       String uid) async {
     List<Map<String, dynamic>> monthlyAttendanceList = [];
     final now = DateTime.now();
     final firstDayOfMonth = DateTime(now.year, now.month, 1);
     final lastDayOfMonth = DateTime(now.year, now.month + 1, 0);
+    final daysInMonth = lastDayOfMonth.difference(firstDayOfMonth).inDays + 1;
 
-    // Query Firestore for all documents within the month range
-    final attendanceQuery = await FirebaseFirestore.instance
-        .collection('AttendanceDetails')
-        .doc(uid)
-        .collection('dailyattendance')
-        .where(FieldPath.documentId,
-            isGreaterThanOrEqualTo: DateFormat('yMMMd').format(firstDayOfMonth))
-        .where(FieldPath.documentId,
-            isLessThanOrEqualTo: DateFormat('yMMMd').format(lastDayOfMonth))
-        .get();
-
-    // Map existing attendance records for the month by date
-    Map<String, Map<String, dynamic>> attendanceMap = {
-      for (var doc in attendanceQuery.docs) doc.id: doc.data()
-    };
-
-    // Iterate through each day of the month and build attendance data
-    for (int i = 0;
-        i <= lastDayOfMonth.difference(firstDayOfMonth).inDays;
-        i++) {
+    // Prepare a list of futures to fetch attendance data concurrently
+    final List<Future<DocumentSnapshot<Map<String, dynamic>>>> snapshotFutures =
+        List.generate(daysInMonth, (i) {
       final date = firstDayOfMonth.add(Duration(days: i));
       final formattedDate = DateFormat('yMMMd').format(date);
+      return FirebaseFirestore.instance
+          .collection('AttendanceDetails')
+          .doc(uid)
+          .collection('dailyattendance')
+          .doc(formattedDate)
+          .get();
+    });
 
-      if (attendanceMap.containsKey(formattedDate)) {
-        // Record exists in Firestore; add it to the list
-        monthlyAttendanceList.add(attendanceMap[formattedDate]!);
+    // Wait for all futures to complete
+    final snapshots = await Future.wait(snapshotFutures);
+
+    // Process each snapshot result
+    for (int i = 0; i < snapshots.length; i++) {
+      final date = firstDayOfMonth.add(Duration(days: i));
+      final formattedDate = DateFormat('yMMMd').format(date);
+      final snapshot = snapshots[i];
+      final data = snapshot.data();
+      final checkIn = (data?['checkIn'] as Timestamp?)?.toDate();
+
+      if (snapshot.exists && checkIn != null) {
+        monthlyAttendanceList.add(data!);
       } else {
-        // No record for the date; mark as 'Absent'
         monthlyAttendanceList.add({
           'date': formattedDate,
           'status': 'Absent',
