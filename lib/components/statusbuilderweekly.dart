@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
@@ -19,32 +21,40 @@ class _StatusBuilerState extends State<StatusBuilderWeekly> {
     List<Map<String, dynamic>?> attendanceList = [];
     final now = DateTime.now();
 
+    // Calculate the start of the week (Monday)
     DateTime startOfWeek = now.subtract(Duration(days: now.weekday - 1));
+
+    // Create a list of promises for fetching attendance data
+    List<Future<void>> fetchPromises = [];
 
     for (int i = 0; i < 5; i++) {
       DateTime currentDay = startOfWeek.add(Duration(days: i));
 
+      // Skip weekends (Saturday and Sunday)
       if (currentDay.weekday == DateTime.saturday ||
           currentDay.weekday == DateTime.sunday) {
+        attendanceList.add(null);
         continue;
       }
 
       String formattedDate = DateFormat('yMMMd').format(currentDay);
 
-      final DocumentSnapshot<Map<String, dynamic>> snapshot =
-          await FirebaseFirestore.instance
-              .collection('AttendanceDetails')
-              .doc(uid)
-              .collection('dailyattendance')
-              .doc(formattedDate)
-              .get();
-
-      if (snapshot.exists) {
-        attendanceList.add(snapshot.data());
-      } else {
-        attendanceList.add(null);
-      }
+      // Fetch data asynchronously
+      fetchPromises.add(FirebaseFirestore.instance
+          .collection('AttendanceDetails')
+          .doc(uid)
+          .collection('dailyattendance')
+          .doc(formattedDate)
+          .get()
+          .then((snapshot) {
+        // Add data to the attendance list
+        attendanceList.add(snapshot.exists ? snapshot.data() : null);
+      }));
     }
+
+    // Wait for all fetch operations to complete
+    await Future.wait(fetchPromises);
+
     return attendanceList;
   }
 
@@ -461,9 +471,10 @@ class _StatusBuilerState extends State<StatusBuilderWeekly> {
               // Extracting data from the snapshot
               final attendanceData = snapshot.data!['attendanceData']
                   as List<Map<String, dynamic>?>;
-              final weeklyData = snapshot.data!['weeklyData']
+              final weeklyData = snapshot.data!['attendanceData']
                       as List<Map<String, dynamic>?>? ??
                   [];
+              log('Weekly Data: ${snapshot.data!['weeklyData']}');
 
               // Calculating total time and hours
               final totalTime = _calculateWeeklyMins(weeklyData);

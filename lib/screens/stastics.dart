@@ -367,7 +367,7 @@ class _StatsticsScreenState extends State<StatsticsScreen> {
                         height: 20,
                       ),
                       Padding(
-                        padding: const EdgeInsets.only(top: 20.0),
+                        padding: const EdgeInsets.only(top: 1.0),
                         child: Column(
                           children: [
                             if (_selectedIndex != 1)
