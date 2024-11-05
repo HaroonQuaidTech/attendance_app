@@ -31,27 +31,21 @@ Future<Map<String, int>> fetchMonthlyAttendance(String userId) async {
       'absent': 0,
     };
 
-    // Set of all days in the month with attendance records
     Set<int> daysWithRecords = {};
 
-    // Process each attendance record
     for (var doc in querySnapshot.docs) {
       final data = doc.data();
       final checkIn = (data['checkIn'] as Timestamp?)?.toDate();
-      final checkOut = (data['checkOut'] as Timestamp?)
-          ?.toDate(); // Check for checkOut as well
+      final checkOut = (data['checkOut'] as Timestamp?)?.toDate();
 
-      // If both check-in and check-out are null, the user is absent for that day
       if (checkIn == null && checkOut == null) {
-        continue; // Skip, will mark absent later
+        continue;
       }
 
-      // Record the day of the check-in
       if (checkIn != null) {
         daysWithRecords.add(checkIn.day);
       }
 
-      // Determine if the user was late
       if (checkIn != null && checkIn.isAfter(lateThreshold)) {
         counts['late'] = (counts['late'] ?? 0) + 1;
       } else if (checkIn != null) {
@@ -59,7 +53,6 @@ Future<Map<String, int>> fetchMonthlyAttendance(String userId) async {
       }
     }
 
-    // Calculate absences by checking which past and current days are missing records
     for (int day = 1; day <= currentDayOfMonth; day++) {
       if (!daysWithRecords.contains(day)) {
         counts['absent'] = (counts['absent'] ?? 0) + 1;

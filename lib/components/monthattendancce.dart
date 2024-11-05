@@ -1,20 +1,16 @@
-// ignore_for_file: prefer_const_constructors, prefer_const_literals_to_create_immutables, use_super_parameters, unnecessary_string_interpolations, unused_element, depend_on_referenced_packages, curly_braces_in_flow_control_structures
-
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-
 import 'package:intl/intl.dart';
 
 class MonthlyAttendance extends StatefulWidget {
   final Color color;
   final String? dropdownValue2;
-
   const MonthlyAttendance({
-    Key? key,
+    super.key,
     required this.color,
     required this.dropdownValue2,
-  }) : super(key: key);
+  });
 
   @override
   State<MonthlyAttendance> createState() => _MonthlyAttendanceState();
@@ -23,109 +19,97 @@ class MonthlyAttendance extends StatefulWidget {
 class _MonthlyAttendanceState extends State<MonthlyAttendance> {
   final String userId = FirebaseAuth.instance.currentUser!.uid;
   bool isLoading = true;
-
   List<Map<String, dynamic>> monthlyData = [];
   List<Map<String, dynamic>> lateArrivals = [];
   List<Map<String, dynamic>> absents = [];
   List<Map<String, dynamic>> onTime = [];
   List<Map<String, dynamic>> earlyOuts = [];
   List<Map<String, dynamic>> presents = [];
-Future<void> _getMonthlyAttendance(String uid) async {
-  DateTime today = DateTime.now();
 
-  // Get the first day of the current month
-  // ignore: unused_local_variable
-  DateTime firstDayOfMonth = DateTime(today.year, today.month, 1);
+  Future<void> _getMonthlyAttendance(String uid) async {
+    DateTime today = DateTime.now();
+    int lastDayOfMonth = DateTime(today.year, today.month + 1, 0).day;
 
-  // Get the last day of the current month
-  int lastDayOfMonth = DateTime(today.year, today.month + 1, 0).day;
+    for (int day = 1; day <= lastDayOfMonth; day++) {
+      DateTime currentDate = DateTime(today.year, today.month, day);
+      String formattedDate = DateFormat('yMMMd').format(currentDate);
+      String formattedDay = DateFormat('EEE').format(currentDate);
+      if (currentDate.weekday == DateTime.saturday ||
+          currentDate.weekday == DateTime.sunday) {
+        continue;
+      }
+      if (currentDate.isBefore(today) || currentDate.isAtSameMomentAs(today)) {
+        final DocumentSnapshot<Map<String, dynamic>> snapshot =
+            await FirebaseFirestore.instance
+                .collection('AttendanceDetails')
+                .doc(uid)
+                .collection('dailyattendance')
+                .doc(formattedDate)
+                .get();
 
-  for (int day = 1; day <= lastDayOfMonth; day++) {
-    DateTime currentDate = DateTime(today.year, today.month, day);
-    String formattedDate = DateFormat('yMMMd').format(currentDate);
-    String formattedDay = DateFormat('EEE').format(currentDate);
+        if (snapshot.exists) {
+          Map<String, dynamic>? data = snapshot.data();
 
-    // Skip weekends (Saturday and Sunday)
-    if (currentDate.weekday == DateTime.saturday || currentDate.weekday == DateTime.sunday) {
-      continue;
-    }
+          if (data != null) {
+            DateTime? checkInTime = (data['checkIn'] as Timestamp?)?.toDate();
+            DateTime? checkOutTime = (data['checkOut'] as Timestamp?)?.toDate();
 
-    // Fetch attendance data for each day of the month
-    if (currentDate.isBefore(today) || currentDate.isAtSameMomentAs(today)) {
-      final DocumentSnapshot<Map<String, dynamic>> snapshot =
-          await FirebaseFirestore.instance
-              .collection('AttendanceDetails')
-              .doc(uid)
-              .collection('dailyattendance')
-              .doc(formattedDate)
-              .get();
+            List<String> statuses = [];
 
-      if (snapshot.exists) {
-        Map<String, dynamic>? data = snapshot.data();
+            if (checkInTime == null) {
+              statuses.add("Absent");
+            } else {
+              statuses.add("Present");
 
-        if (data != null) {
-          DateTime? checkInTime = (data['checkIn'] as Timestamp?)?.toDate();
-          DateTime? checkOutTime = (data['checkOut'] as Timestamp?)?.toDate();
+              if (checkInTime.isAfter(DateTime(currentDate.year,
+                  currentDate.month, currentDate.day, 8, 15))) {
+                statuses.add("Late Arrival");
+              }
 
-          List<String> statuses = [];
+              if (checkOutTime != null &&
+                  checkOutTime.isBefore(DateTime(currentDate.year,
+                      currentDate.month, currentDate.day, 17, 0))) {
+                statuses.add("Early Out");
+              }
 
-          if (checkInTime == null) {
-            statuses.add("Absent");
-          } else {
-            statuses.add("Present");
-
-            if (checkInTime.isAfter(
-                DateTime(currentDate.year, currentDate.month, currentDate.day, 8, 15))) {
-              statuses.add("Late Arrival");
+              if (checkInTime.isAfter(DateTime(currentDate.year,
+                      currentDate.month, currentDate.day, 7, 50)) &&
+                  checkInTime.isBefore(DateTime(currentDate.year,
+                      currentDate.month, currentDate.day, 8, 10))) {
+                statuses.add("On Time");
+              }
             }
 
-            if (checkOutTime != null &&
-                checkOutTime.isBefore(DateTime(currentDate.year, currentDate.month, currentDate.day, 17, 0))) {
-              statuses.add("Early Out");
-            }
+            data['formattedDate'] = formattedDate;
+            data['formattedDay'] = formattedDay;
+            data['statuses'] = statuses;
 
-            if (checkInTime.isAfter(DateTime(currentDate.year, currentDate.month, currentDate.day, 7, 50)) &&
-                checkInTime.isBefore(DateTime(currentDate.year, currentDate.month, currentDate.day, 8, 10))) {
-              statuses.add("On Time");
-            }
+            monthlyData.add(data);
           }
-
-          data['formattedDate'] = formattedDate;
-          data['formattedDay'] = formattedDay;
-          data['statuses'] = statuses;
-
-          monthlyData.add(data);
+        } else {
+          monthlyData.add({
+            "checkIn": null,
+            "checkOut": null,
+            "statuses": ["Absent"],
+            "formattedDate": formattedDate,
+            "formattedDay": formattedDay,
+          });
         }
-      } else {
-        // If no data is found for the day, mark it as Absent
-        monthlyData.add({
-          "checkIn": null,
-          "checkOut": null,
-          "statuses": ["Absent"],
-          "formattedDate": formattedDate,
-          "formattedDay": formattedDay,
-        });
       }
     }
+
+    setState(() {
+      isLoading = false;
+    });
   }
-
-  setState(() {
-    isLoading = false;
-  });
-}
-
 
   String _calculateTotalHours(Timestamp? checkIn, Timestamp? checkOut) {
     if (checkIn == null || checkOut == null) return '0:00';
-
     DateTime checkInTime = checkIn.toDate();
     DateTime checkOutTime = checkOut.toDate();
-
     Duration duration = checkOutTime.difference(checkInTime);
-
     int hours = duration.inHours;
     int minutes = duration.inMinutes % 60;
-
     return '${hours.toString().padLeft(2, '0')}:${minutes.toString().padLeft(2, '0')}';
   }
 
@@ -133,10 +117,6 @@ Future<void> _getMonthlyAttendance(String uid) async {
     if (timestamp == null) return "--:--";
     DateTime dateTime = timestamp.toDate();
     return DateFormat('hh:mm a').format(dateTime);
-  }
-
-  String _formatDate(DateTime date) {
-    return DateFormat('EEE, MMM d').format(date);
   }
 
   @override
@@ -174,8 +154,8 @@ Future<void> _getMonthlyAttendance(String uid) async {
       mainAxisSize: MainAxisSize.min,
       children: [
         if (isLoading)
-          Padding(
-            padding: const EdgeInsets.only(top: 100.0),
+          const Padding(
+            padding: EdgeInsets.only(top: 100.0),
             child: Center(
               child: CircularProgressIndicator(),
             ),
@@ -202,10 +182,9 @@ Future<void> _getMonthlyAttendance(String uid) async {
                       data['checkOut'] as Timestamp?,
                     );
 
-
                     return Container(
-                      padding: EdgeInsets.all(12),
-                      margin: EdgeInsets.only(bottom: 10),
+                      padding: const EdgeInsets.all(12),
+                      margin: const EdgeInsets.only(bottom: 10),
                       height: 82,
                       width: double.infinity,
                       decoration: BoxDecoration(
@@ -231,7 +210,7 @@ Future<void> _getMonthlyAttendance(String uid) async {
                                   children: [
                                     Text(
                                       formattedDate,
-                                      style: TextStyle(
+                                      style: const TextStyle(
                                         fontSize: 22,
                                         fontWeight: FontWeight.w600,
                                         color: Colors.white,
@@ -239,7 +218,7 @@ Future<void> _getMonthlyAttendance(String uid) async {
                                     ),
                                     Text(
                                       day,
-                                      style: TextStyle(
+                                      style: const TextStyle(
                                         fontSize: 12,
                                         fontWeight: FontWeight.w400,
                                         color: Colors.white,
@@ -255,13 +234,13 @@ Future<void> _getMonthlyAttendance(String uid) async {
                             children: [
                               Text(
                                 checkInTime,
-                                style: TextStyle(
+                                style: const TextStyle(
                                   fontSize: 14,
                                   fontWeight: FontWeight.bold,
                                   color: Colors.black,
                                 ),
                               ),
-                              Text(
+                              const Text(
                                 'Check In',
                                 style: TextStyle(
                                   fontSize: 10,
@@ -274,20 +253,21 @@ Future<void> _getMonthlyAttendance(String uid) async {
                           Container(
                             width: 1,
                             height: 50,
-                            decoration: BoxDecoration(color: Colors.black),
+                            decoration:
+                                const BoxDecoration(color: Colors.black),
                           ),
                           Column(
                             mainAxisAlignment: MainAxisAlignment.center,
                             children: [
                               Text(
                                 checkOutTime,
-                                style: TextStyle(
+                                style: const TextStyle(
                                   fontSize: 14,
                                   fontWeight: FontWeight.bold,
                                   color: Colors.black,
                                 ),
                               ),
-                              Text(
+                              const Text(
                                 'Check Out',
                                 style: TextStyle(
                                     fontSize: 10,
@@ -299,20 +279,21 @@ Future<void> _getMonthlyAttendance(String uid) async {
                           Container(
                             width: 1,
                             height: 50,
-                            decoration: BoxDecoration(color: Colors.black),
+                            decoration:
+                                const BoxDecoration(color: Colors.black),
                           ),
                           Column(
                             mainAxisAlignment: MainAxisAlignment.center,
                             children: [
                               Text(
                                 totalHours,
-                                style: TextStyle(
+                                style: const TextStyle(
                                   fontSize: 14,
                                   fontWeight: FontWeight.bold,
-                                  color:Colors.black,// Custom color based on status
+                                  color: Colors.black,
                                 ),
                               ),
-                              Text(
+                              const Text(
                                 'Total Hours',
                                 style: TextStyle(
                                   fontSize: 10,
