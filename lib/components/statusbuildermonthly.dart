@@ -509,6 +509,7 @@ class _StatusBuilerState extends State<StatusBuiler> {
                   [];
               // log('Attendance Data: ${snapshot.data!['attendanceData']}');
               log('MonthlyData: ${snapshot.data!['monthlyData']}');
+              log('MonthlyData: ${snapshot.data!['attendanceData']}');
               final totalTime = _calculateMonthlyTotal(monthlyData);
               final totalHours = (totalTime / 60).toStringAsFixed(2);
 
