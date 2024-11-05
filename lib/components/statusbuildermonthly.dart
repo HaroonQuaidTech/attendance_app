@@ -12,42 +12,46 @@ class StatusBuiler extends StatefulWidget {
 
 class _StatusBuilerState extends State<StatusBuiler> {
   final String userId = FirebaseAuth.instance.currentUser!.uid;
-  Future<List<Map<String, dynamic>?>> _getMonthlyAttendanceDetails(
+  Future<List<Map<String, dynamic>>> _getMonthlyAttendanceDetails(
       String uid) async {
-    List<Map<String, dynamic>?> monthlyAttendanceList = [];
+    List<Map<String, dynamic>> monthlyAttendanceList = [];
     final now = DateTime.now();
+    final todayFormatted = DateFormat('yMMMd').format(now);
     final firstDayOfMonth = DateTime(now.year, now.month, 1);
     final lastDayOfMonth = DateTime(now.year, now.month + 1, 0);
+
+    // Query Firestore for all documents within the month range
+    final attendanceQuery = await FirebaseFirestore.instance
+        .collection('AttendanceDetails')
+        .doc(uid)
+        .collection('dailyattendance')
+        .where(FieldPath.documentId,
+            isGreaterThanOrEqualTo: DateFormat('yMMMd').format(firstDayOfMonth))
+        .where(FieldPath.documentId,
+            isLessThanOrEqualTo: DateFormat('yMMMd').format(lastDayOfMonth))
+        .get();
+
+    Map<String, Map<String, dynamic>> attendanceMap = {
+      for (var doc in attendanceQuery.docs) doc.id: doc.data()
+    };
+
     for (int i = 0;
         i <= lastDayOfMonth.difference(firstDayOfMonth).inDays;
         i++) {
       final date = firstDayOfMonth.add(Duration(days: i));
       final formattedDate = DateFormat('yMMMd').format(date);
-      final DocumentSnapshot<Map<String, dynamic>> snapshot =
-          await FirebaseFirestore.instance
-              .collection('AttendanceDetails')
-              .doc(uid)
-              .collection('dailyattendance')
-              .doc(formattedDate)
-              .get();
-      if (snapshot.exists) {
-        final data = snapshot.data();
-        final checkIn = (data?['checkIn'] as Timestamp?)?.toDate();
-        if (checkIn == null) {
-          monthlyAttendanceList.add({
-            'date': formattedDate,
-            'status': 'Absent',
-          });
-        } else {
-          monthlyAttendanceList.add(data);
-        }
+
+      if (attendanceMap.containsKey(formattedDate)) {
+        monthlyAttendanceList.add(attendanceMap[formattedDate]!);
       } else {
+        // No record for the date and it's not today; mark as 'Absent'
         monthlyAttendanceList.add({
           'date': formattedDate,
           'status': 'Absent',
         });
       }
     }
+
     return monthlyAttendanceList;
   }
 
