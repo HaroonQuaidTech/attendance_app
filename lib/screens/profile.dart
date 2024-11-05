@@ -331,6 +331,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                         ),
                         GestureDetector(
                           onTap: () {
+                            Navigator.pop(context);
                             _logout(context);
                           },
                           child: Container(
@@ -397,7 +398,6 @@ class _ProfileScreenState extends State<ProfileScreen> {
                 (Route<dynamic> route) => false,
               );
             } else if (message == 'Profile Updated') {
-             
             } else {
               Navigator.pop(context);
             }
