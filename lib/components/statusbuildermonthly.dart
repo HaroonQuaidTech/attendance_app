@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:developer';
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -12,42 +13,48 @@ class StatusBuiler extends StatefulWidget {
 
 class _StatusBuilerState extends State<StatusBuiler> {
   final String userId = FirebaseAuth.instance.currentUser!.uid;
-  Future<List<Map<String, dynamic>?>> _getMonthlyAttendanceDetails(
+  Future<List<Map<String, dynamic>>> _getMonthlyAttendanceDetails(
       String uid) async {
-    List<Map<String, dynamic>?> monthlyAttendanceList = [];
+    List<Map<String, dynamic>> monthlyAttendanceList = [];
     final now = DateTime.now();
     final firstDayOfMonth = DateTime(now.year, now.month, 1);
     final lastDayOfMonth = DateTime(now.year, now.month + 1, 0);
+
+    // Query Firestore for all documents within the month range
+    final attendanceQuery = await FirebaseFirestore.instance
+        .collection('AttendanceDetails')
+        .doc(uid)
+        .collection('dailyattendance')
+        .where(FieldPath.documentId,
+            isGreaterThanOrEqualTo: DateFormat('yMMMd').format(firstDayOfMonth))
+        .where(FieldPath.documentId,
+            isLessThanOrEqualTo: DateFormat('yMMMd').format(lastDayOfMonth))
+        .get();
+
+    // Map existing attendance records for the month by date
+    Map<String, Map<String, dynamic>> attendanceMap = {
+      for (var doc in attendanceQuery.docs) doc.id: doc.data()
+    };
+
+    // Iterate through each day of the month and build attendance data
     for (int i = 0;
         i <= lastDayOfMonth.difference(firstDayOfMonth).inDays;
         i++) {
       final date = firstDayOfMonth.add(Duration(days: i));
       final formattedDate = DateFormat('yMMMd').format(date);
-      final DocumentSnapshot<Map<String, dynamic>> snapshot =
-          await FirebaseFirestore.instance
-              .collection('AttendanceDetails')
-              .doc(uid)
-              .collection('dailyattendance')
-              .doc(formattedDate)
-              .get();
-      if (snapshot.exists) {
-        final data = snapshot.data();
-        final checkIn = (data?['checkIn'] as Timestamp?)?.toDate();
-        if (checkIn == null) {
-          monthlyAttendanceList.add({
-            'date': formattedDate,
-            'status': 'Absent',
-          });
-        } else {
-          monthlyAttendanceList.add(data);
-        }
+
+      if (attendanceMap.containsKey(formattedDate)) {
+        // Record exists in Firestore; add it to the list
+        monthlyAttendanceList.add(attendanceMap[formattedDate]!);
       } else {
+        // No record for the date; mark as 'Absent'
         monthlyAttendanceList.add({
           'date': formattedDate,
           'status': 'Absent',
         });
       }
     }
+
     return monthlyAttendanceList;
   }
 
@@ -458,8 +465,10 @@ class _StatusBuilerState extends State<StatusBuiler> {
   }
 
   Future<Map<String, dynamic>> _getMonthlyData(String userId) async {
-    final attendanceData = await _getMonthlyAttendanceDetails(userId);
-    final totalHoursData = _calculateMonthlyTotal(attendanceData);
+    final attendanceData = await _getMonthlyAttendanceDetails(
+        userId); // Default to empty list if null
+    final totalHoursData =
+        attendanceData.isNotEmpty ? _calculateMonthlyTotal(attendanceData) : 0;
     return {
       'attendanceData': attendanceData,
       'totalHours': totalHoursData,
@@ -494,15 +503,21 @@ class _StatusBuilerState extends State<StatusBuiler> {
               }
               final attendanceData = snapshot.data!['attendanceData']
                   as List<Map<String, dynamic>?>;
-              final monthlyData = snapshot.data!['monthlyData']
+
+              final monthlyData = snapshot.data!['attendanceData']
                       as List<Map<String, dynamic>?>? ??
                   [];
+              // log('Attendance Data: ${snapshot.data!['attendanceData']}');
+              log('MonthlyData: ${snapshot.data!['monthlyData']}');
               final totalTime = _calculateMonthlyTotal(monthlyData);
               final totalHours = (totalTime / 60).toStringAsFixed(2);
-              final totalMinutes = _calculateMonthlyTotal(monthlyData);
-              final totalHourss = _calculateMonthlyHours(monthlyData);
+
               const int maxMinutes = 10392;
               const double maxHours = 173.2;
+
+              final totalMinutes = _calculateMonthlyTotal(monthlyData);
+              final totalHourss = _calculateMonthlyHours(monthlyData);
+
               double progressValue =
                   maxHours != 0 ? totalHourss / maxHours : 0.0;
               return Column(
