@@ -21,8 +21,6 @@ class _StatusBuilerState extends State<StatusBuiler> {
     final firstDayOfMonth = DateTime(now.year, now.month, 1);
     final lastDayOfMonth = DateTime(now.year, now.month + 1, 0);
     final daysInMonth = lastDayOfMonth.difference(firstDayOfMonth).inDays + 1;
-
-    // Prepare a list of futures to fetch attendance data concurrently
     final List<Future<DocumentSnapshot<Map<String, dynamic>>>> snapshotFutures =
         List.generate(daysInMonth, (i) {
       final date = firstDayOfMonth.add(Duration(days: i));
@@ -35,10 +33,8 @@ class _StatusBuilerState extends State<StatusBuiler> {
           .get();
     });
 
-    // Wait for all futures to complete
     final snapshots = await Future.wait(snapshotFutures);
 
-    // Process each snapshot result
     for (int i = 0; i < snapshots.length; i++) {
       final date = firstDayOfMonth.add(Duration(days: i));
       final formattedDate = DateFormat('yMMMd').format(date);

@@ -1,5 +1,3 @@
-// ignore_for_file: prefer_const_constructors, prefer_const_literals_to_create_immutables, use_super_parameters, unnecessary_string_interpolations, unused_element, depend_on_referenced_packages, curly_braces_in_flow_control_structures
-
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
@@ -13,11 +11,11 @@ class WeeklyAttendance extends StatefulWidget {
   final AttendanceType attendanceType;
 
   const WeeklyAttendance({
-    Key? key,
+    super.key,
     required this.color,
     required this.dropdownValue2,
     this.attendanceType = AttendanceType.weekly,
-  }) : super(key: key);
+  });
 
   @override
   State<WeeklyAttendance> createState() => _WeeklyAttendanceState();
@@ -88,7 +86,7 @@ class _WeeklyAttendanceState extends State<WeeklyAttendance> {
             data['formattedDay'] = formattedDay;
             data['statuses'] = statuses;
 
-            weeklyData.add(data); //-----------------displaying week data
+            weeklyData.add(data);
           }
         } else {
           weeklyData.add({
@@ -124,10 +122,6 @@ class _WeeklyAttendanceState extends State<WeeklyAttendance> {
     if (timestamp == null) return "--:--";
     DateTime dateTime = timestamp.toDate();
     return DateFormat('hh:mm a').format(dateTime);
-  }
-
-  String _formatDate(DateTime date) {
-    return DateFormat('EEE, MMM d').format(date);
   }
 
   @override
@@ -166,15 +160,15 @@ class _WeeklyAttendanceState extends State<WeeklyAttendance> {
       mainAxisSize: MainAxisSize.min,
       children: [
         if (isLoading)
-          Padding(
-            padding: const EdgeInsets.only(top: 100.0),
+          const Padding(
+            padding: EdgeInsets.only(top: 100.0),
             child: Center(
               child: CircularProgressIndicator(),
             ),
           )
         else if (filteredData.isEmpty)
-          Padding(
-            padding: const EdgeInsets.only(top: 100.0),
+          const Padding(
+            padding: EdgeInsets.only(top: 100.0),
             child: Center(
               child: Text(
                 "No Data Available",

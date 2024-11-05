@@ -1,5 +1,4 @@
 import 'dart:developer';
-
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
@@ -262,7 +261,6 @@ class _StatusBuilerState extends State<StatusBuilderWeekly> {
             Duration(days: DateTime.now().weekday - 1 - index),
           );
 
-          // Skip future dates
           if (date.isAfter(DateTime.now())) {
             return _buildNullAttendanceContainer(index);
           }
@@ -270,24 +268,20 @@ class _StatusBuilerState extends State<StatusBuilderWeekly> {
           final String day = DateFormat('EE').format(date);
           final String formattedDate = DateFormat('dd').format(date);
 
-          // Skip weekends
           if (date.weekday == DateTime.saturday ||
               date.weekday == DateTime.sunday) {
             return const SizedBox.shrink();
           }
 
-          // Attendance times
           final checkIn =
               (attendanceRecord?['checkIn'] as Timestamp?)?.toDate();
           final checkOut =
               (attendanceRecord?['checkOut'] as Timestamp?)?.toDate();
 
-          // Handle empty attendance
           if (checkIn == null && checkOut == null) {
             return _buildEmptyAttendanceContainer(index);
           }
 
-          // Calculate total hours and determine container color
           final totalHours = _calculateTotalHours(checkIn, checkOut);
           Color containerColor = _determineContainerColor(checkIn, checkOut);
 
@@ -323,18 +317,18 @@ class _StatusBuilerState extends State<StatusBuilderWeekly> {
     const TimeOfDay lateArrival = TimeOfDay(hour: 8, minute: 15);
     const TimeOfDay earlyCheckout = TimeOfDay(hour: 17, minute: 0);
 
-    Color containerColor = const Color(0xffEC5851); // Default: No check-in
+    Color containerColor = const Color(0xffEC5851);
 
     if (checkIn != null) {
       final TimeOfDay checkInTime = TimeOfDay.fromDateTime(checkIn);
       if (checkInTime.hour < onTime.hour ||
           (checkInTime.hour == onTime.hour &&
               checkInTime.minute <= onTime.minute)) {
-        containerColor = const Color(0xff22Af41); // On time
+        containerColor = const Color(0xff22Af41);
       } else if (checkInTime.hour > lateArrival.hour ||
           (checkInTime.hour == lateArrival.hour &&
               checkInTime.minute >= lateArrival.minute)) {
-        containerColor = const Color(0xffF6C15B); // Late arrival
+        containerColor = const Color(0xffF6C15B);
       }
     }
 
@@ -343,7 +337,7 @@ class _StatusBuilerState extends State<StatusBuilderWeekly> {
       if (checkOutTime.hour < earlyCheckout.hour ||
           (checkOutTime.hour == earlyCheckout.hour &&
               checkOutTime.minute < earlyCheckout.minute)) {
-        containerColor = const Color(0xffF07E25); // Early check-out
+        containerColor = const Color(0xffF07E25);
       }
     }
 
@@ -467,7 +461,6 @@ class _StatusBuilerState extends State<StatusBuilderWeekly> {
                 );
               }
 
-              // Extracting data from the snapshot
               final attendanceData = snapshot.data!['attendanceData']
                   as List<Map<String, dynamic>?>;
               final weeklyData = snapshot.data!['attendanceData']
@@ -475,14 +468,13 @@ class _StatusBuilerState extends State<StatusBuilderWeekly> {
                   [];
               log('Weekly Data: ${snapshot.data!['weeklyData']}');
 
-              // Calculating total time and hours
               final totalTime = _calculateWeeklyMins(weeklyData);
               final totalHours = (totalTime / 60).toStringAsFixed(2);
               final totalMinutes = _calculateWeeklyMins(weeklyData);
               final totalHourss = _calculateWeeklyHours(weeklyData);
 
-              const int maxMinutes = 2700; // weekly minutes
-              const double maxHours = 45; // weekly hours
+              const int maxMinutes = 2700;
+              const double maxHours = 45;
 
               final double progress = totalHourss / maxHours;
 
@@ -490,7 +482,6 @@ class _StatusBuilerState extends State<StatusBuilderWeekly> {
                 padding: const EdgeInsets.only(top: 0.0),
                 child: Column(
                   children: [
-                    // Weekly Times Log Container
                     Container(
                       height: 207,
                       width: double.infinity,
@@ -521,7 +512,6 @@ class _StatusBuilerState extends State<StatusBuilderWeekly> {
                             Row(
                               mainAxisAlignment: MainAxisAlignment.spaceBetween,
                               children: [
-                                // Time in Minutes Container
                                 Container(
                                   height: screenHeight * 0.15,
                                   width: screenWidth * 0.43,
@@ -565,7 +555,6 @@ class _StatusBuilerState extends State<StatusBuilderWeekly> {
                                     ),
                                   ),
                                 ),
-                                // Time in Hours Container
                                 Container(
                                   height: screenHeight * 0.15,
                                   width: screenWidth * 0.43,
@@ -617,8 +606,6 @@ class _StatusBuilerState extends State<StatusBuilderWeekly> {
                       ),
                     ),
                     const SizedBox(height: 20),
-
-                    // Weekly Attendance Container
                     Container(
                       padding: const EdgeInsets.symmetric(
                           horizontal: 12, vertical: 12),
