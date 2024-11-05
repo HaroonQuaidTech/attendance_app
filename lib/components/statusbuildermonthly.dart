@@ -300,42 +300,41 @@ class _StatusBuilerState extends State<StatusBuiler> {
         ),
       );
     }
-    return Expanded(
-      child: ListView.builder(
-        itemCount: data.length,
-        itemBuilder: (context, index) {
-          final attendanceRecord = data[index];
-          final DateTime now = DateTime.now();
-          final DateTime firstDayOfMonth = DateTime(now.year, now.month, 1);
-          final DateTime date = firstDayOfMonth.add(Duration(days: index));
-          final String day = DateFormat('EE').format(date);
-          final String formattedDate = DateFormat('dd').format(date);
-          if (date.weekday == DateTime.saturday ||
-              date.weekday == DateTime.sunday) {
-            return _buildWeekendContainer(index);
-          }
-          if (date.isAfter(now) || attendanceRecord == null) {
-            return _buildHNullAttendanceContainer(index);
-          }
-          final checkIn = (attendanceRecord['checkIn'] as Timestamp?)?.toDate();
-          final checkOut =
-              (attendanceRecord['checkOut'] as Timestamp?)?.toDate();
-          if (checkIn == null && checkOut == null) {
-            return _buildEmptyAttendanceContainer(index);
-          }
-          final totalHours = _calculateTotalHours(checkIn, checkOut);
-          final Color containerColor =
-              _determineContainerColor(checkIn, checkOut);
-          return _buildAttendanceRow(
-            formattedDate: formattedDate,
-            day: day,
-            checkIn: checkIn,
-            checkOut: checkOut,
-            totalHours: totalHours,
-            containerColor: containerColor,
-          );
-        },
-      ),
+    return ListView.builder(
+      itemCount: data.length,
+      primary: false,
+      shrinkWrap: true,
+      itemBuilder: (context, index) {
+        final attendanceRecord = data[index];
+        final DateTime now = DateTime.now();
+        final DateTime firstDayOfMonth = DateTime(now.year, now.month, 1);
+        final DateTime date = firstDayOfMonth.add(Duration(days: index));
+        final String day = DateFormat('EE').format(date);
+        final String formattedDate = DateFormat('dd').format(date);
+        if (date.weekday == DateTime.saturday ||
+            date.weekday == DateTime.sunday) {
+          return _buildWeekendContainer(index);
+        }
+        if (date.isAfter(now) || attendanceRecord == null) {
+          return _buildHNullAttendanceContainer(index);
+        }
+        final checkIn = (attendanceRecord['checkIn'] as Timestamp?)?.toDate();
+        final checkOut = (attendanceRecord['checkOut'] as Timestamp?)?.toDate();
+        if (checkIn == null && checkOut == null) {
+          return _buildEmptyAttendanceContainer(index);
+        }
+        final totalHours = _calculateTotalHours(checkIn, checkOut);
+        final Color containerColor =
+            _determineContainerColor(checkIn, checkOut);
+        return _buildAttendanceRow(
+          formattedDate: formattedDate,
+          day: day,
+          checkIn: checkIn,
+          checkOut: checkOut,
+          totalHours: totalHours,
+          containerColor: containerColor,
+        );
+      },
     );
   }
 
@@ -521,7 +520,6 @@ class _StatusBuilerState extends State<StatusBuiler> {
               return Column(
                 children: [
                   Container(
-                    height: 207,
                     width: double.infinity,
                     decoration: BoxDecoration(
                       borderRadius: BorderRadius.circular(20),
@@ -638,30 +636,17 @@ class _StatusBuilerState extends State<StatusBuiler> {
                               ),
                             ],
                           ),
-                          const SizedBox(height: 14),
                         ],
                       ),
                     ),
                   ),
                   const SizedBox(height: 20),
                   Container(
-                    padding: const EdgeInsets.all(12),
-                    height: (screenHeight < 600)
-                        ? screenHeight * 3.66
-                        : (screenHeight < 800)
-                            ? screenHeight * 3.6
-                            : screenHeight * 3.8,
+                    padding: const EdgeInsets.symmetric(
+                        horizontal: 12, vertical: 10),
                     decoration: BoxDecoration(
                       borderRadius: BorderRadius.circular(20),
                       color: const Color(0xffEFF1FF),
-                      boxShadow: [
-                        BoxShadow(
-                          color: Colors.grey.withOpacity(0.2),
-                          spreadRadius: 2,
-                          blurRadius: 4,
-                          offset: const Offset(0, 2),
-                        ),
-                      ],
                     ),
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
@@ -675,7 +660,6 @@ class _StatusBuilerState extends State<StatusBuiler> {
                         _buildAttendance(
                             color: const Color(0xff9478F7),
                             data: attendanceData),
-                        const SizedBox(height: 10),
                       ],
                     ),
                   ),

@@ -1,4 +1,3 @@
-import 'dart:developer';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
@@ -252,63 +251,62 @@ class _StatusBuilerState extends State<StatusBuilderWeekly> {
     required Color color,
     required List<Map<String, dynamic>?> data,
   }) {
-    return Expanded(
-      child: ListView.builder(
-        itemCount: data.length,
-        itemBuilder: (context, index) {
-          final attendanceRecord = data[index];
-          final DateTime date = DateTime.now().subtract(
-            Duration(days: DateTime.now().weekday - 1 - index),
-          );
+    return ListView.builder(
+      itemCount: data.length,
+      primary: false,
+      shrinkWrap: true,
+      itemBuilder: (context, index) {
+        final attendanceRecord = data[index];
+        final DateTime date = DateTime.now().subtract(
+          Duration(days: DateTime.now().weekday - 1 - index),
+        );
 
-          if (date.isAfter(DateTime.now())) {
-            return _buildNullAttendanceContainer(index);
-          }
+        if (date.isAfter(DateTime.now())) {
+          return _buildNullAttendanceContainer(index);
+        }
 
-          final String day = DateFormat('EE').format(date);
-          final String formattedDate = DateFormat('dd').format(date);
+        final String day = DateFormat('EE').format(date);
+        final String formattedDate = DateFormat('dd').format(date);
 
-          if (date.weekday == DateTime.saturday ||
-              date.weekday == DateTime.sunday) {
-            return const SizedBox.shrink();
-          }
+        if (date.weekday == DateTime.saturday ||
+            date.weekday == DateTime.sunday) {
+          return const SizedBox.shrink();
+        }
 
-          final checkIn =
-              (attendanceRecord?['checkIn'] as Timestamp?)?.toDate();
-          final checkOut =
-              (attendanceRecord?['checkOut'] as Timestamp?)?.toDate();
+        final checkIn = (attendanceRecord?['checkIn'] as Timestamp?)?.toDate();
+        final checkOut =
+            (attendanceRecord?['checkOut'] as Timestamp?)?.toDate();
 
-          if (checkIn == null && checkOut == null) {
-            return _buildEmptyAttendanceContainer(index);
-          }
+        if (checkIn == null && checkOut == null) {
+          return _buildEmptyAttendanceContainer(index);
+        }
 
-          final totalHours = _calculateTotalHours(checkIn, checkOut);
-          Color containerColor = _determineContainerColor(checkIn, checkOut);
+        final totalHours = _calculateTotalHours(checkIn, checkOut);
+        Color containerColor = _determineContainerColor(checkIn, checkOut);
 
-          return Container(
-            padding: const EdgeInsets.all(12),
-            margin: const EdgeInsets.only(bottom: 10),
-            height: 82,
-            width: 360,
-            decoration: BoxDecoration(
-              borderRadius: BorderRadius.circular(12),
-              color: Colors.white,
-            ),
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              crossAxisAlignment: CrossAxisAlignment.center,
-              children: [
-                _buildDateColumn(formattedDate, day, containerColor),
-                _buildTimeColumn(checkIn, 'Check In'),
-                const VerticalDivider(color: Colors.black, width: 1),
-                _buildTimeColumn(checkOut, 'Check Out'),
-                const VerticalDivider(color: Colors.black, width: 1),
-                _buildHoursColumn(totalHours),
-              ],
-            ),
-          );
-        },
-      ),
+        return Container(
+          padding: const EdgeInsets.all(12),
+          margin: const EdgeInsets.only(bottom: 10),
+          height: 82,
+          width: 360,
+          decoration: BoxDecoration(
+            borderRadius: BorderRadius.circular(12),
+            color: Colors.white,
+          ),
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            crossAxisAlignment: CrossAxisAlignment.center,
+            children: [
+              _buildDateColumn(formattedDate, day, containerColor),
+              _buildTimeColumn(checkIn, 'Check In'),
+              const VerticalDivider(color: Colors.black, width: 1),
+              _buildTimeColumn(checkOut, 'Check Out'),
+              const VerticalDivider(color: Colors.black, width: 1),
+              _buildHoursColumn(totalHours),
+            ],
+          ),
+        );
+      },
     );
   }
 
@@ -466,7 +464,6 @@ class _StatusBuilerState extends State<StatusBuilderWeekly> {
               final weeklyData = snapshot.data!['attendanceData']
                       as List<Map<String, dynamic>?>? ??
                   [];
-              log('Weekly Data: ${snapshot.data!['weeklyData']}');
 
               final totalTime = _calculateWeeklyMins(weeklyData);
               final totalHours = (totalTime / 60).toStringAsFixed(2);
@@ -478,175 +475,155 @@ class _StatusBuilerState extends State<StatusBuilderWeekly> {
 
               final double progress = totalHourss / maxHours;
 
-              return Padding(
-                padding: const EdgeInsets.only(top: 0.0),
-                child: Column(
-                  children: [
-                    Container(
-                      height: 207,
-                      width: double.infinity,
-                      decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(20),
-                        color: const Color(0xffEFF1FF),
-                        boxShadow: [
-                          BoxShadow(
-                            color: Colors.grey.withOpacity(0.2),
-                            spreadRadius: 2,
-                            blurRadius: 4,
-                            offset: const Offset(0, 2),
-                          ),
-                        ],
-                      ),
-                      child: Padding(
-                        padding: const EdgeInsets.symmetric(
-                            horizontal: 10.0, vertical: 10.0),
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            const Text(
-                              'Weekly Times Log',
-                              style: TextStyle(
-                                  fontWeight: FontWeight.w600, fontSize: 18),
-                            ),
-                            const SizedBox(height: 20),
-                            Row(
-                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                              children: [
-                                Container(
-                                  height: screenHeight * 0.15,
-                                  width: screenWidth * 0.43,
-                                  decoration: BoxDecoration(
-                                    borderRadius: BorderRadius.circular(12),
-                                    color: Colors.white,
-                                  ),
-                                  child: Padding(
-                                    padding: const EdgeInsets.symmetric(
-                                        horizontal: 10.0),
-                                    child: Column(
-                                      mainAxisAlignment:
-                                          MainAxisAlignment.spaceAround,
-                                      crossAxisAlignment:
-                                          CrossAxisAlignment.start,
-                                      children: [
-                                        const Text(
-                                          'Time in Mints',
-                                          style: TextStyle(
-                                              fontWeight: FontWeight.w500,
-                                              fontSize: 14),
-                                        ),
-                                        Text(
-                                          '$totalTime Mints',
-                                          style: const TextStyle(
-                                              fontWeight: FontWeight.w600,
-                                              fontSize: 20),
-                                        ),
-                                        LinearProgressIndicator(
-                                          value: totalMinutes / maxMinutes,
-                                          backgroundColor: Colors.grey[300],
-                                          color: const Color(0xff9478F7),
-                                        ),
-                                        Text(
-                                          '$startFormatted - $endFormatted',
-                                          style: const TextStyle(
-                                              fontWeight: FontWeight.w600,
-                                              fontSize: 15),
-                                        ),
-                                      ],
-                                    ),
-                                  ),
-                                ),
-                                Container(
-                                  height: screenHeight * 0.15,
-                                  width: screenWidth * 0.43,
-                                  decoration: BoxDecoration(
-                                    borderRadius: BorderRadius.circular(12),
-                                    color: Colors.white,
-                                  ),
-                                  child: Padding(
-                                    padding: const EdgeInsets.symmetric(
-                                        horizontal: 10.0),
-                                    child: Column(
-                                      mainAxisAlignment:
-                                          MainAxisAlignment.spaceAround,
-                                      crossAxisAlignment:
-                                          CrossAxisAlignment.start,
-                                      children: [
-                                        const Text(
-                                          'Time in Hours',
-                                          style: TextStyle(
-                                              fontWeight: FontWeight.w500,
-                                              fontSize: 14),
-                                        ),
-                                        Text(
-                                          '$totalHours Hours',
-                                          style: const TextStyle(
-                                              fontWeight: FontWeight.w600,
-                                              fontSize: 20),
-                                        ),
-                                        LinearProgressIndicator(
-                                          value: progress,
-                                          backgroundColor: Colors.grey[300],
-                                          color: const Color(0xff9478F7),
-                                        ),
-                                        Text(
-                                          '$startFormatted - $endFormatted',
-                                          style: const TextStyle(
-                                              fontWeight: FontWeight.w600,
-                                              fontSize: 15),
-                                        ),
-                                      ],
-                                    ),
-                                  ),
-                                ),
-                              ],
-                            ),
-                            const SizedBox(height: 14),
-                          ],
+              return Column(
+                children: [
+                  Container(
+                    width: double.infinity,
+                    decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(20),
+                      color: const Color(0xffEFF1FF),
+                      boxShadow: [
+                        BoxShadow(
+                          color: Colors.grey.withOpacity(0.2),
+                          spreadRadius: 2,
+                          blurRadius: 4,
+                          offset: const Offset(0, 2),
                         ),
-                      ),
+                      ],
                     ),
-                    const SizedBox(height: 20),
-                    Container(
+                    child: Padding(
                       padding: const EdgeInsets.symmetric(
-                          horizontal: 12, vertical: 12),
-                      height: (MediaQuery.of(context).size.height < 600)
-                          ? MediaQuery.of(context).size.height * 0.70
-                          : (MediaQuery.of(context).size.height < 800)
-                              ? MediaQuery.of(context).size.height * 0.65
-                              : MediaQuery.of(context).size.height * 0.7,
-                      width: double.infinity,
-                      decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(20),
-                        color: const Color(0xffEFF1FF),
-                        boxShadow: [
-                          BoxShadow(
-                            color: const Color.fromARGB(255, 139, 80, 80)
-                                .withOpacity(0.2),
-                            spreadRadius: 2,
-                            blurRadius: 4,
-                            offset: const Offset(0, 2),
-                          ),
-                        ],
-                      ),
+                          horizontal: 10.0, vertical: 10.0),
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          Text(
-                            'Weekly Attendance: ${'$startFormatted - $endFormatted'}',
-                            style: const TextStyle(
+                          const Text(
+                            'Weekly Times Log',
+                            style: TextStyle(
                                 fontWeight: FontWeight.w600, fontSize: 18),
                           ),
-                          const SizedBox(height: 10),
-                          _buildAttendance(
-                            color: const Color(0xff9478F7),
-                            data: attendanceData,
+                          const SizedBox(height: 20),
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              Container(
+                                height: screenHeight * 0.15,
+                                width: screenWidth * 0.43,
+                                decoration: BoxDecoration(
+                                  borderRadius: BorderRadius.circular(12),
+                                  color: Colors.white,
+                                ),
+                                child: Padding(
+                                  padding: const EdgeInsets.symmetric(
+                                      horizontal: 10.0),
+                                  child: Column(
+                                    mainAxisAlignment:
+                                        MainAxisAlignment.spaceAround,
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.start,
+                                    children: [
+                                      const Text(
+                                        'Time in Mints',
+                                        style: TextStyle(
+                                            fontWeight: FontWeight.w500,
+                                            fontSize: 14),
+                                      ),
+                                      Text(
+                                        '$totalTime Mints',
+                                        style: const TextStyle(
+                                            fontWeight: FontWeight.w600,
+                                            fontSize: 20),
+                                      ),
+                                      LinearProgressIndicator(
+                                        value: totalMinutes / maxMinutes,
+                                        backgroundColor: Colors.grey[300],
+                                        color: const Color(0xff9478F7),
+                                      ),
+                                      Text(
+                                        '$startFormatted - $endFormatted',
+                                        style: const TextStyle(
+                                            fontWeight: FontWeight.w600,
+                                            fontSize: 15),
+                                      ),
+                                    ],
+                                  ),
+                                ),
+                              ),
+                              Container(
+                                height: screenHeight * 0.15,
+                                width: screenWidth * 0.43,
+                                decoration: BoxDecoration(
+                                  borderRadius: BorderRadius.circular(12),
+                                  color: Colors.white,
+                                ),
+                                child: Padding(
+                                  padding: const EdgeInsets.symmetric(
+                                      horizontal: 10.0),
+                                  child: Column(
+                                    mainAxisAlignment:
+                                        MainAxisAlignment.spaceAround,
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.start,
+                                    children: [
+                                      const Text(
+                                        'Time in Hours',
+                                        style: TextStyle(
+                                            fontWeight: FontWeight.w500,
+                                            fontSize: 14),
+                                      ),
+                                      Text(
+                                        '$totalHours Hours',
+                                        style: const TextStyle(
+                                            fontWeight: FontWeight.w600,
+                                            fontSize: 20),
+                                      ),
+                                      LinearProgressIndicator(
+                                        value: progress,
+                                        backgroundColor: Colors.grey[300],
+                                        color: const Color(0xff9478F7),
+                                      ),
+                                      Text(
+                                        '$startFormatted - $endFormatted',
+                                        style: const TextStyle(
+                                            fontWeight: FontWeight.w600,
+                                            fontSize: 15),
+                                      ),
+                                    ],
+                                  ),
+                                ),
+                              ),
+                            ],
                           ),
-                          const SizedBox(height: 10),
                         ],
                       ),
                     ),
-                  ],
-                ),
+                  ),
+                  const SizedBox(height: 20),
+                  Container(
+                    padding: const EdgeInsets.symmetric(
+                        horizontal: 12, vertical: 10),
+                    width: double.infinity,
+                    decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(20),
+                      color: const Color(0xffEFF1FF),
+                    ),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(
+                          'Weekly Attendance: ${'$startFormatted - $endFormatted'}',
+                          style: const TextStyle(
+                              fontWeight: FontWeight.w600, fontSize: 18),
+                        ),
+                        const SizedBox(height: 10),
+                        _buildAttendance(
+                          color: const Color(0xff9478F7),
+                          data: attendanceData,
+                        ),
+                      ],
+                    ),
+                  ),
+                ],
               );
             },
           ),
