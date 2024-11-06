@@ -3,7 +3,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:quaidtech/screens/home.dart';
 import 'package:quaidtech/screens/signup.dart';
-import 'package:shared_preferences/shared_preferences.dart';
+
 
 typedef CloseCallback = Function();
 
@@ -50,8 +50,7 @@ class _LoginScreenState extends State<LoginScreen> {
           .signInWithEmailAndPassword(email: email, password: password);
       log(userCredential.toString());
 
-      SharedPreferences prefs = await SharedPreferences.getInstance();
-      await prefs.setBool('rememberMe', _isCheck);
+    
 
       _showAlertDialog(
         title: 'Success',
