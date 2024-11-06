@@ -468,8 +468,7 @@ class _StatusBuilerState extends State<StatusBuiler> {
   }
 
   Future<Map<String, dynamic>> _getMonthlyData(String userId) async {
-    final attendanceData = await _getMonthlyAttendanceDetails(
-        userId); // Default to empty list if null
+    final attendanceData = await _getMonthlyAttendanceDetails(userId);
     final totalHoursData =
         attendanceData.isNotEmpty ? _calculateMonthlyTotal(attendanceData) : 0;
     return {
