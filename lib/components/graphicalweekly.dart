@@ -1,4 +1,3 @@
-import 'dart:developer';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
@@ -54,10 +53,8 @@ class _GraphicalbuilerState extends State<GraphicalbuilerWeekly> {
         }
       }).toList();
 
-      log("Data: $weeklyData");
       return weeklyData;
     } catch (e) {
-      log('Error fetching weekly attendance: $e');
       return null;
     }
   }
@@ -185,7 +182,6 @@ class _GraphicalbuilerState extends State<GraphicalbuilerWeekly> {
         }
       }
     }
-    log('Late count weekly: $lateCount');
     return lateCount;
   }
 
@@ -203,7 +199,6 @@ class _GraphicalbuilerState extends State<GraphicalbuilerWeekly> {
         }
       }
     }
-    log('Early count weekly: $earlyCount');
     return earlyCount;
   }
 
@@ -217,7 +212,6 @@ class _GraphicalbuilerState extends State<GraphicalbuilerWeekly> {
         absentCount++;
       }
     }
-    log('Absent count weekly: $absentCount');
     return absentCount;
   }
 
@@ -237,7 +231,6 @@ class _GraphicalbuilerState extends State<GraphicalbuilerWeekly> {
         }
       }
     }
-    log('OnTime count weekly: $onTimeCount');
     return onTimeCount;
   }
 
@@ -249,8 +242,6 @@ class _GraphicalbuilerState extends State<GraphicalbuilerWeekly> {
         presentCount++;
       }
     }
-
-    log('Present count weekly: $presentCount');
     return presentCount;
   }
 
