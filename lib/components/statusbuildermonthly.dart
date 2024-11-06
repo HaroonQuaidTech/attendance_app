@@ -460,6 +460,13 @@ class _StatusBuilerState extends State<StatusBuiler> {
     );
   }
 
+  String _convertMinutesToTimeFormat(int totalMinutes) {
+    int hours = totalMinutes ~/ 60;
+    int minutes = totalMinutes % 60;
+
+    return '${hours.toString().padLeft(2, '0')}:${minutes.toString().padLeft(2, '0')}';
+  }
+
   Future<Map<String, dynamic>> _getMonthlyData(String userId) async {
     final attendanceData = await _getMonthlyAttendanceDetails(
         userId); // Default to empty list if null
@@ -506,7 +513,9 @@ class _StatusBuilerState extends State<StatusBuiler> {
 
               final totalTime = _calculateMonthlyTotal(monthlyData);
               log('total time: $totalTime');
-              final totalHours = (totalTime / 60).toStringAsFixed(2);
+              final totalHoursFormatted =
+                  _convertMinutesToTimeFormat(totalTime);
+              (totalTime / 60).toStringAsFixed(2);
 
               const int maxMinutes = 10392;
               const double maxHours = 173.2;
@@ -613,7 +622,7 @@ class _StatusBuilerState extends State<StatusBuiler> {
                                             fontSize: 14),
                                       ),
                                       Text(
-                                        '$totalHours Hours',
+                                        '$totalHoursFormatted Hours',
                                         style: const TextStyle(
                                             fontWeight: FontWeight.w600,
                                             fontSize: 20),

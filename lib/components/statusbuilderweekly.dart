@@ -572,7 +572,7 @@ class _StatusBuilerState extends State<StatusBuilderWeekly> {
                       ),
                     ),
                   ),
-                  const SizedBox(height: 20),
+                  const SizedBox(height: 15),
                   Container(
                     padding: const EdgeInsets.symmetric(
                         horizontal: 12, vertical: 10),
