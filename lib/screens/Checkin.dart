@@ -243,8 +243,7 @@ class _CheckinScreenState extends State<CheckinScreen> {
 
   String _formatTime(DateTime? dateTime) {
     if (dateTime == null) return '--:--';
-    final DateFormat formatter =
-        DateFormat('hh:mm a'); // Format to display only time
+    final DateFormat formatter = DateFormat('hh:mm a');
     return formatter.format(dateTime);
   }
 
@@ -297,8 +296,6 @@ class _CheckinScreenState extends State<CheckinScreen> {
     final double screenHeight = screenSize.height;
     final double screenWidth = screenSize.width;
     DateTime now = DateTime.now();
-
-    // Format date, day, and time
     String formattedDate = DateFormat('yMMMd').format(now);
     String formattedDay = DateFormat('EEEE').format(now);
     String formattedTime = DateFormat('hh:mm a').format(now);
@@ -358,9 +355,8 @@ class _CheckinScreenState extends State<CheckinScreen> {
                             width: 50,
                             height: 50,
                             decoration: BoxDecoration(
-                              color: Colors.grey[200], // light background color
-                              borderRadius:
-                                  BorderRadius.circular(12), // rounded corners
+                              color: Colors.grey[200],
+                              borderRadius: BorderRadius.circular(12),
                               boxShadow: const [
                                 BoxShadow(
                                   color: Colors.black12,
@@ -462,7 +458,7 @@ class _CheckinScreenState extends State<CheckinScreen> {
                     ],
                   ),
                   SizedBox(height: MediaQuery.of(context).size.height * 0.14),
-                  //--------------------Check iN-------------------------
+                 
                   if (checkIn == null && checkOut == null)
                     GestureDetector(
                       onTap: () async {
@@ -486,7 +482,6 @@ class _CheckinScreenState extends State<CheckinScreen> {
                       child: Stack(
                         alignment: Alignment.center,
                         children: [
-                          // Outer Circle
                           Container(
                             width: 180,
                             height: 180,
@@ -504,7 +499,6 @@ class _CheckinScreenState extends State<CheckinScreen> {
                                   color: const Color(0xff7647EB), width: 2),
                             ),
                           ),
-                          // Middle Circle
                           Container(
                             width: 120,
                             height: 120,

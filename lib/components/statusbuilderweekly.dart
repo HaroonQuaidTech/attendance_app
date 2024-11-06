@@ -6,23 +6,19 @@ import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 
 class StatusBuilderWeekly extends StatefulWidget {
-  const StatusBuilderWeekly({
-    super.key,
-  });
-
+  const StatusBuilderWeekly({super.key});
   @override
   State<StatusBuilderWeekly> createState() => _StatusBuilerState();
 }
 
 class _StatusBuilerState extends State<StatusBuilderWeekly> {
   final String userId = FirebaseAuth.instance.currentUser!.uid;
-
   Future<List<Map<String, dynamic>>> _getWeeklyAttendanceDetails(
-      String uid) async {
+    String uid,
+  ) async {
     List<Map<String, dynamic>> fiveDayAttendanceList = [];
     final now = DateTime.now();
     final startOfWeek = now.subtract(Duration(days: now.weekday - 1));
-
     final List<Future<DocumentSnapshot<Map<String, dynamic>>>> snapshotFutures =
         List.generate(5, (i) {
       final date = startOfWeek.add(Duration(days: i));
@@ -34,16 +30,13 @@ class _StatusBuilerState extends State<StatusBuilderWeekly> {
           .doc(formattedDate)
           .get();
     });
-
     final snapshots = await Future.wait(snapshotFutures);
-
     for (int i = 0; i < snapshots.length; i++) {
       final date = startOfWeek.add(Duration(days: i));
       final formattedDate = DateFormat('yMMMd').format(date);
       final snapshot = snapshots[i];
       final data = snapshot.data();
       final checkIn = (data?['checkIn'] as Timestamp?)?.toDate();
-
       if (snapshot.exists && checkIn != null) {
         fiveDayAttendanceList.add(data!);
       } else {
@@ -53,7 +46,6 @@ class _StatusBuilerState extends State<StatusBuilderWeekly> {
         });
       }
     }
-
     return fiveDayAttendanceList;
   }
 
@@ -76,20 +68,16 @@ class _StatusBuilerState extends State<StatusBuilderWeekly> {
     if (checkIn == null || checkOut == null) {
       return "00:00";
     }
-
     Duration duration = checkOut.difference(checkIn);
     int hours = duration.inHours;
     int minutes = duration.inMinutes.remainder(60);
-
     final String formattedHours = hours.toString().padLeft(2, '0');
     final String formattedMinutes = minutes.toString().padLeft(2, '0');
-
     return '$formattedHours:$formattedMinutes';
   }
 
   int _calculateWeeklyMins(List<Map<String, dynamic>?> weeklyData) {
     int totalMinutes = 0;
-
     for (var data in weeklyData) {
       if (data == null) continue;
       final checkIn = (data['checkIn'] as Timestamp?)?.toDate();
@@ -100,13 +88,11 @@ class _StatusBuilerState extends State<StatusBuilderWeekly> {
         totalMinutes += duration.inMinutes;
       }
     }
-
     return totalMinutes;
   }
 
   double _calculateWeeklyHours(List<Map<String, dynamic>?> weeklyData) {
     int totalMinutes = 0;
-
     for (var data in weeklyData) {
       if (data == null) continue;
       final checkIn = (data['checkIn'] as Timestamp?)?.toDate();
@@ -117,14 +103,11 @@ class _StatusBuilerState extends State<StatusBuilderWeekly> {
         totalMinutes += duration.inMinutes;
       }
     }
-
     final double totalHours = totalMinutes / 60;
     return totalHours;
   }
 
-  Widget _buildEmptyAttendanceContainer(
-    int index,
-  ) {
+  Widget _buildEmptyAttendanceContainer(int index) {
     final DateTime date = DateTime.now()
         .subtract(Duration(days: DateTime.now().weekday - 1 - index));
     final String day = DateFormat('EE').format(date);
@@ -184,9 +167,7 @@ class _StatusBuilerState extends State<StatusBuilderWeekly> {
     );
   }
 
-  Widget _buildNullAttendanceContainer(
-    int index,
-  ) {
+  Widget _buildNullAttendanceContainer(int index) {
     final DateTime date = DateTime.now()
         .subtract(Duration(days: DateTime.now().weekday - 1 - index));
     final String day = DateFormat('EE').format(date);
@@ -249,10 +230,8 @@ class _StatusBuilerState extends State<StatusBuilderWeekly> {
     );
   }
 
-  Widget _buildAttendance({
-    required Color color,
-    required List<Map<String, dynamic>?> data,
-  }) {
+  Widget _buildAttendance(
+      {required Color color, required List<Map<String, dynamic>?> data}) {
     return ListView.builder(
       itemCount: data.length,
       primary: false,
@@ -262,30 +241,23 @@ class _StatusBuilerState extends State<StatusBuilderWeekly> {
         final DateTime date = DateTime.now().subtract(
           Duration(days: DateTime.now().weekday - 1 - index),
         );
-
         if (date.isAfter(DateTime.now())) {
           return _buildNullAttendanceContainer(index);
         }
-
         final String day = DateFormat('EE').format(date);
         final String formattedDate = DateFormat('dd').format(date);
-
         if (date.weekday == DateTime.saturday ||
             date.weekday == DateTime.sunday) {
           return const SizedBox.shrink();
         }
-
         final checkIn = (attendanceRecord?['checkIn'] as Timestamp?)?.toDate();
         final checkOut =
             (attendanceRecord?['checkOut'] as Timestamp?)?.toDate();
-
         if (checkIn == null && checkOut == null) {
           return _buildEmptyAttendanceContainer(index);
         }
-
         final totalHours = _calculateTotalHours(checkIn, checkOut);
         Color containerColor = _determineContainerColor(checkIn, checkOut);
-
         return Container(
           padding: const EdgeInsets.all(12),
           margin: const EdgeInsets.only(bottom: 10),
@@ -316,9 +288,7 @@ class _StatusBuilerState extends State<StatusBuilderWeekly> {
     const TimeOfDay onTime = TimeOfDay(hour: 8, minute: 14);
     const TimeOfDay lateArrival = TimeOfDay(hour: 8, minute: 15);
     const TimeOfDay earlyCheckout = TimeOfDay(hour: 17, minute: 0);
-
     Color containerColor = const Color(0xffEC5851);
-
     if (checkIn != null) {
       final TimeOfDay checkInTime = TimeOfDay.fromDateTime(checkIn);
       if (checkInTime.hour < onTime.hour ||
@@ -331,7 +301,6 @@ class _StatusBuilerState extends State<StatusBuilderWeekly> {
         containerColor = const Color(0xffF6C15B);
       }
     }
-
     if (checkOut != null) {
       final TimeOfDay checkOutTime = TimeOfDay.fromDateTime(checkOut);
       if (checkOutTime.hour < earlyCheckout.hour ||
@@ -340,7 +309,6 @@ class _StatusBuilerState extends State<StatusBuilderWeekly> {
         containerColor = const Color(0xffF07E25);
       }
     }
-
     return containerColor;
   }
 
@@ -416,6 +384,13 @@ class _StatusBuilerState extends State<StatusBuilderWeekly> {
     );
   }
 
+  String _convertMinutesToTimeFormat(int totalMinutes) {
+    int hours = totalMinutes ~/ 60;
+    int minutes = totalMinutes % 60;
+
+    return '${hours.toString().padLeft(2, '0')}:${minutes.toString().padLeft(2, '0')}';
+  }
+
   @override
   Widget build(BuildContext context) {
     final Size screenSize = MediaQuery.of(context).size;
@@ -442,7 +417,6 @@ class _StatusBuilerState extends State<StatusBuilderWeekly> {
                   ),
                 );
               }
-
               if (snapshot.hasError) {
                 return const Center(
                   child: Text(
@@ -451,7 +425,6 @@ class _StatusBuilerState extends State<StatusBuilderWeekly> {
                   ),
                 );
               }
-
               if (!snapshot.hasData || snapshot.data == null) {
                 return const Center(
                   child: Text(
@@ -467,16 +440,13 @@ class _StatusBuilerState extends State<StatusBuilderWeekly> {
                       as List<Map<String, dynamic>?>? ??
                   [];
 
-              final totalTime = _calculateWeeklyMins(weeklyData) - 44;
-              log('weekly total time $totalTime');
-              final totalHours = (totalTime / 60).toStringAsFixed(2);
-              final totalMinutes = _calculateWeeklyMins(weeklyData);
-              final totalHourss = _calculateWeeklyHours(weeklyData);
+              final totalTime = _calculateWeeklyMins(weeklyData);
+              final totalHoursFormatted =
+                  _convertMinutesToTimeFormat(totalTime);
+              (totalTime / 60).toStringAsFixed(2);
 
-              const int maxMinutes = 2700;
               const double maxHours = 45;
-
-              final double progress = totalHourss / maxHours;
+              final double progress = totalTime / 60 / maxHours;
 
               return Column(
                 children: [
@@ -538,7 +508,9 @@ class _StatusBuilerState extends State<StatusBuilderWeekly> {
                                             fontSize: 20),
                                       ),
                                       LinearProgressIndicator(
-                                        value: totalMinutes / maxMinutes,
+                                        value: totalTime /
+                                            60 /
+                                            maxHours, // Progress based on total minutes
                                         backgroundColor: Colors.grey[300],
                                         color: const Color(0xff9478F7),
                                       ),
@@ -575,13 +547,14 @@ class _StatusBuilerState extends State<StatusBuilderWeekly> {
                                             fontSize: 14),
                                       ),
                                       Text(
-                                        '$totalHours Hours',
+                                        '$totalHoursFormatted Hours', // Display formatted hours
                                         style: const TextStyle(
                                             fontWeight: FontWeight.w600,
                                             fontSize: 20),
                                       ),
                                       LinearProgressIndicator(
-                                        value: progress,
+                                        value:
+                                            progress, // Correct progress bar calculation based on hours
                                         backgroundColor: Colors.grey[300],
                                         color: const Color(0xff9478F7),
                                       ),
