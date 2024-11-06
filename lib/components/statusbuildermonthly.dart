@@ -468,8 +468,7 @@ class _StatusBuilerState extends State<StatusBuiler> {
   }
 
   Future<Map<String, dynamic>> _getMonthlyData(String userId) async {
-    final attendanceData = await _getMonthlyAttendanceDetails(
-        userId); // Default to empty list if null
+    final attendanceData = await _getMonthlyAttendanceDetails(userId);
     final totalHoursData =
         attendanceData.isNotEmpty ? _calculateMonthlyTotal(attendanceData) : 0;
     return {
@@ -510,12 +509,12 @@ class _StatusBuilerState extends State<StatusBuiler> {
               final monthlyData = snapshot.data!['attendanceData']
                       as List<Map<String, dynamic>?>? ??
                   [];
-              // log('Attendance Data: ${snapshot.data!['attendanceData']}');
-              log('MonthlyData: ${snapshot.data!['monthlyData']}');
-              log('MonthlyData: ${snapshot.data!['attendanceData']}');
+
               final totalTime = _calculateMonthlyTotal(monthlyData);
               log('total time: $totalTime');
-              final totalHours = (totalTime / 60).toStringAsFixed(2);
+              final totalHoursFormatted =
+                  _convertMinutesToTimeFormat(totalTime);
+              (totalTime / 60).toStringAsFixed(2);
 
               const int maxMinutes = 10392;
               const double maxHours = 173.2;
