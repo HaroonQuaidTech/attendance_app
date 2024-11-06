@@ -3,7 +3,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:quaidtech/screens/home.dart';
 import 'package:quaidtech/screens/signup.dart';
-
+import 'package:shared_preferences/shared_preferences.dart';
 
 typedef CloseCallback = Function();
 
@@ -20,6 +20,38 @@ class _LoginScreenState extends State<LoginScreen> {
   final TextEditingController _passwordController = TextEditingController();
   bool _isCheck = false;
   bool isPasswordVisible = false;
+
+  @override
+  void initState() {
+    super.initState();
+    _loadLoginDetails();
+  }
+
+  Future<void> _loadLoginDetails() async {
+    final prefs = await SharedPreferences.getInstance();
+    String? savedEmail = prefs.getString('email');
+    String? savedPassword = prefs.getString('password');
+
+    if (savedEmail != null && savedPassword != null) {
+      setState(() {
+        _emailController.text = savedEmail;
+        _passwordController.text = savedPassword;
+        _isCheck = true;
+      });
+    }
+  }
+
+  Future<void> _saveLoginDetails(String email, String password) async {
+    final prefs = await SharedPreferences.getInstance();
+
+    if (_isCheck) {
+      await prefs.setString('email', email);
+      await prefs.setString('password', password);
+    } else {
+      await prefs.remove('email');
+      await prefs.remove('password');
+    }
+  }
 
   void _toggleCheckbox(bool? value) {
     setState(() {
@@ -50,7 +82,7 @@ class _LoginScreenState extends State<LoginScreen> {
           .signInWithEmailAndPassword(email: email, password: password);
       log(userCredential.toString());
 
-    
+      await _saveLoginDetails(email, password);
 
       _showAlertDialog(
         title: 'Success',
@@ -309,42 +341,26 @@ class _LoginScreenState extends State<LoginScreen> {
                               ),
                             ),
                           ),
-                          const SizedBox(height: 16),
                           Row(
                             mainAxisAlignment: MainAxisAlignment.center,
                             children: [
-                              const Text('Don\'t Have an Account?',
-                                  style: TextStyle(
-                                      fontSize: 14,
-                                      fontWeight: FontWeight.bold)),
-                              const SizedBox(width: 10),
-                              GestureDetector(
-                                onTap: () {
-                                  Navigator.pushReplacement(
+                              const Text("Don't have an account?"),
+                              TextButton(
+                                onPressed: () {
+                                  Navigator.push(
                                     context,
                                     MaterialPageRoute(
-                                        builder: (context) =>
-                                            const SignUpScreen()),
+                                      builder: (context) =>
+                                          const SignUpScreen(),
+                                    ),
                                   );
                                 },
-                                child: const Text('Sign Up',
-                                    style: TextStyle(
-                                      fontSize: 14,
-                                      fontWeight: FontWeight.bold,
-                                      color: Color(0xff7647EB),
-                                    )),
+                                child: const Text('Sign Up'),
                               ),
                             ],
                           ),
                         ],
                       ),
-                    ),
-                  ),
-                  const SizedBox(height: 30),
-                  Center(
-                    child: SizedBox(
-                      height: 60,
-                      child: Image.asset('assets/logo.png'),
                     ),
                   ),
                 ],
