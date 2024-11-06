@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
@@ -465,7 +467,8 @@ class _StatusBuilerState extends State<StatusBuilderWeekly> {
                       as List<Map<String, dynamic>?>? ??
                   [];
 
-              final totalTime = _calculateWeeklyMins(weeklyData);
+              final totalTime = _calculateWeeklyMins(weeklyData) - 44;
+              log('weekly total time $totalTime');
               final totalHours = (totalTime / 60).toStringAsFixed(2);
               final totalMinutes = _calculateWeeklyMins(weeklyData);
               final totalHourss = _calculateWeeklyHours(weeklyData);
