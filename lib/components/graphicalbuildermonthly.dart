@@ -1,4 +1,3 @@
-import 'dart:developer';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
@@ -159,7 +158,6 @@ class _GraphicalbuilerState extends State<GraphicalbuilerMonthly> {
         }
       }
     }
-    log("Late Count Monthly: $lateCount");
     return lateCount;
   }
 
@@ -176,7 +174,7 @@ class _GraphicalbuilerState extends State<GraphicalbuilerMonthly> {
         }
       }
     }
-    log("Early Count Monthly: $earlyCount");
+
     return earlyCount;
   }
 
@@ -195,7 +193,7 @@ class _GraphicalbuilerState extends State<GraphicalbuilerMonthly> {
         }
       }
     }
-    log("OnTime Count Monthly: $onTimeCount");
+
     return onTimeCount;
   }
 
@@ -210,7 +208,6 @@ class _GraphicalbuilerState extends State<GraphicalbuilerMonthly> {
       }
     }
 
-    log("Absent Count Monthly: $absentCount");
     return absentCount;
   }
 
@@ -223,7 +220,6 @@ class _GraphicalbuilerState extends State<GraphicalbuilerMonthly> {
       }
     }
 
-    log('Present count Monthly: $presentCount');
     return presentCount;
   }
 
