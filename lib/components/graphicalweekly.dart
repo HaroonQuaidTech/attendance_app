@@ -64,18 +64,15 @@ class _GraphicalbuilerState extends State<GraphicalbuilerWeekly> {
     DateTime currentDate = DateTime.now();
 
     for (var entry in data) {
-      // Ensure checkIn is present
       final checkIn = (entry['checkIn'] as Timestamp?)?.toDate();
       final checkOut = (entry['checkOut'] as Timestamp?)?.toDate();
 
-      // Skip future check-ins
       if (checkIn != null &&
           checkOut != null &&
           checkIn.isBefore(currentDate)) {
         final duration = checkOut.difference(checkIn);
         final dayOfWeek = checkIn.weekday;
 
-        // Add hours only for past and present days
         weeklyHours[dayOfWeek] =
             (weeklyHours[dayOfWeek] ?? 0) + duration.inHours.toDouble();
       }
@@ -189,7 +186,6 @@ class _GraphicalbuilerState extends State<GraphicalbuilerWeekly> {
     int earlyCount = 0;
 
     for (var entry in attendanceData) {
-      // Check if 'checkOut' is not null before processing
       if (entry['checkOut'] != null) {
         DateTime checkOutTime = (entry['checkOut'] as Timestamp).toDate();
 

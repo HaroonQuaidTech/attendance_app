@@ -134,7 +134,6 @@ class _HomeScreenState extends State<HomeScreen> {
         .collection('dailyattendance');
 
     try {
-      // Find the user's first check-in for the current month
       final firstCheckInSnapshot = await attendanceCollection
           .where('checkIn', isGreaterThanOrEqualTo: startOfMonth)
           .orderBy('checkIn')
@@ -151,7 +150,6 @@ class _HomeScreenState extends State<HomeScreen> {
         }
       }
 
-      // Fetch all check-ins from the effective start date to today
       final querySnapshot = await attendanceCollection
           .where('checkIn', isGreaterThanOrEqualTo: effectiveStartDate)
           .where('checkIn', isLessThanOrEqualTo: now)
@@ -169,7 +167,6 @@ class _HomeScreenState extends State<HomeScreen> {
               final lateThreshold =
                   DateTime(checkIn.year, checkIn.month, checkIn.day, 8, 00);
 
-              // Determine color based on attendance status
               Color eventColor;
               if (checkIn.isAfter(lateThreshold)) {
                 eventColor = const Color(0xffF6C15B);
@@ -232,7 +229,6 @@ class _HomeScreenState extends State<HomeScreen> {
         .collection('dailyattendance');
 
     try {
-      // Fetch attendance records for the current month
       final querySnapshot = await attendanceCollection
           .where('checkIn', isGreaterThanOrEqualTo: startOfMonth)
           .where('checkIn', isLessThanOrEqualTo: now)
@@ -247,7 +243,6 @@ class _HomeScreenState extends State<HomeScreen> {
       };
 
       if (querySnapshot.docs.isEmpty) {
-        // No records, so no absences counted for new users
         return {'present': 0, 'late': 0, 'absent': 0};
       }
 
@@ -260,7 +255,6 @@ class _HomeScreenState extends State<HomeScreen> {
 
         if (checkIn == null) continue;
 
-        // Update the firstCheckInDate to the earliest check-in date within the month
         if (firstCheckInDate == null || checkIn.isBefore(firstCheckInDate)) {
           firstCheckInDate = checkIn;
         }
@@ -279,22 +273,18 @@ class _HomeScreenState extends State<HomeScreen> {
         }
       }
 
-      // If no check-in date was found, assume no absences
       if (firstCheckInDate == null) {
         return {'present': 0, 'late': 0, 'absent': 0};
       }
 
-      // Only calculate absences starting from the first check-in date
       for (int day = firstCheckInDate.day; day <= currentDayOfMonth; day++) {
         final DateTime date = DateTime(now.year, now.month, day);
 
-        // Skip weekends
         if (date.weekday == DateTime.saturday ||
             date.weekday == DateTime.sunday) {
           continue;
         }
 
-        // Count as absent if no attendance record exists for this day
         if (!daysWithRecords.contains(day)) {
           counts['absent'] = (counts['absent'] ?? 0) + 1;
         }
@@ -683,8 +673,6 @@ class _HomeScreenState extends State<HomeScreen> {
                                     ),
                                   ),
                                   const SizedBox(height: 20),
-
-                                  // Attendance Details Container
                                   _isLoading
                                       ? const CircularProgressIndicator()
                                       : Container(

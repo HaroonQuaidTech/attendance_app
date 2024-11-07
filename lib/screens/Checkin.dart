@@ -458,7 +458,6 @@ class _CheckinScreenState extends State<CheckinScreen> {
                     ],
                   ),
                   SizedBox(height: MediaQuery.of(context).size.height * 0.14),
-                 
                   if (checkIn == null && checkOut == null)
                     GestureDetector(
                       onTap: () async {
@@ -516,7 +515,6 @@ class _CheckinScreenState extends State<CheckinScreen> {
                                   color: const Color(0xff7647EB), width: 2),
                             ),
                           ),
-
                           Container(
                             width: 115,
                             height: 115,
@@ -552,7 +550,6 @@ class _CheckinScreenState extends State<CheckinScreen> {
                         ],
                       ),
                     ),
-                  //----------------------------------------check out----------------------------------------------------------
                   if (checkIn != null && checkOut == null)
                     GestureDetector(
                       onTap: () async {
@@ -702,7 +699,6 @@ class _CheckinScreenState extends State<CheckinScreen> {
                       child: Stack(
                         alignment: Alignment.center,
                         children: [
-                          // Outer Circle
                           Container(
                             width: 180,
                             height: 180,
@@ -720,7 +716,6 @@ class _CheckinScreenState extends State<CheckinScreen> {
                                   color: const Color(0xffFB3F4A), width: 2),
                             ),
                           ),
-                          // Middle Circle
                           Container(
                             width: 120,
                             height: 120,
@@ -738,7 +733,6 @@ class _CheckinScreenState extends State<CheckinScreen> {
                                   color: const Color(0xffFB3F4A), width: 2),
                             ),
                           ),
-                          // Inner Circle with Icon and Text
                           Container(
                             width: 115,
                             height: 115,

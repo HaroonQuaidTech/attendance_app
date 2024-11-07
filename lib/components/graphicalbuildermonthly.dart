@@ -286,7 +286,6 @@ class _GraphicalbuilerState extends State<GraphicalbuilerMonthly> {
           ),
           child: Column(children: [
             const SizedBox(height: 20),
-            // Monthly Bar Chart
             Container(
               height: 430,
               width: double.infinity,
@@ -471,7 +470,6 @@ class _GraphicalbuilerState extends State<GraphicalbuilerMonthly> {
               ),
             ),
             const SizedBox(height: 20),
-            // Monthly Pie Chart
             Container(
               padding: const EdgeInsets.all(12),
               height: 430,
@@ -505,11 +503,11 @@ class _GraphicalbuilerState extends State<GraphicalbuilerMonthly> {
                       : PieChart(
                           dataMap: pieChartData,
                           colorList: const [
-                            Color(0xff9478F7), // Present
-                            Color(0xffEC5851), // Absent
-                            Color(0xffF6C15B), // Late Arrival
-                            Color(0xffF07E25), // Early Out
-                            Color(0xff22AF41), //oN TIME
+                            Color(0xff9478F7),
+                            Color(0xffEC5851),
+                            Color(0xffF6C15B),
+                            Color(0xffF07E25),
+                            Color(0xff22AF41),
                           ],
                           chartRadius: MediaQuery.of(context).size.width / 1.7,
                           legendOptions: const LegendOptions(
