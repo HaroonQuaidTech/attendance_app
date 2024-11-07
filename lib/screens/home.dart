@@ -1,3 +1,4 @@
+import 'dart:developer';
 import 'dart:io';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:draggable_fab/draggable_fab.dart';
@@ -23,19 +24,23 @@ class HomeScreen extends StatefulWidget {
 }
 
 class _HomeScreenState extends State<HomeScreen> {
+  final FirebaseAuth _auth = FirebaseAuth.instance;
+  String? _imageUrl;
+  int _selectedIndex = 0;
+
   Map<String, dynamic>? data;
   List<Map<String, dynamic>> weeklyData = [];
   final String userId = FirebaseAuth.instance.currentUser!.uid;
   User? user = FirebaseAuth.instance.currentUser;
-  final FirebaseAuth _auth = FirebaseAuth.instance;
-  String? _imageUrl;
   bool _isLoading = false;
-  int _selectedIndex = 0;
   CalendarFormat _calendarFormat = CalendarFormat.month;
   DateTime _focusedDay = DateTime.now();
   DateTime _selectedDay = DateTime.now();
 
-  final Map<DateTime, List<Color>> _events = {};
+  final Map<DateTime, List<Color>> _events = {
+    DateTime.utc(2024, 10, 1): [const Color(0xff8E71DF)],
+    DateTime.utc(2024, 10, 2): [const Color(0xffF6C15B)],
+  };
 
   List<Color> _getEventsForDay(DateTime day) {
     return _events[day] ?? [];
@@ -44,36 +49,23 @@ class _HomeScreenState extends State<HomeScreen> {
   Future<Map<String, dynamic>?> _getAttendanceDetails(
       String uid, DateTime day) async {
     String formattedDate = DateFormat('yMMMd').format(day);
-    int retries = 3;
-    int delayMilliseconds = 500;
 
-    for (int attempt = 0; attempt < retries; attempt++) {
-      try {
-        final DocumentSnapshot<Map<String, dynamic>> snapshot =
-            await FirebaseFirestore.instance
-                .collection('AttendanceDetails')
-                .doc(uid)
-                .collection('dailyattendance')
-                .doc(formattedDate)
-                .get();
+    final DocumentSnapshot<Map<String, dynamic>> snapshot =
+        await FirebaseFirestore.instance
+            .collection('AttendanceDetails')
+            .doc(userId)
+            .collection('dailyattendance')
+            .doc(formattedDate)
+            .get();
 
-        if (snapshot.exists) {
-          return snapshot.data();
-        }
-        return null;
-      } on FirebaseException catch (e) {
-        if (e.code == 'unavailable' && attempt < retries - 1) {
-          await Future.delayed(Duration(milliseconds: delayMilliseconds));
-          delayMilliseconds *= 2;
-        } else {
-          rethrow;
-        }
-      }
+    if (snapshot.exists) {
+      return snapshot.data();
     }
     return null;
   }
 
   void _showAttendanceDetails(Map<String, dynamic> data) {
+    log(' data1 $data', name: 'Logg');
     DateTime? checkInTime = (data['checkIn'] != null)
         ? (data['checkIn'] as Timestamp).toDate()
         : null;
@@ -86,7 +78,9 @@ class _HomeScreenState extends State<HomeScreen> {
     } else {}
   }
 
-  void _showNoDataMessage() {}
+  void _showNoDataMessage() {
+    log('No attendance data available for the selected day');
+  }
 
   @override
   void initState() {
@@ -116,6 +110,7 @@ class _HomeScreenState extends State<HomeScreen> {
         }
       });
     } catch (e) {
+      log('Error fetching attendance details: $e');
       setState(() {
         _isLoading = false;
         _showNoDataMessage();
@@ -139,8 +134,26 @@ class _HomeScreenState extends State<HomeScreen> {
         .collection('dailyattendance');
 
     try {
-      final querySnapshot = await attendanceCollection
+      // Find the user's first check-in for the current month
+      final firstCheckInSnapshot = await attendanceCollection
           .where('checkIn', isGreaterThanOrEqualTo: startOfMonth)
+          .orderBy('checkIn')
+          .limit(1)
+          .get();
+
+      DateTime effectiveStartDate = startOfMonth;
+      if (firstCheckInSnapshot.docs.isNotEmpty) {
+        final firstCheckInData = firstCheckInSnapshot.docs.first.data();
+        final firstCheckInDate =
+            (firstCheckInData['checkIn'] as Timestamp?)?.toDate();
+        if (firstCheckInDate != null) {
+          effectiveStartDate = firstCheckInDate;
+        }
+      }
+
+      // Fetch all check-ins from the effective start date to today
+      final querySnapshot = await attendanceCollection
+          .where('checkIn', isGreaterThanOrEqualTo: effectiveStartDate)
           .where('checkIn', isLessThanOrEqualTo: now)
           .get();
 
@@ -154,15 +167,16 @@ class _HomeScreenState extends State<HomeScreen> {
 
             if (checkIn != null) {
               final lateThreshold =
-                  DateTime(checkIn.year, checkIn.month, checkIn.day, 8, 15);
+                  DateTime(checkIn.year, checkIn.month, checkIn.day, 8, 00);
 
+              // Determine color based on attendance status
               Color eventColor;
               if (checkIn.isAfter(lateThreshold)) {
                 eventColor = const Color(0xffF6C15B);
               } else if (checkIn.isBefore(lateThreshold)) {
                 eventColor = const Color(0xff22AF41);
               } else {
-                eventColor = const Color(0xffEC5851);
+                eventColor = const Color(0xff22AF41);
               }
 
               _events[DateTime.utc(checkIn.year, checkIn.month, checkIn.day)] =
@@ -172,7 +186,7 @@ class _HomeScreenState extends State<HomeScreen> {
         });
       }
     } catch (e) {
-      const Text('Error');
+      log('Error fetching events: $e');
     }
   }
 
@@ -626,52 +640,35 @@ class _HomeScreenState extends State<HomeScreen> {
                                       eventLoader: _getEventsForDay,
                                       calendarBuilders: CalendarBuilders(
                                         markerBuilder: (context, day, events) {
-                                          final currentMonth =
-                                              DateTime.now().month;
-                                          final currentYear =
-                                              DateTime.now().year;
-
-                                          bool isCurrentMonth =
-                                              (day.month == currentMonth &&
-                                                  day.year == currentYear);
-
-                                          bool isWeekend = day.weekday ==
-                                                  DateTime.saturday ||
-                                              day.weekday == DateTime.sunday;
-
-                                          bool isPastOrToday =
-                                              day.isBefore(DateTime.now()) ||
-                                                  day.isAtSameMomentAs(
-                                                      DateTime.now());
-
-                                          Color? eventColor = (!isWeekend &&
-                                                  isCurrentMonth &&
-                                                  isPastOrToday)
-                                              ? (events.isEmpty
-                                                  ? const Color(0xffEC5851)
-                                                  : events.first as Color)
-                                              : null;
-
-                                          if (eventColor != null) {
-                                            return Container(
-                                              margin:
-                                                  const EdgeInsets.symmetric(
-                                                      horizontal: 1.5),
-                                              width: 6,
-                                              height: 6,
-                                              decoration: BoxDecoration(
-                                                shape: BoxShape.circle,
-                                                color: eventColor,
-                                              ),
-                                            );
+                                          if (events.isEmpty) {
+                                            return const SizedBox.shrink();
                                           }
-
-                                          return const SizedBox.shrink();
+                                          return Row(
+                                            mainAxisSize: MainAxisSize.min,
+                                            children: List.generate(
+                                                events.length, (index) {
+                                              final color =
+                                                  events[index] as Color;
+                                              return Container(
+                                                margin:
+                                                    const EdgeInsets.symmetric(
+                                                        horizontal: 1.5),
+                                                width: 6,
+                                                height: 6,
+                                                decoration: BoxDecoration(
+                                                  shape: BoxShape.circle,
+                                                  color: color,
+                                                ),
+                                              );
+                                            }),
+                                          );
                                         },
                                       ),
                                     ),
                                   ),
                                   const SizedBox(height: 20),
+
+                                  // Attendance Details Container
                                   _isLoading
                                       ? const CircularProgressIndicator()
                                       : Container(
@@ -719,6 +716,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                                           );
                                                         }
 
+                                                     
                                                         return DailyAttendance(
                                                           data: data!,
                                                           selectedDay:
