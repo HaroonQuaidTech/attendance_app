@@ -732,7 +732,6 @@ class _HomeScreenState extends State<HomeScreen> {
                                                           );
                                                         }
 
-                                                     
                                                         return DailyAttendance(
                                                           data: data!,
                                                           selectedDay:

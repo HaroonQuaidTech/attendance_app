@@ -4,7 +4,7 @@ import 'package:intl/intl.dart';
 
 class DailyEmptyAttendance extends StatefulWidget {
   final DateTime? selectedDay;
-  final String? checkInTime; 
+  final String? checkInTime;
 
   const DailyEmptyAttendance({
     super.key,
@@ -25,33 +25,26 @@ class _DailyAttendanceState extends State<DailyEmptyAttendance> {
     final double screenHeight = screenSize.height;
     final double screenWidth = screenSize.width;
 
-    
     String message;
     Color containerColor;
 
-    
     final DateTime currentDate = DateTime.now();
 
-    
     if (widget.selectedDay != null &&
         (widget.selectedDay!.weekday == DateTime.saturday ||
             widget.selectedDay!.weekday == DateTime.sunday)) {
       message = 'Weekend Days';
-      containerColor = Colors.blueGrey; 
+      containerColor = Colors.blueGrey;
     } else {
-     
       if (widget.selectedDay!.isAfter(currentDate)) {
-    
         message = 'No Data Available';
-        containerColor = const Color(0xffEC5851); 
+        containerColor = const Color(0xffEC5851);
       } else if (widget.checkInTime == null || widget.checkInTime!.isEmpty) {
-   
         message = 'Leave/Day off';
-        containerColor = const Color(0xffEC5851); 
+        containerColor = const Color(0xffEC5851);
       } else {
-      
         message = 'Checked in at ${widget.checkInTime}';
-        containerColor = const Color(0xffEC5851); 
+        containerColor = const Color(0xffEC5851);
       }
     }
 
@@ -106,7 +99,7 @@ class _DailyAttendanceState extends State<DailyEmptyAttendance> {
           const SizedBox(width: 50),
           Center(
             child: Text(
-              message, 
+              message,
               style: const TextStyle(
                 fontSize: 22,
                 fontWeight: FontWeight.w600,
