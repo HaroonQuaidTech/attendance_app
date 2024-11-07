@@ -394,10 +394,17 @@ class _ProfileScreenState extends State<ProfileScreen> {
             closeCallback();
             if (title == 'Logged Out') {
               Navigator.of(context).pushAndRemoveUntil(
-                MaterialPageRoute(builder: (context) => const LoginScreen()),
+                MaterialPageRoute(
+                  builder: (context) => const LoginScreen(),
+                ),
                 (Route<dynamic> route) => false,
               );
             } else if (message == 'Profile Updated') {
+              Navigator.pop(context);
+              setState(() {
+                isEdited = false;
+              });
+              _loadUserProfile();
             } else {
               Navigator.pop(context);
             }
