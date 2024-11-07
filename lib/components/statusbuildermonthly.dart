@@ -19,10 +19,10 @@ class _StatusBuilerState extends State<StatusBuiler> {
     List<Map<String, dynamic>> monthlyAttendanceList = [];
     final now = DateTime.now();
     final firstDayOfMonth = DateTime(now.year, now.month, 1);
-    final lastDayOfMonth = DateTime(now.year, now.month + 1, 0);
-    final daysInMonth = lastDayOfMonth.difference(firstDayOfMonth).inDays + 1;
+    final today = now.day;
+
     final List<Future<DocumentSnapshot<Map<String, dynamic>>>> snapshotFutures =
-        List.generate(daysInMonth, (i) {
+        List.generate(today, (i) {
       final date = firstDayOfMonth.add(Duration(days: i));
       final formattedDate = DateFormat('yMMMd').format(date);
       return FirebaseFirestore.instance
