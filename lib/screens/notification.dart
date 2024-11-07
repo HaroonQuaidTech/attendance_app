@@ -1,5 +1,3 @@
-// ignore_for_file: prefer_const_constructors, prefer_const_literals_to_create_immutables
-
 import 'package:flutter/material.dart';
 
 class NotificationScreen extends StatefulWidget {
@@ -28,10 +26,9 @@ class _NotificationScreenState extends State<NotificationScreen> {
                         width: 50,
                         height: 50,
                         decoration: BoxDecoration(
-                          color: Colors.grey[200], // light background color
-                          borderRadius:
-                              BorderRadius.circular(12), // rounded corners
-                          boxShadow: [
+                          color: Colors.grey[200],
+                          borderRadius: BorderRadius.circular(12),
+                          boxShadow: const [
                             BoxShadow(
                               color: Colors.black12,
                               offset: Offset(0, 4),
@@ -44,13 +41,13 @@ class _NotificationScreenState extends State<NotificationScreen> {
                           onTap: () {
                             Navigator.pop(context);
                           },
-                          child: Icon(
+                          child: const Icon(
                             Icons.arrow_back,
                             color: Colors.black,
                           ),
                         ),
                       ),
-                      Text(
+                      const Text(
                         'Notification',
                         style: TextStyle(
                           fontSize: 22,
@@ -59,17 +56,15 @@ class _NotificationScreenState extends State<NotificationScreen> {
                       ),
                     ]),
               ),
-              //OUTER CONTAINER--------------------------------------------------------------------
               Container(
                 height: 500,
-                padding: EdgeInsets.symmetric(vertical: 20),
+                padding: const EdgeInsets.symmetric(vertical: 20),
                 width: double.infinity,
                 decoration: BoxDecoration(
-                    color: Color(0xffEFF1FF),
+                    color: const Color(0xffEFF1FF),
                     borderRadius: BorderRadius.circular(18)),
                 child: Column(
                   children: [
-                    // --------------------------------------- INSIDE container--------------------------------------------
                     Container(
                         width: 330,
                         height: 80,
@@ -85,22 +80,20 @@ class _NotificationScreenState extends State<NotificationScreen> {
                                 width: 42,
                                 height: 42,
                                 decoration: BoxDecoration(
-                                  color: Colors
-                                      .grey[200], // light background color
-                                  borderRadius: BorderRadius.circular(
-                                      40), // rounded corners
+                                  color: Colors.grey[200],
+                                  borderRadius: BorderRadius.circular(40),
                                 ),
-                                child: Icon(
+                                child: const Icon(
                                   Icons.notifications_none,
                                   color: Colors.black,
                                 ),
                               ),
-                              Text(
+                              const Text(
                                 'Lorem ipsum dolor sit amet,\nconsectetur adipiscing elit dolor ',
                                 style: TextStyle(
                                     fontSize: 13, fontWeight: FontWeight.w600),
                               ),
-                              Text(
+                              const Text(
                                 '1m ago.',
                                 style: TextStyle(
                                     fontSize: 14,
@@ -110,7 +103,7 @@ class _NotificationScreenState extends State<NotificationScreen> {
                             ],
                           ),
                         )),
-                    SizedBox(height: 10),
+                    const SizedBox(height: 10),
                     Container(
                         width: 330,
                         height: 80,
@@ -127,21 +120,21 @@ class _NotificationScreenState extends State<NotificationScreen> {
                                 height: 42,
                                 decoration: BoxDecoration(
                                   color: Colors
-                                      .grey[200], // light background color
+                                      .grey[200], 
                                   borderRadius: BorderRadius.circular(
-                                      40), // rounded corners
+                                      40),
                                 ),
-                                child: Icon(
+                                child: const Icon(
                                   Icons.notifications_none,
                                   color: Colors.black,
                                 ),
                               ),
-                              Text(
+                              const Text(
                                 'Lorem ipsum dolor sit amet,\nconsectetur adipiscing elit dolor ',
                                 style: TextStyle(
                                     fontSize: 13, fontWeight: FontWeight.w600),
                               ),
-                              Text(
+                              const Text(
                                 '1d ago.',
                                 style: TextStyle(
                                     fontSize: 14,
@@ -151,7 +144,7 @@ class _NotificationScreenState extends State<NotificationScreen> {
                             ],
                           ),
                         )),
-                    SizedBox(height: 10),
+                    const SizedBox(height: 10),
                     Container(
                         width: 330,
                         height: 80,
@@ -172,17 +165,17 @@ class _NotificationScreenState extends State<NotificationScreen> {
                                   borderRadius: BorderRadius.circular(
                                       40), // rounded corners
                                 ),
-                                child: Icon(
+                                child: const Icon(
                                   Icons.notifications_none,
                                   color: Colors.black,
                                 ),
                               ),
-                              Text(
+                              const Text(
                                 'Lorem ipsum dolor sit amet,\nconsectetur adipiscing elit dolor ',
                                 style: TextStyle(
                                     fontSize: 13, fontWeight: FontWeight.w600),
                               ),
-                              Text(
+                              const Text(
                                 '2d ago.',
                                 style: TextStyle(
                                     fontSize: 14,
@@ -192,7 +185,7 @@ class _NotificationScreenState extends State<NotificationScreen> {
                             ],
                           ),
                         )),
-                    SizedBox(height: 10),
+                    const SizedBox(height: 10),
                     Container(
                         width: 330,
                         height: 80,
@@ -213,17 +206,17 @@ class _NotificationScreenState extends State<NotificationScreen> {
                                   borderRadius: BorderRadius.circular(
                                       40), // rounded corners
                                 ),
-                                child: Icon(
+                                child: const Icon(
                                   Icons.notifications_none,
                                   color: Colors.black,
                                 ),
                               ),
-                              Text(
+                              const Text(
                                 'Lorem ipsum dolor sit amet,\nconsectetur adipiscing elit dolor ',
                                 style: TextStyle(
                                     fontSize: 13, fontWeight: FontWeight.w600),
                               ),
-                              Text(
+                              const Text(
                                 '3d ago.',
                                 style: TextStyle(
                                     fontSize: 14,
@@ -233,7 +226,7 @@ class _NotificationScreenState extends State<NotificationScreen> {
                             ],
                           ),
                         )),
-                    SizedBox(height: 10),
+                    const SizedBox(height: 10),
                     Container(
                         width: 330,
                         height: 80,
@@ -254,17 +247,17 @@ class _NotificationScreenState extends State<NotificationScreen> {
                                   borderRadius: BorderRadius.circular(
                                       40), // rounded corners
                                 ),
-                                child: Icon(
+                                child: const Icon(
                                   Icons.notifications_none,
                                   color: Colors.black,
                                 ),
                               ),
-                              Text(
+                              const Text(
                                 'Lorem ipsum dolor sit amet,\nconsectetur adipiscing elit dolor ',
                                 style: TextStyle(
                                     fontSize: 13, fontWeight: FontWeight.w600),
                               ),
-                              Text(
+                              const Text(
                                 '1M ago.',
                                 style: TextStyle(
                                     fontSize: 14,

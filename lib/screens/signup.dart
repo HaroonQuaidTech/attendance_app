@@ -1,5 +1,3 @@
-// ignore_for_file: prefer_const_constructors
-
 import 'dart:developer';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -31,12 +29,11 @@ class _LoginScreenState extends State<SignUpScreen> {
       String password = _passwordController.text;
       String name = _nameController.text.trim();
 
-      // Show a progress dialog
       showDialog(
         context: context,
         barrierDismissible: false,
         builder: (BuildContext context) {
-          return Center(
+          return const Center(
             child: CircularProgressIndicator(),
           );
         },
@@ -64,7 +61,7 @@ class _LoginScreenState extends State<SignUpScreen> {
 
         Navigator.pushReplacement(
           context,
-          MaterialPageRoute(builder: (context) => LoginScreen()),
+          MaterialPageRoute(builder: (context) => const LoginScreen()),
         );
       } catch (e) {
         Navigator.pop(context);
@@ -96,7 +93,7 @@ class _LoginScreenState extends State<SignUpScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Color(0xffF8F8FF),
+      backgroundColor: const Color(0xffF8F8FF),
       body: SafeArea(
         child: Center(
           child: SingleChildScrollView(
@@ -109,48 +106,48 @@ class _LoginScreenState extends State<SignUpScreen> {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
-                    Text(
+                    const Text(
                       'Hi, Welcome Back! 👋',
                       style: TextStyle(
                         fontSize: 30,
                         fontWeight: FontWeight.w600,
                       ),
                     ),
-                    Text(
+                    const Text(
                       'Hello again, you’ve been missed!',
                       style:
                           TextStyle(fontSize: 16, fontWeight: FontWeight.w400),
                     ),
-                    SizedBox(height: 30),
+                    const SizedBox(height: 30),
                     Container(
-                      padding:
-                          EdgeInsets.symmetric(horizontal: 20, vertical: 20),
+                      padding: const EdgeInsets.symmetric(
+                          horizontal: 20, vertical: 20),
                       decoration: BoxDecoration(
-                        color: Color(0xffEFF1FF),
+                        color: const Color(0xffEFF1FF),
                         borderRadius: BorderRadius.circular(20),
                       ),
                       child: Column(
                         mainAxisAlignment: MainAxisAlignment.start,
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          Center(
+                          const Center(
                             child: Text('Sign Up',
                                 style: TextStyle(
                                     fontSize: 18, fontWeight: FontWeight.w600)),
                           ),
-                          Text(
+                          const Text(
                             'Name',
                             style: TextStyle(
                                 fontSize: 20, fontWeight: FontWeight.bold),
                           ),
                           Container(
-                            padding: EdgeInsets.symmetric(horizontal: 3),
+                            padding: const EdgeInsets.symmetric(horizontal: 3),
                             decoration: BoxDecoration(
                                 color: Colors.white,
                                 borderRadius: BorderRadius.circular(8)),
                             child: TextFormField(
                               controller: _nameController,
-                              decoration: InputDecoration(
+                              decoration: const InputDecoration(
                                 filled: true,
                                 fillColor: Colors.white,
                                 hintText: 'Enter your Name',
@@ -164,20 +161,20 @@ class _LoginScreenState extends State<SignUpScreen> {
                               },
                             ),
                           ),
-                          SizedBox(height: 10),
-                          Text(
+                          const SizedBox(height: 10),
+                          const Text(
                             'Email Address',
                             style: TextStyle(
                                 fontSize: 20, fontWeight: FontWeight.bold),
                           ),
                           Container(
-                            padding: EdgeInsets.symmetric(horizontal: 3),
+                            padding: const EdgeInsets.symmetric(horizontal: 3),
                             decoration: BoxDecoration(
                                 color: Colors.white,
                                 borderRadius: BorderRadius.circular(8)),
                             child: TextFormField(
                               controller: _emailController,
-                              decoration: InputDecoration(
+                              decoration: const InputDecoration(
                                 filled: true,
                                 fillColor: Colors.white,
                                 hintText: 'Enter your Email Address',
@@ -196,12 +193,12 @@ class _LoginScreenState extends State<SignUpScreen> {
                               },
                             ),
                           ),
-                          SizedBox(height: 10),
-                          Text('Password',
+                          const SizedBox(height: 10),
+                          const Text('Password',
                               style: TextStyle(
                                   fontSize: 20, fontWeight: FontWeight.bold)),
                           Container(
-                            padding: EdgeInsets.symmetric(horizontal: 3),
+                            padding: const EdgeInsets.symmetric(horizontal: 3),
                             decoration: BoxDecoration(
                                 color: Colors.white,
                                 borderRadius: BorderRadius.circular(8)),
@@ -210,7 +207,7 @@ class _LoginScreenState extends State<SignUpScreen> {
                               obscureText: isPasswordVisible,
                               decoration: InputDecoration(
                                   suffixIconConstraints:
-                                      BoxConstraints(maxHeight: 20),
+                                      const BoxConstraints(maxHeight: 20),
                                   filled: true,
                                   fillColor: Colors.white,
                                   hintText: 'Enter your Password',
@@ -240,12 +237,12 @@ class _LoginScreenState extends State<SignUpScreen> {
                               },
                             ),
                           ),
-                          SizedBox(height: 10),
-                          Text('Confirm Your Password',
+                          const SizedBox(height: 10),
+                          const Text('Confirm Your Password',
                               style: TextStyle(
                                   fontSize: 20, fontWeight: FontWeight.bold)),
                           Container(
-                            padding: EdgeInsets.symmetric(horizontal: 3),
+                            padding: const EdgeInsets.symmetric(horizontal: 3),
                             decoration: BoxDecoration(
                                 color: Colors.white,
                                 borderRadius: BorderRadius.circular(8)),
@@ -254,7 +251,7 @@ class _LoginScreenState extends State<SignUpScreen> {
                               obscureText: isPasswordVisible,
                               decoration: InputDecoration(
                                   suffixIconConstraints:
-                                      BoxConstraints(maxHeight: 20),
+                                      const BoxConstraints(maxHeight: 20),
                                   filled: true,
                                   fillColor: Colors.white,
                                   hintText: 'Confirm your Password',
@@ -317,7 +314,8 @@ class _LoginScreenState extends State<SignUpScreen> {
                                   Navigator.pushReplacement(
                                     context,
                                     MaterialPageRoute(
-                                        builder: (context) => LoginScreen()),
+                                        builder: (context) =>
+                                            const LoginScreen()),
                                   );
                                 },
                                 child: const Text('Sign In',
