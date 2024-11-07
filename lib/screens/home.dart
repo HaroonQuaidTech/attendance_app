@@ -218,6 +218,7 @@ class _HomeScreenState extends State<HomeScreen> {
         .collection('dailyattendance');
 
     try {
+      // Fetch attendance records for the current month
       final querySnapshot = await attendanceCollection
           .where('checkIn', isGreaterThanOrEqualTo: startOfMonth)
           .where('checkIn', isLessThanOrEqualTo: now)
@@ -232,16 +233,23 @@ class _HomeScreenState extends State<HomeScreen> {
       };
 
       if (querySnapshot.docs.isEmpty) {
-        return {'present': 0, 'late': 0, 'absent': currentDayOfMonth};
+        // No records, so no absences counted for new users
+        return {'present': 0, 'late': 0, 'absent': 0};
       }
 
       Set<int> daysWithRecords = {};
+      DateTime? firstCheckInDate;
 
       for (var doc in querySnapshot.docs) {
         final data = doc.data();
         final checkIn = (data['checkIn'] as Timestamp?)?.toDate();
 
         if (checkIn == null) continue;
+
+        // Update the firstCheckInDate to the earliest check-in date within the month
+        if (firstCheckInDate == null || checkIn.isBefore(firstCheckInDate)) {
+          firstCheckInDate = checkIn;
+        }
 
         final checkInDay = checkIn.day;
 
@@ -257,14 +265,22 @@ class _HomeScreenState extends State<HomeScreen> {
         }
       }
 
-      for (int day = 1; day <= currentDayOfMonth; day++) {
+      // If no check-in date was found, assume no absences
+      if (firstCheckInDate == null) {
+        return {'present': 0, 'late': 0, 'absent': 0};
+      }
+
+      // Only calculate absences starting from the first check-in date
+      for (int day = firstCheckInDate.day; day <= currentDayOfMonth; day++) {
         final DateTime date = DateTime(now.year, now.month, day);
 
+        // Skip weekends
         if (date.weekday == DateTime.saturday ||
             date.weekday == DateTime.sunday) {
           continue;
         }
 
+        // Count as absent if no attendance record exists for this day
         if (!daysWithRecords.contains(day)) {
           counts['absent'] = (counts['absent'] ?? 0) + 1;
         }
