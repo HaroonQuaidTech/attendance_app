@@ -45,7 +45,7 @@ class _HomeScreenState extends State<HomeScreen> {
       String uid, DateTime day) async {
     String formattedDate = DateFormat('yMMMd').format(day);
     int retries = 3;
-    int delayMilliseconds = 500; // Initial delay time for backoff
+    int delayMilliseconds = 500;
 
     for (int attempt = 0; attempt < retries; attempt++) {
       try {
@@ -64,7 +64,7 @@ class _HomeScreenState extends State<HomeScreen> {
       } on FirebaseException catch (e) {
         if (e.code == 'unavailable' && attempt < retries - 1) {
           await Future.delayed(Duration(milliseconds: delayMilliseconds));
-          delayMilliseconds *= 2; // Exponential backoff
+          delayMilliseconds *= 2;
         } else {
           rethrow;
         }
@@ -156,7 +156,6 @@ class _HomeScreenState extends State<HomeScreen> {
               final lateThreshold =
                   DateTime(checkIn.year, checkIn.month, checkIn.day, 8, 15);
 
-              // Determine color based on attendance status
               Color eventColor;
               if (checkIn.isAfter(lateThreshold)) {
                 eventColor = const Color(0xffF6C15B);
@@ -568,7 +567,6 @@ class _HomeScreenState extends State<HomeScreen> {
                                               'No attendance records available for this month.'),
                                         );
                                       }
-                                      //Monthly attendance componenet
 
                                       return Monthlyattendance(
                                         presentCount: data['present']!,
@@ -628,38 +626,32 @@ class _HomeScreenState extends State<HomeScreen> {
                                       eventLoader: _getEventsForDay,
                                       calendarBuilders: CalendarBuilders(
                                         markerBuilder: (context, day, events) {
-                                          // Get the currently visible month in the calendar.
                                           final currentMonth =
                                               DateTime.now().month;
                                           final currentYear =
                                               DateTime.now().year;
 
-                                          // Check if the day is within the current month and year.
                                           bool isCurrentMonth =
                                               (day.month == currentMonth &&
                                                   day.year == currentYear);
 
-                                          // Check if the day is a weekend (Saturday or Sunday).
                                           bool isWeekend = day.weekday ==
                                                   DateTime.saturday ||
                                               day.weekday == DateTime.sunday;
 
-                                          // Ensure markers are only shown for past or present days within the current month.
                                           bool isPastOrToday =
                                               day.isBefore(DateTime.now()) ||
                                                   day.isAtSameMomentAs(
                                                       DateTime.now());
 
-                                          // Determine the event color (red for missing check-ins, event color otherwise).
                                           Color? eventColor = (!isWeekend &&
                                                   isCurrentMonth &&
                                                   isPastOrToday)
                                               ? (events.isEmpty
                                                   ? const Color(0xffEC5851)
                                                   : events.first as Color)
-                                              : null; // No marker for weekends, future dates, or non-current months.
+                                              : null;
 
-                                          // Return the marker only if there's a valid color (i.e., not null).
                                           if (eventColor != null) {
                                             return Container(
                                               margin:
@@ -674,7 +666,6 @@ class _HomeScreenState extends State<HomeScreen> {
                                             );
                                           }
 
-                                          // Return an empty widget if no marker is needed.
                                           return const SizedBox.shrink();
                                         },
                                       ),
@@ -728,7 +719,6 @@ class _HomeScreenState extends State<HomeScreen> {
                                                           );
                                                         }
 
-                                                        // Show the fetched attendance data
                                                         return DailyAttendance(
                                                           data: data!,
                                                           selectedDay:
@@ -764,20 +754,17 @@ class _HomeScreenState extends State<HomeScreen> {
                   }
 
                   if (checkIn != null && checkOut == null) {
-                    // Display Check-Out Button
                     return DraggableFab(
                       child: Container(
                         margin: const EdgeInsets.only(bottom: 20.0),
                         child: Stack(
                           alignment: Alignment.center,
                           children: [
-                            // Outer Circle
                             Material(
-                              elevation: 4.0, // Adjust elevation as needed
+                              elevation: 4.0,
                               shape: const CircleBorder(),
                               child: CircleAvatar(
-                                radius:
-                                    45, // This defines the size of the CircleAvatar (90 width and height)
+                                radius: 45,
                                 backgroundColor: Colors.white,
                                 child: Container(
                                   decoration: BoxDecoration(
@@ -790,7 +777,6 @@ class _HomeScreenState extends State<HomeScreen> {
                                 ),
                               ),
                             ),
-                            // Middle Circle
                             Container(
                               width: 60,
                               height: 60,
@@ -814,8 +800,7 @@ class _HomeScreenState extends State<HomeScreen> {
                               },
                               backgroundColor: const Color(0xffffd7d9),
                               shape: RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(
-                                    300), // Set border radius
+                                borderRadius: BorderRadius.circular(300),
                               ),
                               child: Column(
                                 mainAxisAlignment: MainAxisAlignment.center,
