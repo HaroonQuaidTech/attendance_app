@@ -119,10 +119,8 @@ class _NotificationScreenState extends State<NotificationScreen> {
                                 width: 42,
                                 height: 42,
                                 decoration: BoxDecoration(
-                                  color: Colors
-                                      .grey[200], 
-                                  borderRadius: BorderRadius.circular(
-                                      40),
+                                  color: Colors.grey[200],
+                                  borderRadius: BorderRadius.circular(40),
                                 ),
                                 child: const Icon(
                                   Icons.notifications_none,
