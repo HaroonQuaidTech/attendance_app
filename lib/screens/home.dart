@@ -27,20 +27,18 @@ class _HomeScreenState extends State<HomeScreen> {
   final FirebaseAuth _auth = FirebaseAuth.instance;
   String? _imageUrl;
   int _selectedIndex = 0;
+  List<Map<String, dynamic>> weeklyData = [];
+  User? user = FirebaseAuth.instance.currentUser;
 
   Map<String, dynamic>? data;
-  List<Map<String, dynamic>> weeklyData = [];
   final String userId = FirebaseAuth.instance.currentUser!.uid;
-  User? user = FirebaseAuth.instance.currentUser;
   bool _isLoading = false;
   CalendarFormat _calendarFormat = CalendarFormat.month;
   DateTime _focusedDay = DateTime.now();
   DateTime _selectedDay = DateTime.now();
+  DateTime? _firstCheckInDate;
 
-  final Map<DateTime, List<Color>> _events = {
-    DateTime.utc(2024, 10, 1): [const Color(0xff8E71DF)],
-    DateTime.utc(2024, 10, 2): [const Color(0xffF6C15B)],
-  };
+  final Map<DateTime, List<Color>> _events = {};
 
   List<Color> _getEventsForDay(DateTime day) {
     return _events[day] ?? [];
@@ -65,7 +63,7 @@ class _HomeScreenState extends State<HomeScreen> {
   }
 
   void _showAttendanceDetails(Map<String, dynamic> data) {
-    log(' data1 $data', name: 'Logg');
+    log('data $data', name: 'Logg');
     DateTime? checkInTime = (data['checkIn'] != null)
         ? (data['checkIn'] as Timestamp).toDate()
         : null;
@@ -75,7 +73,7 @@ class _HomeScreenState extends State<HomeScreen> {
 
     if (checkOutTime != null && checkInTime != null) {
       checkOutTime.difference(checkInTime);
-    } else {}
+    }
   }
 
   void _showNoDataMessage() {
@@ -89,7 +87,7 @@ class _HomeScreenState extends State<HomeScreen> {
     _loadUserProfile();
     _onDaySelected(_selectedDay, _focusedDay);
     _getAttendanceDetails(userId, DateTime.now());
-    _fetchEventsForMonth(userId);
+    _fetchFirstCheckInDate(userId);
   }
 
   void _onDaySelected(DateTime selectedDay, DateTime focusedDay) async {
@@ -98,7 +96,7 @@ class _HomeScreenState extends State<HomeScreen> {
       _focusedDay = focusedDay;
       _isLoading = true;
     });
-    String userId = FirebaseAuth.instance.currentUser!.uid;
+
     try {
       data = await _getAttendanceDetails(userId, selectedDay);
       setState(() {
@@ -118,15 +116,35 @@ class _HomeScreenState extends State<HomeScreen> {
     }
   }
 
-  void _onItemTapped(int index) {
-    setState(() {
-      _selectedIndex = index;
-    });
+  Future<void> _fetchFirstCheckInDate(String userId) async {
+    final attendanceCollection = FirebaseFirestore.instance
+        .collection('AttendanceDetails')
+        .doc(userId)
+        .collection('dailyattendance');
+
+    try {
+      final querySnapshot = await attendanceCollection
+          .orderBy('checkIn', descending: false)
+          .limit(1)
+          .get();
+
+      if (querySnapshot.docs.isNotEmpty) {
+        final data = querySnapshot.docs.first.data();
+        final checkIn = (data['checkIn'] as Timestamp?)?.toDate();
+        setState(() {
+          _firstCheckInDate = checkIn;
+        });
+        if (_firstCheckInDate != null) {
+          _fetchEventsForUser(userId, _firstCheckInDate!);
+        }
+      }
+    } catch (e) {
+      log('Error fetching first check-in date: $e');
+    }
   }
 
-  Future<void> _fetchEventsForMonth(String userId) async {
+  Future<void> _fetchEventsForUser(String userId, DateTime startDate) async {
     final now = DateTime.now();
-    final startOfMonth = DateTime(now.year, now.month, 1);
 
     final attendanceCollection = FirebaseFirestore.instance
         .collection('AttendanceDetails')
@@ -134,24 +152,8 @@ class _HomeScreenState extends State<HomeScreen> {
         .collection('dailyattendance');
 
     try {
-      final firstCheckInSnapshot = await attendanceCollection
-          .where('checkIn', isGreaterThanOrEqualTo: startOfMonth)
-          .orderBy('checkIn')
-          .limit(1)
-          .get();
-
-      DateTime effectiveStartDate = startOfMonth;
-      if (firstCheckInSnapshot.docs.isNotEmpty) {
-        final firstCheckInData = firstCheckInSnapshot.docs.first.data();
-        final firstCheckInDate =
-            (firstCheckInData['checkIn'] as Timestamp?)?.toDate();
-        if (firstCheckInDate != null) {
-          effectiveStartDate = firstCheckInDate;
-        }
-      }
-
       final querySnapshot = await attendanceCollection
-          .where('checkIn', isGreaterThanOrEqualTo: effectiveStartDate)
+          .where('checkIn', isGreaterThanOrEqualTo: startDate)
           .where('checkIn', isLessThanOrEqualTo: now)
           .get();
 
@@ -170,8 +172,6 @@ class _HomeScreenState extends State<HomeScreen> {
               Color eventColor;
               if (checkIn.isAfter(lateThreshold)) {
                 eventColor = const Color(0xffF6C15B);
-              } else if (checkIn.isBefore(lateThreshold)) {
-                eventColor = const Color(0xff22AF41);
               } else {
                 eventColor = const Color(0xff22AF41);
               }
@@ -185,6 +185,12 @@ class _HomeScreenState extends State<HomeScreen> {
     } catch (e) {
       log('Error fetching events: $e');
     }
+  }
+
+  void _onItemTapped(int index) {
+    setState(() {
+      _selectedIndex = index;
+    });
   }
 
   Future<void> _loadUserProfile() async {
@@ -646,27 +652,30 @@ class _HomeScreenState extends State<HomeScreen> {
                                       eventLoader: _getEventsForDay,
                                       calendarBuilders: CalendarBuilders(
                                         markerBuilder: (context, day, events) {
-                                          if (events.isEmpty) {
+                                          if (day.weekday ==
+                                                  DateTime.saturday ||
+                                              day.weekday == DateTime.sunday) {
                                             return const SizedBox.shrink();
                                           }
-                                          return Row(
-                                            mainAxisSize: MainAxisSize.min,
-                                            children: List.generate(
-                                                events.length, (index) {
-                                              final color =
-                                                  events[index] as Color;
-                                              return Container(
-                                                margin:
-                                                    const EdgeInsets.symmetric(
-                                                        horizontal: 1.5),
-                                                width: 6,
-                                                height: 6,
-                                                decoration: BoxDecoration(
-                                                  shape: BoxShape.circle,
-                                                  color: color,
-                                                ),
-                                              );
-                                            }),
+                                          if (_firstCheckInDate != null &&
+                                              (day.isBefore(
+                                                      _firstCheckInDate!) ||
+                                                  day.isAfter(
+                                                      DateTime.now()))) {
+                                            return const SizedBox.shrink();
+                                          }
+                                          Color? eventColor = events.isNotEmpty
+                                              ? events.first as Color
+                                              : const Color(0xffEC5851);
+                                          return Container(
+                                            margin: const EdgeInsets.symmetric(
+                                                horizontal: 1.5),
+                                            width: 6,
+                                            height: 6,
+                                            decoration: BoxDecoration(
+                                              shape: BoxShape.circle,
+                                              color: eventColor,
+                                            ),
                                           );
                                         },
                                       ),
