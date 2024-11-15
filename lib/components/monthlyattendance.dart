@@ -1,6 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:fl_chart/fl_chart.dart';
+import 'package:quaidtech/main.dart';
 
 Future<Map<String, int>> fetchMonthlyAttendance(String userId) async {
   final now = DateTime.now();
@@ -101,19 +102,19 @@ class Monthlyattendance extends StatelessWidget {
             child: PieChart(
               PieChartData(sections: [
                 PieChartSectionData(
-                  color: const Color(0xff8E71DF),
+                  color: CustomTheme.theme.colorScheme.surface,
                   value: presentCount.toDouble(),
                   title: '',
                   radius: 12,
                 ),
                 PieChartSectionData(
-                  color: const Color(0xffF6C15B),
+                  color: CustomTheme.theme.colorScheme.primary,
                   value: lateCount.toDouble(),
                   title: '',
                   radius: 12,
                 ),
                 PieChartSectionData(
-                  color: const Color(0xffEC5851),
+                  color: CustomTheme.theme.colorScheme.secondary,
                   value: absentCount.toDouble(),
                   title: '',
                   radius: 12,
@@ -126,16 +127,20 @@ class Monthlyattendance extends StatelessWidget {
               Text(
                 presentCount.toString(),
                 style: TextStyle(
-                    fontSize: responsiveFontSize,
-                    fontWeight: FontWeight.w600,
-                    color: const Color(0xff8E71DF)),
+                  fontSize: responsiveFontSize,
+                  fontWeight: FontWeight.w600,
+                  color: CustomTheme.theme.colorScheme.surface,
+                  height: 0,
+                ),
               ),
+              const SizedBox(height: 10),
               Text(
                 'Present',
                 style: TextStyle(
-                    fontSize: responsiveFontSize1,
-                    fontWeight: FontWeight.w600,
-                    color: const Color(0xff9E9E9E)),
+                  fontSize: responsiveFontSize1,
+                  color: Theme.of(context).colorScheme.surface,
+                  height: 0,
+                ),
               ),
             ],
           ),
@@ -144,16 +149,20 @@ class Monthlyattendance extends StatelessWidget {
               Text(
                 lateCount.toString(),
                 style: TextStyle(
-                    fontSize: responsiveFontSize,
-                    fontWeight: FontWeight.w600,
-                    color: const Color(0xffF6C15B)),
+                  fontSize: responsiveFontSize,
+                  fontWeight: FontWeight.w600,
+                  color: CustomTheme.theme.colorScheme.primary,
+                  height: 0,
+                ),
               ),
+              const SizedBox(height: 10),
               Text(
                 'Late',
                 style: TextStyle(
-                    fontSize: responsiveFontSize1,
-                    fontWeight: FontWeight.w600,
-                    color: const Color(0xff9E9E9E)),
+                  fontSize: responsiveFontSize1,
+                  color: Theme.of(context).colorScheme.surface,
+                  height: 0,
+                ),
               ),
             ],
           ),
@@ -162,16 +171,20 @@ class Monthlyattendance extends StatelessWidget {
               Text(
                 absentCount.toString(),
                 style: TextStyle(
-                    fontSize: responsiveFontSize,
-                    fontWeight: FontWeight.w600,
-                    color: const Color(0xffEC5851)),
+                  fontSize: responsiveFontSize,
+                  fontWeight: FontWeight.w600,
+                  color: CustomTheme.theme.colorScheme.secondary,
+                  height: 0,
+                ),
               ),
+              const SizedBox(height: 10),
               Text(
                 'Absent',
                 style: TextStyle(
-                    fontSize: responsiveFontSize1,
-                    fontWeight: FontWeight.w600,
-                    color: const Color(0xff9E9E9E)),
+                  fontSize: responsiveFontSize1,
+                  color: Theme.of(context).colorScheme.surface,
+                  height: 0,
+                ),
               ),
             ],
           )

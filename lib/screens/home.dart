@@ -7,6 +7,7 @@ import 'package:flutter/material.dart';
 import 'package:quaidtech/components/dailyAttendancedetails.dart';
 import 'package:quaidtech/components/dailyNullAttend.dart';
 import 'package:quaidtech/components/monthlyattendance.dart';
+import 'package:quaidtech/main.dart';
 import 'package:quaidtech/screens/Checkin.dart';
 import 'package:quaidtech/screens/notification.dart';
 import 'package:quaidtech/screens/profile.dart';
@@ -171,9 +172,9 @@ class _HomeScreenState extends State<HomeScreen> {
 
               Color eventColor;
               if (checkIn.isAfter(lateThreshold)) {
-                eventColor = const Color(0xffF6C15B);
+                eventColor = CustomTheme.theme.colorScheme.primary;
               } else {
-                eventColor = const Color(0xff22AF41);
+                eventColor = CustomTheme.theme.colorScheme.surface;
               }
 
               _events[DateTime.utc(checkIn.year, checkIn.month, checkIn.day)] =
@@ -324,16 +325,16 @@ class _HomeScreenState extends State<HomeScreen> {
                 children: [
                   Container(
                     height: 10,
-                    decoration: const BoxDecoration(
+                    decoration: BoxDecoration(
                       gradient: LinearGradient(
                         colors: [
-                          Color(0xff4D3D79),
-                          Color(0xff8E71DF),
+                          Theme.of(context).colorScheme.secondary,
+                          Theme.of(context).colorScheme.inversePrimary,
                         ],
                         begin: Alignment.centerLeft,
                         end: Alignment.centerRight,
                       ),
-                      borderRadius: BorderRadius.vertical(
+                      borderRadius: const BorderRadius.vertical(
                         top: Radius.circular(12),
                       ),
                     ),
@@ -403,7 +404,8 @@ class _HomeScreenState extends State<HomeScreen> {
                                 width: 110,
                                 height: 30,
                                 decoration: BoxDecoration(
-                                  color: const Color(0xff7647EB),
+                                  color:
+                                      Theme.of(context).colorScheme.secondary,
                                   borderRadius: BorderRadius.circular(10),
                                 ),
                                 child: const Center(
@@ -431,7 +433,7 @@ class _HomeScreenState extends State<HomeScreen> {
         return exitApp;
       },
       child: Scaffold(
-        backgroundColor: Colors.white,
+        backgroundColor: Theme.of(context).colorScheme.primary,
         body: SafeArea(
           child: _selectedIndex == 1
               ? const StatsticsScreen()
@@ -439,7 +441,7 @@ class _HomeScreenState extends State<HomeScreen> {
                   ? const ProfileScreen()
                   : Padding(
                       padding: const EdgeInsets.symmetric(
-                          horizontal: 12.0, vertical: 16.0),
+                          horizontal: 12.0, vertical: 0),
                       child: Column(
                         children: [
                           FutureBuilder<DocumentSnapshot>(
@@ -451,7 +453,6 @@ class _HomeScreenState extends State<HomeScreen> {
                                 if (!snapshot.hasData ||
                                     !snapshot.data!.exists) {
                                   return Row(children: [
-                                    const Spacer(),
                                     GestureDetector(
                                       onTap: () {
                                         Navigator.push(
@@ -500,14 +501,18 @@ class _HomeScreenState extends State<HomeScreen> {
                                       Text(
                                         displayName,
                                         style: const TextStyle(
-                                            fontSize: 20,
-                                            fontWeight: FontWeight.w600),
+                                          fontSize: 20,
+                                          fontWeight: FontWeight.w600,
+                                          height: 0,
+                                        ),
                                       ),
                                       Text(
                                         email,
                                         style: const TextStyle(
-                                            fontSize: 16,
-                                            fontWeight: FontWeight.w400),
+                                          fontSize: 16,
+                                          fontWeight: FontWeight.w400,
+                                          height: 0,
+                                        ),
                                       ),
                                     ],
                                   ),
@@ -522,25 +527,21 @@ class _HomeScreenState extends State<HomeScreen> {
                                         ),
                                       );
                                     },
-                                    child: Container(
-                                      height: 50,
-                                      width: 50,
-                                      decoration: BoxDecoration(
-                                        color: const Color(0xffE6E8FD),
-                                        borderRadius: BorderRadius.circular(12),
-                                        boxShadow: const [
-                                          BoxShadow(
-                                            color: Colors.black12,
-                                            offset: Offset(2, 2),
-                                            blurRadius: 4,
+                                    child: Material(
+                                      borderRadius: BorderRadius.circular(12),
+                                      elevation: 10,
+                                      color: Theme.of(context)
+                                          .colorScheme
+                                          .tertiary,
+                                      child: SizedBox(
+                                        width: 50,
+                                        height: 50,
+                                        child: Center(
+                                          child: Image.asset(
+                                            'assets/notification_icon.png',
+                                            height: 30,
+                                            width: 30,
                                           ),
-                                        ],
-                                      ),
-                                      child: Center(
-                                        child: Image.asset(
-                                          'assets/notification_icon.png',
-                                          height: 30,
-                                          width: 30,
                                         ),
                                       ),
                                     ),
@@ -548,17 +549,10 @@ class _HomeScreenState extends State<HomeScreen> {
                                 ]);
                               }),
                           const SizedBox(height: 30),
-                          Container(
-                            decoration: BoxDecoration(
-                              color: const Color(0xffEFF1FF),
-                              borderRadius: BorderRadius.circular(12),
-                              boxShadow: const [
-                                BoxShadow(
-                                  color: Colors.black12,
-                                  blurRadius: 10,
-                                ),
-                              ],
-                            ),
+                          Material(
+                            elevation: 10,
+                            color: Theme.of(context).colorScheme.tertiary,
+                            borderRadius: BorderRadius.circular(12),
                             child: Column(
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
@@ -569,62 +563,60 @@ class _HomeScreenState extends State<HomeScreen> {
                                     'Monthly Attendance',
                                     style: TextStyle(
                                       fontSize: 18,
-                                      fontWeight: FontWeight.w600,
                                       height: 0,
                                     ),
                                   ),
                                 ),
                                 const SizedBox(height: 10),
-                                FutureBuilder<Map<String, int>>(
-                                  future: fetchMonthlyAttendance(user!.uid),
-                                  builder: (context, snapshot) {
-                                    if (snapshot.hasError) {
-                                      return Text('Error: ${snapshot.error}');
-                                    }
+                                Padding(
+                                  padding: const EdgeInsets.symmetric(
+                                      horizontal: 10.0),
+                                  child: FutureBuilder<Map<String, int>>(
+                                    future: fetchMonthlyAttendance(user!.uid),
+                                    builder: (context, snapshot) {
+                                      if (snapshot.hasError) {
+                                        return Text('Error: ${snapshot.error}');
+                                      }
 
-                                    if (snapshot.hasData) {
-                                      final data = snapshot.data!;
+                                      if (snapshot.hasData) {
+                                        final data = snapshot.data!;
 
-                                      if (data['present'] == 0 &&
-                                          data['late'] == 0 &&
-                                          data['absent'] == 0) {
-                                        return const Center(
-                                          child: Text(
-                                              'No attendance records available for this month.'),
+                                        if (data['present'] == 0 &&
+                                            data['late'] == 0 &&
+                                            data['absent'] == 0) {
+                                          return const Center(
+                                            child: Text(
+                                                'No attendance records available for this month.'),
+                                          );
+                                        }
+
+                                        return Monthlyattendance(
+                                          presentCount: data['present']!,
+                                          lateCount: data['late']!,
+                                          absentCount: data['absent']!,
                                         );
                                       }
 
-                                      return Monthlyattendance(
-                                        presentCount: data['present']!,
-                                        lateCount: data['late']!,
-                                        absentCount: data['absent']!,
+                                      return const Center(
+                                        child: CircularProgressIndicator(),
                                       );
-                                    }
-
-                                    return const Center(
-                                      child: CircularProgressIndicator(),
-                                    );
-                                  },
+                                    },
+                                  ),
                                 ),
+                                const SizedBox(height: 10),
                               ],
                             ),
                           ),
+                          const SizedBox(height: 20),
                           Expanded(
                             child: SingleChildScrollView(
                               child: Column(
                                 children: [
-                                  const SizedBox(height: 20),
-                                  Container(
-                                    decoration: BoxDecoration(
-                                      color: const Color(0xffEFF1FF),
-                                      borderRadius: BorderRadius.circular(16),
-                                      boxShadow: const [
-                                        BoxShadow(
-                                          color: Colors.black12,
-                                          blurRadius: 10,
-                                        ),
-                                      ],
-                                    ),
+                                  Material(
+                                    elevation: 10,
+                                    borderRadius: BorderRadius.circular(12),
+                                    color:
+                                        Theme.of(context).colorScheme.tertiary,
                                     child: TableCalendar(
                                       firstDay: DateTime.utc(2020, 10, 16),
                                       lastDay: DateTime.utc(2030, 3, 14),
@@ -650,7 +642,37 @@ class _HomeScreenState extends State<HomeScreen> {
                                         _focusedDay = focusedDay;
                                       },
                                       eventLoader: _getEventsForDay,
+                                      calendarStyle: CalendarStyle(
+                                        todayDecoration: BoxDecoration(
+                                          color: Theme.of(context)
+                                              .colorScheme
+                                              .inversePrimary,
+                                          shape: BoxShape.circle,
+                                        ),
+                                        todayTextStyle: const TextStyle(
+                                          color: Colors.black,
+                                        ),
+                                      ),
                                       calendarBuilders: CalendarBuilders(
+                                        selectedBuilder: (context, date, _) {
+                                          return Container(
+                                            margin: const EdgeInsets.all(6.0),
+                                            alignment: Alignment.center,
+                                            decoration: BoxDecoration(
+                                              color: Theme.of(context)
+                                                  .colorScheme
+                                                  .secondary,
+                                              shape: BoxShape.circle,
+                                            ),
+                                            child: Text(
+                                              '${date.day}',
+                                              style: const TextStyle(
+                                                color: Colors.white,
+                                                height: 0,
+                                              ),
+                                            ),
+                                          );
+                                        },
                                         markerBuilder: (context, day, events) {
                                           if (day.weekday ==
                                                   DateTime.saturday ||
@@ -666,10 +688,12 @@ class _HomeScreenState extends State<HomeScreen> {
                                           }
                                           Color? eventColor = events.isNotEmpty
                                               ? events.first as Color
-                                              : const Color(0xffEC5851);
+                                              : CustomTheme
+                                                  .theme.colorScheme.secondary;
                                           return Container(
                                             margin: const EdgeInsets.symmetric(
-                                                horizontal: 1.5),
+                                              horizontal: 1.5,
+                                            ),
                                             width: 6,
                                             height: 6,
                                             decoration: BoxDecoration(
@@ -683,43 +707,41 @@ class _HomeScreenState extends State<HomeScreen> {
                                   ),
                                   const SizedBox(height: 20),
                                   _isLoading
-                                      ? const CircularProgressIndicator()
-                                      : Container(
-                                          height: 142,
-                                          padding: const EdgeInsets.symmetric(
-                                              vertical: 8),
-                                          decoration: BoxDecoration(
-                                            borderRadius:
-                                                BorderRadius.circular(12),
-                                            color: const Color(0xffEFF1FF),
-                                            boxShadow: const [
-                                              BoxShadow(
-                                                color: Colors.black12,
-                                                offset: Offset(4, 4),
-                                                blurRadius: 4,
-                                              ),
-                                            ],
-                                          ),
+                                      ? CircularProgressIndicator(
+                                          color: Theme.of(context)
+                                              .colorScheme
+                                              .secondary,
+                                        )
+                                      : Material(
+                                          elevation: 10,
+                                          color: Theme.of(context)
+                                              .colorScheme
+                                              .tertiary,
+                                          borderRadius:
+                                              BorderRadius.circular(12),
                                           child: Row(
                                             mainAxisAlignment:
                                                 MainAxisAlignment.center,
                                             crossAxisAlignment:
                                                 CrossAxisAlignment.start,
                                             children: [
-                                              Center(
+                                              Padding(
+                                                padding:
+                                                    const EdgeInsets.symmetric(
+                                                        horizontal: 10.0),
                                                 child: Column(
                                                   crossAxisAlignment:
                                                       CrossAxisAlignment.start,
                                                   children: [
+                                                    const SizedBox(height: 10),
                                                     const Text(
                                                       'Attendance Details',
                                                       style: TextStyle(
                                                         fontSize: 18,
-                                                        fontWeight:
-                                                            FontWeight.w600,
+                                                        height: 0,
                                                       ),
                                                     ),
-                                                    const SizedBox(height: 6),
+                                                    const SizedBox(height: 10),
                                                     Builder(
                                                       builder: (context) {
                                                         if (data == null) {
@@ -736,12 +758,14 @@ class _HomeScreenState extends State<HomeScreen> {
                                                         );
                                                       },
                                                     ),
+                                                    const SizedBox(height: 10),
                                                   ],
                                                 ),
                                               ),
                                             ],
                                           ),
                                         ),
+                                  const SizedBox(height: 20),
                                 ],
                               ),
                             ),
@@ -771,7 +795,7 @@ class _HomeScreenState extends State<HomeScreen> {
                           alignment: Alignment.center,
                           children: [
                             Material(
-                              elevation: 4.0,
+                              elevation: 10,
                               shape: const CircleBorder(),
                               child: CircleAvatar(
                                 radius: 45,

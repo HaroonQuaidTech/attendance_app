@@ -33,7 +33,15 @@ class _MyAppState extends State<MyApp> {
           .copyWith(textScaler: const TextScaler.linear(1)),
       child: MaterialApp(
         debugShowCheckedModeBanner: false,
-        theme: ThemeData(fontFamily: "KumbhSans"),
+        theme: ThemeData(
+          colorScheme: const ColorScheme.light(
+            surface: Color(0xff3B3A3C),
+            primary: Color(0xffFFFFFF),
+            secondary: Color(0xffFF6100),
+            tertiary: Color(0xffEFEFEF),
+            inversePrimary: Color(0xffFFB88C),
+          ),
+        ),
         initialRoute: 'splash',
         routes: {
           'login': (context) => const LoginScreen(),
@@ -47,6 +55,20 @@ class _MyAppState extends State<MyApp> {
           'adminh': (context) => const AdminHomeScreen(),
           'splash': (context) => const Splashscreen(),
         },
+      ),
+    );
+  }
+}
+
+class CustomTheme {
+  static ThemeData get theme {
+    return ThemeData(
+      colorScheme: const ColorScheme.light(
+        surface: Color(0xff22AF41),
+        primary: Color(0xffF6C15B),
+        secondary: Color(0xffEC5851),
+        tertiary: Color(0xffF07E25),
+        inversePrimary: Color(0xff8E71DF),
       ),
     );
   }

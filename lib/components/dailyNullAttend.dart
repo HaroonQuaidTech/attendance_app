@@ -51,7 +51,7 @@ class _DailyAttendanceState extends State<DailyEmptyAttendance> {
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 8),
       height: screenHeight * 0.1,
-      width: screenWidth * 0.90,
+      width: screenWidth * 0.85,
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(12),
         color: Colors.white,
