@@ -1022,7 +1022,7 @@ class _HomeScreenState extends State<HomeScreen> {
                       width: 30,
                       height: 30,
                       asset,
-                      color: Theme.of(context).colorScheme.primary,
+                      color: Theme.of(context).colorScheme.surface,
                     ),
             ),
             isSelected
