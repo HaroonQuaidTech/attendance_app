@@ -1,6 +1,7 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
+import 'package:quaidtech/main.dart';
 
 class DailyEmptyAttendance extends StatefulWidget {
   final DateTime? selectedDay;
@@ -34,27 +35,27 @@ class _DailyAttendanceState extends State<DailyEmptyAttendance> {
         (widget.selectedDay!.weekday == DateTime.saturday ||
             widget.selectedDay!.weekday == DateTime.sunday)) {
       message = 'Weekend Days';
-      containerColor = Colors.blueGrey;
+      containerColor = CustomTheme.theme.colorScheme.secondaryFixed;
     } else {
       if (widget.selectedDay!.isAfter(currentDate)) {
         message = 'No Data Available';
-        containerColor = const Color(0xffEC5851);
+        containerColor = CustomTheme.theme.colorScheme.secondary;
       } else if (widget.checkInTime == null || widget.checkInTime!.isEmpty) {
         message = 'Leave/Day off';
-        containerColor = const Color(0xffEC5851);
+        containerColor = CustomTheme.theme.colorScheme.secondary;
       } else {
         message = 'Checked in at ${widget.checkInTime}';
-        containerColor = const Color(0xffEC5851);
+        containerColor = CustomTheme.theme.colorScheme.secondary;
       }
     }
 
     return Container(
-      padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 8),
+      padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 8),
       height: screenHeight * 0.1,
       width: screenWidth * 0.85,
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(12),
-        color: Colors.white,
+        color: Theme.of(context).colorScheme.primary,
       ),
       child: Row(
         crossAxisAlignment: CrossAxisAlignment.center,
