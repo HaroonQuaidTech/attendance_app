@@ -168,13 +168,13 @@ class _HomeScreenState extends State<HomeScreen> {
 
             if (checkIn != null) {
               final lateThreshold =
-                  DateTime(checkIn.year, checkIn.month, checkIn.day, 8, 00);
+                  DateTime(checkIn.year, checkIn.month, checkIn.day, 8, 15);
 
               Color eventColor;
               if (checkIn.isAfter(lateThreshold)) {
                 eventColor = CustomTheme.theme.colorScheme.primary;
               } else {
-                eventColor = CustomTheme.theme.colorScheme.surface;
+                eventColor = CustomTheme.theme.colorScheme.inversePrimary;
               }
 
               _events[DateTime.utc(checkIn.year, checkIn.month, checkIn.day)] =
@@ -725,42 +725,36 @@ class _HomeScreenState extends State<HomeScreen> {
                                             crossAxisAlignment:
                                                 CrossAxisAlignment.start,
                                             children: [
-                                              Padding(
-                                                padding:
-                                                    const EdgeInsets.symmetric(
-                                                        horizontal: 10.0),
-                                                child: Column(
-                                                  crossAxisAlignment:
-                                                      CrossAxisAlignment.start,
-                                                  children: [
-                                                    const SizedBox(height: 10),
-                                                    const Text(
-                                                      'Attendance Details',
-                                                      style: TextStyle(
-                                                        fontSize: 18,
-                                                        height: 0,
-                                                      ),
+                                              Column(
+                                                crossAxisAlignment:
+                                                    CrossAxisAlignment.start,
+                                                children: [
+                                                  const SizedBox(height: 10),
+                                                  const Text(
+                                                    'Attendance Details',
+                                                    style: TextStyle(
+                                                      fontSize: 18,
+                                                      height: 0,
                                                     ),
-                                                    const SizedBox(height: 10),
-                                                    Builder(
-                                                      builder: (context) {
-                                                        if (data == null) {
-                                                          return DailyEmptyAttendance(
-                                                            selectedDay:
-                                                                _selectedDay,
-                                                          );
-                                                        }
-
-                                                        return DailyAttendance(
-                                                          data: data!,
+                                                  ),
+                                                  const SizedBox(height: 10),
+                                                  Builder(
+                                                    builder: (context) {
+                                                      if (data == null) {
+                                                        return DailyEmptyAttendance(
                                                           selectedDay:
                                                               _selectedDay,
                                                         );
-                                                      },
-                                                    ),
-                                                    const SizedBox(height: 10),
-                                                  ],
-                                                ),
+                                                      }
+                                                      return DailyAttendance(
+                                                        data: data!,
+                                                        selectedDay:
+                                                            _selectedDay,
+                                                      );
+                                                    },
+                                                  ),
+                                                  const SizedBox(height: 10),
+                                                ],
                                               ),
                                             ],
                                           ),
@@ -804,7 +798,9 @@ class _HomeScreenState extends State<HomeScreen> {
                                   decoration: BoxDecoration(
                                     shape: BoxShape.circle,
                                     border: Border.all(
-                                      color: const Color(0xffFB3F4A),
+                                      color: Theme.of(context)
+                                          .colorScheme
+                                          .secondary,
                                       width: 2.0,
                                     ),
                                   ),
@@ -818,7 +814,8 @@ class _HomeScreenState extends State<HomeScreen> {
                                 color: Colors.white,
                                 shape: BoxShape.circle,
                                 border: Border.all(
-                                  color: const Color(0xffFB3F4A),
+                                  color:
+                                      Theme.of(context).colorScheme.secondary,
                                   width: 1.0,
                                 ),
                               ),
@@ -832,7 +829,8 @@ class _HomeScreenState extends State<HomeScreen> {
                                   ),
                                 );
                               },
-                              backgroundColor: const Color(0xffffd7d9),
+                              backgroundColor:
+                                  Theme.of(context).colorScheme.inversePrimary,
                               shape: RoundedRectangleBorder(
                                 borderRadius: BorderRadius.circular(300),
                               ),
@@ -843,7 +841,8 @@ class _HomeScreenState extends State<HomeScreen> {
                                     'assets/mingcute.png',
                                     height: 20,
                                     width: 20,
-                                    color: const Color(0xffFB3F4A),
+                                    color:
+                                        Theme.of(context).colorScheme.secondary,
                                   ),
                                   const SizedBox(height: 4),
                                   const Text(
@@ -878,7 +877,9 @@ class _HomeScreenState extends State<HomeScreen> {
                                   decoration: BoxDecoration(
                                     shape: BoxShape.circle,
                                     border: Border.all(
-                                      color: const Color(0xff8E71DF),
+                                      color: Theme.of(context)
+                                          .colorScheme
+                                          .secondary,
                                       width: 2.0,
                                     ),
                                   ),
@@ -892,7 +893,8 @@ class _HomeScreenState extends State<HomeScreen> {
                                 color: Colors.white,
                                 shape: BoxShape.circle,
                                 border: Border.all(
-                                  color: const Color(0xff8E71DF),
+                                  color:
+                                      Theme.of(context).colorScheme.secondary,
                                   width: 1.0,
                                 ),
                               ),
@@ -947,15 +949,7 @@ class _HomeScreenState extends State<HomeScreen> {
             width: double.infinity,
             decoration: BoxDecoration(
               borderRadius: BorderRadius.circular(60),
-              color: const Color(0xffEFF1FF),
-              boxShadow: [
-                BoxShadow(
-                  color: Colors.grey.withOpacity(0.2),
-                  spreadRadius: 2,
-                  blurRadius: 4,
-                  offset: const Offset(0, 2),
-                ),
-              ],
+              color: Theme.of(context).colorScheme.surface,
             ),
             child: Padding(
               padding: const EdgeInsets.symmetric(horizontal: 5),
@@ -1001,7 +995,9 @@ class _HomeScreenState extends State<HomeScreen> {
       child: Container(
         height: 50,
         decoration: BoxDecoration(
-          color: isSelected ? Colors.white : Colors.transparent,
+          color: isSelected
+              ? Theme.of(context).colorScheme.primary
+              : Colors.transparent,
           borderRadius: BorderRadius.circular(48.0),
         ),
         child: Row(
@@ -1011,7 +1007,7 @@ class _HomeScreenState extends State<HomeScreen> {
               child: isSelected
                   ? Image(
                       image: image.image,
-                      color: const Color(0xff7647EB),
+                      color: Theme.of(context).colorScheme.secondary,
                       width: 30,
                       height: 30,
                     )
@@ -1019,20 +1015,17 @@ class _HomeScreenState extends State<HomeScreen> {
                       width: 30,
                       height: 30,
                       asset,
-                      color: const Color(0xffA4A4A4),
+                      color: Theme.of(context).colorScheme.primary,
                     ),
             ),
-            SizedBox(width: isSelected ? 5 : 0),
             isSelected
                 ? Text(
                     text,
                     style: TextStyle(
-                        color: isSelected
-                            ? const Color(0xff7647EB)
-                            : const Color(0xffA4A4A4),
-                        fontWeight:
-                            isSelected ? FontWeight.bold : FontWeight.normal,
-                        fontSize: responsiveFontSize),
+                      color: Theme.of(context).colorScheme.secondary,
+                      fontSize: responsiveFontSize,
+                      height: 0,
+                    ),
                   )
                 : Container(),
             const SizedBox(width: 20),
