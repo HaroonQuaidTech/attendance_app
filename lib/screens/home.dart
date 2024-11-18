@@ -597,8 +597,12 @@ class _HomeScreenState extends State<HomeScreen> {
                                         );
                                       }
 
-                                      return const Center(
-                                        child: CircularProgressIndicator(),
+                                      return Center(
+                                        child: CircularProgressIndicator(
+                                          color: Theme.of(context)
+                                              .colorScheme
+                                              .secondary,
+                                        ),
                                       );
                                     },
                                   ),
@@ -908,7 +912,8 @@ class _HomeScreenState extends State<HomeScreen> {
                                   ),
                                 );
                               },
-                              backgroundColor: const Color(0xffEFF1FF),
+                              backgroundColor:
+                                  Theme.of(context).colorScheme.inversePrimary,
                               shape: RoundedRectangleBorder(
                                 borderRadius: BorderRadius.circular(300),
                               ),
@@ -919,6 +924,8 @@ class _HomeScreenState extends State<HomeScreen> {
                                     'assets/mingcute.png',
                                     height: 20,
                                     width: 20,
+                                    color:
+                                        Theme.of(context).colorScheme.secondary,
                                   ),
                                   const SizedBox(height: 4),
                                   const Text(
@@ -949,7 +956,7 @@ class _HomeScreenState extends State<HomeScreen> {
             width: double.infinity,
             decoration: BoxDecoration(
               borderRadius: BorderRadius.circular(60),
-              color: Theme.of(context).colorScheme.surface,
+              color: Theme.of(context).colorScheme.tertiary,
             ),
             child: Padding(
               padding: const EdgeInsets.symmetric(horizontal: 5),
