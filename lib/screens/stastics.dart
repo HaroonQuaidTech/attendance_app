@@ -363,6 +363,134 @@ class _StatsticsScreenState extends State<StatsticsScreen> {
                                 ]),
                           ),
                         ),
+                      //-------------------dropdown value2---------------------------------------------
+                      if (_selectedIndex != 2)
+                        const SizedBox(
+                          height: 20,
+                        ),
+                      Container(
+                        height: 130,
+                        width: double.infinity,
+                        decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(20),
+                          color: const Color(0xffEFF1FF),
+                          boxShadow: [
+                            BoxShadow(
+                              color: Colors.grey.withOpacity(0.2),
+                              spreadRadius: 2,
+                              blurRadius: 4,
+                              offset: const Offset(0, 2),
+                            ),
+                          ],
+                        ),
+                        child: Padding(
+                          padding: const EdgeInsets.symmetric(
+                              horizontal: 10.0, vertical: 10.0),
+                          child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                const Text(
+                                  'Filter',
+                                  style: TextStyle(
+                                      fontWeight: FontWeight.w600,
+                                      fontSize: 18),
+                                ),
+                                const SizedBox(height: 10),
+                                Row(
+                                  mainAxisAlignment:
+                                      MainAxisAlignment.spaceBetween,
+                                  children: [
+                                    Expanded(
+                                      child: Container(
+                                        height: 50,
+                                        padding: const EdgeInsets.symmetric(
+                                            horizontal: 10),
+                                        decoration: BoxDecoration(
+                                          color: Colors.white,
+                                          borderRadius:
+                                              BorderRadius.circular(12),
+                                        ),
+                                        child: DropdownButton<String>(
+                                          value: dropdownValue3,
+                                          icon:
+                                              const Icon(Icons.arrow_drop_down),
+                                          iconSize: 24,
+                                          elevation: 16,
+                                          isExpanded: true,
+                                          style: const TextStyle(
+                                              color: Colors.black,
+                                              fontSize: 16),
+                                          underline: const SizedBox(),
+                                          onChanged: (String? newValue) {
+                                            setState(() {
+                                              dropdownValue3 = newValue!;
+                                            });
+                                          },
+                                          items: <String>[
+                                            'Select Month',
+                                            'Feb',
+                                            'March',
+                                            'April',
+                                            'May',
+                                          ].map<DropdownMenuItem<String>>(
+                                              (String value) {
+                                            return DropdownMenuItem<String>(
+                                              value: value,
+                                              child: Text(value),
+                                            );
+                                          }).toList(),
+                                        ),
+                                      ),
+                                    ),
+                                    const SizedBox(width: 16),
+                                    Expanded(
+                                      child: Container(
+                                        height: 50,
+                                        padding: const EdgeInsets.symmetric(
+                                            horizontal: 10),
+                                        decoration: BoxDecoration(
+                                          color: Colors.white,
+                                          borderRadius:
+                                              BorderRadius.circular(12),
+                                        ),
+                                        child: DropdownButton<String>(
+                                          value: dropdownValue4,
+                                          icon:
+                                              const Icon(Icons.arrow_drop_down),
+                                          iconSize: 24,
+                                          elevation: 16,
+                                          isExpanded: true,
+                                          style: const TextStyle(
+                                              color: Colors.black,
+                                              fontSize: 16),
+                                          underline: const SizedBox(),
+                                          onChanged: (String? newValue) {
+                                            setState(() {
+                                              dropdownValue4 = newValue!;
+                                            });
+                                          },
+                                          items: <String>[
+                                            'Select Year',
+                                            '2024',
+                                            '2023',
+                                            '2022',
+                                            '2021',
+                                            '2020'
+                                          ].map<DropdownMenuItem<String>>(
+                                              (String value) {
+                                            return DropdownMenuItem<String>(
+                                              value: value,
+                                              child: Text(value),
+                                            );
+                                          }).toList(),
+                                        ),
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                              ]),
+                        ),
+                      ),
                       const SizedBox(
                         height: 20,
                       ),
