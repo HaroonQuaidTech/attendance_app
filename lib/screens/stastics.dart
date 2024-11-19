@@ -1,12 +1,16 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:quaidtech/components/PreviousMonthStatusBuilder.dart';
 import 'package:quaidtech/components/graphicalbuildermonthly.dart';
 import 'package:quaidtech/components/graphicalweekly.dart';
 import 'package:quaidtech/components/monthattendancce.dart';
 import 'package:quaidtech/components/statusbuilderweekly.dart';
-import 'package:quaidtech/components/statusbuildermonthly.dart';
 import 'package:quaidtech/components/weeklyattenance.dart';
 import 'package:quaidtech/screens/home.dart';
 import 'package:quaidtech/screens/notification.dart';
+import 'dart:async';
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:intl/intl.dart';
 
 class StatsticsScreen extends StatefulWidget {
   const StatsticsScreen({
@@ -22,7 +26,18 @@ class _StatsticsScreenState extends State<StatsticsScreen> {
   String dropdownValue2 = 'Select';
   String dropdownValue3 = 'Select Month';
   String dropdownValue4 = 'Select Year';
+  int selectedYear = DateTime.now().year;
+  int selectedMonth = DateTime.now().month;
   int _selectedIndex = 0;
+  List<Map<String, dynamic>> attendanceDetails = [];
+  final String uid = FirebaseAuth.instance.currentUser!.uid;
+  Future<void> fetchAttendance() async {
+    final details =
+        await _getMonthlyAttendanceDetails(uid, selectedYear, selectedMonth);
+    setState(() {
+      attendanceDetails = details;
+    });
+  }
 
   Widget _buildWeeklyAttendance(
     String text,
@@ -58,6 +73,53 @@ class _StatsticsScreenState extends State<StatsticsScreen> {
             dropdownValue2: dropdownValue2,
           ),
         ]));
+  }
+
+  Future<List<Map<String, dynamic>>> _getMonthlyAttendanceDetails(
+      String uid, int selectedYear, int selectedMonth) async {
+    List<Map<String, dynamic>> monthlyAttendanceList = [];
+
+    // Calculate the first and last day of the selected month
+    final firstDayOfMonth = DateTime(selectedYear, selectedMonth, 1);
+    final lastDayOfMonth =
+        DateTime(selectedYear, selectedMonth + 1, 0); // Last day of the month
+    final totalDays = lastDayOfMonth.day;
+
+    // Generate the list of document snapshot futures for the selected month
+    final List<Future<DocumentSnapshot<Map<String, dynamic>>>> snapshotFutures =
+        List.generate(totalDays, (i) {
+      final date = firstDayOfMonth.add(Duration(days: i));
+      final formattedDate = DateFormat('yMMMd').format(date);
+      return FirebaseFirestore.instance
+          .collection('AttendanceDetails')
+          .doc(uid)
+          .collection('dailyattendance')
+          .doc(formattedDate)
+          .get();
+    });
+
+    // Await all snapshot fetches
+    final snapshots = await Future.wait(snapshotFutures);
+
+    // Process each day of the month
+    for (int i = 0; i < snapshots.length; i++) {
+      final date = firstDayOfMonth.add(Duration(days: i));
+      final formattedDate = DateFormat('yMMMd').format(date);
+      final snapshot = snapshots[i];
+      final data = snapshot.data();
+      final checkIn = (data?['checkIn'] as Timestamp?)?.toDate();
+
+      if (snapshot.exists && checkIn != null) {
+        monthlyAttendanceList.add(data!);
+      } else {
+        monthlyAttendanceList.add({
+          'date': formattedDate,
+          'status': 'Absent',
+        });
+      }
+    }
+
+    return monthlyAttendanceList;
   }
 
   Widget _buildMonthlyAttendance(
@@ -370,7 +432,7 @@ class _StatsticsScreenState extends State<StatsticsScreen> {
                       ),
                       if (dropdownValue1 == 'Monthly')
                         Container(
-                          height: 130,
+                          height: 400,
                           width: double.infinity,
                           decoration: BoxDecoration(
                             borderRadius: BorderRadius.circular(20),
@@ -384,122 +446,220 @@ class _StatsticsScreenState extends State<StatsticsScreen> {
                               ),
                             ],
                           ),
-                          child: Padding(
-                            padding: const EdgeInsets.symmetric(
-                                horizontal: 10.0, vertical: 10.0),
-                            child: Column(
-                                crossAxisAlignment: CrossAxisAlignment.start,
+                          child: Column(
+                            children: [
+                              Row(
                                 children: [
-                                  const Text(
-                                    'Monthly Log Times',
-                                    style: TextStyle(
-                                        fontWeight: FontWeight.w600,
-                                        fontSize: 18),
-                                  ),
-                                  const SizedBox(height: 10),
-                                  Row(
-                                    mainAxisAlignment:
-                                        MainAxisAlignment.spaceBetween,
-                                    children: [
-                                      Expanded(
-                                        child: Container(
-                                          height: 50,
-                                          padding: const EdgeInsets.symmetric(
-                                              horizontal: 10),
-                                          decoration: BoxDecoration(
-                                            color: Colors.white,
-                                            borderRadius:
-                                                BorderRadius.circular(12),
+                                  Flexible(
+                                    child: Container(
+                                      height: 50,
+                                      padding: const EdgeInsets.symmetric(
+                                          horizontal: 10),
+                                      decoration: BoxDecoration(
+                                        color: Colors.white,
+                                        borderRadius: BorderRadius.circular(12),
+                                        boxShadow: [
+                                          BoxShadow(
+                                            color: Colors.grey.withOpacity(0.2),
+                                            spreadRadius: 2,
+                                            blurRadius: 4,
+                                            offset: const Offset(0, 2),
                                           ),
-                                          child: DropdownButton<String>(
-                                            value: dropdownValue3,
-                                            icon: const Icon(
-                                                Icons.arrow_drop_down),
-                                            iconSize: 24,
-                                            elevation: 16,
-                                            isExpanded: true,
-                                            style: const TextStyle(
-                                                color: Colors.black,
-                                                fontSize: 16),
-                                            underline: const SizedBox(),
-                                            onChanged: (String? newValue) {
-                                              setState(() {
-                                                dropdownValue3 = newValue!;
-                                              });
-                                            },
-                                            items: <String>[
-                                              'Select Month',
-                                              'January',
-                                              'Feb',
-                                              'March',
-                                              'April',
-                                              'May',
-                                              'June',
-                                              'July',
-                                              'August',
-                                              'September',
-                                              'October',
-                                              'November',
-                                              'December',
-                                            ].map<DropdownMenuItem<String>>(
-                                                (String value) {
-                                              return DropdownMenuItem<String>(
-                                                value: value,
-                                                child: Text(value),
-                                              );
-                                            }).toList(),
-                                          ),
-                                        ),
+                                        ],
                                       ),
-                                      const SizedBox(width: 16),
-                                      Expanded(
-                                        child: Container(
-                                          height: 50,
-                                          padding: const EdgeInsets.symmetric(
-                                              horizontal: 10),
-                                          decoration: BoxDecoration(
-                                            color: Colors.white,
-                                            borderRadius:
-                                                BorderRadius.circular(12),
-                                          ),
-                                          child: DropdownButton<String>(
-                                            value: dropdownValue4,
-                                            icon: const Icon(
-                                                Icons.arrow_drop_down),
-                                            iconSize: 24,
-                                            elevation: 16,
-                                            isExpanded: true,
-                                            style: const TextStyle(
-                                                color: Colors.black,
-                                                fontSize: 16),
-                                            underline: const SizedBox(),
-                                            onChanged: (String? newValue) {
-                                              setState(() {
-                                                dropdownValue4 = newValue!;
-                                              });
-                                            },
-                                            items: <String>[
-                                              'Select Year',
-                                              '2024',
-                                              '2023',
-                                              '2022',
-                                              '2021',
-                                              '2020'
-                                            ].map<DropdownMenuItem<String>>(
-                                                (String value) {
-                                              return DropdownMenuItem<String>(
-                                                value: value,
-                                                child: Text(value),
-                                              );
-                                            }).toList(),
-                                          ),
-                                        ),
+                                      child: DropdownButton<int>(
+                                        value: selectedMonth,
+                                        isExpanded: true,
+                                        icon: const Icon(Icons.arrow_drop_down),
+                                        iconSize: 24,
+                                        elevation: 16,
+                                        style: const TextStyle(
+                                            color: Colors.black, fontSize: 16),
+                                        underline: const SizedBox(),
+                                        onChanged: (value) {
+                                          setState(() {
+                                            selectedMonth = value!;
+                                          });
+                                          fetchAttendance();
+                                        },
+                                        items: List.generate(12, (index) {
+                                          return DropdownMenuItem<int>(
+                                            value: index + 1,
+                                            child: Text(DateFormat('MMMM')
+                                                .format(
+                                                    DateTime(0, index + 1))),
+                                          );
+                                        }),
                                       ),
-                                    ],
+                                    ),
                                   ),
-                                ]),
+                                  DropdownButton<int>(
+                                    value: selectedYear,
+                                    items: List.generate(10, (index) {
+                                      final year = DateTime.now().year - index;
+                                      return DropdownMenuItem(
+                                        value: year,
+                                        child: Text(year.toString()),
+                                      );
+                                    }),
+                                    onChanged: (value) {
+                                      setState(() {
+                                        selectedYear = value!;
+                                      });
+                                      fetchAttendance();
+                                    },
+                                  ),
+                                ],
+                              ),
+                              Expanded(
+                                child: ListView.builder(
+                                  itemCount: attendanceDetails.length,
+                                  itemBuilder: (context, index) {
+                                    final attendance = attendanceDetails[index];
+                                    return ListTile(
+                                      title: Text(attendance['date'] ??
+                                          'No Date Available'),
+                                      subtitle: Text(attendance['status'] ??
+                                          'No Status Available'),
+                                    );
+                                  },
+                                ),
+                              ),
+                            ],
                           ),
                         ),
+
+                      // Container(
+                      //   height: 130,
+                      //   width: double.infinity,
+                      //   decoration: BoxDecoration(
+                      //     borderRadius: BorderRadius.circular(20),
+                      //     color: const Color(0xffEFF1FF),
+                      //     boxShadow: [
+                      //       BoxShadow(
+                      //         color: Colors.grey.withOpacity(0.2),
+                      //         spreadRadius: 2,
+                      //         blurRadius: 4,
+                      //         offset: const Offset(0, 2),
+                      //       ),
+                      //     ],
+                      //   ),
+                      //   child: Padding(
+                      //     padding: const EdgeInsets.symmetric(
+                      //         horizontal: 10.0, vertical: 10.0),
+                      //     child: Column(
+                      //         crossAxisAlignment: CrossAxisAlignment.start,
+                      //         children: [
+                      //           const Text(
+                      //             'Monthly Log Times',
+                      //             style: TextStyle(
+                      //                 fontWeight: FontWeight.w600,
+                      //                 fontSize: 18),
+                      //           ),
+                      //           const SizedBox(height: 10),
+                      //           Row(
+                      //             mainAxisAlignment:
+                      //                 MainAxisAlignment.spaceBetween,
+                      //             children: [
+                      //               Expanded(
+                      //                 child: Container(
+                      //                   height: 50,
+                      //                   padding: const EdgeInsets.symmetric(
+                      //                       horizontal: 10),
+                      //                   decoration: BoxDecoration(
+                      //                     color: Colors.white,
+                      //                     borderRadius:
+                      //                         BorderRadius.circular(12),
+                      //                   ),
+                      //                   child: DropdownButton<String>(
+                      //                     value: dropdownValue3,
+                      //                     icon:
+                      //                         const Icon(Icons.arrow_drop_down),
+                      //                     iconSize: 24,
+                      //                     elevation: 16,
+                      //                     isExpanded: true,
+                      //                     style: const TextStyle(
+                      //                         color: Colors.black,
+                      //                         fontSize: 16),
+                      //                     underline: const SizedBox(),
+                      //                     onChanged: (String? newValue) {
+                      //                       setState(() {
+                      //                         dropdownValue3 = newValue!;
+                      //                       });
+                      //                     },
+                      //                     items: <String>[
+                      //                       'Select Month',
+                      //                       'January',
+                      //                       'Feb',
+                      //                       'March',
+                      //                       'April',
+                      //                       'May',
+                      //                       'June',
+                      //                       'July',
+                      //                       'August',
+                      //                       'September',
+                      //                       'October',
+                      //                       'November',
+                      //                       'December',
+                      //                     ].map<DropdownMenuItem<String>>(
+                      //                         (String value) {
+                      //                       return DropdownMenuItem<String>(
+                      //                         value: value,
+                      //                         child: Text(value),
+                      //                       );
+                      //                     }).toList(),
+                      //                   ),
+                      //                 ),
+                      //               ),
+                      //               const SizedBox(width: 16),
+                      //               Expanded(
+                      //                 child: Container(
+                      //                   height: 50,
+                      //                   padding: const EdgeInsets.symmetric(
+                      //                       horizontal: 10),
+                      //                   decoration: BoxDecoration(
+                      //                     color: Colors.white,
+                      //                     borderRadius:
+                      //                         BorderRadius.circular(12),
+                      //                   ),
+                      //                   child: DropdownButton<String>(
+                      //                     value: dropdownValue4,
+                      //                     icon:
+                      //                         const Icon(Icons.arrow_drop_down),
+                      //                     iconSize: 24,
+                      //                     elevation: 16,
+                      //                     isExpanded: true,
+                      //                     style: const TextStyle(
+                      //                         color: Colors.black,
+                      //                         fontSize: 16),
+                      //                     underline: const SizedBox(),
+                      //                     onChanged: (String? newValue) {
+                      //                       setState(() {
+                      //                         dropdownValue4 = newValue!;
+                      //                       });
+                      //                     },
+                      //                     items: <String>[
+                      //                       'Select Year',
+                      //                       '2024',
+                      //                       '2023',
+                      //                       '2022',
+                      //                       '2021',
+                      //                       '2020'
+                      //                     ].map<DropdownMenuItem<String>>(
+                      //                         (String value) {
+                      //                       return DropdownMenuItem<String>(
+                      //                         value: value,
+                      //                         child: Text(value),
+                      //                       );
+                      //                     }).toList(),
+                      //                   ),
+                      //                 ),
+                      //               ),
+                      //             ],
+                      //           ),
+                      //         ]),
+                      //   ),
+                      // ),
                       const SizedBox(
                         height: 20,
                       ),
@@ -558,7 +718,7 @@ class _StatsticsScreenState extends State<StatsticsScreen> {
                           dropdownValue2 != 'Early Out' &&
                           dropdownValue2 != 'Late Arrival')
                         if (dropdownValue1 == 'Monthly' && _selectedIndex == 0)
-                          const StatusBuiler(),
+                          const Previousmonthstatusbuilder(),
                       if (dropdownValue1 == 'Weekly' && _selectedIndex == 1)
                         const GraphicalbuilerWeekly(),
                       if (dropdownValue1 == 'Monthly' && _selectedIndex == 1)
