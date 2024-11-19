@@ -42,7 +42,6 @@ class _MyAppState extends State<MyApp> {
             inversePrimary: Color(0xffFFE9DC),
           ),
           fontFamily: 'Kumbh Sans',
-      
           progressIndicatorTheme: const ProgressIndicatorThemeData(
             color: Color(0xffFF6100),
           ),
