@@ -831,7 +831,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                 mainAxisAlignment: MainAxisAlignment.center,
                                 children: [
                                   Image.asset(
-                                    'assets/mingcute.png',
+                                    'assets/checkout_button.png',
                                     height: 20,
                                     width: 20,
                                     color:
@@ -908,7 +908,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                 mainAxisAlignment: MainAxisAlignment.center,
                                 children: [
                                   Image.asset(
-                                    'assets/mingcute.png',
+                                    'assets/checkin_button.png',
                                     height: 20,
                                     width: 20,
                                     color:

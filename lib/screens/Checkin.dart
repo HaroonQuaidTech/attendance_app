@@ -159,16 +159,16 @@ void _showAlertDialog({
             children: [
               Container(
                 height: 10,
-                decoration: const BoxDecoration(
+                decoration: BoxDecoration(
                   gradient: LinearGradient(
                     colors: [
-                      Color(0xff4D3D79),
-                      Color(0xff8E71DF),
+                      Theme.of(context).colorScheme.primary,
+                      Theme.of(context).colorScheme.inversePrimary,
                     ],
                     begin: Alignment.centerLeft,
                     end: Alignment.centerRight,
                   ),
-                  borderRadius: BorderRadius.vertical(
+                  borderRadius: const BorderRadius.vertical(
                     top: Radius.circular(12),
                   ),
                 ),
@@ -339,66 +339,63 @@ class _CheckinScreenState extends State<CheckinScreen> {
 
           final totalHours = _calculateTotalHours(checkIn, checkOut);
           return Padding(
-            padding: const EdgeInsets.symmetric(vertical: 20),
+            padding: const EdgeInsets.symmetric(horizontal: 12),
             child: SafeArea(
               child: Column(
-                mainAxisAlignment: MainAxisAlignment.spaceAround,
                 children: [
-                  SizedBox(
-                    height: 70,
-                    child: Padding(
-                      padding: const EdgeInsets.only(left: 10.0, right: 10.0),
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                          Container(
-                            width: 50,
-                            height: 50,
-                            decoration: BoxDecoration(
-                              color: Colors.grey[200],
-                              borderRadius: BorderRadius.circular(12),
-                              boxShadow: const [
-                                BoxShadow(
-                                  color: Colors.black12,
-                                  offset: Offset(2, 2),
-                                  blurRadius: 4,
+                  const SizedBox(height: 20),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      SizedBox(
+                        width: 50,
+                        height: 50,
+                        child: Material(
+                          elevation: 10,
+                          color: Theme.of(context).colorScheme.tertiary,
+                          borderRadius: BorderRadius.circular(12),
+                          child: GestureDetector(
+                            onTap: () {
+                              Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                  builder: (context) => const HomeScreen(),
                                 ),
-                              ],
-                            ),
-                            child: GestureDetector(
-                              onTap: () {
-                                Navigator.push(
-                                  context,
-                                  MaterialPageRoute(
-                                    builder: (context) => const HomeScreen(),
-                                  ),
-                                );
-                              },
-                              child: const Icon(
+                              );
+                            },
+                            child: Center(
+                              child: Icon(
                                 Icons.arrow_back,
-                                color: Colors.black,
+                                color: Theme.of(context).colorScheme.secondary,
                               ),
                             ),
                           ),
-                          if (checkIn == null && checkOut == null)
-                            const Text(
-                              'Check In',
-                              style: TextStyle(
-                                fontSize: 22,
-                                fontWeight: FontWeight.w600,
-                                height: 0,
-                              ),
-                            ),
-                          if (checkIn != null && checkOut == null)
-                            const Text(
-                              'Check Out',
-                              style: TextStyle(
-                                fontSize: 22,
-                                fontWeight: FontWeight.w600,
-                                height: 0,
-                              ),
-                            ),
-                          GestureDetector(
+                        ),
+                      ),
+                      if (checkIn == null && checkOut == null)
+                        const Text(
+                          'Check In',
+                          style: TextStyle(
+                            fontSize: 22,
+                            height: 0,
+                          ),
+                        ),
+                      if (checkIn != null && checkOut == null)
+                        const Text(
+                          'Check Out',
+                          style: TextStyle(
+                            fontSize: 22,
+                            height: 0,
+                          ),
+                        ),
+                      SizedBox(
+                        width: 50,
+                        height: 50,
+                        child: Material(
+                          elevation: 10,
+                          color: Theme.of(context).colorScheme.tertiary,
+                          borderRadius: BorderRadius.circular(12),
+                          child: GestureDetector(
                             onTap: () {
                               Navigator.push(
                                 context,
@@ -408,38 +405,25 @@ class _CheckinScreenState extends State<CheckinScreen> {
                                 ),
                               );
                             },
-                            child: Container(
-                              height: 50,
-                              width: 50,
-                              decoration: BoxDecoration(
-                                color: const Color(0xffE6E8FD),
-                                borderRadius: BorderRadius.circular(12),
-                                boxShadow: const [
-                                  BoxShadow(
-                                    color: Colors.black12,
-                                    offset: Offset(2, 2),
-                                    blurRadius: 4,
-                                  ),
-                                ],
-                              ),
-                              child: Center(
-                                child: Image.asset(
-                                  'assets/notification_icon.png',
-                                  height: 30,
-                                  width: 30,
-                                ),
+                            child: Center(
+                              child: Image.asset(
+                                'assets/notification_icon.png',
+                                height: 30,
+                                width: 30,
                               ),
                             ),
                           ),
-                        ],
+                        ),
                       ),
-                    ),
+                    ],
                   ),
+                  const SizedBox(height: 50),
                   Text(
                     formattedTime,
-                    style: const TextStyle(
+                    style: TextStyle(
                       fontSize: 40,
-                      color: Color(0xff7647EB),
+                      color: Theme.of(context).colorScheme.secondary,
+                      height: 0,
                     ),
                   ),
                   Row(
@@ -447,17 +431,30 @@ class _CheckinScreenState extends State<CheckinScreen> {
                     children: [
                       Text(
                         formattedDate,
-                        style: const TextStyle(
-                            fontSize: 20, color: Color(0xff7647EB)),
+                        style: TextStyle(
+                          fontSize: 20,
+                          color: Theme.of(context).colorScheme.secondary,
+                          height: 0,
+                        ),
                       ),
                       Text(
-                        ' $formattedDay',
-                        style: const TextStyle(
-                            fontSize: 20, color: Color(0xff7647EB)),
+                        ' — ',
+                        style: TextStyle(
+                          color: Theme.of(context).colorScheme.secondary,
+                          fontWeight: FontWeight.bold,
+                          height: 0,
+                        ),
+                      ),
+                      Text(
+                        formattedDay,
+                        style: TextStyle(
+                          fontSize: 20,
+                          color: Theme.of(context).colorScheme.secondary,
+                          height: 0,
+                        ),
                       ),
                     ],
                   ),
-                  SizedBox(height: MediaQuery.of(context).size.height * 0.14),
                   if (checkIn == null && checkOut == null)
                     GestureDetector(
                       onTap: () async {
@@ -487,15 +484,10 @@ class _CheckinScreenState extends State<CheckinScreen> {
                             decoration: BoxDecoration(
                               color: Colors.white,
                               shape: BoxShape.circle,
-                              boxShadow: const [
-                                BoxShadow(
-                                  color: Colors.black12,
-                                  offset: Offset(2, 2),
-                                  blurRadius: 4,
-                                ),
-                              ],
                               border: Border.all(
-                                  color: const Color(0xff7647EB), width: 2),
+                                color: const Color(0xff7647EB),
+                                width: 2,
+                              ),
                             ),
                           ),
                           Container(
@@ -504,15 +496,10 @@ class _CheckinScreenState extends State<CheckinScreen> {
                             decoration: BoxDecoration(
                               color: Colors.white,
                               shape: BoxShape.circle,
-                              boxShadow: const [
-                                BoxShadow(
-                                  color: Colors.black12,
-                                  offset: Offset(2, 2),
-                                  blurRadius: 4,
-                                ),
-                              ],
                               border: Border.all(
-                                  color: const Color(0xff7647EB), width: 2),
+                                color: const Color(0xff7647EB),
+                                width: 2,
+                              ),
                             ),
                           ),
                           Container(
@@ -521,18 +508,12 @@ class _CheckinScreenState extends State<CheckinScreen> {
                             decoration: const BoxDecoration(
                               shape: BoxShape.circle,
                               color: Colors.white,
-                              boxShadow: [
-                                BoxShadow(
-                                  color: Colors.black12,
-                                  blurRadius: 4,
-                                ),
-                              ],
                             ),
                             child: Column(
                               mainAxisAlignment: MainAxisAlignment.center,
                               children: [
                                 Image.asset(
-                                  'assets/mingcute.png',
+                                  'assets/checkin_button.png',
                                   height: 42,
                                   width: 42,
                                 ),
@@ -700,70 +681,49 @@ class _CheckinScreenState extends State<CheckinScreen> {
                         alignment: Alignment.center,
                         children: [
                           Container(
-                            width: 180,
-                            height: 180,
+                            width: 280,
+                            height: 280,
                             decoration: BoxDecoration(
-                              color: Colors.white,
+                              color: Theme.of(context).colorScheme.tertiary,
                               shape: BoxShape.circle,
-                              boxShadow: const [
-                                BoxShadow(
-                                  color: Colors.black12,
-                                  offset: Offset(12, 12),
-                                  blurRadius: 1,
-                                ),
-                              ],
                               border: Border.all(
-                                  color: const Color(0xffFB3F4A), width: 2),
+                                color: Theme.of(context).colorScheme.primary,
+                                width: 1,
+                              ),
                             ),
                           ),
                           Container(
-                            width: 120,
-                            height: 120,
+                            width: 200,
+                            height: 200,
                             decoration: BoxDecoration(
-                              color: Colors.white,
+                              color: Theme.of(context).colorScheme.surface,
                               shape: BoxShape.circle,
-                              boxShadow: const [
-                                BoxShadow(
-                                  color: Colors.black12,
-                                  offset: Offset(8, 8),
-                                  blurRadius: 4,
-                                ),
-                              ],
                               border: Border.all(
-                                  color: const Color(0xffFB3F4A), width: 2),
+                                color: Theme.of(context).colorScheme.primary,
+                                width: 1,
+                              ),
                             ),
                           ),
-                          Container(
-                            width: 115,
-                            height: 115,
-                            decoration: const BoxDecoration(
-                              shape: BoxShape.circle,
-                              color: Colors.white,
-                              boxShadow: [
-                                BoxShadow(
-                                  color: Colors.black12,
-                                  blurRadius: 4,
+                          Column(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              Image.asset(
+                                'assets/checkout_button.png',
+                                height: 20,
+                                width: 20,
+                                color: Theme.of(context).colorScheme.secondary,
+                              ),
+                              Text(
+                                "Check Out",
+                                style: TextStyle(
+                                  color:
+                                      Theme.of(context).colorScheme.secondary,
+                                  fontSize: 25,
+                                  fontWeight: FontWeight.bold,
+                                  height: 0,
                                 ),
-                              ],
-                            ),
-                            child: Column(
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              children: [
-                                Image.asset(
-                                  'assets/mingout.png',
-                                  height: 42,
-                                  width: 42,
-                                ),
-                                const SizedBox(height: 4),
-                                const Text(
-                                  "Check Out",
-                                  style: TextStyle(
-                                    color: Colors.black,
-                                    fontSize: 16,
-                                  ),
-                                ),
-                              ],
-                            ),
+                              ),
+                            ],
                           ),
                         ],
                       ),
@@ -797,7 +757,7 @@ class _CheckinScreenState extends State<CheckinScreen> {
                               mainAxisAlignment: MainAxisAlignment.spaceAround,
                               children: [
                                 Image.asset(
-                                  'assets/checkin.png',
+                                  'assets/checkin_time.png',
                                   height: 42,
                                   width: 42,
                                 ),
@@ -834,7 +794,7 @@ class _CheckinScreenState extends State<CheckinScreen> {
                               mainAxisAlignment: MainAxisAlignment.spaceAround,
                               children: [
                                 Image.asset(
-                                  'assets/checkout.png',
+                                  'assets/checkout_butt.png',
                                   height: 42,
                                   width: 42,
                                 ),
