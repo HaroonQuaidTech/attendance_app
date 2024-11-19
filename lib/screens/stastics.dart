@@ -439,6 +439,8 @@ class _StatsticsScreenState extends State<StatsticsScreen> {
                                               'August',
                                               'September',
                                               'October',
+                                              'November',
+                                              'December',
                                             ].map<DropdownMenuItem<String>>(
                                                 (String value) {
                                               return DropdownMenuItem<String>(
