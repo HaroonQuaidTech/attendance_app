@@ -138,7 +138,7 @@ class Monthlyattendance extends StatelessWidget {
                 'Present',
                 style: TextStyle(
                   fontSize: responsiveFontSize1,
-                  color: Theme.of(context).colorScheme.surface,
+                  color: Theme.of(context).colorScheme.secondary,
                   height: 0,
                 ),
               ),
@@ -160,7 +160,7 @@ class Monthlyattendance extends StatelessWidget {
                 'Late',
                 style: TextStyle(
                   fontSize: responsiveFontSize1,
-                  color: Theme.of(context).colorScheme.surface,
+                  color: Theme.of(context).colorScheme.secondary,
                   height: 0,
                 ),
               ),
@@ -182,7 +182,7 @@ class Monthlyattendance extends StatelessWidget {
                 'Absent',
                 style: TextStyle(
                   fontSize: responsiveFontSize1,
-                  color: Theme.of(context).colorScheme.surface,
+                  color: Theme.of(context).colorScheme.secondary,
                   height: 0,
                 ),
               ),

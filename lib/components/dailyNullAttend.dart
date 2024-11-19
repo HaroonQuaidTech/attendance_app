@@ -55,7 +55,7 @@ class _DailyAttendanceState extends State<DailyEmptyAttendance> {
       width: screenWidth * 0.85,
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(12),
-        color: Theme.of(context).colorScheme.primary,
+        color: Theme.of(context).colorScheme.surface,
       ),
       child: Row(
         crossAxisAlignment: CrossAxisAlignment.center,
@@ -64,7 +64,7 @@ class _DailyAttendanceState extends State<DailyEmptyAttendance> {
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
               Container(
-                width: 53,
+                width: 55,
                 height: 55,
                 decoration: BoxDecoration(
                   color: containerColor,

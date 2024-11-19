@@ -328,7 +328,7 @@ class _HomeScreenState extends State<HomeScreen> {
                     decoration: BoxDecoration(
                       gradient: LinearGradient(
                         colors: [
-                          Theme.of(context).colorScheme.secondary,
+                          Theme.of(context).colorScheme.primary,
                           Theme.of(context).colorScheme.inversePrimary,
                         ],
                         begin: Alignment.centerLeft,
@@ -404,8 +404,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                 width: 110,
                                 height: 30,
                                 decoration: BoxDecoration(
-                                  color:
-                                      Theme.of(context).colorScheme.secondary,
+                                  color: Theme.of(context).colorScheme.primary,
                                   borderRadius: BorderRadius.circular(10),
                                 ),
                                 child: const Center(
@@ -433,7 +432,7 @@ class _HomeScreenState extends State<HomeScreen> {
         return exitApp;
       },
       child: Scaffold(
-        backgroundColor: Theme.of(context).colorScheme.primary,
+        backgroundColor: Theme.of(context).colorScheme.surface,
         body: SafeArea(
           child: _selectedIndex == 1
               ? const StatsticsScreen()
@@ -597,12 +596,8 @@ class _HomeScreenState extends State<HomeScreen> {
                                         );
                                       }
 
-                                      return Center(
-                                        child: CircularProgressIndicator(
-                                          color: Theme.of(context)
-                                              .colorScheme
-                                              .secondary,
-                                        ),
+                                      return const Center(
+                                        child: CircularProgressIndicator(),
                                       );
                                     },
                                   ),
@@ -660,12 +655,12 @@ class _HomeScreenState extends State<HomeScreen> {
                                       calendarBuilders: CalendarBuilders(
                                         selectedBuilder: (context, date, _) {
                                           return Container(
-                                            margin: const EdgeInsets.all(6.0),
+                                            margin: const EdgeInsets.all(8.0),
                                             alignment: Alignment.center,
                                             decoration: BoxDecoration(
                                               color: Theme.of(context)
                                                   .colorScheme
-                                                  .secondary,
+                                                  .primary,
                                               shape: BoxShape.circle,
                                             ),
                                             child: Text(
@@ -711,11 +706,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                   ),
                                   const SizedBox(height: 20),
                                   _isLoading
-                                      ? CircularProgressIndicator(
-                                          color: Theme.of(context)
-                                              .colorScheme
-                                              .secondary,
-                                        )
+                                      ? const CircularProgressIndicator()
                                       : Material(
                                           elevation: 10,
                                           color: Theme.of(context)
@@ -802,9 +793,8 @@ class _HomeScreenState extends State<HomeScreen> {
                                   decoration: BoxDecoration(
                                     shape: BoxShape.circle,
                                     border: Border.all(
-                                      color: Theme.of(context)
-                                          .colorScheme
-                                          .secondary,
+                                      color:
+                                          Theme.of(context).colorScheme.primary,
                                       width: 2.0,
                                     ),
                                   ),
@@ -818,8 +808,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                 color: Colors.white,
                                 shape: BoxShape.circle,
                                 border: Border.all(
-                                  color:
-                                      Theme.of(context).colorScheme.secondary,
+                                  color: Theme.of(context).colorScheme.primary,
                                   width: 1.0,
                                 ),
                               ),
@@ -846,7 +835,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                     height: 20,
                                     width: 20,
                                     color:
-                                        Theme.of(context).colorScheme.secondary,
+                                        Theme.of(context).colorScheme.primary,
                                   ),
                                   const SizedBox(height: 4),
                                   const Text(
@@ -881,9 +870,8 @@ class _HomeScreenState extends State<HomeScreen> {
                                   decoration: BoxDecoration(
                                     shape: BoxShape.circle,
                                     border: Border.all(
-                                      color: Theme.of(context)
-                                          .colorScheme
-                                          .secondary,
+                                      color:
+                                          Theme.of(context).colorScheme.primary,
                                       width: 2.0,
                                     ),
                                   ),
@@ -897,8 +885,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                 color: Colors.white,
                                 shape: BoxShape.circle,
                                 border: Border.all(
-                                  color:
-                                      Theme.of(context).colorScheme.secondary,
+                                  color: Theme.of(context).colorScheme.primary,
                                   width: 1.0,
                                 ),
                               ),
@@ -925,7 +912,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                     height: 20,
                                     width: 20,
                                     color:
-                                        Theme.of(context).colorScheme.secondary,
+                                        Theme.of(context).colorScheme.primary,
                                   ),
                                   const SizedBox(height: 4),
                                   const Text(
@@ -1003,7 +990,7 @@ class _HomeScreenState extends State<HomeScreen> {
         height: 50,
         decoration: BoxDecoration(
           color: isSelected
-              ? Theme.of(context).colorScheme.primary
+              ? Theme.of(context).colorScheme.surface
               : Colors.transparent,
           borderRadius: BorderRadius.circular(48.0),
         ),
@@ -1014,7 +1001,7 @@ class _HomeScreenState extends State<HomeScreen> {
               child: isSelected
                   ? Image(
                       image: image.image,
-                      color: Theme.of(context).colorScheme.secondary,
+                      color: Theme.of(context).colorScheme.primary,
                       width: 30,
                       height: 30,
                     )
@@ -1022,14 +1009,14 @@ class _HomeScreenState extends State<HomeScreen> {
                       width: 30,
                       height: 30,
                       asset,
-                      color: Theme.of(context).colorScheme.surface,
+                      color: Theme.of(context).colorScheme.secondary,
                     ),
             ),
             isSelected
                 ? Text(
                     text,
                     style: TextStyle(
-                      color: Theme.of(context).colorScheme.secondary,
+                      color: Theme.of(context).colorScheme.primary,
                       fontSize: responsiveFontSize,
                       height: 0,
                     ),

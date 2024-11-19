@@ -141,7 +141,7 @@ class _LoginScreenState extends State<LoginScreen> {
                 decoration: BoxDecoration(
                   gradient: LinearGradient(
                     colors: [
-                      Theme.of(context).colorScheme.secondary,
+                      Theme.of(context).colorScheme.primary,
                       Theme.of(context).colorScheme.inversePrimary,
                     ],
                     begin: Alignment.centerLeft,
@@ -195,13 +195,14 @@ class _LoginScreenState extends State<LoginScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: const Color(0xffF8F8FF),
+      backgroundColor: Theme.of(context).colorScheme.surface,
       body: SafeArea(
         child: Center(
           child: SingleChildScrollView(
             child: Padding(
-              padding:
-                  const EdgeInsets.symmetric(horizontal: 25.0, vertical: 10.0),
+              padding: const EdgeInsets.symmetric(
+                horizontal: 25.0,
+              ),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 mainAxisAlignment: MainAxisAlignment.center,
@@ -213,150 +214,167 @@ class _LoginScreenState extends State<LoginScreen> {
                   //     height: 0,
                   //   ),
                   // ),
-                  // const Text(
-                  //   'Hello again, you’ve been missed!',
-                  //   style: TextStyle(
-                  //     fontSize: 16,
-                  //     height: 0,
-                  //   ),
-                  // ),
-                  // const SizedBox(height: 10),
-                  Center(
-                    child: Image.asset(
-                      'assets/login.png',
-                      height: 225,
-                      width: 225,
-                      fit: BoxFit.fitHeight,
+                  const Text(
+                    'Login to your account',
+                    style: TextStyle(
+                      fontSize: 40,
+                      height: 0,
+                      fontWeight: FontWeight.w500,
                     ),
                   ),
+                  const SizedBox(height: 30),
+                  // Center(
+                  //   child: Image.asset(
+                  //     'assets/login.png',
+                  //     height: 225,
+                  //     width: 225,
+                  //     fit: BoxFit.fitHeight,
+                  //   ),
+                  // ),
                   Form(
                     key: _formKey,
-                    child: Material(
-                      color: Theme.of(context).colorScheme.primary,
-                      elevation: 10,
-                      borderRadius: BorderRadius.circular(20),
-                      child: Padding(
-                        padding: const EdgeInsets.all(20.0),
-                        child: Column(
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.start,
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        const Text(
+                          'Email Address',
+                          style: TextStyle(
+                            height: 0,
+                            fontSize: 15,
+                            fontWeight: FontWeight.w400,
+                          ),
+                        ),
+                        const SizedBox(height: 5),
+                        TextFormField(
+                          controller: _emailController,
+                          validator: (value) {
+                            if (value == null || value.isEmpty) {
+                              return 'Please enter your email';
+                            }
+                            if (!RegExp(r'^[^@]+@[^@]+\.[^@]+')
+                                .hasMatch(value)) {
+                              return 'Please enter a valid email';
+                            }
+                            return null;
+                          },
+                          decoration: InputDecoration(
+                            prefixIcon: Icon(
+                              Icons.email,
+                              color: Theme.of(context).colorScheme.primary,
+                            ),
+                            filled: true,
+                            fillColor: Theme.of(context).colorScheme.tertiary,
+                            hintText: 'Enter your email address',
+                            border: OutlineInputBorder(
+                              borderRadius: BorderRadius.circular(8.0),
+                              borderSide: BorderSide.none,
+                            ),
+                          ),
+                        ),
+                        const SizedBox(height: 20),
+                        const Text(
+                          'Password',
+                          style: TextStyle(
+                            height: 0,
+                            fontSize: 15,
+                            fontWeight: FontWeight.w400,
+                          ),
+                        ),
+                        const SizedBox(height: 5),
+                        TextFormField(
+                          controller: _passwordController,
+                          obscureText: !isPasswordVisible,
+                          validator: (value) {
+                            if (value == null || value.isEmpty) {
+                              return 'Password cannot be empty';
+                            }
+                            return null;
+                          },
+                          decoration: InputDecoration(
+                            prefixIcon: Icon(
+                              Icons.password,
+                              color: Theme.of(context).colorScheme.primary,
+                            ),
+                            filled: true,
+                            fillColor: Theme.of(context).colorScheme.tertiary,
+                            hintText: 'Enter your password',
+                            border: OutlineInputBorder(
+                              borderRadius: BorderRadius.circular(8.0),
+                              borderSide: BorderSide.none,
+                            ),
+                            suffixIcon: IconButton(
+                              icon: Icon(
+                                isPasswordVisible
+                                    ? Icons.visibility_off
+                                    : Icons.visibility,
+                              ),
+                              onPressed: () {
+                                setState(() {
+                                  isPasswordVisible = !isPasswordVisible;
+                                });
+                              },
+                            ),
+                          ),
+                        ),
+                        const SizedBox(height: 10),
+                        Row(
                           mainAxisAlignment: MainAxisAlignment.start,
-                          crossAxisAlignment: CrossAxisAlignment.start,
+                          crossAxisAlignment: CrossAxisAlignment.center,
                           children: [
+                            Theme(
+                              data: Theme.of(context).copyWith(
+                                checkboxTheme: CheckboxThemeData(
+                                  side: BorderSide(
+                                    color:
+                                        Theme.of(context).colorScheme.secondary,
+                                    width: 2,
+                                  ),
+                                  shape: RoundedRectangleBorder(
+                                    borderRadius: BorderRadius.circular(4),
+                                  ),
+                                ),
+                              ),
+                              child: Checkbox(
+                                value: _isCheck,
+                                onChanged: _toggleCheckbox,
+                              ),
+                            ),
                             const Text(
-                              'Email Address',
+                              'Remember me',
                               style: TextStyle(
-                                fontWeight: FontWeight.bold,
+                                fontWeight: FontWeight.w500,
+                                fontSize: 15,
                                 height: 0,
-                              ),
-                            ),
-                            const SizedBox(height: 5),
-                            TextFormField(
-                              controller: _emailController,
-                              validator: (value) {
-                                if (value == null || value.isEmpty) {
-                                  return 'Please enter your email';
-                                }
-                                if (!RegExp(r'^[^@]+@[^@]+\.[^@]+')
-                                    .hasMatch(value)) {
-                                  return 'Please enter a valid email';
-                                }
-                                return null;
-                              },
-                              decoration: InputDecoration(
-                                filled: true,
-                                fillColor:
-                                    Theme.of(context).colorScheme.tertiary,
-                                hintText: 'Enter your email address',
-                                border: OutlineInputBorder(
-                                  borderRadius: BorderRadius.circular(8.0),
-                                  borderSide: BorderSide.none,
-                                ),
-                              ),
-                            ),
-                            const SizedBox(height: 20),
-                            const Text(
-                              'Password',
-                              style: TextStyle(
-                                fontWeight: FontWeight.bold,
-                                height: 0,
-                              ),
-                            ),
-                            const SizedBox(height: 5),
-                            TextFormField(
-                              controller: _passwordController,
-                              obscureText: !isPasswordVisible,
-                              validator: (value) {
-                                if (value == null || value.isEmpty) {
-                                  return 'Password cannot be empty';
-                                }
-                                return null;
-                              },
-                              decoration: InputDecoration(
-                                filled: true,
-                                fillColor:
-                                    Theme.of(context).colorScheme.tertiary,
-                                hintText: 'Enter your password',
-                                border: OutlineInputBorder(
-                                  borderRadius: BorderRadius.circular(8.0),
-                                  borderSide: BorderSide.none,
-                                ),
-                                suffixIcon: IconButton(
-                                  icon: Icon(
-                                    isPasswordVisible
-                                        ? Icons.visibility_off
-                                        : Icons.visibility,
-                                  ),
-                                  onPressed: () {
-                                    setState(() {
-                                      isPasswordVisible = !isPasswordVisible;
-                                    });
-                                  },
-                                ),
-                              ),
-                            ),
-                            Row(
-                              mainAxisAlignment: MainAxisAlignment.start,
-                              crossAxisAlignment: CrossAxisAlignment.center,
-                              children: [
-                                Checkbox(
-                                  value: _isCheck,
-                                  onChanged: _toggleCheckbox,
-                                ),
-                                const Text(
-                                  'Remember me',
-                                  style: TextStyle(
-                                    fontWeight: FontWeight.w500,
-                                    fontSize: 15,
-                                    height: 0,
-                                  ),
-                                ),
-                              ],
-                            ),
-                            GestureDetector(
-                              onTap: () {
-                                _login(context);
-                              },
-                              child: Container(
-                                width: double.infinity,
-                                height: 40,
-                                decoration: BoxDecoration(
-                                  color:
-                                      Theme.of(context).colorScheme.secondary,
-                                  borderRadius: BorderRadius.circular(8),
-                                ),
-                                child: const Center(
-                                  child: Text(
-                                    'Log In',
-                                    style: TextStyle(
-                                      color: Colors.white,
-                                      height: 0,
-                                    ),
-                                  ),
-                                ),
                               ),
                             ),
                           ],
                         ),
-                      ),
+                        const SizedBox(height: 10),
+                        GestureDetector(
+                          onTap: () {
+                            _login(context);
+                          },
+                          child: Container(
+                            width: double.infinity,
+                            height: 60,
+                            decoration: BoxDecoration(
+                              color: Theme.of(context).colorScheme.primary,
+                              borderRadius: BorderRadius.circular(8),
+                            ),
+                            child: const Center(
+                              child: Text(
+                                'LOGIN',
+                                style: TextStyle(
+                                  color: Colors.white,
+                                  height: 0,
+                                  fontWeight: FontWeight.w700,
+                                ),
+                              ),
+                            ),
+                          ),
+                        ),
+                      ],
                     ),
                   ),
                   const SizedBox(height: 30),

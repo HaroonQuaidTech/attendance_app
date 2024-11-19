@@ -35,11 +35,16 @@ class _MyAppState extends State<MyApp> {
         debugShowCheckedModeBanner: false,
         theme: ThemeData(
           colorScheme: const ColorScheme.light(
-            surface: Color(0xff3B3A3C),
-            primary: Color(0xffFFFFFF),
-            secondary: Color(0xffFF6100),
+            surface: Color(0xffFFFFFF),
+            primary: Color(0xffFF6100),
+            secondary: Color(0xff3B3A3C),
             tertiary: Color(0xffEFEFEF),
             inversePrimary: Color(0xffFFE9DC),
+          ),
+          fontFamily: 'Kumbh Sans',
+      
+          progressIndicatorTheme: const ProgressIndicatorThemeData(
+            color: Color(0xffFF6100),
           ),
         ),
         initialRoute: 'splash',
