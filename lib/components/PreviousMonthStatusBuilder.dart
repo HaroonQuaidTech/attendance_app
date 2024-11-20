@@ -443,125 +443,13 @@ class _PreviousmonthstatusbuilderState
 
   @override
   Widget build(BuildContext context) {
-    return Column(
+    return const Column(
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
-        const SizedBox(
-          height: 20,
-        ),
         Container(
-          height: 100,
-          width: double.infinity,
-          decoration: BoxDecoration(
-            borderRadius: BorderRadius.circular(20),
-            color: const Color(0xffEFF1FF),
-            boxShadow: [
-              BoxShadow(
-                color: Colors.grey.withOpacity(0.2),
-                spreadRadius: 2,
-                blurRadius: 4,
-                offset: const Offset(0, 2),
-              ),
-            ],
-          ),
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 10.0),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    Container(
-                      height: 50,
-                      width: 150,
-                      padding: const EdgeInsets.symmetric(horizontal: 10),
-                      decoration: BoxDecoration(
-                        color: Colors.white,
-                        borderRadius: BorderRadius.circular(12),
-                        boxShadow: [
-                          BoxShadow(
-                            color: Colors.grey.withOpacity(0.2),
-                            spreadRadius: 2,
-                            blurRadius: 4,
-                            offset: const Offset(0, 2),
-                          ),
-                        ],
-                      ),
-                      child: DropdownButton<int>(
-                        value: selectedMonth,
-                        isExpanded: true,
-                        icon: const Icon(Icons.arrow_drop_down),
-                        iconSize: 24,
-                        elevation: 16,
-                        style: const TextStyle(color: Colors.black, fontSize: 16),
-                        underline: const SizedBox(),
-                        onChanged: (value) {
-                          setState(() {
-                            selectedMonth = value!;
-                          });
-                          fetchAttendance();
-                        },
-                        items: List.generate(12, (index) {
-                          return DropdownMenuItem<int>(
-                            value: index + 1,
-                            child: Text(DateFormat('MMMM')
-                                .format(DateTime(0, index + 1))),
-                          );
-                        }),
-                      ),
-                    ),
-                    Container(
-                      height: 50,
-                      width: 150,
-                      padding: const EdgeInsets.symmetric(horizontal: 10),
-                      decoration: BoxDecoration(
-                        color: Colors.white,
-                        borderRadius: BorderRadius.circular(12),
-                        boxShadow: [
-                          BoxShadow(
-                            color: Colors.grey.withOpacity(0.2),
-                            spreadRadius: 2,
-                            blurRadius: 4,
-                            offset: const Offset(0, 2),
-                          ),
-                        ],
-                      ),
-                      child: DropdownButton<int>(
-                        value: selectedYear,
-                        items: List.generate(10, (index) {
-                          final year = DateTime.now().year - index;
-                          return DropdownMenuItem(
-                            value: year,
-                            child: Text(year.toString()),
-                          );
-                        }),
-                        onChanged: (value) {
-                          setState(() {
-                            selectedYear = value!;
-                          });
-                          fetchAttendance();
-                        },
-                      ),
-                    ),
-                  ],
-                ),
-              ),
-              // Expanded(
-              //   child: ListView.builder(
-              //     itemCount: attendanceDetails.length,
-              //     itemBuilder: (context, index) {
-              //       final attendance = attendanceDetails[index];
-              //       return ListTile(
-              //         title: Text(attendance['date'] ?? 'No Date Available'),
-              //         subtitle:
-              //             Text(attendance['status'] ?? 'No Status Available'),
-              //       );
-              //     },
-              //   ),
-              // ),
-            ],
-          ),
+          height: 200,
+          width: 330,
+          child: const Center(child: Text('previous month screen')),
         ),
       ],
     );
