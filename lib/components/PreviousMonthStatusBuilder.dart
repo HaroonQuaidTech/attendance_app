@@ -16,7 +16,7 @@ class _PreviousmonthstatusbuilderState
     extends State<Previousmonthstatusbuilder> {
   int selectedYear = DateTime.now().year;
   int selectedMonth = DateTime.now().month;
-  int _selectedIndex = 0;
+  final int _selectedIndex = 0;
   List<Map<String, dynamic>> attendanceDetails = [];
   final String uid = FirebaseAuth.instance.currentUser!.uid;
   Future<void> fetchAttendance() async {
@@ -446,7 +446,7 @@ class _PreviousmonthstatusbuilderState
     return const Column(
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
-        Container(
+        SizedBox(
           height: 200,
           width: 330,
           child: const Center(child: Text('previous month screen')),
