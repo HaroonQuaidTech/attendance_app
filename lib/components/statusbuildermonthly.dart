@@ -5,13 +5,13 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:intl/intl.dart';
 
-class StatusBuiler extends StatefulWidget {
-  const StatusBuiler({super.key});
+class StatusBuilerMonthly extends StatefulWidget {
+  const StatusBuilerMonthly({super.key});
   @override
-  State<StatusBuiler> createState() => _StatusBuilerState();
+  State<StatusBuilerMonthly> createState() => _StatusBuilerState();
 }
 
-class _StatusBuilerState extends State<StatusBuiler> {
+class _StatusBuilerState extends State<StatusBuilerMonthly> {
   final String userId = FirebaseAuth.instance.currentUser!.uid;
 
   Future<List<Map<String, dynamic>>> _getMonthlyAttendanceDetails(
