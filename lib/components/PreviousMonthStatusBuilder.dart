@@ -12,13 +12,13 @@ class _PreviousmonthstatusbuilderState
     extends State<Previousmonthstatusbuilder> {
   @override
   Widget build(BuildContext context) {
-    return Column(
+    return const Column(
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
-        Container(
+        SizedBox(
           height: 200,
           width: 330,
-          child: const Center(child: Text('previous month screen')),
+          child: Center(child: Text('previous month screen')),
         ),
       ],
     );

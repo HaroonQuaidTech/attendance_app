@@ -2,7 +2,6 @@ import 'dart:developer';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:quaidtech/screens/home.dart';
-import 'package:quaidtech/screens/signup.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 typedef CloseCallback = Function();
@@ -361,23 +360,6 @@ class _LoginScreenState extends State<LoginScreen> {
                           ),
                         ),
                       ],
-                    ),
-                  ),
-                  GestureDetector(
-                    onTap: () {
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                          builder: (context) => const SignUpScreen(),
-                        ),
-                      );
-                    },
-                    child: const Text(
-                      'Sign up',
-                      style: TextStyle(
-                        color: Colors.black,
-                        height: 0,
-                      ),
                     ),
                   ),
                   const SizedBox(height: 150),
