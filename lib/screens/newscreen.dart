@@ -1,7 +1,6 @@
 // ignore_for_file: prefer_const_constructors, prefer_const_literals_to_create_immutables, unused_field, prefer_final_fields
 
 import 'package:flutter/material.dart';
-import 'package:quaidtech/components/PreviousMonthStatusBuilder.dart';
 
 class Newscreen extends StatefulWidget {
   const Newscreen({super.key});
@@ -31,9 +30,6 @@ class _NewscreenState extends State<Newscreen> {
           const SizedBox(
             height: 50,
           ),
-        
-        const   Previousmonthstatusbuilder(),
-       
         ],
       ),
     );

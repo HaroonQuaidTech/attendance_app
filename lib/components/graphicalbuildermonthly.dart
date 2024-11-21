@@ -5,14 +5,14 @@ import 'package:pie_chart/pie_chart.dart';
 import 'package:intl/intl.dart';
 import 'package:fl_chart/fl_chart.dart' hide PieChart;
 
-class GraphicalbuilerMonthly extends StatefulWidget {
-  const GraphicalbuilerMonthly({super.key});
+class GraphicalbuilderMonthly extends StatefulWidget {
+  const GraphicalbuilderMonthly({super.key});
 
   @override
-  State<GraphicalbuilerMonthly> createState() => _GraphicalbuilerState();
+  State<GraphicalbuilderMonthly> createState() => _GraphicalbuilerState();
 }
 
-class _GraphicalbuilerState extends State<GraphicalbuilerMonthly> {
+class _GraphicalbuilerState extends State<GraphicalbuilderMonthly> {
   final String userId = FirebaseAuth.instance.currentUser!.uid;
 
   Future<List<Map<String, dynamic>>?> fetchMonthlyAttendance(
