@@ -470,14 +470,12 @@ class _StatsticsScreenState extends State<AdminStatsticsScreen> {
                     dropdownValue3 != 'Early Out' &&
                     dropdownValue3 != 'Late Arrival')
                   if (dropdownValue2 == 'Monthly' && _selectedIndex == 0)
-                    StatusBuilerMonthly(),
+                    StatusBuilderMonthly(),
 
                 if (dropdownValue2 == 'Weekly' && _selectedIndex == 1)
-                  GraphicalbuilerWeekly(),
+                  GraphicalbuilderWeekly(),
                 if (dropdownValue2 == 'Monthly' && _selectedIndex == 1)
-                  GraphicalbuilerMonthly()
-
-                //-------------------------Weekly Log Times------------------------------------------
+                  GraphicalbuilderMonthly()
               ],
             ),
           ),

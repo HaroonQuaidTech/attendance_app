@@ -9,7 +9,7 @@ class MonthlyAttendance extends StatefulWidget {
   const MonthlyAttendance({
     super.key,
     required this.color,
-    required this.dropdownValue2,
+    required this.dropdownValue2, required String uid,
   });
 
   @override

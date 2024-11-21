@@ -5,14 +5,14 @@ import 'package:pie_chart/pie_chart.dart';
 import 'package:intl/intl.dart';
 import 'package:fl_chart/fl_chart.dart' hide PieChart;
 
-class GraphicalbuilerWeekly extends StatefulWidget {
-  const GraphicalbuilerWeekly({super.key});
+class GraphicalbuilderWeekly extends StatefulWidget {
+  const GraphicalbuilderWeekly({super.key});
 
   @override
-  State<GraphicalbuilerWeekly> createState() => _GraphicalbuilerState();
+  State<GraphicalbuilderWeekly> createState() => _GraphicalbuilerState();
 }
 
-class _GraphicalbuilerState extends State<GraphicalbuilerWeekly> {
+class _GraphicalbuilerState extends State<GraphicalbuilderWeekly> {
   DateTime selectedDay = DateTime.now();
   final String userId = FirebaseAuth.instance.currentUser!.uid;
 
