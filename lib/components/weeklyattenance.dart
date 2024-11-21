@@ -157,22 +157,18 @@ class _WeeklyAttendanceState extends State<WeeklyAttendance> {
                         : weeklyData;
 
     return Column(
-      mainAxisSize: MainAxisSize.min,
       children: [
         if (isLoading)
-          const Padding(
-            padding: EdgeInsets.only(top: 100.0),
-            child: Center(
-              child: CircularProgressIndicator(),
-            ),
+          const Center(
+            child: CircularProgressIndicator(),
           )
         else if (filteredData.isEmpty)
-          const Padding(
-            padding: EdgeInsets.only(top: 100.0),
-            child: Center(
-              child: Text(
-                "No Data Available",
-                style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
+          const Center(
+            child: Text(
+              "No Data Available",
+              style: TextStyle(
+                fontWeight: FontWeight.bold,
+                height: 0,
               ),
             ),
           )
@@ -228,6 +224,7 @@ class _WeeklyAttendanceState extends State<WeeklyAttendance> {
                                       fontSize: 22,
                                       fontWeight: FontWeight.w600,
                                       color: Colors.white,
+                                      height: 0,
                                     ),
                                   ),
                                   Text(
@@ -236,6 +233,7 @@ class _WeeklyAttendanceState extends State<WeeklyAttendance> {
                                       fontSize: 12,
                                       fontWeight: FontWeight.w400,
                                       color: Colors.white,
+                                      height: 0,
                                     ),
                                   ),
                                 ],

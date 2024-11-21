@@ -1,5 +1,3 @@
-// ignore_for_file: use_super_parameters, unused_local_variable, unused_element
-
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
@@ -7,8 +5,7 @@ import 'package:intl/intl.dart';
 class PreviousMonthlyAttendance extends StatefulWidget {
   final String uid;
 
-  const PreviousMonthlyAttendance({Key? key, required this.uid})
-      : super(key: key);
+  const PreviousMonthlyAttendance({super.key, required this.uid});
 
   @override
   // ignore: library_private_types_in_public_api
@@ -24,52 +21,53 @@ class _PreviousMonthlyAttendanceState extends State<PreviousMonthlyAttendance> {
   final List<String> years =
       List.generate(10, (index) => (DateTime.now().year - index).toString());
 
-Future<List<Map<String, dynamic>>> _getMonthlyAttendanceDetails(
-    String uid, int month, int year) async {
-  List<Map<String, dynamic>> monthlyAttendanceList = [];
+  Future<List<Map<String, dynamic>>> _getMonthlyAttendanceDetails(
+      String uid, int month, int year) async {
+    List<Map<String, dynamic>> monthlyAttendanceList = [];
 
-  // Define the first and last day of the month
-  final firstDayOfMonth = DateTime(year, month, 1);
-  final lastDayOfMonth = DateTime(year, month + 1, 0);
-  final daysInMonth = lastDayOfMonth.day;
+    // Define the first and last day of the month
+    final firstDayOfMonth = DateTime(year, month, 1);
+    final lastDayOfMonth = DateTime(year, month + 1, 0);
+    final daysInMonth = lastDayOfMonth.day;
 
-  // Prepare Firestore document fetches for all days in the month
-  final List<Future<DocumentSnapshot<Map<String, dynamic>>>> snapshotFutures =
-      List.generate(daysInMonth, (i) {
-    final date = firstDayOfMonth.add(Duration(days: i));
-    final formattedDate = DateFormat('yMMMd').format(date); // Adjusted format
-    
-    return FirebaseFirestore.instance
-        .collection('AttendanceDetails')
-        .doc(uid)
-        .collection('dailyattendance')
-        .doc(formattedDate)
-        .get();
-  });
+    // Prepare Firestore document fetches for all days in the month
+    final List<Future<DocumentSnapshot<Map<String, dynamic>>>> snapshotFutures =
+        List.generate(daysInMonth, (i) {
+      final date = firstDayOfMonth.add(Duration(days: i));
+      final formattedDate = DateFormat('yMMMd').format(date); // Adjusted format
 
-  // Wait for all document snapshots
-  final snapshots = await Future.wait(snapshotFutures);
+      return FirebaseFirestore.instance
+          .collection('AttendanceDetails')
+          .doc(uid)
+          .collection('dailyattendance')
+          .doc(formattedDate)
+          .get();
+    });
 
-  // Process each snapshot
-  for (int i = 0; i < snapshots.length; i++) {
-    final date = firstDayOfMonth.add(Duration(days: i));
-    final formattedDate = DateFormat('MMM d, yyyy').format(date); // Adjusted format
-    final snapshot = snapshots[i];
-    final data = snapshot.data();
-    final checkIn = (data?['checkIn'] as Timestamp?)?.toDate();
+    // Wait for all document snapshots
+    final snapshots = await Future.wait(snapshotFutures);
 
-    if (snapshot.exists && checkIn != null) {
-      monthlyAttendanceList.add(data!); // Add attendance data
-    } else {
-      monthlyAttendanceList.add({
-        'date': formattedDate,
-        'status': 'Absent', // Mark as Absent if no data found
-      });
+    // Process each snapshot
+    for (int i = 0; i < snapshots.length; i++) {
+      final date = firstDayOfMonth.add(Duration(days: i));
+      final formattedDate =
+          DateFormat('MMM d, yyyy').format(date); // Adjusted format
+      final snapshot = snapshots[i];
+      final data = snapshot.data();
+      final checkIn = (data?['checkIn'] as Timestamp?)?.toDate();
+
+      if (snapshot.exists && checkIn != null) {
+        monthlyAttendanceList.add(data!); // Add attendance data
+      } else {
+        monthlyAttendanceList.add({
+          'date': formattedDate,
+          'status': 'Absent', // Mark as Absent if no data found
+        });
+      }
     }
-  }
 
-  return monthlyAttendanceList;
-}
+    return monthlyAttendanceList;
+  }
 
   String _getMonthDateRange() {
     if (selectedMonth != null && selectedYear != null) {
@@ -341,7 +339,6 @@ Future<List<Map<String, dynamic>>> _getMonthlyAttendanceDetails(
       final TimeOfDay checkInTime = TimeOfDay.fromDateTime(checkIn);
       const TimeOfDay earlyOnTime = TimeOfDay(hour: 7, minute: 50);
       const TimeOfDay lateOnTime = TimeOfDay(hour: 8, minute: 10);
-      const TimeOfDay exactCheckIn = TimeOfDay(hour: 8, minute: 0);
       if ((checkInTime.hour == earlyOnTime.hour &&
               checkInTime.minute >= earlyOnTime.minute) ||
           (checkInTime.hour == lateOnTime.hour &&
@@ -356,67 +353,74 @@ Future<List<Map<String, dynamic>>> _getMonthlyAttendanceDetails(
     return const Color(0xff8E71DF); // Default purple color if no check-in
   }
 
- Widget _buildAttendanceRow({
-  required String formattedDate,
-  required String day,
-  required DateTime? checkIn,
-  required DateTime? checkOut,
-  required String? totalHours,
-  required Color containerColor,
-}) {
-  return Container(
-    padding: const EdgeInsets.all(12),
-    margin: const EdgeInsets.only(bottom: 10),
-    height: 82,
-    width: 360,
-    decoration: BoxDecoration(
-      borderRadius: BorderRadius.circular(12),
-      color: Colors.white,
-    ),
-    child: Row(
-      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-      crossAxisAlignment: CrossAxisAlignment.center,
-      children: [
-        _buildDateContainer(formattedDate, day, containerColor),
-        _buildCheckTimeColumn(checkIn != null
-            ? DateFormat('hh:mm a').format(checkIn) // Format Check-In Time
-            : 'N/A', 'Check In'),
-        _buildDivider(),
-        _buildCheckTimeColumn(checkOut != null
-            ? DateFormat('hh:mm a').format(checkOut) // Format Check-Out Time
-            : 'N/A', 'Check Out'),
-        _buildDivider(),
-        _buildCheckTimeColumn(totalHours ?? 'N/A', 'Total Hrs'),
-      ],
-    ),
-  );
-}
+  Widget _buildAttendanceRow({
+    required String formattedDate,
+    required String day,
+    required DateTime? checkIn,
+    required DateTime? checkOut,
+    required String? totalHours,
+    required Color containerColor,
+  }) {
+    return Container(
+      padding: const EdgeInsets.all(12),
+      margin: const EdgeInsets.only(bottom: 10),
+      height: 82,
+      width: 360,
+      decoration: BoxDecoration(
+        borderRadius: BorderRadius.circular(12),
+        color: Colors.white,
+      ),
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        crossAxisAlignment: CrossAxisAlignment.center,
+        children: [
+          _buildDateContainer(formattedDate, day, containerColor),
+          _buildCheckTimeColumn(
+              checkIn != null
+                  ? DateFormat('hh:mm a')
+                      .format(checkIn) // Format Check-In Time
+                  : 'N/A',
+              'Check In'),
+          _buildDivider(),
+          _buildCheckTimeColumn(
+              checkOut != null
+                  ? DateFormat('hh:mm a')
+                      .format(checkOut) // Format Check-Out Time
+                  : 'N/A',
+              'Check Out'),
+          _buildDivider(),
+          _buildCheckTimeColumn(totalHours ?? 'N/A', 'Total Hrs'),
+        ],
+      ),
+    );
+  }
 
-  Widget _buildDateContainer(String formattedDate, String day, Color containerColor) {
-  return Container(
-    width: 53,
-    height: 55,
-    decoration: BoxDecoration(
-      color: containerColor,
-      borderRadius: BorderRadius.circular(6),
-    ),
-    child: Column(
-      mainAxisAlignment: MainAxisAlignment.center,
-      children: [
-        Text(
-          formattedDate, // Display the day of the month
-          style: const TextStyle(
-              fontSize: 22, fontWeight: FontWeight.w600, color: Colors.white),
-        ),
-        Text(
-          day, // Display the day name
-          style: const TextStyle(
-              fontSize: 12, fontWeight: FontWeight.w400, color: Colors.white),
-        ),
-      ],
-    ),
-  );
-}
+  Widget _buildDateContainer(
+      String formattedDate, String day, Color containerColor) {
+    return Container(
+      width: 53,
+      height: 55,
+      decoration: BoxDecoration(
+        color: containerColor,
+        borderRadius: BorderRadius.circular(6),
+      ),
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          Text(
+            formattedDate, // Display the day of the month
+            style: const TextStyle(
+                fontSize: 22, fontWeight: FontWeight.w600, color: Colors.white),
+          ),
+          Text(
+            day, // Display the day name
+            style: const TextStyle(
+                fontSize: 12, fontWeight: FontWeight.w400, color: Colors.white),
+          ),
+        ],
+      ),
+    );
+  }
 
   Widget _buildCheckTimeColumn(dynamic timeOrHours, String label) {
     return Column(
@@ -446,44 +450,10 @@ Future<List<Map<String, dynamic>>> _getMonthlyAttendanceDetails(
     );
   }
 
-  int _calculateMonthlyTotal(List<Map<String, dynamic>?> monthlyData) {
-    int totalMinutes = 0;
-    for (var data in monthlyData) {
-      if (data == null) continue;
-      final checkIn = (data['checkIn'] as Timestamp?)?.toDate();
-      final checkOut = (data['checkOut'] as Timestamp?)?.toDate();
-      if (checkIn != null && checkOut != null) {
-        final duration = checkOut.difference(checkIn);
-        totalMinutes += duration.inMinutes;
-      }
-    }
-    return totalMinutes;
-  }
-
   String _formatTime(DateTime time) {
     final hour = time.hour;
     final minute = time.minute;
     return '${hour.toString().padLeft(2, '0')}:${minute.toString().padLeft(2, '0')}';
-  }
-
-  Future<Map<String, dynamic>> _getMonthlyData(
-      String userId, DateTime startDate, DateTime endDate) async {
-    // Extract month and year from startDate
-    final int month = startDate.month;
-    final int year = startDate.year;
-
-    // Get the attendance data
-    final attendanceData =
-        await _getMonthlyAttendanceDetails(userId, month, year);
-
-    // Calculate total hours
-    final totalHoursData =
-        attendanceData.isNotEmpty ? _calculateMonthlyTotal(attendanceData) : 0;
-
-    return {
-      'attendanceData': attendanceData,
-      'totalHours': totalHoursData,
-    };
   }
 
   @override
@@ -651,7 +621,7 @@ Future<List<Map<String, dynamic>>> _getMonthlyAttendanceDetails(
                     maxHours != 0 ? totalHours / maxHours : 0.0;
                 // Convert total minutes into total hours and total minutes separately
                 // Full hours
-                int totalMinutesOnly = totalMinutes % 60; // Remaining minutes
+// Remaining minutes
 
                 // Convert total hours into total minutes
                 int totalMinutesFromHours = totalHours * 60;
