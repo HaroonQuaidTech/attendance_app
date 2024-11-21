@@ -168,7 +168,7 @@ class _HomeScreenState extends State<HomeScreen> {
 
             if (checkIn != null) {
               final lateThreshold =
-                  DateTime(checkIn.year, checkIn.month, checkIn.day, 8, 15);
+                  DateTime(checkIn.year, checkIn.month, checkIn.day, 8, 16);
 
               Color eventColor;
               if (checkIn.isAfter(lateThreshold)) {
@@ -269,7 +269,7 @@ class _HomeScreenState extends State<HomeScreen> {
         final checkInDay = checkIn.day;
 
         final lateThreshold =
-            DateTime(checkIn.year, checkIn.month, checkIn.day, 8, 15);
+            DateTime(checkIn.year, checkIn.month, checkIn.day, 8, 16);
 
         daysWithRecords.add(checkInDay);
 

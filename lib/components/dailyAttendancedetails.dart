@@ -2,6 +2,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
+import 'package:quaidtech/main.dart';
 
 class DailyAttendance extends StatefulWidget {
   const DailyAttendance({
@@ -56,20 +57,20 @@ class _DailyAttendanceState extends State<DailyAttendance> {
 
     final totalHours = _calculateTotalHours(checkInTime, checkOutTime);
 
-    Color boxColor = const Color(0xff8E71DF);
+    Color? boxColor;
     if (checkInTime != null) {
       final eightAM = DateTime(
         checkInTime.year,
         checkInTime.month,
         checkInTime.day,
         8,
-        15,
+        16,
       );
       if (checkInTime.isBefore(eightAM) ||
           checkInTime.isAtSameMomentAs(eightAM)) {
-        boxColor = const Color(0xff22AF41);
+        boxColor = CustomTheme.theme.colorScheme.surface;
       } else {
-        boxColor = const Color(0xffF6C15B);
+        boxColor = CustomTheme.theme.colorScheme.primary;
       }
     }
 
@@ -89,27 +90,34 @@ class _DailyAttendanceState extends State<DailyAttendance> {
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
               Container(
-                width: 53,
+                width: 55,
                 height: 55,
                 decoration: BoxDecoration(
                   color: boxColor,
                   borderRadius: BorderRadius.circular(6),
                 ),
                 child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  crossAxisAlignment: CrossAxisAlignment.center,
                   children: [
                     Text(
                       DateFormat('dd').format(widget.selectedDay!),
                       style: const TextStyle(
-                          fontSize: 22,
-                          fontWeight: FontWeight.w600,
-                          color: Colors.white),
+                        fontSize: 22,
+                        fontWeight: FontWeight.w600,
+                        color: Colors.white,
+                        height: 0,
+                      ),
                     ),
+                    const SizedBox(height: 5),
                     Text(
                       DateFormat('EEE').format(widget.selectedDay!),
                       style: const TextStyle(
-                          fontSize: 14,
-                          fontWeight: FontWeight.w400,
-                          color: Colors.white),
+                        fontSize: 14,
+                        fontWeight: FontWeight.w400,
+                        color: Colors.white,
+                        height: 0,
+                      ),
                     ),
                   ],
                 ),

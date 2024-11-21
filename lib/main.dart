@@ -44,6 +44,7 @@ class _MyAppState extends State<MyApp> {
           fontFamily: 'Kumbh Sans',
           progressIndicatorTheme: const ProgressIndicatorThemeData(
             color: Color(0xffFF6100),
+            
           ),
         ),
         initialRoute: 'splash',

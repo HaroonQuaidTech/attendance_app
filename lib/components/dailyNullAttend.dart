@@ -71,6 +71,8 @@ class _DailyAttendanceState extends State<DailyEmptyAttendance> {
                   borderRadius: BorderRadius.circular(6),
                 ),
                 child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  crossAxisAlignment: CrossAxisAlignment.center,
                   children: [
                     Text(
                       widget.selectedDay != null
@@ -80,8 +82,10 @@ class _DailyAttendanceState extends State<DailyEmptyAttendance> {
                         fontSize: 22,
                         fontWeight: FontWeight.w600,
                         color: Colors.white,
+                        height: 0,
                       ),
                     ),
+                    const SizedBox(height: 5),
                     Text(
                       widget.selectedDay != null
                           ? DateFormat('EE').format(widget.selectedDay!)
@@ -90,6 +94,7 @@ class _DailyAttendanceState extends State<DailyEmptyAttendance> {
                         fontSize: 14,
                         fontWeight: FontWeight.w400,
                         color: Colors.white,
+                        height: 0,
                       ),
                     ),
                   ],

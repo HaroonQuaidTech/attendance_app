@@ -679,28 +679,32 @@ class _CheckinScreenState extends State<CheckinScreen> {
                       child: Stack(
                         alignment: Alignment.center,
                         children: [
-                          Container(
-                            width: 280,
-                            height: 280,
-                            decoration: BoxDecoration(
-                              color: Theme.of(context).colorScheme.tertiary,
-                              shape: BoxShape.circle,
-                              border: Border.all(
+                          Material(
+                            color: Theme.of(context).colorScheme.tertiary,
+                            shape: CircleBorder(
+                              side: BorderSide(
                                 color: Theme.of(context).colorScheme.primary,
                                 width: 1,
                               ),
                             ),
+                            elevation: 5,
+                            child: const SizedBox(
+                              width: 280,
+                              height: 280,
+                            ),
                           ),
-                          Container(
-                            width: 200,
-                            height: 200,
-                            decoration: BoxDecoration(
-                              color: Theme.of(context).colorScheme.surface,
-                              shape: BoxShape.circle,
-                              border: Border.all(
+                          Material(
+                            color: Theme.of(context).colorScheme.surface,
+                            shape: CircleBorder(
+                              side: BorderSide(
                                 color: Theme.of(context).colorScheme.primary,
                                 width: 1,
                               ),
+                            ),
+                            elevation: 10,
+                            child: const SizedBox(
+                              width: 200,
+                              height: 200,
                             ),
                           ),
                           Column(
@@ -731,138 +735,153 @@ class _CheckinScreenState extends State<CheckinScreen> {
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
-                      Container(
-                        height: screenHeight * 0.14,
-                        width: screenWidth * 0.29,
-                        decoration: BoxDecoration(
-                          color: Theme.of(context).colorScheme.tertiary,
-                          borderRadius: BorderRadius.circular(12),
-                        ),
-                        child: Padding(
-                          padding: const EdgeInsets.all(8.0),
-                          child: Column(
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            children: [
-                              Image.asset(
-                                'assets/checkin_time.png',
-                                color: Theme.of(context).colorScheme.primary,
-                              ),
-                              Text(
-                                _formatTime(checkIn),
-                                style: const TextStyle(
-                                  fontSize: 18,
-                                  height: 0,
-                                ),
-                              ),
-                              Container(
-                                height: 25,
-                                width: 80,
-                                decoration: BoxDecoration(
+                      Material(
+                        color: Theme.of(context).colorScheme.tertiary,
+                        borderRadius: BorderRadius.circular(12),
+                        elevation: 5,
+                        child: SizedBox(
+                          height: screenHeight * 0.14,
+                          width: screenWidth * 0.29,
+                          child: Padding(
+                            padding: const EdgeInsets.all(8.0),
+                            child: Column(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              children: [
+                                Image.asset(
+                                  'assets/checkin_time.png',
                                   color: Theme.of(context).colorScheme.primary,
-                                  borderRadius: BorderRadius.circular(20),
                                 ),
-                                child: Center(
-                                  child: Text(
-                                    'Check In',
-                                    style: TextStyle(
-                                      height: 0,
-                                      color:
-                                          Theme.of(context).colorScheme.surface,
+                                Text(
+                                  _formatTime(checkIn),
+                                  style: const TextStyle(
+                                    fontSize: 18,
+                                    height: 0,
+                                  ),
+                                ),
+                                Container(
+                                  height: 25,
+                                  width: 80,
+                                  decoration: BoxDecoration(
+                                    color:
+                                        Theme.of(context).colorScheme.primary,
+                                    borderRadius: BorderRadius.circular(20),
+                                  ),
+                                  child: Center(
+                                    child: Text(
+                                      'Check In',
+                                      style: TextStyle(
+                                        height: 0,
+                                        color: Theme.of(context)
+                                            .colorScheme
+                                            .surface,
+                                      ),
                                     ),
                                   ),
                                 ),
-                              ),
-                            ],
+                              ],
+                            ),
                           ),
                         ),
                       ),
-                      Container(
-                        height: screenHeight * 0.14,
-                        width: screenWidth * 0.29,
-                        decoration: BoxDecoration(
-                          color: Theme.of(context).colorScheme.tertiary,
-                          borderRadius: BorderRadius.circular(12),
-                        ),
-                        child: Padding(
-                          padding: const EdgeInsets.all(8.0),
-                          child: Column(
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            children: [
-                              Image.asset(
-                                'assets/checkout_time.png',
-                                color: Theme.of(context).colorScheme.primary,
-                              ),
-                              Text(
-                                _formatTime(checkOut),
-                                style: const TextStyle(
-                                  fontSize: 18,
-                                  height: 0,
-                                ),
-                              ),
-                              Container(
-                                height: 25,
-                                width: 80,
-                                decoration: BoxDecoration(
+                      Material(
+                        color: Theme.of(context).colorScheme.tertiary,
+                        borderRadius: BorderRadius.circular(12),
+                        elevation: 5,
+                        child: SizedBox(
+                          height: screenHeight * 0.14,
+                          width: screenWidth * 0.29,
+                          child: Padding(
+                            padding: const EdgeInsets.all(8.0),
+                            child: Column(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              children: [
+                                Image.asset(
+                                  'assets/checkout_time.png',
                                   color: Theme.of(context).colorScheme.primary,
-                                  borderRadius: BorderRadius.circular(20),
+                                  height: 26,
+                                  width: 26,
+                                  fit: BoxFit.fitHeight,
                                 ),
-                                child: Center(
-                                  child: Text(
-                                    'Check Out',
-                                    style: TextStyle(
-                                      height: 0,
-                                      color:
-                                          Theme.of(context).colorScheme.surface,
+                                Text(
+                                  _formatTime(checkOut),
+                                  style: const TextStyle(
+                                    fontSize: 18,
+                                    height: 0,
+                                  ),
+                                ),
+                                Container(
+                                  height: 25,
+                                  width: 80,
+                                  decoration: BoxDecoration(
+                                    color:
+                                        Theme.of(context).colorScheme.primary,
+                                    borderRadius: BorderRadius.circular(20),
+                                  ),
+                                  child: Center(
+                                    child: Text(
+                                      'Check Out',
+                                      style: TextStyle(
+                                        height: 0,
+                                        color: Theme.of(context)
+                                            .colorScheme
+                                            .surface,
+                                      ),
                                     ),
                                   ),
                                 ),
-                              ),
-                            ],
+                              ],
+                            ),
                           ),
                         ),
                       ),
-                      Container(
-                        height: screenHeight * 0.14,
-                        width: screenWidth * 0.29,
-                        decoration: BoxDecoration(
-                          color: Theme.of(context).colorScheme.tertiary,
-                          borderRadius: BorderRadius.circular(12),
-                        ),
-                        child: Padding(
-                          padding: const EdgeInsets.all(8.0),
-                          child: Column(
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            children: [
-                              Image.asset(
-                                'assets/total_hrs.png',
-                                color: Theme.of(context).colorScheme.primary,
-                              ),
-                              Text(
-                                totalHours,
-                                style: const TextStyle(
-                                  fontSize: 18,
-                                  height: 0,
-                                ),
-                              ),
-                              Container(
-                                height: 25,
-                                width: 80,
-                                decoration: BoxDecoration(
+                      Material(
+                        color: Theme.of(context).colorScheme.tertiary,
+                        borderRadius: BorderRadius.circular(12),
+                        elevation: 5,
+                        child: SizedBox(
+                          height: screenHeight * 0.14,
+                          width: screenWidth * 0.29,
+                          child: Padding(
+                            padding: const EdgeInsets.all(8.0),
+                            child: Column(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              children: [
+                                Image.asset(
+                                  'assets/total_hrs.png',
                                   color: Theme.of(context).colorScheme.primary,
-                                  borderRadius: BorderRadius.circular(20),
+                                  height: 26,
+                                  width: 26,
+                                  fit: BoxFit.fitHeight,
                                 ),
-                                child: Center(
-                                  child: Text(
-                                    'Total Hrs',
-                                    style: TextStyle(
-                                      height: 0,
-                                      color:
-                                          Theme.of(context).colorScheme.surface,
+                                Text(
+                                  totalHours,
+                                  style: const TextStyle(
+                                    fontSize: 18,
+                                    height: 0,
+                                  ),
+                                ),
+                                Container(
+                                  height: 25,
+                                  width: 80,
+                                  decoration: BoxDecoration(
+                                    color:
+                                        Theme.of(context).colorScheme.primary,
+                                    borderRadius: BorderRadius.circular(20),
+                                  ),
+                                  child: Center(
+                                    child: Text(
+                                      'Total Hrs',
+                                      style: TextStyle(
+                                        height: 0,
+                                        color: Theme.of(context)
+                                            .colorScheme
+                                            .surface,
+                                      ),
                                     ),
                                   ),
                                 ),
-                              ),
-                            ],
+                              ],
+                            ),
                           ),
                         ),
                       ),

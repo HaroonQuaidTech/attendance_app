@@ -24,7 +24,7 @@ Future<Map<String, int>> fetchMonthlyAttendance(String userId) async {
       return {'present': 0, 'late': 0, 'absent': currentDayOfMonth};
     }
 
-    final lateThreshold = DateTime(now.year, now.month, now.day, 8, 15);
+    final lateThreshold = DateTime(now.year, now.month, now.day, 8, 16);
 
     Map<String, int> counts = {
       'present': 0,

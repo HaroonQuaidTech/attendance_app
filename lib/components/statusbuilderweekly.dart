@@ -2,6 +2,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
+import 'package:quaidtech/main.dart';
 
 class StatusBuilderWeekly extends StatefulWidget {
   const StatusBuilderWeekly({super.key});
@@ -12,13 +13,16 @@ class StatusBuilderWeekly extends StatefulWidget {
 class _StatusBuilerState extends State<StatusBuilderWeekly> {
   final String userId = FirebaseAuth.instance.currentUser!.uid;
   Future<List<Map<String, dynamic>>> _getWeeklyAttendanceDetails(
-    String uid,
-  ) async {
-    List<Map<String, dynamic>> fiveDayAttendanceList = [];
+      String uid) async {
+    List<Map<String, dynamic>> weeklyAttendanceList = [];
     final now = DateTime.now();
     final startOfWeek = now.subtract(Duration(days: now.weekday - 1));
+
+    // Calculate the current day of the week (0 for Monday, 4 for Friday in this case)
+    final currentDayOfWeek = now.weekday - 1;
+
     final List<Future<DocumentSnapshot<Map<String, dynamic>>>> snapshotFutures =
-        List.generate(5, (i) {
+        List.generate(currentDayOfWeek + 1, (i) {
       final date = startOfWeek.add(Duration(days: i));
       final formattedDate = DateFormat('yMMMd').format(date);
       return FirebaseFirestore.instance
@@ -28,23 +32,27 @@ class _StatusBuilerState extends State<StatusBuilderWeekly> {
           .doc(formattedDate)
           .get();
     });
+
     final snapshots = await Future.wait(snapshotFutures);
-    for (int i = 0; i < snapshots.length; i++) {
+
+    for (int i = 0; i <= currentDayOfWeek; i++) {
       final date = startOfWeek.add(Duration(days: i));
       final formattedDate = DateFormat('yMMMd').format(date);
       final snapshot = snapshots[i];
       final data = snapshot.data();
       final checkIn = (data?['checkIn'] as Timestamp?)?.toDate();
+
       if (snapshot.exists && checkIn != null) {
-        fiveDayAttendanceList.add(data!);
+        weeklyAttendanceList.add(data!);
       } else {
-        fiveDayAttendanceList.add({
+        weeklyAttendanceList.add({
           'date': formattedDate,
           'status': 'Absent',
         });
       }
     }
-    return fiveDayAttendanceList;
+
+    return weeklyAttendanceList;
   }
 
   Future<Map<String, dynamic>> _getWeeklyData(String userId) async {
@@ -165,71 +173,7 @@ class _StatusBuilerState extends State<StatusBuilderWeekly> {
     );
   }
 
-  Widget _buildNullAttendanceContainer(int index) {
-    final DateTime date = DateTime.now()
-        .subtract(Duration(days: DateTime.now().weekday - 1 - index));
-    final String day = DateFormat('EE').format(date);
-    final String formattedDate = DateFormat('dd').format(date);
-    return Container(
-      padding: const EdgeInsets.all(12),
-      margin: const EdgeInsets.only(bottom: 10),
-      height: 82,
-      width: 360,
-      decoration: BoxDecoration(
-        borderRadius: BorderRadius.circular(12),
-        color: Colors.white,
-      ),
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-        children: [
-          Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              Container(
-                width: 53,
-                height: 55,
-                decoration: BoxDecoration(
-                    color: const Color(0xff8E71DF),
-                    borderRadius: BorderRadius.circular(6)),
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  crossAxisAlignment: CrossAxisAlignment.center,
-                  children: [
-                    Text(
-                      formattedDate,
-                      style: const TextStyle(
-                          fontSize: 22,
-                          fontWeight: FontWeight.w600,
-                          color: Colors.white),
-                    ),
-                    Text(
-                      day,
-                      style: const TextStyle(
-                          fontSize: 12,
-                          fontWeight: FontWeight.w400,
-                          color: Colors.white),
-                    ),
-                  ],
-                ),
-              ),
-            ],
-          ),
-          const Text(
-            'Data not Available',
-            style: TextStyle(
-              fontSize: 20,
-              fontWeight: FontWeight.bold,
-              height: 0,
-            ),
-          ),
-          const SizedBox(width: 0),
-        ],
-      ),
-    );
-  }
-
-  Widget _buildAttendance(
-      {required Color color, required List<Map<String, dynamic>?> data}) {
+  Widget _buildAttendance({required List<Map<String, dynamic>?> data}) {
     return ListView.builder(
       itemCount: data.length,
       primary: false,
@@ -239,9 +183,7 @@ class _StatusBuilerState extends State<StatusBuilderWeekly> {
         final DateTime date = DateTime.now().subtract(
           Duration(days: DateTime.now().weekday - 1 - index),
         );
-        if (date.isAfter(DateTime.now())) {
-          return _buildNullAttendanceContainer(index);
-        }
+
         final String day = DateFormat('EE').format(date);
         final String formattedDate = DateFormat('dd').format(date);
         if (date.weekday == DateTime.saturday ||
@@ -283,20 +225,20 @@ class _StatusBuilerState extends State<StatusBuilderWeekly> {
   }
 
   Color _determineContainerColor(DateTime? checkIn, DateTime? checkOut) {
-    const TimeOfDay onTime = TimeOfDay(hour: 8, minute: 14);
-    const TimeOfDay lateArrival = TimeOfDay(hour: 8, minute: 15);
+    const TimeOfDay onTime = TimeOfDay(hour: 8, minute: 15);
+    const TimeOfDay lateArrival = TimeOfDay(hour: 8, minute: 16);
     const TimeOfDay earlyCheckout = TimeOfDay(hour: 17, minute: 0);
-    Color containerColor = const Color(0xffEC5851);
+    Color containerColor = CustomTheme.theme.colorScheme.secondary;
     if (checkIn != null) {
       final TimeOfDay checkInTime = TimeOfDay.fromDateTime(checkIn);
       if (checkInTime.hour < onTime.hour ||
           (checkInTime.hour == onTime.hour &&
               checkInTime.minute <= onTime.minute)) {
-        containerColor = const Color(0xff22Af41);
+        containerColor = CustomTheme.theme.colorScheme.surface;
       } else if (checkInTime.hour > lateArrival.hour ||
           (checkInTime.hour == lateArrival.hour &&
               checkInTime.minute >= lateArrival.minute)) {
-        containerColor = const Color(0xffF6C15B);
+        containerColor = CustomTheme.theme.colorScheme.primary;
       }
     }
     if (checkOut != null) {
@@ -304,7 +246,7 @@ class _StatusBuilerState extends State<StatusBuilderWeekly> {
       if (checkOutTime.hour < earlyCheckout.hour ||
           (checkOutTime.hour == earlyCheckout.hour &&
               checkOutTime.minute < earlyCheckout.minute)) {
-        containerColor = const Color(0xffF07E25);
+        containerColor = CustomTheme.theme.colorScheme.tertiary;
       }
     }
     return containerColor;
@@ -316,7 +258,7 @@ class _StatusBuilerState extends State<StatusBuilderWeekly> {
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
         Container(
-          width: 53,
+          width: 55,
           height: 55,
           decoration: BoxDecoration(
             color: containerColor,
@@ -328,16 +270,21 @@ class _StatusBuilerState extends State<StatusBuilderWeekly> {
               Text(
                 formattedDate,
                 style: const TextStyle(
-                    fontSize: 22,
-                    fontWeight: FontWeight.w600,
-                    color: Colors.white),
+                  fontSize: 22,
+                  fontWeight: FontWeight.w600,
+                  color: Colors.white,
+                  height: 0,
+                ),
               ),
+              const SizedBox(height: 5),
               Text(
                 day,
                 style: const TextStyle(
-                    fontSize: 12,
-                    fontWeight: FontWeight.w400,
-                    color: Colors.white),
+                  fontSize: 12,
+                  fontWeight: FontWeight.w400,
+                  color: Colors.white,
+                  height: 0,
+                ),
               ),
             ],
           ),
@@ -353,12 +300,20 @@ class _StatusBuilerState extends State<StatusBuilderWeekly> {
         Text(
           time != null ? _formatTime(time) : '--:--',
           style: const TextStyle(
-              fontSize: 14, fontWeight: FontWeight.bold, color: Colors.black),
+            fontSize: 14,
+            fontWeight: FontWeight.bold,
+            color: Colors.black,
+            height: 0,
+          ),
         ),
         Text(
           label,
           style: const TextStyle(
-              fontSize: 10, fontWeight: FontWeight.w600, color: Colors.black),
+            fontSize: 10  ,
+            fontWeight: FontWeight.w600,
+            color: Colors.black,
+            height: 0,
+          ),
         ),
       ],
     );
@@ -371,12 +326,19 @@ class _StatusBuilerState extends State<StatusBuilderWeekly> {
         Text(
           totalHours,
           style: const TextStyle(
-              fontSize: 14, fontWeight: FontWeight.bold, color: Colors.black),
+            fontSize: 14,
+            fontWeight: FontWeight.bold,
+            height: 0,
+          ),
         ),
+        const SizedBox(height: 5),
         const Text(
           'Total Hrs',
           style: TextStyle(
-              fontSize: 10, fontWeight: FontWeight.w600, color: Colors.black),
+            fontSize: 10,
+            fontWeight: FontWeight.w600,
+            height: 0,
+          ),
         ),
       ],
     );
@@ -448,30 +410,23 @@ class _StatusBuilerState extends State<StatusBuilderWeekly> {
 
               return Column(
                 children: [
-                  Container(
-                    width: double.infinity,
-                    decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(20),
-                      color: const Color(0xffEFF1FF),
-                      boxShadow: [
-                        BoxShadow(
-                          color: Colors.grey.withOpacity(0.2),
-                          spreadRadius: 2,
-                          blurRadius: 4,
-                          offset: const Offset(0, 2),
-                        ),
-                      ],
-                    ),
+                  Material(
+                    borderRadius: BorderRadius.circular(20),
+                    color: Theme.of(context).colorScheme.tertiary,
+                    elevation: 5,
                     child: Padding(
                       padding: const EdgeInsets.symmetric(
-                          horizontal: 10.0, vertical: 10.0),
+                          horizontal: 10.0, vertical: 20.0),
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           const Text(
-                            'Weekly Times Log',
+                            'Weekly Log Times',
                             style: TextStyle(
-                                fontWeight: FontWeight.w600, fontSize: 18),
+                              fontSize: 18,
+                              height: 0,
+                              fontWeight: FontWeight.bold,
+                            ),
                           ),
                           const SizedBox(height: 20),
                           Row(
@@ -486,37 +441,43 @@ class _StatusBuilerState extends State<StatusBuilderWeekly> {
                                 ),
                                 child: Padding(
                                   padding: const EdgeInsets.symmetric(
-                                      horizontal: 10.0),
+                                      horizontal: 10.0, vertical: 10),
                                   child: Column(
-                                    mainAxisAlignment:
-                                        MainAxisAlignment.spaceAround,
                                     crossAxisAlignment:
                                         CrossAxisAlignment.start,
+                                    mainAxisAlignment:
+                                        MainAxisAlignment.spaceBetween,
                                     children: [
                                       const Text(
                                         'Time in Mints',
                                         style: TextStyle(
-                                            fontWeight: FontWeight.w500,
-                                            fontSize: 14),
+                                          fontWeight: FontWeight.w500,
+                                          fontSize: 15,
+                                          height: 0,
+                                        ),
                                       ),
                                       Text(
                                         '$totalTime Mints',
                                         style: const TextStyle(
-                                            fontWeight: FontWeight.w600,
-                                            fontSize: 20),
+                                          fontWeight: FontWeight.bold,
+                                          fontSize: 20,
+                                          height: 0,
+                                        ),
                                       ),
                                       LinearProgressIndicator(
-                                        value: totalTime /
-                                            60 /
-                                            maxHours, // Progress based on total minutes
+                                        value: totalTime / 60 / maxHours,
                                         backgroundColor: Colors.grey[300],
-                                        color: const Color(0xff9478F7),
+                                        color: Theme.of(context)
+                                            .colorScheme
+                                            .primary,
                                       ),
                                       Text(
                                         '$startFormatted - $endFormatted',
                                         style: const TextStyle(
-                                            fontWeight: FontWeight.w600,
-                                            fontSize: 15),
+                                          fontWeight: FontWeight.w600,
+                                          fontSize: 15,
+                                          height: 0,
+                                        ),
                                       ),
                                     ],
                                   ),
@@ -531,36 +492,43 @@ class _StatusBuilerState extends State<StatusBuilderWeekly> {
                                 ),
                                 child: Padding(
                                   padding: const EdgeInsets.symmetric(
-                                      horizontal: 10.0),
+                                      horizontal: 10.0, vertical: 10),
                                   child: Column(
                                     mainAxisAlignment:
-                                        MainAxisAlignment.spaceAround,
+                                        MainAxisAlignment.spaceBetween,
                                     crossAxisAlignment:
                                         CrossAxisAlignment.start,
                                     children: [
                                       const Text(
                                         'Time in Hours',
                                         style: TextStyle(
-                                            fontWeight: FontWeight.w500,
-                                            fontSize: 14),
+                                          fontWeight: FontWeight.w500,
+                                          fontSize: 15,
+                                          height: 0,
+                                        ),
                                       ),
                                       Text(
-                                        '$totalHoursFormatted Hours', // Display formatted hours
+                                        '$totalHoursFormatted Hours',
                                         style: const TextStyle(
-                                            fontWeight: FontWeight.w600,
-                                            fontSize: 20),
+                                          fontWeight: FontWeight.w600,
+                                          fontSize: 20,
+                                          height: 0,
+                                        ),
                                       ),
                                       LinearProgressIndicator(
-                                        value:
-                                            progress, // Correct progress bar calculation based on hours
+                                        value: progress,
                                         backgroundColor: Colors.grey[300],
-                                        color: const Color(0xff9478F7),
+                                        color: Theme.of(context)
+                                            .colorScheme
+                                            .primary,
                                       ),
                                       Text(
                                         '$startFormatted - $endFormatted',
                                         style: const TextStyle(
-                                            fontWeight: FontWeight.w600,
-                                            fontSize: 15),
+                                          fontWeight: FontWeight.w600,
+                                          fontSize: 15,
+                                          height: 0,
+                                        ),
                                       ),
                                     ],
                                   ),
@@ -572,35 +540,37 @@ class _StatusBuilerState extends State<StatusBuilderWeekly> {
                       ),
                     ),
                   ),
-                  const SizedBox(height: 15),
-                  Container(
-                    padding: const EdgeInsets.symmetric(
-                        horizontal: 12, vertical: 10),
-                    width: double.infinity,
-                    decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(20),
-                      color: const Color(0xffEFF1FF),
-                    ),
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Text(
-                          'Weekly Attendance: ${'$startFormatted - $endFormatted'}',
-                          style: const TextStyle(
-                              fontWeight: FontWeight.w600, fontSize: 18),
-                        ),
-                        const SizedBox(height: 10),
-                        _buildAttendance(
-                          color: const Color(0xff9478F7),
-                          data: attendanceData,
-                        ),
-                      ],
+                  const SizedBox(height: 30),
+                  Material(
+                    borderRadius: BorderRadius.circular(20),
+                    color: Theme.of(context).colorScheme.tertiary,
+                    elevation: 5,
+                    child: Padding(
+                      padding: const EdgeInsets.all(12.0),
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text(
+                            'Weekly Attendance: ${'$startFormatted - $endFormatted'}',
+                            style: const TextStyle(
+                              fontWeight: FontWeight.bold,
+                              fontSize: 18,
+                              height: 0,
+                            ),
+                          ),
+                          const SizedBox(height: 10),
+                          _buildAttendance(
+                            data: attendanceData,
+                          ),
+                        ],
+                      ),
                     ),
                   ),
                 ],
               );
             },
           ),
+          const SizedBox(height: 20),
         ],
       ),
     );
