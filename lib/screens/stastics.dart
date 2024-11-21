@@ -6,15 +6,14 @@ import 'package:quaidtech/components/graphicalweekly.dart';
 import 'package:quaidtech/components/monthattendancce.dart';
 import 'package:quaidtech/components/statusbuilderweekly.dart';
 import 'package:quaidtech/components/weeklyattenance.dart';
+import 'package:quaidtech/screens/home.dart';
 import 'package:quaidtech/screens/notification.dart';
 import 'dart:async';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:intl/intl.dart';
 
 class StatsticsScreen extends StatefulWidget {
-  const StatsticsScreen({
-    super.key,
-  });
+  const StatsticsScreen({super.key});
 
   @override
   State<StatsticsScreen> createState() => _StatsticsScreenState();
@@ -48,7 +47,7 @@ class _StatsticsScreenState extends State<StatsticsScreen> {
         width: double.infinity,
         decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(20),
-          color: Theme.of(context).colorScheme.tertiary,
+          color: const Color(0xffEFF1FF),
           boxShadow: [
             BoxShadow(
               color: Colors.grey.withOpacity(0.2),
@@ -217,60 +216,85 @@ class _StatsticsScreenState extends State<StatsticsScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Theme.of(context).colorScheme.surface,
-      appBar: AppBar(
-        automaticallyImplyLeading: false,
-        title: const Row(
-          mainAxisAlignment: MainAxisAlignment.center,
-          crossAxisAlignment: CrossAxisAlignment.center,
-          children: [
-            SizedBox(width: 60),
-            Text(
-              'Statistics',
-              style: TextStyle(
-                fontSize: 22,
-                fontWeight: FontWeight.bold,
-                height: 0,
-              ),
-            ),
-          ],
-        ),
-        actions: [
-          Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 12.0),
-            child: GestureDetector(
-              onTap: () {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                    builder: (context) => const NotificationScreen(),
-                  ),
-                );
-              },
-              child: Container(
-                height: 50,
-                width: 50,
-                decoration: BoxDecoration(
-                  color: Theme.of(context).colorScheme.tertiary,
-                  borderRadius: BorderRadius.circular(12),
-                ),
-                child: Center(
-                  child: Image.asset(
-                    'assets/notification_icon.png',
-                    height: 30,
-                    width: 30,
-                  ),
-                ),
-              ),
-            ),
-          ),
-        ],
-      ),
+      backgroundColor: Colors.white,
       body: SafeArea(
         child: Padding(
           padding: const EdgeInsets.symmetric(horizontal: 10.0),
           child: Column(
             children: [
+              SizedBox(
+                height: 70,
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Container(
+                      width: 50,
+                      height: 50,
+                      decoration: BoxDecoration(
+                        color: Colors.transparent,
+                        borderRadius: BorderRadius.circular(12),
+                        boxShadow: const [
+                          BoxShadow(
+                            color: Colors.transparent,
+                            offset: Offset(2, 2),
+                            blurRadius: 4,
+                          ),
+                        ],
+                      ),
+                      child: GestureDetector(
+                        onTap: () {
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                                builder: (context) => const HomeScreen()),
+                          );
+                        },
+                        child: const Icon(
+                          Icons.arrow_back,
+                          color: Colors.transparent,
+                        ),
+                      ),
+                    ),
+                    const Text(
+                      'Statistics',
+                      style:
+                          TextStyle(fontSize: 22, fontWeight: FontWeight.w600),
+                    ),
+                    GestureDetector(
+                      onTap: () {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => const NotificationScreen(),
+                          ),
+                        );
+                      },
+                      child: Container(
+                        height: 50,
+                        width: 50,
+                        decoration: BoxDecoration(
+                          color: const Color(0xffE6E8FD),
+                          borderRadius: BorderRadius.circular(12),
+                          boxShadow: const [
+                            BoxShadow(
+                              color: Colors.black12,
+                              offset: Offset(2, 2),
+                              blurRadius: 4,
+                            ),
+                          ],
+                        ),
+                        child: Center(
+                          child: Image.asset(
+                            'assets/notification_icon.png',
+                            height: 30,
+                            width: 30,
+                          ),
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
+              ),
               const SizedBox(height: 20),
               Expanded(
                 child: SingleChildScrollView(
@@ -395,158 +419,8 @@ class _StatsticsScreenState extends State<StatsticsScreen> {
                             ),
                           ),
                         ),
-<<<<<<< HEAD
-                      const SizedBox(height: 20),
-                      if (dropdownValue1 == 'Monthly')
-                        Container(
-                          height: 130,
-                          width: double.infinity,
-                          decoration: BoxDecoration(
-                            borderRadius: BorderRadius.circular(20),
-                            color: const Color(0xffEFF1FF),
-                            boxShadow: [
-                              BoxShadow(
-                                color: Colors.grey.withOpacity(0.2),
-                                spreadRadius: 2,
-                                blurRadius: 4,
-                                offset: const Offset(0, 2),
-                              ),
-                            ],
-                          ),
-                          child: Padding(
-                            padding: const EdgeInsets.symmetric(
-                                horizontal: 10.0, vertical: 10.0),
-                            child: Column(
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: [
-                                  const Text(
-                                    'Monthly Log Times',
-                                    style: TextStyle(
-                                        fontWeight: FontWeight.w600,
-                                        fontSize: 18),
-                                  ),
-                                  const SizedBox(height: 10),
-                                  Row(
-                                    mainAxisAlignment:
-                                        MainAxisAlignment.spaceBetween,
-                                    children: [
-                                      Expanded(
-                                        child: Container(
-                                          height: 50,
-                                          padding: const EdgeInsets.symmetric(
-                                              horizontal: 10),
-                                          decoration: BoxDecoration(
-                                            color: Colors.white,
-                                            borderRadius:
-                                                BorderRadius.circular(12),
-                                          ),
-                                          child: DropdownButton<String>(
-                                            value: dropdownValue3,
-                                            icon: const Icon(
-                                                Icons.arrow_drop_down),
-                                            iconSize: 24,
-                                            elevation: 16,
-                                            isExpanded: true,
-                                            style: const TextStyle(
-                                                color: Colors.black,
-                                                fontSize: 16),
-                                            underline: const SizedBox(),
-                                            onChanged: (String? newValue) {
-                                              setState(() {
-                                                dropdownValue3 = newValue!;
-                                              });
-                                            },
-                                            items: <String>[
-                                              'Select Month',
-                                              'January',
-                                              'Feb',
-                                              'March',
-                                              'April',
-                                              'May',
-                                              'June',
-                                              'July',
-                                              'August',
-                                              'September',
-                                              'October',
-                                              'November',
-                                              'December',
-                                            ].map<DropdownMenuItem<String>>(
-                                                (String value) {
-                                              return DropdownMenuItem<String>(
-                                                value: value,
-                                                child: Text(value),
-                                              );
-                                            }).toList(),
-                                          ),
-                                        ),
-                                      ),
-                                      const SizedBox(width: 20),
-                                      Expanded(
-                                        child: Container(
-                                          padding: const EdgeInsets.symmetric(
-                                              horizontal: 10),
-                                          decoration: BoxDecoration(
-                                            color: Theme.of(context)
-                                                .colorScheme
-                                                .surface,
-                                            borderRadius:
-                                                BorderRadius.circular(12),
-                                          ),
-                                          child: DropdownButton<String>(
-                                            value: dropdownValue4,
-                                            icon: const Icon(
-                                                Icons.arrow_drop_down),
-                                            iconSize: 24,
-                                            elevation: 16,
-                                            isExpanded: true,
-                                            style: const TextStyle(
-                                                color: Colors.black,
-                                                fontSize: 16),
-                                            underline: const SizedBox(),
-                                            onChanged: (String? newValue) {
-                                              setState(() {
-                                                dropdownValue4 = newValue!;
-                                              });
-                                            },
-                                            items: <String>[
-                                              'Select Year',
-                                              '2024',
-                                              '2023',
-                                              '2022',
-                                              '2021',
-                                              '2020'
-                                            ].map<DropdownMenuItem<String>>(
-                                                (String value) {
-                                              return DropdownMenuItem<String>(
-                                                value: value,
-                                                child: Text(value),
-                                              );
-                                            }).toList(),
-                                          ),
-                                        ),
-                                      ),
-                                    ],
-                                  ),
-                                ]),
-                          ),
-                        ),
-                      Column(
-                        children: [
-                          if (_selectedIndex != 1)
-                            if (dropdownValue1 == 'Weekly') ...[
-                              _buildAttendanceBasedOnSelection(dropdownValue2,
-                                  isWeekly: true),
-                            ] else if (dropdownValue1 == 'Monthly') ...[
-                              _buildAttendanceBasedOnSelection(dropdownValue2,
-                                  isWeekly: false),
-                            ],
-                        ],
-=======
-                      //-------------------dropdown value2---------------------------------------------
 
-                      const SizedBox(
-                        height: 20,
-                      ),
+                      const SizedBox(height: 20),
                       // if (dropdownValue1 == 'Monthly')
                       //   Container(
                       //     height: 130,
@@ -679,9 +553,7 @@ class _StatsticsScreenState extends State<StatsticsScreen> {
                       //           ]),
                       //     ),
                       //   ),
-                      const SizedBox(
-                        height: 20,
-                      ),
+                      const SizedBox(height: 20),
                       Padding(
                         padding: const EdgeInsets.only(top: 1.0),
                         child: Column(
@@ -696,7 +568,6 @@ class _StatsticsScreenState extends State<StatsticsScreen> {
                               ],
                           ],
                         ),
->>>>>>> 51093a222990c9308baef45b6f3e71b4daee7304
                       ),
                       if (dropdownValue2 != 'Present' &&
                           dropdownValue2 != 'On Time' &&
@@ -704,10 +575,19 @@ class _StatsticsScreenState extends State<StatsticsScreen> {
                           dropdownValue2 != 'Early Out' &&
                           dropdownValue2 != 'Late Arrival')
                         Container(
+                          height: 65,
                           width: double.infinity,
                           decoration: BoxDecoration(
                             borderRadius: BorderRadius.circular(60),
-                            color: Theme.of(context).colorScheme.tertiary,
+                            color: const Color(0xffEFF1FF),
+                            boxShadow: [
+                              BoxShadow(
+                                color: Colors.grey.withOpacity(0.2),
+                                spreadRadius: 2,
+                                blurRadius: 4,
+                                offset: const Offset(0, 2),
+                              ),
+                            ],
                           ),
                           child: Row(
                             children: [
