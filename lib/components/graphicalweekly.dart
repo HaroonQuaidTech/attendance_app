@@ -435,7 +435,7 @@ class _GraphicalbuilerState extends State<GraphicalbuilderWeekly> {
                                       toY: 9,
                                       color: Colors.white,
                                     ),
-                                  )
+                                  ),
                                 ],
                               ),
                           ],

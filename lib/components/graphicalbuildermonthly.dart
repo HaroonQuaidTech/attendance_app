@@ -118,12 +118,12 @@ class _GraphicalbuilerState extends State<GraphicalbuilderMonthly> {
         final checkInTime = TimeOfDay.fromDateTime(checkIn);
         final checkOutTime = TimeOfDay.fromDateTime(checkOut);
         if ((checkInTime.hour == 7 && checkInTime.minute >= 50) ||
-            (checkInTime.hour == 8 && checkInTime.minute <= 10)) {
+            (checkInTime.hour == 8 && checkInTime.minute <= 15)) {
           attendanceStats["On Time"] = (attendanceStats["On Time"] ?? 0) + 1;
         }
 
         if (checkInTime.hour > 8 ||
-            (checkInTime.hour == 8 && checkInTime.minute > 15)) {
+            (checkInTime.hour == 8 && checkInTime.minute > 16)) {
           attendanceStats["Late Arrival"] =
               (attendanceStats["Late Arrival"] ?? 0) + 1;
         }
