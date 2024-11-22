@@ -526,23 +526,13 @@ class _StatusBuilerState extends State<StatusBuilderMonthly> {
                   maxHours != 0 ? totalHourss / maxHours : 0.0;
               return Column(
                 children: [
-                  Container(
-                    width: double.infinity,
-                    decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(20),
-                      color: const Color(0xffEFF1FF),
-                      boxShadow: [
-                        BoxShadow(
-                          color: Colors.grey.withOpacity(0.2),
-                          spreadRadius: 2,
-                          blurRadius: 4,
-                          offset: const Offset(0, 2),
-                        ),
-                      ],
-                    ),
+                  Material(
+                    borderRadius: BorderRadius.circular(20),
+                    elevation: 5,
+                    color: Theme.of(context).colorScheme.tertiary,
                     child: Padding(
                       padding: const EdgeInsets.symmetric(
-                          horizontal: 10.0, vertical: 10.0),
+                          horizontal: 10.0, vertical: 20.0),
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
@@ -586,7 +576,7 @@ class _StatusBuilerState extends State<StatusBuilderMonthly> {
                                       LinearProgressIndicator(
                                         value: totalMinutes / maxMinutes,
                                         backgroundColor: Colors.grey[300],
-                                        color: const Color(0xff9478F7),
+                                 color: Theme.of(context).colorScheme.primary,
                                       ),
                                       Text(
                                         getCurrentMonthDateRange(),
@@ -629,7 +619,7 @@ class _StatusBuilerState extends State<StatusBuilderMonthly> {
                                       LinearProgressIndicator(
                                         value: progressValue,
                                         backgroundColor: Colors.grey[300],
-                                        color: const Color(0xff9478F7),
+                                      color: Theme.of(context).colorScheme.primary,
                                       ),
                                       Text(
                                         getCurrentMonthDateRange(),
@@ -648,26 +638,26 @@ class _StatusBuilerState extends State<StatusBuilderMonthly> {
                     ),
                   ),
                   const SizedBox(height: 20),
-                  Container(
-                    padding: const EdgeInsets.symmetric(
-                        horizontal: 12, vertical: 10),
-                    decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(20),
-                      color: const Color(0xffEFF1FF),
-                    ),
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Text(
-                          'Monthly Attendance: ${getCurrentMonthDateRange()}',
-                          style: const TextStyle(
-                              fontWeight: FontWeight.w600, fontSize: 18),
-                        ),
-                        const SizedBox(height: 10),
-                        _buildAttendance(
-                            color: const Color(0xff9478F7),
-                            data: attendanceData),
-                      ],
+                  Material(
+                    borderRadius: BorderRadius.circular(20),
+                    color: Theme.of(context).colorScheme.tertiary,
+                    child: Container(
+                      padding: const EdgeInsets.symmetric(
+                          horizontal: 12, vertical: 10),
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text(
+                            'Monthly Attendance: ${getCurrentMonthDateRange()}',
+                            style: const TextStyle(
+                                fontWeight: FontWeight.w600, fontSize: 18),
+                          ),
+                          const SizedBox(height: 10),
+                          _buildAttendance(
+                              color: const Color(0xff9478F7),
+                              data: attendanceData),
+                        ],
+                      ),
                     ),
                   ),
                 ],
