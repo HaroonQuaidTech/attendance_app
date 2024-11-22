@@ -467,7 +467,102 @@ class _PreviousMonthlyAttendanceState extends State<PreviousMonthlyAttendance> {
         child: Column(
           mainAxisSize: MainAxisSize.min,
           children: [
-            
+            Material(
+              borderRadius: BorderRadius.circular(20),
+              color: Theme.of(context).colorScheme.tertiary,
+              child: Padding(
+                padding:
+                    const EdgeInsets.symmetric(horizontal: 5.0, vertical: 20.0),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    const Text(
+                      'Monthly filter log ',
+                      style:
+                          TextStyle(fontWeight: FontWeight.w600, fontSize: 18),
+                    ),
+                    const SizedBox(height: 10),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Expanded(
+                          child: Container(
+                            height: 50,
+                            padding: const EdgeInsets.symmetric(horizontal: 10),
+                            decoration: BoxDecoration(
+                              color: Colors.white,
+                              borderRadius: BorderRadius.circular(12),
+                              boxShadow: [
+                                BoxShadow(
+                                  color: Colors.grey.withOpacity(0.2),
+                                  spreadRadius: 2,
+                                  blurRadius: 4,
+                                  offset: const Offset(0, 2),
+                                ),
+                              ],
+                            ),
+                            child: DropdownButton<String>(
+                              value: selectedMonth,
+                              hint: const Text("Select Month"),
+                              isExpanded: true,
+                              underline: const SizedBox(),
+                              items: months.map((month) {
+                                return DropdownMenuItem(
+                                  value: month,
+                                  child: Text(DateFormat('MMMM')
+                                      .format(DateTime(0, int.parse(month)))),
+                                );
+                              }).toList(),
+                              onChanged: (value) {
+                                setState(() {
+                                  selectedMonth = value;
+                                });
+                              },
+                            ),
+                          ),
+                        ),
+                        const SizedBox(width: 16),
+                        Expanded(
+                          child: Container(
+                            height: 50,
+                            padding: const EdgeInsets.symmetric(horizontal: 10),
+                            decoration: BoxDecoration(
+                              color: Colors.white,
+                              borderRadius: BorderRadius.circular(12),
+                              boxShadow: [
+                                BoxShadow(
+                                  color: Colors.grey.withOpacity(0.2),
+                                  spreadRadius: 2,
+                                  blurRadius: 4,
+                                  offset: const Offset(0, 2),
+                                ),
+                              ],
+                            ),
+                            child: DropdownButton<String>(
+                              value: selectedYear,
+                              hint: const Text("Select Year"),
+                              isExpanded: true,
+                              underline: const SizedBox(),
+                              items: years.map((year) {
+                                return DropdownMenuItem(
+                                  value: year,
+                                  child: Text(year),
+                                );
+                              }).toList(),
+                              onChanged: (value) {
+                                setState(() {
+                                  selectedYear = value;
+                                });
+                              },
+                            ),
+                          ),
+                        ),
+                      ],
+                    ),
+                  ],
+                ),
+              ),
+            ),
             const SizedBox(height: 20),
             FutureBuilder<List<Map<String, dynamic>>>(
               future: selectedMonth != null && selectedYear != null
