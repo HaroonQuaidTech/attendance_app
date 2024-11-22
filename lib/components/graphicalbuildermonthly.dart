@@ -118,12 +118,12 @@ class _GraphicalbuilerState extends State<GraphicalbuilderMonthly> {
         final checkInTime = TimeOfDay.fromDateTime(checkIn);
         final checkOutTime = TimeOfDay.fromDateTime(checkOut);
         if ((checkInTime.hour == 7 && checkInTime.minute >= 50) ||
-            (checkInTime.hour == 8 && checkInTime.minute <= 10)) {
+            (checkInTime.hour == 8 && checkInTime.minute <= 15)) {
           attendanceStats["On Time"] = (attendanceStats["On Time"] ?? 0) + 1;
         }
 
         if (checkInTime.hour > 8 ||
-            (checkInTime.hour == 8 && checkInTime.minute > 15)) {
+            (checkInTime.hour == 8 && checkInTime.minute > 16)) {
           attendanceStats["Late Arrival"] =
               (attendanceStats["Late Arrival"] ?? 0) + 1;
         }
@@ -300,6 +300,7 @@ class _GraphicalbuilerState extends State<GraphicalbuilderMonthly> {
                     ),
                   ),
                   Row(
+                    crossAxisAlignment: CrossAxisAlignment.center,
                     children: [
                       Container(
                         height: 18,
@@ -312,12 +313,16 @@ class _GraphicalbuilerState extends State<GraphicalbuilderMonthly> {
                       const Text(
                         'TAT (Turn Around Time)',
                         style: TextStyle(
-                            fontWeight: FontWeight.w600, fontSize: 18),
+                          fontWeight: FontWeight.w400,
+                          fontSize: 18,
+                          height: 0,
+                        ),
                       ),
                     ],
                   ),
                   const SizedBox(height: 20),
-                  Expanded(
+                  SizedBox(
+                    height: 400,
                     child: BarChart(
                       BarChartData(
                         alignment: BarChartAlignment.spaceAround,
@@ -328,54 +333,47 @@ class _GraphicalbuilerState extends State<GraphicalbuilderMonthly> {
                             sideTitles: SideTitles(
                               showTitles: true,
                               getTitlesWidget: (value, meta) {
-                                return Text('${value.toInt()}H',
-                                    style: const TextStyle(
-                                        color: Colors.black,
-                                        fontSize: 13,
-                                        fontWeight: FontWeight.bold));
+                                return Text(
+                                  '${value.toInt()}H',
+                                  style: const TextStyle(
+                                    color: Colors.black,
+                                    fontSize: 15,
+                                    fontWeight: FontWeight.w600,
+                                    height: 0,
+                                  ),
+                                );
                               },
-                              reservedSize: 28,
+                              reservedSize: 0,
                               interval: 5,
                             ),
                           ),
                           bottomTitles: AxisTitles(
                             sideTitles: SideTitles(
                               showTitles: true,
+                              reservedSize: 60,
                               getTitlesWidget: (value, meta) {
-                                switch (value.toInt()) {
-                                  case 0:
-                                    return const Text('Week 1',
-                                        style: TextStyle(
-                                            color: Colors.black,
-                                            fontSize: 13,
-                                            fontWeight: FontWeight.w400));
-                                  case 1:
-                                    return const Text('Week 2',
-                                        style: TextStyle(
-                                            color: Colors.black,
-                                            fontSize: 13,
-                                            fontWeight: FontWeight.w400));
-                                  case 2:
-                                    return const Text('Week 3',
-                                        style: TextStyle(
-                                            color: Colors.black,
-                                            fontSize: 13,
-                                            fontWeight: FontWeight.w400));
-                                  case 3:
-                                    return const Text('Week 4',
-                                        style: TextStyle(
-                                            color: Colors.black,
-                                            fontSize: 13,
-                                            fontWeight: FontWeight.w400));
-                                  case 4:
-                                    return const Text('Week 5',
-                                        style: TextStyle(
-                                            color: Colors.black,
-                                            fontSize: 13,
-                                            fontWeight: FontWeight.w400));
-                                  default:
-                                    return const Text('');
-                                }
+                                List<String> weekLabels = [
+                                  'W1',
+                                  'W2',
+                                  'W3',
+                                  'W4',
+                                  'W5'
+                                ];
+                                return Column(
+                                  mainAxisSize: MainAxisSize.min,
+                                  children: [
+                                    const SizedBox(height: 30),
+                                    Text(
+                                      weekLabels[value.toInt()],
+                                      style: const TextStyle(
+                                        color: Colors.black,
+                                        fontSize: 14,
+                                        fontWeight: FontWeight.w600,
+                                        height: 0,
+                                      ),
+                                    ),
+                                  ],
+                                );
                               },
                             ),
                           ),
@@ -389,66 +387,22 @@ class _GraphicalbuilerState extends State<GraphicalbuilderMonthly> {
                         borderData: FlBorderData(show: false),
                         gridData: const FlGridData(show: false),
                         barGroups: [
-                          BarChartGroupData(x: 0, barRods: [
-                            BarChartRodData(
-                              toY: monthlyHours["Week 1"]!,
-                              color: Theme.of(context).colorScheme.primary,
-                              width: 22,
-                              backDrawRodData: BackgroundBarChartRodData(
-                                show: true,
-                                toY: 45,
-                                color: Colors.white,
-                              ),
+                          for (int week = 1; week <= 5; week++)
+                            BarChartGroupData(
+                              x: week - 1,
+                              barRods: [
+                                BarChartRodData(
+                                  toY: monthlyHours["Week $week"] ?? 0,
+                                  color: Theme.of(context).colorScheme.primary,
+                                  width: 30,
+                                  backDrawRodData: BackgroundBarChartRodData(
+                                    show: true,
+                                    toY: 45,
+                                    color: Colors.white,
+                                  ),
+                                ),
+                              ],
                             ),
-                          ]),
-                          BarChartGroupData(x: 1, barRods: [
-                            BarChartRodData(
-                              toY: monthlyHours["Week 2"]!,
-                              color: Theme.of(context).colorScheme.primary,
-                              width: 22,
-                              backDrawRodData: BackgroundBarChartRodData(
-                                show: true,
-                                toY: 45,
-                                color: Colors.white,
-                              ),
-                            ),
-                          ]),
-                          BarChartGroupData(x: 2, barRods: [
-                            BarChartRodData(
-                              toY: monthlyHours["Week 3"]!,
-                              color: Theme.of(context).colorScheme.primary,
-                              width: 22,
-                              backDrawRodData: BackgroundBarChartRodData(
-                                show: true,
-                                toY: 45,
-                                color: Colors.white,
-                              ),
-                            ),
-                          ]),
-                          BarChartGroupData(x: 3, barRods: [
-                            BarChartRodData(
-                              toY: monthlyHours["Week 4"]!,
-                              color: Theme.of(context).colorScheme.primary,
-                              width: 22,
-                              backDrawRodData: BackgroundBarChartRodData(
-                                show: true,
-                                toY: 45,
-                                color: Colors.white,
-                              ),
-                            ),
-                          ]),
-                          BarChartGroupData(x: 4, barRods: [
-                            BarChartRodData(
-                              toY: monthlyHours["Week 5"]!,
-                              color: Theme.of(context).colorScheme.primary,
-                              width: 22,
-                              backDrawRodData: BackgroundBarChartRodData(
-                                show: true,
-                                toY: 45,
-                                color: Colors.white,
-                              ),
-                            ),
-                          ]),
                         ],
                       ),
                     ),
