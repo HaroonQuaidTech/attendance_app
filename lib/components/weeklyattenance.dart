@@ -164,13 +164,27 @@ class _WeeklyAttendanceState extends State<WeeklyAttendance> {
               child: CircularProgressIndicator(),
             )
           else if (filteredData.isEmpty)
-            const Center(
-              child: Text(
-                "No Data Available",
-                style: TextStyle(
-                  fontWeight: FontWeight.bold,
-                  height: 0,
-                ),
+            Center(
+              child: Column(
+                children: [
+                  const SizedBox(height: 30),
+                  const Icon(
+                    Icons.warning,
+                    color: Colors.grey,
+                    size: 50,
+                  ),
+                  const SizedBox(height: 5),
+                  Text(
+                    "No Data Available",
+                    style: TextStyle(
+                      fontWeight: FontWeight.bold,
+                      height: 0,
+                      fontSize: 20,
+                      color: Colors.grey[400],
+                    ),
+                  ),
+                  const SizedBox(height: 30),
+                ],
               ),
             )
           else
