@@ -105,8 +105,8 @@ class _GraphicalbuilerState extends State<GraphicalbuilderMonthly> {
     Map<String, double> attendanceStats = {
       "Present": 0,
       "Absent": 0,
-      "Early Out": 0,
       "On Time": 0,
+      "Early Out": 0,
       "Late Arrival": 0,
     };
 
@@ -275,268 +275,248 @@ class _GraphicalbuilerState extends State<GraphicalbuilderMonthly> {
         Map<String, double> pieChartData = {
           'Present': getPresentCount(snapshot.data!).toDouble(),
           'Absent': getAbsentCount(snapshot.data!).toDouble(),
-          'Late Arrival': getLateArrivalCount(snapshot.data!).toDouble(),
-          'Early Out': getEarlyOutCount(snapshot.data!).toDouble(),
           'On Time': getOnTimeCount(snapshot.data!).toDouble(),
+          'Early Out': getEarlyOutCount(snapshot.data!).toDouble(),
+          'Late Arrival': getLateArrivalCount(snapshot.data!).toDouble(),
         };
 
-        return Container(
-          decoration: BoxDecoration(
-            borderRadius: BorderRadius.circular(12),
-          ),
-          child: Column(children: [
-            const SizedBox(height: 20),
-            Container(
-              height: 430,
-              width: double.infinity,
-              decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(20),
-                color: const Color(0xffEFF1FF),
-                boxShadow: [
-                  BoxShadow(
-                    color: Colors.grey.withOpacity(0.2),
-                    spreadRadius: 2,
-                    blurRadius: 4,
-                    offset: const Offset(0, 2),
-                  ),
-                ],
-              ),
-              child: Padding(
-                padding: const EdgeInsets.symmetric(
-                    horizontal: 10.0, vertical: 10.0),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    const Text(
-                      'Monthly',
-                      style:
-                          TextStyle(fontWeight: FontWeight.w600, fontSize: 18),
-                    ),
-                    Row(
-                      children: [
-                        Container(
-                          height: 18,
-                          width: 16,
-                          decoration: BoxDecoration(
-                            color: Theme.of(context).colorScheme.primary,
-                          ),
-                        ),
-                        const SizedBox(width: 10),
-                        const Text(
-                          'TAT (Turn Around Time)',
-                          style: TextStyle(
-                              fontWeight: FontWeight.w600, fontSize: 18),
-                        ),
-                      ],
-                    ),
-                    const SizedBox(height: 20),
-                    Expanded(
-                      child: BarChart(
-                        BarChartData(
-                          alignment: BarChartAlignment.spaceAround,
-                          maxY: 45,
-                          barTouchData: BarTouchData(enabled: false),
-                          titlesData: FlTitlesData(
-                            leftTitles: AxisTitles(
-                              sideTitles: SideTitles(
-                                showTitles: true,
-                                getTitlesWidget: (value, meta) {
-                                  return Text('${value.toInt()}H',
-                                      style: const TextStyle(
-                                          color: Colors.black,
-                                          fontSize: 13,
-                                          fontWeight: FontWeight.bold));
-                                },
-                                reservedSize: 28,
-                                interval: 5,
-                              ),
-                            ),
-                            bottomTitles: AxisTitles(
-                              sideTitles: SideTitles(
-                                showTitles: true,
-                                getTitlesWidget: (value, meta) {
-                                  switch (value.toInt()) {
-                                    case 0:
-                                      return const Text('Week 1',
-                                          style: TextStyle(
-                                              color: Colors.black,
-                                              fontSize: 13,
-                                              fontWeight: FontWeight.w400));
-                                    case 1:
-                                      return const Text('Week 2',
-                                          style: TextStyle(
-                                              color: Colors.black,
-                                              fontSize: 13,
-                                              fontWeight: FontWeight.w400));
-                                    case 2:
-                                      return const Text('Week 3',
-                                          style: TextStyle(
-                                              color: Colors.black,
-                                              fontSize: 13,
-                                              fontWeight: FontWeight.w400));
-                                    case 3:
-                                      return const Text('Week 4',
-                                          style: TextStyle(
-                                              color: Colors.black,
-                                              fontSize: 13,
-                                              fontWeight: FontWeight.w400));
-                                    case 4:
-                                      return const Text('Week 5',
-                                          style: TextStyle(
-                                              color: Colors.black,
-                                              fontSize: 13,
-                                              fontWeight: FontWeight.w400));
-                                    default:
-                                      return const Text('');
-                                  }
-                                },
-                              ),
-                            ),
-                            topTitles: const AxisTitles(
-                              sideTitles: SideTitles(showTitles: false),
-                            ),
-                            rightTitles: const AxisTitles(
-                              sideTitles: SideTitles(showTitles: false),
-                            ),
-                          ),
-                          borderData: FlBorderData(show: false),
-                          gridData: const FlGridData(show: false),
-                          barGroups: [
-                            BarChartGroupData(x: 0, barRods: [
-                              BarChartRodData(
-                                toY: monthlyHours["Week 1"]!,
-                                color: Theme.of(context).colorScheme.primary,
-                                width: 22,
-                                backDrawRodData: BackgroundBarChartRodData(
-                                  show: true,
-                                  toY: 45,
-                                  color: Colors.white,
-                                ),
-                              ),
-                            ]),
-                            BarChartGroupData(x: 1, barRods: [
-                              BarChartRodData(
-                                toY: monthlyHours["Week 2"]!,
-                                 color: Theme.of(context)
-                                            .colorScheme
-                                            .primary,
-                                width: 22,
-                                backDrawRodData: BackgroundBarChartRodData(
-                                  show: true,
-                                  toY: 45,
-                                  color: Colors.white,
-                                ),
-                              ),
-                            ]),
-                            BarChartGroupData(x: 2, barRods: [
-                              BarChartRodData(
-                                toY: monthlyHours["Week 3"]!,
-                          color: Theme.of(context)
-                                            .colorScheme
-                                            .primary,
-                                width: 22,
-                                backDrawRodData: BackgroundBarChartRodData(
-                                  show: true,
-                                  toY: 45,
-                                  color: Colors.white,
-                                ),
-                              ),
-                            ]),
-                            BarChartGroupData(x: 3, barRods: [
-                              BarChartRodData(
-                                toY: monthlyHours["Week 4"]!,
-                     color: Theme.of(context)
-                                            .colorScheme
-                                            .primary,
-                                width: 22,
-                                backDrawRodData: BackgroundBarChartRodData(
-                                  show: true,
-                                  toY: 45,
-                                  color: Colors.white,
-                                ),
-                              ),
-                            ]),
-                            BarChartGroupData(x: 4, barRods: [
-                              BarChartRodData(
-                                toY: monthlyHours["Week 5"]!,
-                                color: Theme.of(context).colorScheme.primary,
-                                width: 22,
-                                backDrawRodData: BackgroundBarChartRodData(
-                                  show: true,
-                                  toY: 45,
-                                  color: Colors.white,
-                                ),
-                              ),
-                            ]),
-                          ],
-                        ),
-                      ),
-                    ),
-                  ],
-                ),
-              ),
-            ),
-            const SizedBox(height: 20),
-            Container(
-              padding: const EdgeInsets.all(12),
-              width: double.infinity,
-              decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(20),
-                color: const Color(0xffEFF1FF),
-                boxShadow: [
-                  BoxShadow(
-                    color: Colors.grey.withOpacity(0.2),
-                    spreadRadius: 2,
-                    blurRadius: 4,
-                    offset: const Offset(0, 2),
-                  ),
-                ],
-              ),
+        return Column(children: [
+          const SizedBox(height: 20),
+          Material(
+            borderRadius: BorderRadius.circular(20),
+            color: Theme.of(context).colorScheme.tertiary,
+            elevation: 5,
+            child: Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 10.0),
               child: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   const Text(
                     'Monthly',
                     style: TextStyle(
-                      fontSize: 20,
                       fontWeight: FontWeight.w600,
+                      fontSize: 18,
+                      height: 0,
                     ),
                   ),
+                  Row(
+                    children: [
+                      Container(
+                        height: 18,
+                        width: 16,
+                        decoration: BoxDecoration(
+                          color: Theme.of(context).colorScheme.primary,
+                        ),
+                      ),
+                      const SizedBox(width: 10),
+                      const Text(
+                        'TAT (Turn Around Time)',
+                        style: TextStyle(
+                            fontWeight: FontWeight.w600, fontSize: 18),
+                      ),
+                    ],
+                  ),
                   const SizedBox(height: 20),
-                  pieChartData.isEmpty
-                      ? const Center(child: Text('No data available'))
-                      : PieChart(
-                          dataMap: pieChartData,
-                          colorList: const [
-                            Color(0xff9478F7),
-                            Color(0xffEC5851),
-                            Color(0xffF6C15B),
-                            Color(0xffF07E25),
-                            Color(0xff22AF41),
-                          ],
-                          chartRadius: MediaQuery.of(context).size.width / 1.7,
-                          legendOptions: const LegendOptions(
-                            legendPosition: LegendPosition.top,
-                            showLegendsInRow: true,
-                            showLegends: true,
-                            legendShape: BoxShape.circle,
-                            legendTextStyle: TextStyle(
-                              fontWeight: FontWeight.bold,
+                  Expanded(
+                    child: BarChart(
+                      BarChartData(
+                        alignment: BarChartAlignment.spaceAround,
+                        maxY: 45,
+                        barTouchData: BarTouchData(enabled: false),
+                        titlesData: FlTitlesData(
+                          leftTitles: AxisTitles(
+                            sideTitles: SideTitles(
+                              showTitles: true,
+                              getTitlesWidget: (value, meta) {
+                                return Text('${value.toInt()}H',
+                                    style: const TextStyle(
+                                        color: Colors.black,
+                                        fontSize: 13,
+                                        fontWeight: FontWeight.bold));
+                              },
+                              reservedSize: 28,
+                              interval: 5,
                             ),
                           ),
-                          chartValuesOptions: const ChartValuesOptions(
-                            showChartValues: false,
+                          bottomTitles: AxisTitles(
+                            sideTitles: SideTitles(
+                              showTitles: true,
+                              getTitlesWidget: (value, meta) {
+                                switch (value.toInt()) {
+                                  case 0:
+                                    return const Text('Week 1',
+                                        style: TextStyle(
+                                            color: Colors.black,
+                                            fontSize: 13,
+                                            fontWeight: FontWeight.w400));
+                                  case 1:
+                                    return const Text('Week 2',
+                                        style: TextStyle(
+                                            color: Colors.black,
+                                            fontSize: 13,
+                                            fontWeight: FontWeight.w400));
+                                  case 2:
+                                    return const Text('Week 3',
+                                        style: TextStyle(
+                                            color: Colors.black,
+                                            fontSize: 13,
+                                            fontWeight: FontWeight.w400));
+                                  case 3:
+                                    return const Text('Week 4',
+                                        style: TextStyle(
+                                            color: Colors.black,
+                                            fontSize: 13,
+                                            fontWeight: FontWeight.w400));
+                                  case 4:
+                                    return const Text('Week 5',
+                                        style: TextStyle(
+                                            color: Colors.black,
+                                            fontSize: 13,
+                                            fontWeight: FontWeight.w400));
+                                  default:
+                                    return const Text('');
+                                }
+                              },
+                            ),
                           ),
-                          totalValue: pieChartData.values.isNotEmpty
-                              ? pieChartData.values.reduce((a, b) => a + b)
-                              : 1,
+                          topTitles: const AxisTitles(
+                            sideTitles: SideTitles(showTitles: false),
+                          ),
+                          rightTitles: const AxisTitles(
+                            sideTitles: SideTitles(showTitles: false),
+                          ),
                         ),
+                        borderData: FlBorderData(show: false),
+                        gridData: const FlGridData(show: false),
+                        barGroups: [
+                          BarChartGroupData(x: 0, barRods: [
+                            BarChartRodData(
+                              toY: monthlyHours["Week 1"]!,
+                              color: Theme.of(context).colorScheme.primary,
+                              width: 22,
+                              backDrawRodData: BackgroundBarChartRodData(
+                                show: true,
+                                toY: 45,
+                                color: Colors.white,
+                              ),
+                            ),
+                          ]),
+                          BarChartGroupData(x: 1, barRods: [
+                            BarChartRodData(
+                              toY: monthlyHours["Week 2"]!,
+                              color: Theme.of(context).colorScheme.primary,
+                              width: 22,
+                              backDrawRodData: BackgroundBarChartRodData(
+                                show: true,
+                                toY: 45,
+                                color: Colors.white,
+                              ),
+                            ),
+                          ]),
+                          BarChartGroupData(x: 2, barRods: [
+                            BarChartRodData(
+                              toY: monthlyHours["Week 3"]!,
+                              color: Theme.of(context).colorScheme.primary,
+                              width: 22,
+                              backDrawRodData: BackgroundBarChartRodData(
+                                show: true,
+                                toY: 45,
+                                color: Colors.white,
+                              ),
+                            ),
+                          ]),
+                          BarChartGroupData(x: 3, barRods: [
+                            BarChartRodData(
+                              toY: monthlyHours["Week 4"]!,
+                              color: Theme.of(context).colorScheme.primary,
+                              width: 22,
+                              backDrawRodData: BackgroundBarChartRodData(
+                                show: true,
+                                toY: 45,
+                                color: Colors.white,
+                              ),
+                            ),
+                          ]),
+                          BarChartGroupData(x: 4, barRods: [
+                            BarChartRodData(
+                              toY: monthlyHours["Week 5"]!,
+                              color: Theme.of(context).colorScheme.primary,
+                              width: 22,
+                              backDrawRodData: BackgroundBarChartRodData(
+                                show: true,
+                                toY: 45,
+                                color: Colors.white,
+                              ),
+                            ),
+                          ]),
+                        ],
+                      ),
+                    ),
+                  ),
                 ],
               ),
             ),
-          ]),
-        );
+          ),
+          const SizedBox(height: 20),
+          Container(
+            padding: const EdgeInsets.all(12),
+            width: double.infinity,
+            decoration: BoxDecoration(
+              borderRadius: BorderRadius.circular(20),
+              color: const Color(0xffEFF1FF),
+              boxShadow: [
+                BoxShadow(
+                  color: Colors.grey.withOpacity(0.2),
+                  spreadRadius: 2,
+                  blurRadius: 4,
+                  offset: const Offset(0, 2),
+                ),
+              ],
+            ),
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                const Text(
+                  'Monthly',
+                  style: TextStyle(
+                    fontSize: 20,
+                    fontWeight: FontWeight.w600,
+                  ),
+                ),
+                const SizedBox(height: 20),
+                pieChartData.isEmpty
+                    ? const Center(child: Text('No data available'))
+                    : PieChart(
+                        dataMap: pieChartData,
+                        colorList: const [
+                          Color(0xff9478F7),
+                          Color(0xffEC5851),
+                          Color(0xffF6C15B),
+                          Color(0xffF07E25),
+                          Color(0xff22AF41),
+                        ],
+                        chartRadius: MediaQuery.of(context).size.width / 1.7,
+                        legendOptions: const LegendOptions(
+                          legendPosition: LegendPosition.top,
+                          showLegendsInRow: true,
+                          showLegends: true,
+                          legendShape: BoxShape.circle,
+                          legendTextStyle: TextStyle(
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ),
+                        chartValuesOptions: const ChartValuesOptions(
+                          showChartValues: false,
+                        ),
+                        totalValue: pieChartData.values.isNotEmpty
+                            ? pieChartData.values.reduce((a, b) => a + b)
+                            : 1,
+                      ),
+              ],
+            ),
+          ),
+        ]);
       },
     );
   }

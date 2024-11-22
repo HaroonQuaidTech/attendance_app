@@ -457,8 +457,9 @@ class _HomeScreenState extends State<HomeScreen> {
                                         Navigator.push(
                                           context,
                                           MaterialPageRoute(
-                                              builder: (context) =>
-                                                  const NotificationScreen()),
+                                            builder: (context) =>
+                                                const NotificationScreen(),
+                                          ),
                                         );
                                       },
                                       child: Image.asset(
@@ -528,7 +529,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                     },
                                     child: Material(
                                       borderRadius: BorderRadius.circular(12),
-                                      elevation: 10,
+                                      elevation: 5,
                                       color: Theme.of(context)
                                           .colorScheme
                                           .tertiary,
@@ -549,7 +550,7 @@ class _HomeScreenState extends State<HomeScreen> {
                               }),
                           const SizedBox(height: 30),
                           Material(
-                            elevation: 10,
+                            elevation: 5,
                             color: Theme.of(context).colorScheme.tertiary,
                             borderRadius: BorderRadius.circular(12),
                             child: Column(
@@ -612,7 +613,7 @@ class _HomeScreenState extends State<HomeScreen> {
                               child: Column(
                                 children: [
                                   Material(
-                                    elevation: 10,
+                                    elevation: 5,
                                     borderRadius: BorderRadius.circular(12),
                                     color:
                                         Theme.of(context).colorScheme.tertiary,
@@ -784,7 +785,7 @@ class _HomeScreenState extends State<HomeScreen> {
                           alignment: Alignment.center,
                           children: [
                             Material(
-                              elevation: 10,
+                              elevation: 5,
                               shape: const CircleBorder(),
                               child: CircleAvatar(
                                 radius: 45,

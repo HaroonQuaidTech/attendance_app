@@ -68,7 +68,7 @@ class _DailyAttendanceState extends State<DailyAttendance> {
       );
       if (checkInTime.isBefore(eightAM) ||
           checkInTime.isAtSameMomentAs(eightAM)) {
-        boxColor = CustomTheme.theme.colorScheme.surface;
+        boxColor = CustomTheme.theme.colorScheme.inversePrimary;
       } else {
         boxColor = CustomTheme.theme.colorScheme.primary;
       }
@@ -130,16 +130,20 @@ class _DailyAttendanceState extends State<DailyAttendance> {
               Text(
                 checkInTimeFormatted,
                 style: const TextStyle(
-                    fontSize: 16,
-                    fontWeight: FontWeight.w600,
-                    color: Colors.black),
+                  fontSize: 16,
+                  fontWeight: FontWeight.w600,
+                  color: Colors.black,
+                  height: 0,
+                ),
               ),
+              const SizedBox(height: 5),
               const Text(
                 'Check In',
                 style: TextStyle(
                   fontSize: 10,
                   fontWeight: FontWeight.w600,
                   color: Colors.black,
+                  height: 0,
                 ),
               ),
             ],
@@ -158,14 +162,17 @@ class _DailyAttendanceState extends State<DailyAttendance> {
                   fontSize: 16,
                   fontWeight: FontWeight.w600,
                   color: Colors.black,
+                  height: 0,
                 ),
               ),
+              const SizedBox(height: 5),
               const Text(
                 'Check Out',
                 style: TextStyle(
                   fontSize: 10,
                   fontWeight: FontWeight.w600,
                   color: Colors.black,
+                  height: 0,
                 ),
               ),
             ],
@@ -181,16 +188,21 @@ class _DailyAttendanceState extends State<DailyAttendance> {
               Text(
                 totalHours,
                 style: const TextStyle(
-                    fontSize: 16,
-                    fontWeight: FontWeight.w600,
-                    color: Colors.black),
+                  fontSize: 16,
+                  fontWeight: FontWeight.w600,
+                  color: Colors.black,
+                  height: 0,
+                ),
               ),
+              const SizedBox(height: 5),
               const Text(
                 'Total Hrs',
                 style: TextStyle(
-                    fontSize: 10,
-                    fontWeight: FontWeight.w600,
-                    color: Colors.black),
+                  fontSize: 10,
+                  fontWeight: FontWeight.w600,
+                  color: Colors.black,
+                  height: 0,
+                ),
               ),
             ],
           )
