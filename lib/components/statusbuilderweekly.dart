@@ -309,7 +309,7 @@ class _StatusBuilerState extends State<StatusBuilderWeekly> {
         Text(
           label,
           style: const TextStyle(
-            fontSize: 10  ,
+            fontSize: 10,
             fontWeight: FontWeight.w600,
             color: Colors.black,
             height: 0,

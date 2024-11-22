@@ -333,7 +333,9 @@ class _GraphicalbuilerState extends State<GraphicalbuilderWeekly> {
                             height: 18,
                             width: 16,
                             decoration:
-                                const BoxDecoration(color: Color(0xff9478F7)),
+                                 BoxDecoration( color: Theme.of(context)
+                                            .colorScheme
+                                            .primary,),
                           ),
                           const SizedBox(width: 10),
                           const Text(
@@ -436,7 +438,9 @@ class _GraphicalbuilerState extends State<GraphicalbuilderWeekly> {
                                     toY: weeklyHours[day] ?? 0,
                                     color: (weeklyHours[day] ?? 0) == 0
                                         ? Colors.red
-                                        : const Color(0xff9478F7),
+                                        : Theme.of(context)
+                                            .colorScheme
+                                            .primary,
                                     width: 22,
                                     backDrawRodData:
                                         (weeklyHours[day] ?? 0) == 0
