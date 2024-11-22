@@ -317,8 +317,9 @@ class _GraphicalbuilerState extends State<GraphicalbuilderMonthly> {
                         Container(
                           height: 18,
                           width: 16,
-                          decoration:
-                              const BoxDecoration(color: Color(0xff9478F7)),
+                          decoration: BoxDecoration(
+                            color: Theme.of(context).colorScheme.primary,
+                          ),
                         ),
                         const SizedBox(width: 10),
                         const Text(
@@ -404,7 +405,7 @@ class _GraphicalbuilerState extends State<GraphicalbuilderMonthly> {
                             BarChartGroupData(x: 0, barRods: [
                               BarChartRodData(
                                 toY: monthlyHours["Week 1"]!,
-                                color: const Color(0xff9478F7),
+                                color: Theme.of(context).colorScheme.primary,
                                 width: 22,
                                 backDrawRodData: BackgroundBarChartRodData(
                                   show: true,
@@ -416,7 +417,9 @@ class _GraphicalbuilerState extends State<GraphicalbuilderMonthly> {
                             BarChartGroupData(x: 1, barRods: [
                               BarChartRodData(
                                 toY: monthlyHours["Week 2"]!,
-                                color: const Color(0xff9478F7),
+                                 color: Theme.of(context)
+                                            .colorScheme
+                                            .primary,
                                 width: 22,
                                 backDrawRodData: BackgroundBarChartRodData(
                                   show: true,
@@ -428,7 +431,9 @@ class _GraphicalbuilerState extends State<GraphicalbuilderMonthly> {
                             BarChartGroupData(x: 2, barRods: [
                               BarChartRodData(
                                 toY: monthlyHours["Week 3"]!,
-                                color: const Color(0xff9478F7),
+                          color: Theme.of(context)
+                                            .colorScheme
+                                            .primary,
                                 width: 22,
                                 backDrawRodData: BackgroundBarChartRodData(
                                   show: true,
@@ -440,7 +445,9 @@ class _GraphicalbuilerState extends State<GraphicalbuilderMonthly> {
                             BarChartGroupData(x: 3, barRods: [
                               BarChartRodData(
                                 toY: monthlyHours["Week 4"]!,
-                                color: const Color(0xff9478F7),
+                     color: Theme.of(context)
+                                            .colorScheme
+                                            .primary,
                                 width: 22,
                                 backDrawRodData: BackgroundBarChartRodData(
                                   show: true,
@@ -452,7 +459,7 @@ class _GraphicalbuilerState extends State<GraphicalbuilderMonthly> {
                             BarChartGroupData(x: 4, barRods: [
                               BarChartRodData(
                                 toY: monthlyHours["Week 5"]!,
-                                color: const Color(0xff9478F7),
+                                color: Theme.of(context).colorScheme.primary,
                                 width: 22,
                                 backDrawRodData: BackgroundBarChartRodData(
                                   show: true,
