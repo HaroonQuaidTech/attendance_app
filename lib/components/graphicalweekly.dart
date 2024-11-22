@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:pie_chart/pie_chart.dart';
 import 'package:intl/intl.dart';
 import 'package:fl_chart/fl_chart.dart' hide PieChart;
+import 'package:quaidtech/main.dart';
 
 class GraphicalbuilderWeekly extends StatefulWidget {
   const GraphicalbuilderWeekly({super.key});
@@ -86,8 +87,8 @@ class _GraphicalbuilerState extends State<GraphicalbuilderWeekly> {
       "Present": 0,
       "Absent": 0,
       "On Time": 0,
-      "Late Arrival": 0,
       "Early Out": 0,
+      "Late Arrival": 0,
     };
 
     for (var entry in data) {
@@ -108,16 +109,17 @@ class _GraphicalbuilerState extends State<GraphicalbuilderWeekly> {
                 (weeklyHoursss["Abesnt"] ?? 0) + duration.inHours.toDouble();
             break;
           case 3:
+            weeklyHoursss["On Time"] =
+                (weeklyHoursss["On Time"] ?? 0) + duration.inHours.toDouble();
+            break;
+          case 4:
             weeklyHoursss["Early Out"] =
                 (weeklyHoursss["Early Out"] ?? 0) + duration.inHours.toDouble();
             break;
-          case 4:
-            weeklyHoursss["Late Arrival"] =
-                (weeklyHoursss["Fri"] ?? 0) + duration.inHours.toDouble();
-            break;
           case 5:
-            weeklyHoursss["On Time"] =
-                (weeklyHoursss["On Time"] ?? 0) + duration.inHours.toDouble();
+            weeklyHoursss["Late Arrival"] =
+                (weeklyHoursss["Late Arrival"] ?? 0) +
+                    duration.inHours.toDouble();
             break;
         }
       }
@@ -131,8 +133,8 @@ class _GraphicalbuilerState extends State<GraphicalbuilderWeekly> {
     Map<String, double> attendanceStats = {
       "Present": 0,
       "Absent": 0,
-      "Early Out": 0,
       "On Time": 0,
+      "Early Out": 0,
       "Late Arrival": 0,
     };
 
@@ -174,7 +176,7 @@ class _GraphicalbuilerState extends State<GraphicalbuilderWeekly> {
         DateTime checkInTime = (entry['checkIn'] as Timestamp).toDate();
 
         if (checkInTime.isAfter(DateTime(
-            checkInTime.year, checkInTime.month, checkInTime.day, 8, 15))) {
+            checkInTime.year, checkInTime.month, checkInTime.day, 8, 16))) {
           lateCount++;
         }
       }
@@ -222,7 +224,7 @@ class _GraphicalbuilerState extends State<GraphicalbuilderWeekly> {
 
         // Check if the check-in is between 7:50 and 8:10 for "On Time"
         if ((checkInTime.hour == 7 && checkInTime.minute >= 50) ||
-            (checkInTime.hour == 8 && checkInTime.minute <= 10)) {
+            (checkInTime.hour == 8 && checkInTime.minute <= 16)) {
           onTimeCount++;
         }
       }
@@ -244,9 +246,9 @@ class _GraphicalbuilerState extends State<GraphicalbuilderWeekly> {
   Map<String, double> weeklyHoursss = {
     'Present': 0, // hours present
     'Absent': 0, // days absent
-    'Late Arrival': 0, // late days
-    'Early Out': 0, // early check-outs
     'On Time': 0, // early on time
+    'Early Out': 0, // early check-outs
+    'Late Arrival': 0, // late days
   };
   @override
   void initState() {
@@ -266,223 +268,193 @@ class _GraphicalbuilerState extends State<GraphicalbuilderWeekly> {
   @override
   Widget build(BuildContext context) {
     return FutureBuilder<List<Map<String, dynamic>>?>(
-        future: fetchWeeklyAttendance(userId),
-        builder: (context, snapshot) {
-          if (snapshot.connectionState == ConnectionState.waiting) {
-            return const Padding(
-              padding: EdgeInsets.only(top: 240.0),
-              child: CircularProgressIndicator(),
-            );
-          } else if (snapshot.hasError) {
-            return const Text('Error loading data');
-          } else if (!snapshot.hasData || snapshot.data!.isEmpty) {
-            return const Padding(
-              padding: EdgeInsets.only(top: 80.0),
-              child: Text('No attendance data available'),
-            );
-          }
-
-          // Get the weekly hours
-          Map<int, double> weeklyHours = calculateWeeklyHourss(snapshot.data!);
-
-          Map<String, double> pieChartData = {
-            'Present': getPresentCount(snapshot.data!).toDouble(),
-            'Absent': getAbsentCount(snapshot.data!).toDouble(),
-            'Late Arrival': getLateArrivalCount(snapshot.data!).toDouble(),
-            'Early Out': getEarlyOutCount(snapshot.data!).toDouble(),
-            'On Time': getOnTimeCount(snapshot.data!).toDouble(),
-          };
-
-          return Container(
-            decoration: BoxDecoration(
-              borderRadius: BorderRadius.circular(12),
-            ),
-            child: Column(children: [
-              const SizedBox(
-                height: 20,
-              ),
-              Container(
-                height: 482,
-                width: double.infinity,
-                decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(20),
-                  color: const Color(0xffEFF1FF),
-                  boxShadow: [
-                    BoxShadow(
-                      color: Colors.grey.withOpacity(0.2),
-                      spreadRadius: 2,
-                      blurRadius: 4,
-                      offset: const Offset(0, 2), // changes position of shadow
-                    ),
-                  ],
+      future: fetchWeeklyAttendance(userId),
+      builder: (context, snapshot) {
+        if (snapshot.connectionState == ConnectionState.waiting) {
+          return const Padding(
+            padding: EdgeInsets.only(top: 240.0),
+            child: CircularProgressIndicator(),
+          );
+        } else if (snapshot.hasError) {
+          return const Text('Error loading data');
+        } else if (!snapshot.hasData || snapshot.data!.isEmpty) {
+          return Center(
+            child: Column(
+              children: [
+                const SizedBox(height: 30),
+                const Icon(
+                  Icons.warning,
+                  color: Colors.grey,
+                  size: 50,
                 ),
-                child: Padding(
-                  padding: const EdgeInsets.symmetric(
-                      horizontal: 10.0, vertical: 10.0),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      const Text(
-                        'Weekly',
-                        style: TextStyle(
-                            fontWeight: FontWeight.w600, fontSize: 18),
+                const SizedBox(height: 5),
+                Text(
+                  "No Data Available",
+                  style: TextStyle(
+                    fontWeight: FontWeight.bold,
+                    height: 0,
+                    fontSize: 20,
+                    color: Colors.grey[400],
+                  ),
+                ),
+                const SizedBox(height: 30),
+              ],
+            ),
+          );
+        }
+
+  
+        Map<int, double> weeklyHours = calculateWeeklyHourss(snapshot.data!);
+
+        Map<String, double> pieChartData = {
+          'Present': getPresentCount(snapshot.data!).toDouble(),
+          'Absent': getAbsentCount(snapshot.data!).toDouble(),
+          'On Time': getOnTimeCount(snapshot.data!).toDouble(),
+          'Early Out': getEarlyOutCount(snapshot.data!).toDouble(),
+          'Late Arrival': getLateArrivalCount(snapshot.data!).toDouble(),
+        };
+
+        return Column(
+          children: [
+            const SizedBox(height: 20),
+            Material(
+              borderRadius: BorderRadius.circular(20),
+              color: Theme.of(context).colorScheme.tertiary,
+              elevation: 5,
+              child: Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 10),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    const SizedBox(height: 20),
+                    const Text(
+                      'Weekly',
+                      style: TextStyle(
+                        fontWeight: FontWeight.w600,
+                        fontSize: 18,
+                        height: 0,
                       ),
-                      Row(
-                        children: [
-                          Container(
-                            height: 18,
-                            width: 16,
-                            decoration:
-                                 BoxDecoration( color: Theme.of(context)
-                                            .colorScheme
-                                            .primary,),
+                    ),
+                    const SizedBox(height: 10),
+                    Row(
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      children: [
+                        Container(
+                          height: 18,
+                          width: 16,
+                          decoration: BoxDecoration(
+                            color: Theme.of(context).colorScheme.primary,
                           ),
-                          const SizedBox(width: 10),
-                          const Text(
-                            'TAT (Turn Around Time)',
-                            style: TextStyle(
-                                fontWeight: FontWeight.w600, fontSize: 18),
+                        ),
+                        const SizedBox(width: 10),
+                        const Text(
+                          'TAT (Turn Around Time)',
+                          style: TextStyle(
+                            fontWeight: FontWeight.w400,
+                            fontSize: 18,
+                            height: 0,
                           ),
-                        ],
-                      ),
-                      const SizedBox(height: 20),
-                      Expanded(
-                        child: BarChart(
-                          BarChartData(
-                            alignment: BarChartAlignment.spaceAround,
-                            maxY: 9,
-                            barTouchData: BarTouchData(enabled: false),
-                            titlesData: FlTitlesData(
-                              leftTitles: AxisTitles(
-                                sideTitles: SideTitles(
-                                  showTitles: true,
-                                  getTitlesWidget: (value, meta) {
-                                    return Text('${value.toInt()}H',
-                                        style: const TextStyle(
-                                            color: Colors.black,
-                                            fontSize: 15,
-                                            fontWeight: FontWeight.w600));
-                                  },
-                                  reservedSize: 28,
-                                  interval: 1,
-                                ),
-                              ),
-                              bottomTitles: AxisTitles(
-                                sideTitles: SideTitles(
-                                  showTitles: true,
-                                  getTitlesWidget: (value, meta) {
-                                    int dayIndex = value.toInt();
-                                    bool hasData =
-                                        (weeklyHours[dayIndex + 1] ?? 0) > 0;
-
-                                    int currentDayOfWeek =
-                                        DateTime.now().weekday;
-
-                                    bool isPastOrCurrentDay =
-                                        dayIndex < currentDayOfWeek;
-
-                                    Color textColor = isPastOrCurrentDay
-                                        ? (hasData ? Colors.black : Colors.red)
-                                        : Colors.grey;
-
-                                    switch (dayIndex) {
-                                      case 0:
-                                        return Text('Mon',
-                                            style: TextStyle(
-                                                color: textColor,
-                                                fontSize: 15,
-                                                fontWeight: FontWeight.w600));
-                                      case 1:
-                                        return Text('Tue',
-                                            style: TextStyle(
-                                                color: textColor,
-                                                fontSize: 15,
-                                                fontWeight: FontWeight.w600));
-                                      case 2:
-                                        return Text('Wed',
-                                            style: TextStyle(
-                                                color: textColor,
-                                                fontSize: 15,
-                                                fontWeight: FontWeight.w600));
-                                      case 3:
-                                        return Text('Thur',
-                                            style: TextStyle(
-                                                color: textColor,
-                                                fontSize: 15,
-                                                fontWeight: FontWeight.w600));
-                                      case 4:
-                                        return Text('Fri',
-                                            style: TextStyle(
-                                                color: textColor,
-                                                fontSize: 15,
-                                                fontWeight: FontWeight.w600));
-                                      default:
-                                        return const Text('');
-                                    }
-                                  },
-                                ),
-                              ),
-                              topTitles: const AxisTitles(
-                                sideTitles: SideTitles(showTitles: false),
-                              ),
-                              rightTitles: const AxisTitles(
-                                sideTitles: SideTitles(showTitles: false),
+                        ),
+                      ],
+                    ),
+                    const SizedBox(height: 20),
+                    SizedBox(
+                      height: 400,
+                      child: BarChart(
+                        BarChartData(
+                          maxY: 9,
+                          barTouchData: BarTouchData(enabled: false),
+                          titlesData: FlTitlesData(
+                            leftTitles: AxisTitles(
+                              sideTitles: SideTitles(
+                                showTitles: true,
+                                getTitlesWidget: (value, meta) {
+                                  return Text(
+                                    '${value.toInt()}H',
+                                    style: const TextStyle(
+                                      color: Colors.black,
+                                      fontSize: 15,
+                                      fontWeight: FontWeight.w600,
+                                      height: 0,
+                                    ),
+                                  );
+                                },
+                                reservedSize: 28,
+                                interval: 1,
                               ),
                             ),
-                            borderData: FlBorderData(show: false),
-                            gridData: const FlGridData(show: false),
-                            barGroups: [
-                              for (int day = 1; day <= 5; day++)
-                                BarChartGroupData(x: day - 1, barRods: [
+                            bottomTitles: AxisTitles(
+                              sideTitles: SideTitles(
+                                showTitles: true,
+                                reservedSize: 60,
+                                getTitlesWidget: (value, meta) {
+                                  return Column(
+                                    mainAxisSize: MainAxisSize.min,
+                                    children: [
+                                      const SizedBox(height: 30),
+                                      Text(
+                                        [
+                                          'Mon',
+                                          'Tue',
+                                          'Wed',
+                                          'Thur',
+                                          'Fri'
+                                        ][value.toInt()],
+                                        style: const TextStyle(
+                                          fontSize: 14,
+                                          fontWeight: FontWeight.w600,
+                                          height: 0,
+                                        ),
+                                      ),
+                                    ],
+                                  );
+                                },
+                              ),
+                            ),
+                            topTitles: const AxisTitles(
+                              sideTitles: SideTitles(showTitles: false),
+                            ),
+                            rightTitles: const AxisTitles(
+                              sideTitles: SideTitles(showTitles: false),
+                            ),
+                          ),
+                          borderData: FlBorderData(show: false),
+                          gridData: const FlGridData(show: false),
+                          barGroups: [
+                            for (int day = 1; day <= 5; day++)
+                              BarChartGroupData(
+                                x: day - 1,
+                                barRods: [
                                   BarChartRodData(
                                     toY: weeklyHours[day] ?? 0,
                                     color: (weeklyHours[day] ?? 0) == 0
                                         ? Colors.red
-                                        : Theme.of(context)
-                                            .colorScheme
-                                            .primary,
-                                    width: 22,
-                                    backDrawRodData:
-                                        (weeklyHours[day] ?? 0) == 0
-                                            ? BackgroundBarChartRodData(
-                                                show: false,
-                                              )
-                                            : BackgroundBarChartRodData(
-                                                show: true,
-                                                toY: 9,
-                                                color: Colors.white,
-                                              ),
+                                        : Theme.of(context).colorScheme.primary,
+                                    width: 30,
+                                    backDrawRodData: BackgroundBarChartRodData(
+                                      show: (weeklyHours[day] ?? 0) != 0,
+                                      toY: 9,
+                                      color: Colors.white,
+                                    ),
                                   )
-                                ]),
-                            ],
-                          ),
+                                ],
+                              ),
+                          ],
                         ),
                       ),
-                      const SizedBox(height: 14),
-
-                      //----------------------dot indicators--------------------------------
-                    ],
-                  ),
-                ),
-              ),
-              const SizedBox(
-                height: 24,
-              ),
-              Container(
-                padding: const EdgeInsets.all(12),
-                width: double.infinity,
-                decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(20),
-                  color: const Color(0xffEFF1FF),
-                  boxShadow: [
-                    BoxShadow(
-                      color: Colors.grey.withOpacity(0.2),
-                      spreadRadius: 2,
-                      blurRadius: 4,
-                      offset: const Offset(0, 2),
-                    ),
+                    )
                   ],
                 ),
+              ),
+            ),
+            const SizedBox(height: 20),
+            Material(
+              borderRadius: BorderRadius.circular(20),
+              color: Theme.of(context).colorScheme.tertiary,
+              elevation: 5,
+              child: Padding(
+                padding:
+                    const EdgeInsets.symmetric(horizontal: 20, vertical: 20),
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.center,
                   crossAxisAlignment: CrossAxisAlignment.start,
@@ -492,19 +464,42 @@ class _GraphicalbuilerState extends State<GraphicalbuilderWeekly> {
                       style: TextStyle(
                         fontSize: 20,
                         fontWeight: FontWeight.w600,
+                        height: 0,
                       ),
                     ),
                     const SizedBox(height: 20),
                     pieChartData.isEmpty
-                        ? const Center(child: Text('No data available'))
+                        ? Center(
+                            child: Column(
+                              children: [
+                                const SizedBox(height: 30),
+                                const Icon(
+                                  Icons.warning,
+                                  color: Colors.grey,
+                                  size: 50,
+                                ),
+                                const SizedBox(height: 5),
+                                Text(
+                                  "No Data Available",
+                                  style: TextStyle(
+                                    fontWeight: FontWeight.bold,
+                                    height: 0,
+                                    fontSize: 20,
+                                    color: Colors.grey[400],
+                                  ),
+                                ),
+                                const SizedBox(height: 30),
+                              ],
+                            ),
+                          )
                         : PieChart(
                             dataMap: pieChartData,
-                            colorList: const [
-                              Color(0xff9478F7), // Present
-                              Color(0xffEC5851), // Absent
-                              Color(0xffF6C15B), // Late Arrival
-                              Color(0xffF07E25), // EARLY OUT
-                              Color(0xff22AF41), //oN TIME
+                            colorList: [
+                              CustomTheme.theme.colorScheme.surface,
+                              CustomTheme.theme.colorScheme.secondary,
+                              CustomTheme.theme.colorScheme.inversePrimary,
+                              CustomTheme.theme.colorScheme.tertiary,
+                              CustomTheme.theme.colorScheme.primary,
                             ],
                             chartRadius:
                                 MediaQuery.of(context).size.width / 1.7,
@@ -512,9 +507,11 @@ class _GraphicalbuilerState extends State<GraphicalbuilderWeekly> {
                               legendPosition: LegendPosition.top,
                               showLegendsInRow: true,
                               showLegends: true,
-                              legendShape: BoxShape.circle,
+                              legendShape: BoxShape.rectangle,
                               legendTextStyle: TextStyle(
-                                fontWeight: FontWeight.bold,
+                                fontWeight: FontWeight.w500,
+                                fontSize: 15,
+                                height: 0,
                               ),
                             ),
                             chartValuesOptions: const ChartValuesOptions(
@@ -524,8 +521,11 @@ class _GraphicalbuilerState extends State<GraphicalbuilderWeekly> {
                   ],
                 ),
               ),
-            ]),
-          );
-        });
+            ),
+            const SizedBox(height: 20)
+          ],
+        );
+      },
+    );
   }
 }

@@ -134,7 +134,7 @@ class _StatusBuilerState extends State<StatusBuilderWeekly> {
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
               Container(
-                width: 53,
+                width: 55,
                 height: 55,
                 decoration: BoxDecoration(
                     color: Colors.red, borderRadius: BorderRadius.circular(6)),
@@ -145,10 +145,13 @@ class _StatusBuilerState extends State<StatusBuilderWeekly> {
                     Text(
                       formattedDate,
                       style: const TextStyle(
-                          fontSize: 22,
-                          fontWeight: FontWeight.w600,
-                          color: Colors.white),
+                        fontSize: 22,
+                        fontWeight: FontWeight.w600,
+                        color: Colors.white,
+                        height: 0,
+                      ),
                     ),
+                    const SizedBox(height: 5),
                     Text(
                       day,
                       style: const TextStyle(
@@ -165,7 +168,11 @@ class _StatusBuilerState extends State<StatusBuilderWeekly> {
             padding: EdgeInsets.only(left: 50.0),
             child: Text(
               'Leave/Day off',
-              style: TextStyle(fontSize: 22, fontWeight: FontWeight.bold),
+              style: TextStyle(
+                fontSize: 22,
+                fontWeight: FontWeight.bold,
+                height: 0,
+              ),
             ),
           )
         ],
@@ -234,7 +241,7 @@ class _StatusBuilerState extends State<StatusBuilderWeekly> {
       if (checkInTime.hour < onTime.hour ||
           (checkInTime.hour == onTime.hour &&
               checkInTime.minute <= onTime.minute)) {
-        containerColor = CustomTheme.theme.colorScheme.surface;
+        containerColor = CustomTheme.theme.colorScheme.inversePrimary;
       } else if (checkInTime.hour > lateArrival.hour ||
           (checkInTime.hour == lateArrival.hour &&
               checkInTime.minute >= lateArrival.minute)) {
@@ -306,6 +313,7 @@ class _StatusBuilerState extends State<StatusBuilderWeekly> {
             height: 0,
           ),
         ),
+        const SizedBox(height: 5),
         Text(
           label,
           style: const TextStyle(

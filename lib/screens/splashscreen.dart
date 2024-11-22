@@ -10,7 +10,7 @@ class Splashscreen extends StatefulWidget {
 
 class _SplashscreenState extends State<Splashscreen> {
   void _checkUserLogin() async {
-    await Future.delayed(const Duration(seconds: 1));
+    await Future.delayed(const Duration(seconds: 5));
 
     User? user = FirebaseAuth.instance.currentUser;
 
@@ -32,7 +32,7 @@ class _SplashscreenState extends State<Splashscreen> {
     return Scaffold(
       body: Center(
         child: Image.asset(
-          'assets/splash_screen.jpg',
+          'assets/splash_screen.png',
           fit: BoxFit.cover,
           width: double.infinity,
           height: double.infinity,
