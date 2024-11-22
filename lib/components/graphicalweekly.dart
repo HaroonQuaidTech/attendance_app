@@ -466,7 +466,6 @@ class _GraphicalbuilerState extends State<GraphicalbuilderWeekly> {
               ),
               Container(
                 padding: const EdgeInsets.all(12),
-                height: 430,
                 width: double.infinity,
                 decoration: BoxDecoration(
                   borderRadius: BorderRadius.circular(20),
