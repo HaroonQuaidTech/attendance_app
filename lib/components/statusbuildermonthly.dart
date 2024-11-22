@@ -576,7 +576,7 @@ class _StatusBuilerState extends State<StatusBuilderMonthly> {
                                       LinearProgressIndicator(
                                         value: totalMinutes / maxMinutes,
                                         backgroundColor: Colors.grey[300],
-                                        color: const Color(0xff9478F7),
+                                 color: Theme.of(context).colorScheme.primary,
                                       ),
                                       Text(
                                         getCurrentMonthDateRange(),
@@ -619,7 +619,7 @@ class _StatusBuilerState extends State<StatusBuilderMonthly> {
                                       LinearProgressIndicator(
                                         value: progressValue,
                                         backgroundColor: Colors.grey[300],
-                                        color: const Color(0xff9478F7),
+                                      color: Theme.of(context).colorScheme.primary,
                                       ),
                                       Text(
                                         getCurrentMonthDateRange(),

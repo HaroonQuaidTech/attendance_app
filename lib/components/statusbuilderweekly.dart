@@ -5,7 +5,14 @@ import 'package:intl/intl.dart';
 import 'package:quaidtech/main.dart';
 
 class StatusBuilderWeekly extends StatefulWidget {
-  const StatusBuilderWeekly({super.key});
+    final String month;
+  final String year;
+  const StatusBuilderWeekly
+  ({
+      super.key,
+    required this.month,
+    required this.year,
+  });
   @override
   State<StatusBuilderWeekly> createState() => _StatusBuilerState();
 }

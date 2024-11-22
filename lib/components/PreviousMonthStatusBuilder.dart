@@ -80,8 +80,8 @@ class _PreviousMonthlyAttendanceState extends State<PreviousMonthlyAttendance> {
           DateTime(year, month + 1, 0); // last day of the month
 
       // Format the date range
-      String startDate = DateFormat('MMMM dd').format(firstDayOfMonth);
-      String endDate = DateFormat('MMMM dd').format(lastDayOfMonth);
+      String startDate = DateFormat('MMM dd').format(firstDayOfMonth);
+      String endDate = DateFormat('MMM dd').format(lastDayOfMonth);
 
       return '$startDate - $endDate';
     }
@@ -467,114 +467,7 @@ class _PreviousMonthlyAttendanceState extends State<PreviousMonthlyAttendance> {
         child: Column(
           mainAxisSize: MainAxisSize.min,
           children: [
-            Container(
-              height: 130,
-              width: double.infinity,
-              decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(20),
-                color: const Color(0xffEFF1FF),
-                boxShadow: [
-                  BoxShadow(
-                    color: Colors.grey.withOpacity(0.2),
-                    spreadRadius: 2,
-                    blurRadius: 4,
-                    offset: const Offset(0, 2),
-                  ),
-                ],
-              ),
-              child: Padding(
-                padding: const EdgeInsets.symmetric(
-                    horizontal: 10.0, vertical: 10.0),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    const Text(
-                      'Monthly filter log ',
-                      style:
-                          TextStyle(fontWeight: FontWeight.w600, fontSize: 18),
-                    ),
-                    const SizedBox(height: 10),
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        Expanded(
-                          child: Container(
-                            height: 50,
-                            padding: const EdgeInsets.symmetric(horizontal: 10),
-                            decoration: BoxDecoration(
-                              color: Colors.white,
-                              borderRadius: BorderRadius.circular(12),
-                              boxShadow: [
-                                BoxShadow(
-                                  color: Colors.grey.withOpacity(0.2),
-                                  spreadRadius: 2,
-                                  blurRadius: 4,
-                                  offset: const Offset(0, 2),
-                                ),
-                              ],
-                            ),
-                            child: DropdownButton<String>(
-                              value: selectedMonth,
-                              hint: const Text("Select Month"),
-                              isExpanded: true,
-                              underline: const SizedBox(),
-                              items: months.map((month) {
-                                return DropdownMenuItem(
-                                  value: month,
-                                  child: Text(DateFormat('MMMM')
-                                      .format(DateTime(0, int.parse(month)))),
-                                );
-                              }).toList(),
-                              onChanged: (value) {
-                                setState(() {
-                                  selectedMonth = value;
-                                });
-                              },
-                            ),
-                          ),
-                        ),
-                        const SizedBox(width: 16),
-                        Expanded(
-                          child: Container(
-                            height: 50,
-                            padding: const EdgeInsets.symmetric(horizontal: 10),
-                            decoration: BoxDecoration(
-                              color: Colors.white,
-                              borderRadius: BorderRadius.circular(12),
-                              boxShadow: [
-                                BoxShadow(
-                                  color: Colors.grey.withOpacity(0.2),
-                                  spreadRadius: 2,
-                                  blurRadius: 4,
-                                  offset: const Offset(0, 2),
-                                ),
-                              ],
-                            ),
-                            child: DropdownButton<String>(
-                              value: selectedYear,
-                              hint: const Text("Select Year"),
-                              isExpanded: true,
-                              underline: const SizedBox(),
-                              items: years.map((year) {
-                                return DropdownMenuItem(
-                                  value: year,
-                                  child: Text(year),
-                                );
-                              }).toList(),
-                              onChanged: (value) {
-                                setState(() {
-                                  selectedYear = value;
-                                });
-                              },
-                            ),
-                          ),
-                        ),
-                      ],
-                    ),
-                  ],
-                ),
-              ),
-            ),
+            
             const SizedBox(height: 20),
             FutureBuilder<List<Map<String, dynamic>>>(
               future: selectedMonth != null && selectedYear != null
@@ -600,7 +493,6 @@ class _PreviousMonthlyAttendanceState extends State<PreviousMonthlyAttendance> {
 
                 final attendanceData = snapshot.data!;
 
-                // Calculate total working minutes
                 int totalMinutes = 0;
 
                 for (var entry in attendanceData) {
@@ -619,27 +511,12 @@ class _PreviousMonthlyAttendanceState extends State<PreviousMonthlyAttendance> {
                 int totalHours = totalMinutes ~/ 60;
                 double progressValueInHours =
                     maxHours != 0 ? totalHours / maxHours : 0.0;
-                // Convert total minutes into total hours and total minutes separately
-                // Full hours
-// Remaining minutes
 
-                // Convert total hours into total minutes
                 int totalMinutesFromHours = totalHours * 60;
                 return Column(children: [
-                  Container(
-                    width: double.infinity,
-                    decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(20),
-                      color: const Color(0xffEFF1FF),
-                      boxShadow: [
-                        BoxShadow(
-                          color: Colors.grey.withOpacity(0.2),
-                          spreadRadius: 2,
-                          blurRadius: 4,
-                          offset: const Offset(0, 2),
-                        ),
-                      ],
-                    ),
+                  Material(
+                    borderRadius: BorderRadius.circular(20),
+                    color: Theme.of(context).colorScheme.tertiary,
                     child: Padding(
                       padding: const EdgeInsets.symmetric(
                           horizontal: 10.0, vertical: 10.0),
@@ -678,7 +555,7 @@ class _PreviousMonthlyAttendanceState extends State<PreviousMonthlyAttendance> {
                                             fontSize: 14),
                                       ),
                                       Text(
-                                        '$totalMinutesFromHours mins',
+                                        '$totalMinutesFromHours Minutes',
                                         style: const TextStyle(
                                             fontWeight: FontWeight.w600,
                                             fontSize: 20),
@@ -686,7 +563,9 @@ class _PreviousMonthlyAttendanceState extends State<PreviousMonthlyAttendance> {
                                       LinearProgressIndicator(
                                         value: totalMinutes / maxMinutes,
                                         backgroundColor: Colors.grey[300],
-                                        color: const Color(0xff9478F7),
+                                        color: Theme.of(context)
+                                            .colorScheme
+                                            .primary,
                                       ),
                                       Text(
                                         _getMonthDateRange(),
@@ -721,7 +600,7 @@ class _PreviousMonthlyAttendanceState extends State<PreviousMonthlyAttendance> {
                                             fontSize: 14),
                                       ),
                                       Text(
-                                        '$totalHours hrs',
+                                        '$totalHours Hours',
                                         style: const TextStyle(
                                             fontWeight: FontWeight.w600,
                                             fontSize: 20),
@@ -729,7 +608,9 @@ class _PreviousMonthlyAttendanceState extends State<PreviousMonthlyAttendance> {
                                       LinearProgressIndicator(
                                         value: progressValueInHours,
                                         backgroundColor: Colors.grey[300],
-                                        color: const Color(0xff9478F7),
+                                        color: Theme.of(context)
+                                            .colorScheme
+                                            .primary,
                                       ),
                                       Text(
                                         _getMonthDateRange(),
@@ -748,26 +629,26 @@ class _PreviousMonthlyAttendanceState extends State<PreviousMonthlyAttendance> {
                     ),
                   ),
                   const SizedBox(height: 20),
-                  Container(
-                    padding: const EdgeInsets.symmetric(
-                        horizontal: 12, vertical: 10),
-                    decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(20),
-                      color: const Color(0xffEFF1FF),
-                    ),
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Text(
-                          'Selected Month Date Range: ${_getMonthDateRange()}',
-                          style: const TextStyle(
-                              fontWeight: FontWeight.w600, fontSize: 18),
-                        ),
-                        const SizedBox(height: 10),
-                        _buildAttendance(
-                            color: const Color(0xff9478F7),
-                            data: attendanceData),
-                      ],
+                  Material(
+                    color: Theme.of(context).colorScheme.tertiary,
+                    borderRadius: BorderRadius.circular(20),
+                    child: Container(
+                      padding: const EdgeInsets.symmetric(
+                          horizontal: 12, vertical: 10),
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text(
+                            'Month Date Range: ${_getMonthDateRange()}',
+                            style: const TextStyle(
+                                fontWeight: FontWeight.w600, fontSize: 18),
+                          ),
+                          const SizedBox(height: 10),
+                          _buildAttendance(
+                              color: const Color(0xff9478F7),
+                              data: attendanceData),
+                        ],
+                      ),
                     ),
                   )
                 ]);
