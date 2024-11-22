@@ -3,7 +3,6 @@ import 'package:quaidtech/screens/Checkin.dart';
 import 'package:quaidtech/screens/home.dart';
 import 'package:quaidtech/screens/login.dart';
 import 'package:quaidtech/screens/adminhome.dart';
-import 'package:quaidtech/screens/newscreen.dart';
 import 'package:quaidtech/screens/notification.dart';
 import 'package:quaidtech/screens/profile.dart';
 import 'package:quaidtech/screens/signup.dart';
@@ -44,14 +43,12 @@ class _MyAppState extends State<MyApp> {
           fontFamily: 'Kumbh Sans',
           progressIndicatorTheme: const ProgressIndicatorThemeData(
             color: Color(0xffFF6100),
-            
           ),
         ),
         initialRoute: 'splash',
         routes: {
           'login': (context) => const LoginScreen(),
           'signup': (context) => const SignUpScreen(),
-          'nscreen': (context) => const Newscreen(),
           'home': (context) => const HomeScreen(),
           'checkin': (context) => const CheckinScreen(),
           'notification': (context) => const NotificationScreen(),
@@ -59,7 +56,7 @@ class _MyAppState extends State<MyApp> {
           'stat': (context) => const StatsticsScreen(),
           'adminh': (context) => const AdminHomeScreen(),
           'splash': (context) => const Splashscreen(),
-        },
+        },  
       ),
     );
   }

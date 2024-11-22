@@ -64,7 +64,7 @@ class _WeeklyAttendanceState extends State<WeeklyAttendance> {
               statuses.add("Present");
 
               if (checkInTime
-                  .isAfter(DateTime(day.year, day.month, day.day, 8, 10))) {
+                  .isAfter(DateTime(day.year, day.month, day.day, 8, 16))) {
                 statuses.add("Late Arrival");
               }
 
@@ -77,7 +77,7 @@ class _WeeklyAttendanceState extends State<WeeklyAttendance> {
               if (checkInTime
                       .isAfter(DateTime(day.year, day.month, day.day, 7, 50)) &&
                   checkInTime.isBefore(
-                      DateTime(day.year, day.month, day.day, 8, 11))) {
+                      DateTime(day.year, day.month, day.day, 8, 16))) {
                 statuses.add("On Time");
               }
             }
@@ -156,26 +156,25 @@ class _WeeklyAttendanceState extends State<WeeklyAttendance> {
                             .toList()
                         : weeklyData;
 
-    return Column(
-      children: [
-        if (isLoading)
-          const Center(
-            child: CircularProgressIndicator(),
-          )
-        else if (filteredData.isEmpty)
-          const Center(
-            child: Text(
-              "No Data Available",
-              style: TextStyle(
-                fontWeight: FontWeight.bold,
-                height: 0,
+    return SingleChildScrollView(
+      child: Column(
+        children: [
+          if (isLoading)
+            const Center(
+              child: CircularProgressIndicator(),
+            )
+          else if (filteredData.isEmpty)
+            const Center(
+              child: Text(
+                "No Data Available",
+                style: TextStyle(
+                  fontWeight: FontWeight.bold,
+                  height: 0,
+                ),
               ),
-            ),
-          )
-        else
-          Flexible(
-            fit: FlexFit.loose,
-            child: ListView.builder(
+            )
+          else
+            ListView.builder(
                 shrinkWrap: true,
                 itemCount: filteredData.length,
                 itemBuilder: (context, index) {
@@ -209,7 +208,7 @@ class _WeeklyAttendanceState extends State<WeeklyAttendance> {
                           mainAxisAlignment: MainAxisAlignment.center,
                           children: [
                             Container(
-                              width: 53,
+                              width: 55,
                               height: 55,
                               decoration: BoxDecoration(
                                 color: widget.color,
@@ -259,6 +258,7 @@ class _WeeklyAttendanceState extends State<WeeklyAttendance> {
                                 fontSize: 10,
                                 fontWeight: FontWeight.bold,
                                 color: Colors.black,
+                                height: 0,
                               ),
                             ),
                           ],
@@ -277,6 +277,7 @@ class _WeeklyAttendanceState extends State<WeeklyAttendance> {
                                 fontSize: 14,
                                 fontWeight: FontWeight.bold,
                                 color: Colors.black,
+                                height: 0,
                               ),
                             ),
                             const Text(
@@ -285,6 +286,7 @@ class _WeeklyAttendanceState extends State<WeeklyAttendance> {
                                 fontSize: 10,
                                 fontWeight: FontWeight.bold,
                                 color: Colors.black,
+                                height: 0,
                               ),
                             ),
                           ],
@@ -303,6 +305,7 @@ class _WeeklyAttendanceState extends State<WeeklyAttendance> {
                                 fontSize: 14,
                                 fontWeight: FontWeight.bold,
                                 color: Colors.black,
+                                height: 0,
                               ),
                             ),
                             const Text(
@@ -311,6 +314,7 @@ class _WeeklyAttendanceState extends State<WeeklyAttendance> {
                                 fontSize: 10,
                                 fontWeight: FontWeight.bold,
                                 color: Colors.black,
+                                height: 0,
                               ),
                             ),
                           ],
@@ -319,8 +323,8 @@ class _WeeklyAttendanceState extends State<WeeklyAttendance> {
                     ),
                   );
                 }),
-          ),
-      ],
+        ],
+      ),
     );
   }
 }
