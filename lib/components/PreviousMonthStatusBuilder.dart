@@ -215,62 +215,66 @@ class _PreviousMonthlyAttendanceState extends State<PreviousMonthlyAttendance> {
   }
 
   Widget _buildHNullAttendanceContainer(int index) {
-    final DateTime now = DateTime.now();
-    final DateTime firstDayOfMonth = DateTime(now.year, now.month, 1);
-    final DateTime date = firstDayOfMonth.add(Duration(days: index));
-    final String day = DateFormat('EE').format(date);
-    final String formattedDate = DateFormat('dd').format(date);
-    return Container(
-      padding: const EdgeInsets.symmetric(horizontal: 12),
-      margin: const EdgeInsets.only(bottom: 10),
-      height: 82,
-      decoration: BoxDecoration(
-        borderRadius: BorderRadius.circular(12),
-        color: Colors.white,
-      ),
-      child: Row(
-        children: [
-          Container(
-            width: 53,
-            height: 55,
-            decoration: BoxDecoration(
-                color: const Color(0xff8E71DF),
-                borderRadius: BorderRadius.circular(6)),
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              crossAxisAlignment: CrossAxisAlignment.center,
-              children: [
-                Text(
-                  formattedDate,
-                  style: const TextStyle(
-                      fontSize: 22,
-                      fontWeight: FontWeight.w600,
-                      color: Colors.white),
-                ),
-                Text(
-                  day,
-                  style: const TextStyle(
-                    fontSize: 12,
-                    fontWeight: FontWeight.w400,
-                    color: Colors.white,
-                  ),
-                ),
-              ],
-            ),
+  final date = DateTime(DateTime.now().year, DateTime.now().month, 1).add(Duration(days: index));
+  final formattedDate = DateFormat('dd').format(date);
+  final day = DateFormat('EE').format(date);
+
+  return Container(
+    padding: const EdgeInsets.symmetric(horizontal: 12),
+    margin: const EdgeInsets.only(bottom: 10),
+    height: 82,
+    decoration: BoxDecoration(
+      borderRadius: BorderRadius.circular(12),
+      color: Colors.white,
+    ),
+    child: Row(
+      children: [
+        _buildDateBox(formattedDate, day),
+        const SizedBox(width: 30),
+        const Text(
+          'Data Not Available',
+          style: TextStyle(
+            fontSize: 22,
+            fontWeight: FontWeight.bold,
           ),
-          const SizedBox(width: 30),
-          const Text(
-            'Data Not Available',
-            style: TextStyle(
-              fontSize: 22,
-              fontWeight: FontWeight.bold,
-              height: 0,
-            ),
-          )
-        ],
-      ),
-    );
-  }
+        ),
+      ],
+    ),
+  );
+}
+
+Widget _buildDateBox(String date, String day) {
+  return Container(
+    width: 53,
+    height: 55,
+    decoration: BoxDecoration(
+      color: const Color(0xff8E71DF),
+      borderRadius: BorderRadius.circular(6),
+    ),
+    child: Column(
+      mainAxisAlignment: MainAxisAlignment.center,
+      children: [
+        Text(
+          date,
+          style: const TextStyle(
+            fontSize: 22,
+            fontWeight: FontWeight.w600,
+            color: Colors.white,
+          ),
+        ),
+        Text(
+          day,
+          style: const TextStyle(
+            fontSize: 12,
+            fontWeight: FontWeight.w400,
+            color: Colors.white,
+          ),
+        ),
+      ],
+    ),
+  );
+}
+
 
   Widget _buildWeekendContainer(int index) {
     final DateTime now = DateTime.now();
@@ -341,11 +345,11 @@ class _PreviousMonthlyAttendanceState extends State<PreviousMonthlyAttendance> {
               checkInTime.minute >= earlyOnTime.minute) ||
           (checkInTime.hour == lateOnTime.hour &&
               checkInTime.minute <= lateOnTime.minute)) {
-        return const Color(0xff22AF41);
+        return const Color(0xff22AF41); // Green color
       } else if (checkInTime.hour > lateOnTime.hour) {
-        return const Color(0xffF6C15B); 
+        return const Color(0xffF6C15B); // Yellow color
       } else {
-        return const Color(0xff8E71DF);
+        return const Color(0xff8E71DF); // Purple color
       }
     }
     return const Color(0xff8E71DF);
@@ -376,14 +380,14 @@ class _PreviousMonthlyAttendanceState extends State<PreviousMonthlyAttendance> {
           _buildCheckTimeColumn(
               checkIn != null
                   ? DateFormat('hh:mm a')
-                      .format(checkIn) 
+                      .format(checkIn) // Format Check-In Time
                   : 'N/A',
               'Check In'),
           _buildDivider(),
           _buildCheckTimeColumn(
               checkOut != null
                   ? DateFormat('hh:mm a')
-                      .format(checkOut) 
+                      .format(checkOut) // Format Check-Out Time
                   : 'N/A',
               'Check Out'),
           _buildDivider(),
@@ -406,12 +410,12 @@ class _PreviousMonthlyAttendanceState extends State<PreviousMonthlyAttendance> {
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
           Text(
-            formattedDate, 
+            formattedDate, // Display the day of the month
             style: const TextStyle(
                 fontSize: 22, fontWeight: FontWeight.w600, color: Colors.white),
           ),
           Text(
-            day, 
+            day, // Display the day name
             style: const TextStyle(
                 fontSize: 12, fontWeight: FontWeight.w400, color: Colors.white),
           ),

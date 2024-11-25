@@ -179,22 +179,15 @@ class _GraphicalbuilerState extends State<GraphicalbuilderMonthly> {
   }
 
   int getOnTimeCount(List<Map<String, dynamic>> data) {
-    int onTimeCount = 0;
-
-    for (var entry in data) {
+    return data.where((entry) {
       final checkIn = (entry['checkIn'] as Timestamp?)?.toDate();
+      if (checkIn == null) return false;
 
-      if (checkIn != null) {
-        final checkInTime = TimeOfDay.fromDateTime(checkIn);
+      final hour = checkIn.hour;
+      final minute = checkIn.minute;
 
-        if ((checkInTime.hour == 7 && checkInTime.minute >= 50) ||
-            (checkInTime.hour == 8 && checkInTime.minute <= 10)) {
-          onTimeCount++;
-        }
-      }
-    }
-
-    return onTimeCount;
+      return (hour == 7 && minute >= 50) || (hour == 8 && minute <= 10);
+    }).length;
   }
 
   int getAbsentCount(List<dynamic> attendanceData) {
