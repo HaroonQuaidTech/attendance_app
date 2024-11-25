@@ -25,7 +25,7 @@ class _StatusBuilerState extends State<StatusBuilderWeekly> {
     final now = DateTime.now();
     final startOfWeek = now.subtract(Duration(days: now.weekday - 1));
 
-    // Calculate the current day of the week (0 for Monday, 4 for Friday in this case)
+    
     final currentDayOfWeek = now.weekday - 1;
 
     final List<Future<DocumentSnapshot<Map<String, dynamic>>>> snapshotFutures =

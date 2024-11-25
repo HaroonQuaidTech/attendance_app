@@ -44,24 +44,24 @@ class _PreviousMonthlyAttendanceState extends State<PreviousMonthlyAttendance> {
           .get();
     });
 
-    // Wait for all document snapshots
+  
     final snapshots = await Future.wait(snapshotFutures);
 
-    // Process each snapshot
+  
     for (int i = 0; i < snapshots.length; i++) {
       final date = firstDayOfMonth.add(Duration(days: i));
       final formattedDate =
-          DateFormat('MMM d, yyyy').format(date); // Adjusted format
+          DateFormat('MMM d, yyyy').format(date); 
       final snapshot = snapshots[i];
       final data = snapshot.data();
       final checkIn = (data?['checkIn'] as Timestamp?)?.toDate();
 
       if (snapshot.exists && checkIn != null) {
-        monthlyAttendanceList.add(data!); // Add attendance data
+        monthlyAttendanceList.add(data!);
       } else {
         monthlyAttendanceList.add({
           'date': formattedDate,
-          'status': 'Absent', // Mark as Absent if no data found
+          'status': 'Absent',
         });
       }
     }
@@ -74,12 +74,12 @@ class _PreviousMonthlyAttendanceState extends State<PreviousMonthlyAttendance> {
       int month = int.parse(selectedMonth!);
       int year = int.parse(selectedYear!);
 
-      // Get the first and last day of the selected month
+     
       DateTime firstDayOfMonth = DateTime(year, month, 1);
       DateTime lastDayOfMonth =
-          DateTime(year, month + 1, 0); // last day of the month
+          DateTime(year, month + 1, 0); 
 
-      // Format the date range
+    
       String startDate = DateFormat('MMM dd').format(firstDayOfMonth);
       String endDate = DateFormat('MMM dd').format(lastDayOfMonth);
 
@@ -112,7 +112,6 @@ class _PreviousMonthlyAttendanceState extends State<PreviousMonthlyAttendance> {
         final String day = DateFormat('EE').format(date);
         final String formattedDate = DateFormat('dd').format(date);
 
-        // Handle weekend (Saturday/Sunday) and attendance record
         if (date.weekday == DateTime.saturday ||
             date.weekday == DateTime.sunday) {
           return _buildWeekendContainer(index);
@@ -334,7 +333,6 @@ class _PreviousMonthlyAttendanceState extends State<PreviousMonthlyAttendance> {
   }
 
   Color _determineContainerColor(DateTime? checkIn, DateTime? checkOut) {
-    // Add your logic to determine the container color
     if (checkIn != null) {
       final TimeOfDay checkInTime = TimeOfDay.fromDateTime(checkIn);
       const TimeOfDay earlyOnTime = TimeOfDay(hour: 7, minute: 50);
@@ -343,14 +341,14 @@ class _PreviousMonthlyAttendanceState extends State<PreviousMonthlyAttendance> {
               checkInTime.minute >= earlyOnTime.minute) ||
           (checkInTime.hour == lateOnTime.hour &&
               checkInTime.minute <= lateOnTime.minute)) {
-        return const Color(0xff22AF41); // Green color
+        return const Color(0xff22AF41);
       } else if (checkInTime.hour > lateOnTime.hour) {
-        return const Color(0xffF6C15B); // Yellow color
+        return const Color(0xffF6C15B); 
       } else {
-        return const Color(0xff8E71DF); // Purple color
+        return const Color(0xff8E71DF);
       }
     }
-    return const Color(0xff8E71DF); // Default purple color if no check-in
+    return const Color(0xff8E71DF);
   }
 
   Widget _buildAttendanceRow({
@@ -378,14 +376,14 @@ class _PreviousMonthlyAttendanceState extends State<PreviousMonthlyAttendance> {
           _buildCheckTimeColumn(
               checkIn != null
                   ? DateFormat('hh:mm a')
-                      .format(checkIn) // Format Check-In Time
+                      .format(checkIn) 
                   : 'N/A',
               'Check In'),
           _buildDivider(),
           _buildCheckTimeColumn(
               checkOut != null
                   ? DateFormat('hh:mm a')
-                      .format(checkOut) // Format Check-Out Time
+                      .format(checkOut) 
                   : 'N/A',
               'Check Out'),
           _buildDivider(),
@@ -408,12 +406,12 @@ class _PreviousMonthlyAttendanceState extends State<PreviousMonthlyAttendance> {
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
           Text(
-            formattedDate, // Display the day of the month
+            formattedDate, 
             style: const TextStyle(
                 fontSize: 22, fontWeight: FontWeight.w600, color: Colors.white),
           ),
           Text(
-            day, // Display the day name
+            day, 
             style: const TextStyle(
                 fontSize: 12, fontWeight: FontWeight.w400, color: Colors.white),
           ),
@@ -568,8 +566,8 @@ class _PreviousMonthlyAttendanceState extends State<PreviousMonthlyAttendance> {
               future: selectedMonth != null && selectedYear != null
                   ? _getMonthlyAttendanceDetails(
                       widget.uid,
-                      int.parse(selectedMonth!), // Parse month
-                      int.parse(selectedYear!), // Parse year
+                      int.parse(selectedMonth!), 
+                      int.parse(selectedYear!), 
                     )
                   : null,
               builder: (context, snapshot) {
