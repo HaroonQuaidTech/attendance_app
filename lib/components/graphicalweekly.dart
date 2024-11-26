@@ -320,11 +320,10 @@ class _GraphicalbuilerState extends State<GraphicalbuilderWeekly> {
               color: Theme.of(context).colorScheme.tertiary,
               elevation: 5,
               child: Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 10),
+                padding: const EdgeInsets.all(12.0),
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    const SizedBox(height: 20),
                     const Text(
                       'Weekly',
                       style: TextStyle(
@@ -425,12 +424,11 @@ class _GraphicalbuilerState extends State<GraphicalbuilderWeekly> {
                                 barRods: [
                                   BarChartRodData(
                                     toY: weeklyHours[day] ?? 0,
-                                    color: (weeklyHours[day] ?? 0) == 0
-                                        ? Colors.red
-                                        : Theme.of(context).colorScheme.primary,
+                                    color:
+                                        Theme.of(context).colorScheme.primary,
                                     width: 25,
                                     backDrawRodData: BackgroundBarChartRodData(
-                                      show: (weeklyHours[day] ?? 0) != 0,
+                                      show: true,
                                       toY: 9,
                                       color: Colors.white,
                                     ),
@@ -450,71 +448,75 @@ class _GraphicalbuilerState extends State<GraphicalbuilderWeekly> {
               borderRadius: BorderRadius.circular(20),
               color: Theme.of(context).colorScheme.tertiary,
               elevation: 5,
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  const Text(
-                    'Weekly',
-                    style: TextStyle(
-                      fontSize: 20,
-                      fontWeight: FontWeight.w600,
-                      height: 0,
+              child: Padding(
+                padding: const EdgeInsets.all(12.0),
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    const Text(
+                      'Weekly',
+                      style: TextStyle(
+                        fontSize: 20,
+                        fontWeight: FontWeight.w600,
+                        height: 0,
+                      ),
                     ),
-                  ),
-                  const SizedBox(height: 20),
-                  pieChartData.isEmpty
-                      ? Center(
-                          child: Column(
-                            children: [
-                              const SizedBox(height: 30),
-                              const Icon(
-                                Icons.warning,
-                                color: Colors.grey,
-                                size: 50,
-                              ),
-                              const SizedBox(height: 5),
-                              Text(
-                                "No Data Available",
-                                style: TextStyle(
-                                  fontWeight: FontWeight.bold,
-                                  height: 0,
-                                  fontSize: 20,
-                                  color: Colors.grey[400],
+                    const SizedBox(height: 10),
+                    pieChartData.isEmpty
+                        ? Center(
+                            child: Column(
+                              children: [
+                                const SizedBox(height: 30),
+                                const Icon(
+                                  Icons.warning,
+                                  color: Colors.grey,
+                                  size: 50,
                                 ),
-                              ),
-                              const SizedBox(height: 30),
+                                const SizedBox(height: 5),
+                                Text(
+                                  "No Data Available",
+                                  style: TextStyle(
+                                    fontWeight: FontWeight.bold,
+                                    height: 0,
+                                    fontSize: 20,
+                                    color: Colors.grey[400],
+                                  ),
+                                ),
+                                const SizedBox(height: 30),
+                              ],
+                            ),
+                          )
+                        : PieChart(
+                            dataMap: pieChartData,
+                            colorList: [
+                              CustomTheme.theme.colorScheme.surface,
+                              CustomTheme.theme.colorScheme.secondary,
+                              CustomTheme.theme.colorScheme.inversePrimary,
+                              CustomTheme.theme.colorScheme.tertiary,
+                              CustomTheme.theme.colorScheme.primary,
                             ],
-                          ),
-                        )
-                      : PieChart(
-                          dataMap: pieChartData,
-                          colorList: [
-                            CustomTheme.theme.colorScheme.surface,
-                            CustomTheme.theme.colorScheme.secondary,
-                            CustomTheme.theme.colorScheme.inversePrimary,
-                            CustomTheme.theme.colorScheme.tertiary,
-                            CustomTheme.theme.colorScheme.primary,
-                          ],
-                          chartRadius: MediaQuery.of(context).size.width / 1.7,
-                          legendOptions: const LegendOptions(
-                            legendPosition: LegendPosition.top,
-                            showLegendsInRow: true,
-                            showLegends: true,
-                            legendShape: BoxShape.circle,
-                            legendTextStyle: TextStyle(
-                              fontWeight: FontWeight.w500,
-                              fontSize: 15,
-                              height: 0,
+                            chartRadius:
+                                MediaQuery.of(context).size.width / 1.7,
+                            legendOptions: const LegendOptions(
+                              legendPosition: LegendPosition.top,
+                              showLegendsInRow: true,
+                              showLegends: true,
+                              legendShape: BoxShape.circle,
+                              legendTextStyle: TextStyle(
+                                fontWeight: FontWeight.w500,
+                                height: 0,
+                              ),
+                            ),
+                            chartValuesOptions: const ChartValuesOptions(
+                              showChartValues: false,
                             ),
                           ),
-                          chartValuesOptions: const ChartValuesOptions(
-                            showChartValues: false,
-                          ),
-                        ),
-                ],
+                  ],
+                ),
               ),
             ),
+            const SizedBox(height: 20),
           ],
         );
       },

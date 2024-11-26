@@ -274,197 +274,218 @@ class _GraphicalbuilerState extends State<GraphicalbuilderMonthly> {
           'Late Arrival': getLateArrivalCount(snapshot.data!).toDouble(),
         };
 
-        return Column(children: [
-          const SizedBox(height: 20),
-          Material(
-            borderRadius: BorderRadius.circular(20),
-            color: Theme.of(context).colorScheme.tertiary,
-            elevation: 5,
-            child: Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 10.0),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  const Text(
-                    'Monthly',
-                    style: TextStyle(
-                      fontWeight: FontWeight.w600,
-                      fontSize: 18,
-                      height: 0,
+        return Column(
+          children: [
+            const SizedBox(height: 20),
+            Material(
+              borderRadius: BorderRadius.circular(20),
+              color: Theme.of(context).colorScheme.tertiary,
+              elevation: 5,
+              child: Padding(
+                padding: const EdgeInsets.all(12.0),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    const Text(
+                      'Monthly',
+                      style: TextStyle(
+                        fontWeight: FontWeight.w600,
+                        fontSize: 18,
+                        height: 0,
+                      ),
                     ),
-                  ),
-                  Row(
-                    crossAxisAlignment: CrossAxisAlignment.center,
-                    children: [
-                      Container(
-                        height: 18,
-                        width: 16,
-                        decoration: BoxDecoration(
-                          color: Theme.of(context).colorScheme.primary,
-                        ),
-                      ),
-                      const SizedBox(width: 10),
-                      const Text(
-                        'TAT (Turn Around Time)',
-                        style: TextStyle(
-                          fontWeight: FontWeight.w400,
-                          fontSize: 18,
-                          height: 0,
-                        ),
-                      ),
-                    ],
-                  ),
-                  const SizedBox(height: 20),
-                  SizedBox(
-                    height: 400,
-                    child: BarChart(
-                      BarChartData(
-                        alignment: BarChartAlignment.spaceAround,
-                        maxY: 45,
-                        barTouchData: BarTouchData(enabled: false),
-                        titlesData: FlTitlesData(
-                          leftTitles: AxisTitles(
-                            sideTitles: SideTitles(
-                              showTitles: true,
-                              getTitlesWidget: (value, meta) {
-                                return Text(
-                                  '${value.toInt()}H',
-                                  style: const TextStyle(
-                                    color: Colors.black,
-                                    fontSize: 15,
-                                    fontWeight: FontWeight.w600,
-                                    height: 0,
-                                  ),
-                                );
-                              },
-                              reservedSize: 0,
-                              interval: 5,
-                            ),
+                    const SizedBox(height: 10),
+                    Row(
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      children: [
+                        Container(
+                          height: 18,
+                          width: 16,
+                          decoration: BoxDecoration(
+                            color: Theme.of(context).colorScheme.primary,
                           ),
-                          bottomTitles: AxisTitles(
-                            sideTitles: SideTitles(
-                              showTitles: true,
-                              reservedSize: 60,
-                              getTitlesWidget: (value, meta) {
-                                List<String> weekLabels = [
-                                  'W1',
-                                  'W2',
-                                  'W3',
-                                  'W4',
-                                  'W5'
-                                ];
-                                return Column(
-                                  mainAxisSize: MainAxisSize.min,
-                                  children: [
-                                    const SizedBox(height: 30),
-                                    Text(
-                                      weekLabels[value.toInt()],
-                                      style: const TextStyle(
-                                        color: Colors.black,
-                                        fontSize: 14,
-                                        fontWeight: FontWeight.w600,
-                                        height: 0,
-                                      ),
+                        ),
+                        const SizedBox(width: 10),
+                        const Text(
+                          'TAT (Turn Around Time)',
+                          style: TextStyle(
+                            fontWeight: FontWeight.w400,
+                            fontSize: 18,
+                            height: 0,
+                          ),
+                        ),
+                      ],
+                    ),
+                    const SizedBox(height: 20),
+                    SizedBox(
+                      height: 400,
+                      child: BarChart(
+                        BarChartData(
+                          alignment: BarChartAlignment.spaceAround,
+                          maxY: 45,
+                          barTouchData: BarTouchData(enabled: false),
+                          titlesData: FlTitlesData(
+                            leftTitles: AxisTitles(
+                              sideTitles: SideTitles(
+                                showTitles: true,
+                                getTitlesWidget: (value, meta) {
+                                  return Text(
+                                    '${value.toInt()}H',
+                                    style: const TextStyle(
+                                      color: Colors.black,
+                                      fontSize: 15,
+                                      fontWeight: FontWeight.w600,
+                                      height: 0,
                                     ),
-                                  ],
-                                );
-                              },
+                                  );
+                                },
+                                reservedSize: 60,
+                                interval: 5,
+                              ),
+                            ),
+                            bottomTitles: AxisTitles(
+                              sideTitles: SideTitles(
+                                showTitles: true,
+                                reservedSize: 60,
+                                getTitlesWidget: (value, meta) {
+                                  List<String> weekLabels = [
+                                    'Week 1',
+                                    'Week 2',
+                                    'Week 3',
+                                    'Week 4',
+                                    'Week 5'
+                                  ];
+                                  return Column(
+                                    mainAxisSize: MainAxisSize.min,
+                                    children: [
+                                      const SizedBox(height: 30),
+                                      Text(
+                                        weekLabels[value.toInt()],
+                                        style: const TextStyle(
+                                          fontSize: 14,
+                                          fontWeight: FontWeight.w600,
+                                          height: 0,
+                                        ),
+                                      ),
+                                    ],
+                                  );
+                                },
+                              ),
+                            ),
+                            topTitles: const AxisTitles(
+                              sideTitles: SideTitles(showTitles: false),
+                            ),
+                            rightTitles: const AxisTitles(
+                              sideTitles: SideTitles(showTitles: false),
                             ),
                           ),
-                          topTitles: const AxisTitles(
-                            sideTitles: SideTitles(showTitles: false),
-                          ),
-                          rightTitles: const AxisTitles(
-                            sideTitles: SideTitles(showTitles: false),
-                          ),
-                        ),
-                        borderData: FlBorderData(show: false),
-                        gridData: const FlGridData(show: false),
-                        barGroups: [
-                          for (int week = 1; week <= 5; week++)
-                            BarChartGroupData(
-                              x: week - 1,
-                              barRods: [
-                                BarChartRodData(
-                                  toY: monthlyHours["Week $week"] ?? 0,
-                                  color: Theme.of(context).colorScheme.primary,
-                                  width: 30,
-                                  backDrawRodData: BackgroundBarChartRodData(
-                                    show: true,
-                                    toY: 45,
-                                    color: Colors.white,
+                          borderData: FlBorderData(show: false),
+                          gridData: const FlGridData(show: false),
+                          barGroups: [
+                            for (int week = 1; week <= 5; week++)
+                              BarChartGroupData(
+                                x: week - 1,
+                                barRods: [
+                                  BarChartRodData(
+                                    toY: monthlyHours["Week $week"] ?? 0,
+                                    color:
+                                        Theme.of(context).colorScheme.primary,
+                                    width: 25,
+                                    backDrawRodData: BackgroundBarChartRodData(
+                                      show: true,
+                                      toY: 45,
+                                      color: Colors.white,
+                                    ),
                                   ),
-                                ),
-                              ],
-                            ),
-                        ],
+                                ],
+                              ),
+                          ],
+                        ),
                       ),
                     ),
-                  ),
-                ],
+                  ],
+                ),
               ),
             ),
-          ),
-          const SizedBox(height: 20),
-          Container(
-            padding: const EdgeInsets.all(12),
-            width: double.infinity,
-            decoration: BoxDecoration(
+            const SizedBox(height: 20),
+            Material(
               borderRadius: BorderRadius.circular(20),
-              color: const Color(0xffEFF1FF),
-              boxShadow: [
-                BoxShadow(
-                  color: Colors.grey.withOpacity(0.2),
-                  spreadRadius: 2,
-                  blurRadius: 4,
-                  offset: const Offset(0, 2),
-                ),
-              ],
-            ),
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                const Text(
-                  'Monthly',
-                  style: TextStyle(
-                    fontSize: 20,
-                    fontWeight: FontWeight.w600,
-                  ),
-                ),
-                const SizedBox(height: 20),
-                pieChartData.isEmpty
-                    ? const Center(child: Text('No data available'))
-                    : PieChart(
-                        dataMap: pieChartData,
-                        colorList: [
-                          CustomTheme.theme.colorScheme.surface,
-                          CustomTheme.theme.colorScheme.secondary,
-                          CustomTheme.theme.colorScheme.inversePrimary,
-                          CustomTheme.theme.colorScheme.tertiary,
-                          CustomTheme.theme.colorScheme.primary,
-                        ],
-                        chartRadius: MediaQuery.of(context).size.width / 1.7,
-                        legendOptions: const LegendOptions(
-                          legendPosition: LegendPosition.top,
-                          showLegendsInRow: true,
-                          showLegends: true,
-                          legendShape: BoxShape.circle,
-                          legendTextStyle: TextStyle(
-                            fontWeight: FontWeight.bold,
-                          ),
-                        ),
-                        chartValuesOptions: const ChartValuesOptions(
-                          showChartValues: false,
-                        ),
-                        totalValue: pieChartData.values.isNotEmpty
-                            ? pieChartData.values.reduce((a, b) => a + b)
-                            : 1,
+              color: Theme.of(context).colorScheme.tertiary,
+              elevation: 5,
+              child: Padding(
+                padding: const EdgeInsets.all(12.0),
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    const Text(
+                      'Monthly',
+                      style: TextStyle(
+                        fontSize: 20,
+                        fontWeight: FontWeight.w600,
+                        height: 0,
                       ),
-              ],
+                    ),
+                    const SizedBox(height: 10),
+                    pieChartData.isEmpty
+                        ? Center(
+                            child: Column(
+                              children: [
+                                const SizedBox(height: 30),
+                                const Icon(
+                                  Icons.warning,
+                                  color: Colors.grey,
+                                  size: 50,
+                                ),
+                                const SizedBox(height: 5),
+                                Text(
+                                  "No Data Available",
+                                  style: TextStyle(
+                                    fontWeight: FontWeight.bold,
+                                    height: 0,
+                                    fontSize: 20,
+                                    color: Colors.grey[400],
+                                  ),
+                                ),
+                                const SizedBox(height: 30),
+                              ],
+                            ),
+                          )
+                        : PieChart(
+                            dataMap: pieChartData,
+                            colorList: [
+                              CustomTheme.theme.colorScheme.surface,
+                              CustomTheme.theme.colorScheme.secondary,
+                              CustomTheme.theme.colorScheme.inversePrimary,
+                              CustomTheme.theme.colorScheme.tertiary,
+                              CustomTheme.theme.colorScheme.primary,
+                            ],
+                            chartRadius:
+                                MediaQuery.of(context).size.width / 1.7,
+                            legendOptions: const LegendOptions(
+                              legendPosition: LegendPosition.top,
+                              showLegendsInRow: true,
+                              showLegends: true,
+                              legendShape: BoxShape.circle,
+                              legendTextStyle: TextStyle(
+                                fontWeight: FontWeight.w500,
+                                height: 0,
+                              ),
+                            ),
+                            chartValuesOptions: const ChartValuesOptions(
+                              showChartValues: false,
+                            ),
+                            totalValue: pieChartData.values.isNotEmpty
+                                ? pieChartData.values.reduce((a, b) => a + b)
+                                : 1,
+                          ),
+                  ],
+                ),
+              ),
             ),
-          ),
-        ]);
+            const SizedBox(height: 20),
+          ],
+        );
       },
     );
   }
