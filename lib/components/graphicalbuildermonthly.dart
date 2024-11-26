@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:pie_chart/pie_chart.dart';
 import 'package:intl/intl.dart';
 import 'package:fl_chart/fl_chart.dart' hide PieChart;
+import 'package:quaidtech/main.dart';
 
 class GraphicalbuilderMonthly extends StatefulWidget {
   const GraphicalbuilderMonthly({super.key});
@@ -123,7 +124,7 @@ class _GraphicalbuilerState extends State<GraphicalbuilderMonthly> {
         }
 
         if (checkInTime.hour > 8 ||
-            (checkInTime.hour == 8 && checkInTime.minute > 16)) {
+            (checkInTime.hour == 8 && checkInTime.minute > 15)) {
           attendanceStats["Late Arrival"] =
               (attendanceStats["Late Arrival"] ?? 0) + 1;
         }
@@ -152,7 +153,7 @@ class _GraphicalbuilerState extends State<GraphicalbuilderMonthly> {
 
         if (checkInDate.isBefore(now) || checkInDate.isAtSameMomentAs(now)) {
           if (checkInTime.isAfter(DateTime(
-              checkInTime.year, checkInTime.month, checkInTime.day, 8, 15))) {
+              checkInTime.year, checkInTime.month, checkInTime.day, 8, 16))) {
             lateCount++;
           }
         }
@@ -188,7 +189,7 @@ class _GraphicalbuilerState extends State<GraphicalbuilderMonthly> {
         final checkInTime = TimeOfDay.fromDateTime(checkIn);
 
         if ((checkInTime.hour == 7 && checkInTime.minute >= 50) ||
-            (checkInTime.hour == 8 && checkInTime.minute <= 10)) {
+            (checkInTime.hour == 8 && checkInTime.minute <= 15)) {
           onTimeCount++;
         }
       }
@@ -343,7 +344,7 @@ class _GraphicalbuilerState extends State<GraphicalbuilderMonthly> {
                                   ),
                                 );
                               },
-                              reservedSize: 0,
+                              reservedSize: 60,
                               interval: 5,
                             ),
                           ),
@@ -353,11 +354,11 @@ class _GraphicalbuilerState extends State<GraphicalbuilderMonthly> {
                               reservedSize: 60,
                               getTitlesWidget: (value, meta) {
                                 List<String> weekLabels = [
-                                  'W1',
-                                  'W2',
-                                  'W3',
-                                  'W4',
-                                  'W5'
+                                  'Week 1',
+                                  'Week 2',
+                                  'Week 3',
+                                  'Week 4',
+                                  'Week 5'
                                 ];
                                 return Column(
                                   mainAxisSize: MainAxisSize.min,
@@ -394,7 +395,7 @@ class _GraphicalbuilerState extends State<GraphicalbuilderMonthly> {
                                 BarChartRodData(
                                   toY: monthlyHours["Week $week"] ?? 0,
                                   color: Theme.of(context).colorScheme.primary,
-                                  width: 30,
+                                  width: 25,
                                   backDrawRodData: BackgroundBarChartRodData(
                                     show: true,
                                     toY: 45,
@@ -418,14 +419,7 @@ class _GraphicalbuilerState extends State<GraphicalbuilderMonthly> {
             decoration: BoxDecoration(
               borderRadius: BorderRadius.circular(20),
               color: const Color(0xffEFF1FF),
-              boxShadow: [
-                BoxShadow(
-                  color: Colors.grey.withOpacity(0.2),
-                  spreadRadius: 2,
-                  blurRadius: 4,
-                  offset: const Offset(0, 2),
-                ),
-              ],
+              
             ),
             child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
@@ -440,15 +434,37 @@ class _GraphicalbuilerState extends State<GraphicalbuilderMonthly> {
                 ),
                 const SizedBox(height: 20),
                 pieChartData.isEmpty
-                    ? const Center(child: Text('No data available'))
+                    ? Center(
+                        child: Column(
+                          children: [
+                            const SizedBox(height: 30),
+                            const Icon(
+                              Icons.warning,
+                              color: Colors.grey,
+                              size: 50,
+                            ),
+                            const SizedBox(height: 5),
+                            Text(
+                              "No Data Available",
+                              style: TextStyle(
+                                fontWeight: FontWeight.bold,
+                                height: 0,
+                                fontSize: 20,
+                                color: Colors.grey[400],
+                              ),
+                            ),
+                            const SizedBox(height: 30),
+                          ],
+                        ),
+                      )
                     : PieChart(
                         dataMap: pieChartData,
-                        colorList: const [
-                          Color(0xff9478F7),
-                          Color(0xffEC5851),
-                          Color(0xffF6C15B),
-                          Color(0xffF07E25),
-                          Color(0xff22AF41),
+                        colorList: [
+                          CustomTheme.theme.colorScheme.surface,
+                          CustomTheme.theme.colorScheme.secondary,
+                          CustomTheme.theme.colorScheme.inversePrimary,
+                          CustomTheme.theme.colorScheme.tertiary,
+                          CustomTheme.theme.colorScheme.primary,
                         ],
                         chartRadius: MediaQuery.of(context).size.width / 1.7,
                         legendOptions: const LegendOptions(
@@ -457,7 +473,9 @@ class _GraphicalbuilerState extends State<GraphicalbuilderMonthly> {
                           showLegends: true,
                           legendShape: BoxShape.circle,
                           legendTextStyle: TextStyle(
-                            fontWeight: FontWeight.bold,
+                            fontWeight: FontWeight.w500,
+                            fontSize: 15,
+                            height: 0,
                           ),
                         ),
                         chartValuesOptions: const ChartValuesOptions(
