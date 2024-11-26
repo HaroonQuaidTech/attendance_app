@@ -182,24 +182,12 @@ class _GraphicalbuilerState extends State<GraphicalbuilderMonthly> {
   int getOnTimeCount(List<Map<String, dynamic>> data) {
     return data.where((entry) {
       final checkIn = (entry['checkIn'] as Timestamp?)?.toDate();
-
-      if (checkIn != null) {
-        final checkInTime = TimeOfDay.fromDateTime(checkIn);
-
-        if ((checkInTime.hour == 7 && checkInTime.minute >= 50) ||
-            (checkInTime.hour == 8 && checkInTime.minute <= 15)) {
-          onTimeCount++;
-        }
-      }
-    }
-
-    return onTimeCount;
       if (checkIn == null) return false;
 
       final hour = checkIn.hour;
       final minute = checkIn.minute;
 
-      return (hour == 7 && minute >= 50) || (hour == 8 && minute <= 10);
+      return (hour == 7 && minute >= 50) || (hour == 8 && minute <= 15);
     }).length;
   }
 
@@ -349,7 +337,7 @@ class _GraphicalbuilerState extends State<GraphicalbuilderMonthly> {
                                   ),
                                 );
                               },
-                              reservedSize: 60,
+                              reservedSize: 0,
                               interval: 5,
                             ),
                           ),
@@ -359,11 +347,11 @@ class _GraphicalbuilerState extends State<GraphicalbuilderMonthly> {
                               reservedSize: 60,
                               getTitlesWidget: (value, meta) {
                                 List<String> weekLabels = [
-                                  'Week 1',
-                                  'Week 2',
-                                  'Week 3',
-                                  'Week 4',
-                                  'Week 5'
+                                  'W1',
+                                  'W2',
+                                  'W3',
+                                  'W4',
+                                  'W5'
                                 ];
                                 return Column(
                                   mainAxisSize: MainAxisSize.min,
@@ -400,7 +388,7 @@ class _GraphicalbuilerState extends State<GraphicalbuilderMonthly> {
                                 BarChartRodData(
                                   toY: monthlyHours["Week $week"] ?? 0,
                                   color: Theme.of(context).colorScheme.primary,
-                                  width: 25,
+                                  width: 30,
                                   backDrawRodData: BackgroundBarChartRodData(
                                     show: true,
                                     toY: 45,
@@ -424,7 +412,14 @@ class _GraphicalbuilerState extends State<GraphicalbuilderMonthly> {
             decoration: BoxDecoration(
               borderRadius: BorderRadius.circular(20),
               color: const Color(0xffEFF1FF),
-              
+              boxShadow: [
+                BoxShadow(
+                  color: Colors.grey.withOpacity(0.2),
+                  spreadRadius: 2,
+                  blurRadius: 4,
+                  offset: const Offset(0, 2),
+                ),
+              ],
             ),
             child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
@@ -439,29 +434,7 @@ class _GraphicalbuilerState extends State<GraphicalbuilderMonthly> {
                 ),
                 const SizedBox(height: 20),
                 pieChartData.isEmpty
-                    ? Center(
-                        child: Column(
-                          children: [
-                            const SizedBox(height: 30),
-                            const Icon(
-                              Icons.warning,
-                              color: Colors.grey,
-                              size: 50,
-                            ),
-                            const SizedBox(height: 5),
-                            Text(
-                              "No Data Available",
-                              style: TextStyle(
-                                fontWeight: FontWeight.bold,
-                                height: 0,
-                                fontSize: 20,
-                                color: Colors.grey[400],
-                              ),
-                            ),
-                            const SizedBox(height: 30),
-                          ],
-                        ),
-                      )
+                    ? const Center(child: Text('No data available'))
                     : PieChart(
                         dataMap: pieChartData,
                         colorList: [
@@ -478,9 +451,7 @@ class _GraphicalbuilerState extends State<GraphicalbuilderMonthly> {
                           showLegends: true,
                           legendShape: BoxShape.circle,
                           legendTextStyle: TextStyle(
-                            fontWeight: FontWeight.w500,
-                            fontSize: 15,
-                            height: 0,
+                            fontWeight: FontWeight.bold,
                           ),
                         ),
                         chartValuesOptions: const ChartValuesOptions(
