@@ -25,7 +25,7 @@ class _StatusBuilerState extends State<StatusBuilderWeekly> {
     final now = DateTime.now();
     final startOfWeek = now.subtract(Duration(days: now.weekday - 1));
 
-    // Calculate the current day of the week (0 for Monday, 4 for Friday in this case)
+    
     final currentDayOfWeek = now.weekday - 1;
 
     final List<Future<DocumentSnapshot<Map<String, dynamic>>>> snapshotFutures =
@@ -120,72 +120,67 @@ class _StatusBuilerState extends State<StatusBuilderWeekly> {
     return totalHours;
   }
 
-  Widget _buildEmptyAttendanceContainer(int index) {
-    final DateTime date = DateTime.now()
-        .subtract(Duration(days: DateTime.now().weekday - 1 - index));
-    final String day = DateFormat('EE').format(date);
-    final String formattedDate = DateFormat('dd').format(date);
-    return Container(
-      padding: const EdgeInsets.all(12),
-      margin: const EdgeInsets.only(bottom: 10),
-      height: 82,
-      width: 360,
-      decoration: BoxDecoration(
-        borderRadius: BorderRadius.circular(12),
-        color: Colors.white,
-      ),
-      child: Row(
-        crossAxisAlignment: CrossAxisAlignment.center,
-        children: [
-          Column(
+ Widget _buildEmptyAttendanceContainer(int index) {
+  final date = DateTime.now().subtract(Duration(days: DateTime.now().weekday - 1 - index));
+  final formattedDate = DateFormat('dd').format(date);
+  final day = DateFormat('EE').format(date);
+
+  return Container(
+    padding: const EdgeInsets.all(12),
+    margin: const EdgeInsets.only(bottom: 10),
+    height: 82,
+    width: 360,
+    decoration: BoxDecoration(
+      borderRadius: BorderRadius.circular(12),
+      color: Colors.white,
+    ),
+    child: Row(
+      crossAxisAlignment: CrossAxisAlignment.center,
+      children: [
+        // Date Container
+        Container(
+          width: 55,
+          height: 55,
+          decoration: BoxDecoration(
+            color: Colors.red,
+            borderRadius: BorderRadius.circular(6),
+          ),
+          child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              Container(
-                width: 55,
-                height: 55,
-                decoration: BoxDecoration(
-                    color: Colors.red, borderRadius: BorderRadius.circular(6)),
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  crossAxisAlignment: CrossAxisAlignment.center,
-                  children: [
-                    Text(
-                      formattedDate,
-                      style: const TextStyle(
-                        fontSize: 22,
-                        fontWeight: FontWeight.w600,
-                        color: Colors.white,
-                        height: 0,
-                      ),
-                    ),
-                    const SizedBox(height: 5),
-                    Text(
-                      day,
-                      style: const TextStyle(
-                          fontSize: 12,
-                          fontWeight: FontWeight.w400,
-                          color: Colors.white),
-                    ),
-                  ],
+              Text(
+                formattedDate,
+                style: const TextStyle(
+                  fontSize: 22,
+                  fontWeight: FontWeight.w600,
+                  color: Colors.white,
+                ),
+              ),
+              const SizedBox(height: 5),
+              Text(
+                day,
+                style: const TextStyle(
+                  fontSize: 12,
+                  fontWeight: FontWeight.w400,
+                  color: Colors.white,
                 ),
               ),
             ],
           ),
-          const Padding(
-            padding: EdgeInsets.only(left: 50.0),
-            child: Text(
-              'Leave/Day off',
-              style: TextStyle(
-                fontSize: 22,
-                fontWeight: FontWeight.bold,
-                height: 0,
-              ),
-            ),
-          )
-        ],
-      ),
-    );
-  }
+        ),
+        // Label
+        const SizedBox(width: 50),
+        const Text(
+          'Leave/Day off',
+          style: TextStyle(
+            fontSize: 22,
+            fontWeight: FontWeight.bold,
+          ),
+        ),
+      ],
+    ),
+  );
+}
 
   Widget _buildAttendance({required List<Map<String, dynamic>?> data}) {
     return ListView.builder(
