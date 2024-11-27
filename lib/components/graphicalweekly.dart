@@ -490,11 +490,11 @@ class _GraphicalbuilerState extends State<GraphicalbuilderWeekly> {
                         : PieChart(
                             dataMap: pieChartData,
                             colorList: [
-                              CustomTheme.theme.colorScheme.surface,
-                              CustomTheme.theme.colorScheme.secondary,
-                              CustomTheme.theme.colorScheme.inversePrimary,
-                              CustomTheme.theme.colorScheme.tertiary,
-                              CustomTheme.theme.colorScheme.primary,
+                              StatusTheme.theme.colorScheme.surface,
+                              StatusTheme.theme.colorScheme.secondary,
+                              StatusTheme.theme.colorScheme.inversePrimary,
+                              StatusTheme.theme.colorScheme.tertiary,
+                              StatusTheme.theme.colorScheme.primary,
                             ],
                             chartRadius:
                                 MediaQuery.of(context).size.width / 1.7,

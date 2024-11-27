@@ -35,17 +35,17 @@ class _DailyAttendanceState extends State<DailyEmptyAttendance> {
         (widget.selectedDay!.weekday == DateTime.saturday ||
             widget.selectedDay!.weekday == DateTime.sunday)) {
       message = 'Weekend Days';
-      containerColor = CustomTheme.theme.colorScheme.secondaryFixed;
+      containerColor = StatusTheme.theme.colorScheme.secondaryFixed;
     } else {
       if (widget.selectedDay!.isAfter(currentDate)) {
         message = 'No Data Available';
-        containerColor = CustomTheme.theme.colorScheme.secondary;
+        containerColor = StatusTheme.theme.colorScheme.secondary;
       } else if (widget.checkInTime == null || widget.checkInTime!.isEmpty) {
         message = 'Leave/Day off';
-        containerColor = CustomTheme.theme.colorScheme.secondary;
+        containerColor = StatusTheme.theme.colorScheme.secondary;
       } else {
         message = 'Checked in at ${widget.checkInTime}';
-        containerColor = CustomTheme.theme.colorScheme.secondary;
+        containerColor = StatusTheme.theme.colorScheme.secondary;
       }
     }
 

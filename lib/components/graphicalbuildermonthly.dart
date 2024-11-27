@@ -118,8 +118,7 @@ class _GraphicalbuilerState extends State<GraphicalbuilderMonthly> {
       if (checkIn != null && checkOut != null) {
         final checkInTime = TimeOfDay.fromDateTime(checkIn);
         final checkOutTime = TimeOfDay.fromDateTime(checkOut);
-        if ((checkInTime.hour == 7 && checkInTime.minute >= 50) ||
-            (checkInTime.hour == 8 && checkInTime.minute <= 15)) {
+        if ((checkInTime.hour == 8 && checkInTime.minute <= 15)) {
           attendanceStats["On Time"] = (attendanceStats["On Time"] ?? 0) + 1;
         }
 
@@ -454,11 +453,11 @@ class _GraphicalbuilerState extends State<GraphicalbuilderMonthly> {
                         : PieChart(
                             dataMap: pieChartData,
                             colorList: [
-                              CustomTheme.theme.colorScheme.surface,
-                              CustomTheme.theme.colorScheme.secondary,
-                              CustomTheme.theme.colorScheme.inversePrimary,
-                              CustomTheme.theme.colorScheme.tertiary,
-                              CustomTheme.theme.colorScheme.primary,
+                              StatusTheme.theme.colorScheme.surface,
+                              StatusTheme.theme.colorScheme.secondary,
+                              StatusTheme.theme.colorScheme.inversePrimary,
+                              StatusTheme.theme.colorScheme.tertiary,
+                              StatusTheme.theme.colorScheme.primary,
                             ],
                             chartRadius:
                                 MediaQuery.of(context).size.width / 1.7,

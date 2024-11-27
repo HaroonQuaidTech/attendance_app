@@ -68,9 +68,9 @@ class _DailyAttendanceState extends State<DailyAttendance> {
       );
       if (checkInTime.isBefore(eightAM) ||
           checkInTime.isAtSameMomentAs(eightAM)) {
-        boxColor = CustomTheme.theme.colorScheme.inversePrimary;
+        boxColor = StatusTheme.theme.colorScheme.inversePrimary;
       } else {
-        boxColor = CustomTheme.theme.colorScheme.primary;
+        boxColor = StatusTheme.theme.colorScheme.primary;
       }
     }
 

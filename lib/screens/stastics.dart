@@ -1,10 +1,10 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:quaidtech/components/PreviousMonthStatusBuilder.dart';
 import 'package:quaidtech/components/graphicalbuildermonthly.dart';
 import 'package:quaidtech/components/graphicalweekly.dart';
 import 'package:quaidtech/components/monthattendancce.dart';
 import 'package:quaidtech/components/statusbuildermonthly.dart';
+import 'package:quaidtech/components/statusbuilderweekly.dart';
 import 'package:quaidtech/components/weeklyattenance.dart';
 import 'package:quaidtech/main.dart';
 import 'package:quaidtech/screens/notification.dart';
@@ -65,7 +65,6 @@ class _StatsticsScreenState extends State<StatsticsScreen> {
       ),
     );
   }
-
 
   Widget _buildMonthlyAttendance(
       String text, Color color, String dropdownValue2) {
@@ -141,23 +140,23 @@ class _StatsticsScreenState extends State<StatsticsScreen> {
     switch (dropdownValue2) {
       case 'Late Arrival':
         detailsType = 'Late Arrival Details';
-        detailsColor = CustomTheme.theme.colorScheme.primary;
+        detailsColor = StatusTheme.theme.colorScheme.primary;
         break;
       case 'Absent':
         detailsType = 'Absent Details';
-        detailsColor = CustomTheme.theme.colorScheme.secondary;
+        detailsColor = StatusTheme.theme.colorScheme.secondary;
         break;
       case 'On Time':
         detailsType = 'On Time Details';
-        detailsColor = CustomTheme.theme.colorScheme.inversePrimary;
+        detailsColor = StatusTheme.theme.colorScheme.inversePrimary;
         break;
       case 'Early Out':
         detailsType = 'Early Out Details';
-        detailsColor = CustomTheme.theme.colorScheme.tertiary;
+        detailsColor = StatusTheme.theme.colorScheme.tertiary;
         break;
       case 'Present':
         detailsType = 'Present Details';
-        detailsColor = CustomTheme.theme.colorScheme.surface;
+        detailsColor = StatusTheme.theme.colorScheme.surface;
         break;
       default:
         return const SizedBox.shrink();
@@ -201,18 +200,19 @@ class _StatsticsScreenState extends State<StatsticsScreen> {
                   ),
                 );
               },
-              child: Container(
-                height: 50,
-                width: 50,
-                decoration: BoxDecoration(
-                  color: Theme.of(context).colorScheme.tertiary,
-                  borderRadius: BorderRadius.circular(12),
-                ),
-                child: Center(
-                  child: Image.asset(
-                    'assets/notification_icon.png',
-                    height: 30,
-                    width: 30,
+              child: Material(
+                borderRadius: BorderRadius.circular(12),
+                elevation: 5,
+                color: Theme.of(context).colorScheme.tertiary,
+                child: SizedBox(
+                  height: 50,
+                  width: 50,
+                  child: Center(
+                    child: Image.asset(
+                      'assets/notification_icon.png',
+                      height: 30,
+                      width: 30,
+                    ),
                   ),
                 ),
               ),
@@ -250,6 +250,7 @@ class _StatsticsScreenState extends State<StatsticsScreen> {
                                     style: TextStyle(
                                       fontSize: 18,
                                       height: 0,
+                                      fontWeight: FontWeight.bold,
                                     ),
                                   ),
                                   const SizedBox(height: 20),
@@ -349,16 +350,14 @@ class _StatsticsScreenState extends State<StatsticsScreen> {
                             ),
                           ),
                         ),
-                      const SizedBox(
-                        height: 20,
-                      ),
+                      const SizedBox(height: 20),
                       if (dropdownValue1 == 'Monthly')
                         Material(
                           borderRadius: BorderRadius.circular(20),
                           color: Theme.of(context).colorScheme.tertiary,
                           child: Padding(
                             padding: const EdgeInsets.symmetric(
-                                horizontal: 5.0, vertical: 20.0),
+                                horizontal: 10.0, vertical: 20),
                             child: Column(
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
@@ -499,16 +498,14 @@ class _StatsticsScreenState extends State<StatsticsScreen> {
                           dropdownValue2 != 'Early Out' &&
                           dropdownValue2 != 'Late Arrival')
                         if (dropdownValue1 == 'Weekly' && _selectedIndex == 0)
-                        const StatusBuilderMonthly(),
+                          const StatusBuilderWeekly(),
                       if (dropdownValue2 != 'Present' &&
                           dropdownValue2 != 'On Time' &&
                           dropdownValue2 != 'Absent' &&
                           dropdownValue2 != 'Early Out' &&
                           dropdownValue2 != 'Late Arrival')
                         if (dropdownValue1 == 'Monthly' && _selectedIndex == 0)
-                          PreviousMonthlyAttendance(
-                            uid: uid,
-                          ),
+                          const StatusBuilderMonthly(),
                       if (dropdownValue1 == 'Weekly' && _selectedIndex == 1)
                         const GraphicalbuilderWeekly(),
                       if (dropdownValue1 == 'Monthly' && _selectedIndex == 1)

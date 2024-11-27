@@ -5,13 +5,8 @@ import 'package:intl/intl.dart';
 import 'package:quaidtech/main.dart';
 
 class StatusBuilderWeekly extends StatefulWidget {
-    final String month;
-  final String year;
-  const StatusBuilderWeekly
-  ({
-      super.key,
-    required this.month,
-    required this.year,
+  const StatusBuilderWeekly({
+    super.key,
   });
   @override
   State<StatusBuilderWeekly> createState() => _StatusBuilerState();
@@ -25,7 +20,6 @@ class _StatusBuilerState extends State<StatusBuilderWeekly> {
     final now = DateTime.now();
     final startOfWeek = now.subtract(Duration(days: now.weekday - 1));
 
-    
     final currentDayOfWeek = now.weekday - 1;
 
     final List<Future<DocumentSnapshot<Map<String, dynamic>>>> snapshotFutures =
@@ -120,67 +114,72 @@ class _StatusBuilerState extends State<StatusBuilderWeekly> {
     return totalHours;
   }
 
- Widget _buildEmptyAttendanceContainer(int index) {
-  final date = DateTime.now().subtract(Duration(days: DateTime.now().weekday - 1 - index));
-  final formattedDate = DateFormat('dd').format(date);
-  final day = DateFormat('EE').format(date);
+  Widget _buildEmptyAttendanceContainer(int index) {
+    final date = DateTime.now()
+        .subtract(Duration(days: DateTime.now().weekday - 1 - index));
+    final formattedDate = DateFormat('dd').format(date);
+    final day = DateFormat('EE').format(date);
 
-  return Container(
-    padding: const EdgeInsets.all(12),
-    margin: const EdgeInsets.only(bottom: 10),
-    height: 82,
-    width: 360,
-    decoration: BoxDecoration(
-      borderRadius: BorderRadius.circular(12),
-      color: Colors.white,
-    ),
-    child: Row(
-      crossAxisAlignment: CrossAxisAlignment.center,
+    return Column(
       children: [
-        // Date Container
         Container(
-          width: 55,
-          height: 55,
+          padding: const EdgeInsets.all(12),
+          height: 82,
           decoration: BoxDecoration(
-            color: Colors.red,
-            borderRadius: BorderRadius.circular(6),
+            borderRadius: BorderRadius.circular(12),
+            color: Colors.white,
           ),
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              Text(
-                formattedDate,
-                style: const TextStyle(
+              Container(
+                width: 55,
+                height: 55,
+                decoration: BoxDecoration(
+                  color: StatusTheme.theme.colorScheme.secondary,
+                  borderRadius: BorderRadius.circular(6),
+                ),
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Text(
+                      formattedDate,
+                      style: const TextStyle(
+                        fontSize: 22,
+                        fontWeight: FontWeight.w600,
+                        color: Colors.white,
+                        height: 0,
+                      ),
+                    ),
+                    const SizedBox(height: 5),
+                    Text(
+                      day,
+                      style: const TextStyle(
+                        fontSize: 12,
+                        fontWeight: FontWeight.w400,
+                        color: Colors.white,
+                        height: 0,
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+              const Text(
+                'Leave/Day off',
+                style: TextStyle(
                   fontSize: 22,
-                  fontWeight: FontWeight.w600,
-                  color: Colors.white,
+                  fontWeight: FontWeight.bold,
+                  height: 0,
                 ),
               ),
-              const SizedBox(height: 5),
-              Text(
-                day,
-                style: const TextStyle(
-                  fontSize: 12,
-                  fontWeight: FontWeight.w400,
-                  color: Colors.white,
-                ),
-              ),
+              const SizedBox(width: 10),
             ],
           ),
         ),
-        // Label
-        const SizedBox(width: 50),
-        const Text(
-          'Leave/Day off',
-          style: TextStyle(
-            fontSize: 22,
-            fontWeight: FontWeight.bold,
-          ),
-        ),
+        const SizedBox(height: 10),
       ],
-    ),
-  );
-}
+    );
+  }
 
   Widget _buildAttendance({required List<Map<String, dynamic>?> data}) {
     return ListView.builder(
@@ -207,27 +206,30 @@ class _StatusBuilerState extends State<StatusBuilderWeekly> {
         }
         final totalHours = _calculateTotalHours(checkIn, checkOut);
         Color containerColor = _determineContainerColor(checkIn, checkOut);
-        return Container(
-          padding: const EdgeInsets.all(12),
-          margin: const EdgeInsets.only(bottom: 10),
-          height: 82,
-          width: 360,
-          decoration: BoxDecoration(
-            borderRadius: BorderRadius.circular(12),
-            color: Colors.white,
-          ),
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            crossAxisAlignment: CrossAxisAlignment.center,
-            children: [
-              _buildDateColumn(formattedDate, day, containerColor),
-              _buildTimeColumn(checkIn, 'Check In'),
-              const VerticalDivider(color: Colors.black, width: 1),
-              _buildTimeColumn(checkOut, 'Check Out'),
-              const VerticalDivider(color: Colors.black, width: 1),
-              _buildHoursColumn(totalHours),
-            ],
-          ),
+        return Column(
+          children: [
+            Container(
+              padding: const EdgeInsets.all(12),
+              height: 82,
+              decoration: BoxDecoration(
+                borderRadius: BorderRadius.circular(12),
+                color: Colors.white,
+              ),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                crossAxisAlignment: CrossAxisAlignment.center,
+                children: [
+                  _buildDateColumn(formattedDate, day, containerColor),
+                  _buildTimeColumn(checkIn, 'Check In'),
+                  const VerticalDivider(color: Colors.black, width: 1),
+                  _buildTimeColumn(checkOut, 'Check Out'),
+                  const VerticalDivider(color: Colors.black, width: 1),
+                  _buildHoursColumn(totalHours),
+                ],
+              ),
+            ),
+            const SizedBox(height: 10),
+          ],
         );
       },
     );
@@ -237,17 +239,17 @@ class _StatusBuilerState extends State<StatusBuilderWeekly> {
     const TimeOfDay onTime = TimeOfDay(hour: 8, minute: 15);
     const TimeOfDay lateArrival = TimeOfDay(hour: 8, minute: 16);
     const TimeOfDay earlyCheckout = TimeOfDay(hour: 17, minute: 0);
-    Color containerColor = CustomTheme.theme.colorScheme.secondary;
+    Color containerColor = StatusTheme.theme.colorScheme.secondary;
     if (checkIn != null) {
       final TimeOfDay checkInTime = TimeOfDay.fromDateTime(checkIn);
       if (checkInTime.hour < onTime.hour ||
           (checkInTime.hour == onTime.hour &&
               checkInTime.minute <= onTime.minute)) {
-        containerColor = CustomTheme.theme.colorScheme.inversePrimary;
+        containerColor = StatusTheme.theme.colorScheme.inversePrimary;
       } else if (checkInTime.hour > lateArrival.hour ||
           (checkInTime.hour == lateArrival.hour &&
               checkInTime.minute >= lateArrival.minute)) {
-        containerColor = CustomTheme.theme.colorScheme.primary;
+        containerColor = StatusTheme.theme.colorScheme.primary;
       }
     }
     if (checkOut != null) {
@@ -255,7 +257,7 @@ class _StatusBuilerState extends State<StatusBuilderWeekly> {
       if (checkOutTime.hour < earlyCheckout.hour ||
           (checkOutTime.hour == earlyCheckout.hour &&
               checkOutTime.minute < earlyCheckout.minute)) {
-        containerColor = CustomTheme.theme.colorScheme.tertiary;
+        containerColor = StatusTheme.theme.colorScheme.tertiary;
       }
     }
     return containerColor;

@@ -4,7 +4,6 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
-import 'package:quaidtech/screens/home.dart';
 import 'package:quaidtech/screens/login.dart';
 import 'package:quaidtech/screens/notification.dart';
 import 'dart:io';
@@ -258,16 +257,16 @@ class _ProfileScreenState extends State<ProfileScreen> {
             children: [
               Container(
                 height: 10,
-                decoration: const BoxDecoration(
+                decoration: BoxDecoration(
                   gradient: LinearGradient(
                     colors: [
-                      Color(0xff4D3D79),
-                      Color(0xff8E71DF),
+                      Theme.of(context).colorScheme.primary,
+                      Theme.of(context).colorScheme.inversePrimary,
                     ],
                     begin: Alignment.centerLeft,
                     end: Alignment.centerRight,
                   ),
-                  borderRadius: BorderRadius.vertical(
+                  borderRadius: const BorderRadius.vertical(
                     top: Radius.circular(12),
                   ),
                 ),
@@ -277,10 +276,12 @@ class _ProfileScreenState extends State<ProfileScreen> {
                 child: Column(
                   mainAxisSize: MainAxisSize.min,
                   children: [
-                    Image.asset(
-                      "assets/warning.png",
-                      width: 50,
-                      height: 50,
+                    CircleAvatar(
+                      radius: 25,
+                      backgroundColor: const Color(0xff3B3A3C),
+                      child: Image.asset(
+                        "assets/warning.png",
+                      ),
                     ),
                     const SizedBox(height: 10),
                     const Text(
@@ -298,7 +299,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                       style: TextStyle(
                         fontSize: 10,
                         color: Colors.grey,
-                        height: 1.2,
+                        height: 0,
                       ),
                       textAlign: TextAlign.center,
                     ),
@@ -338,7 +339,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                             width: 110,
                             height: 30,
                             decoration: BoxDecoration(
-                              color: const Color(0xff7647EB),
+                              color: Theme.of(context).colorScheme.primary,
                               borderRadius: BorderRadius.circular(10),
                             ),
                             child: const Center(
@@ -421,16 +422,16 @@ class _ProfileScreenState extends State<ProfileScreen> {
               children: [
                 Container(
                   height: 10,
-                  decoration: const BoxDecoration(
+                  decoration: BoxDecoration(
                     gradient: LinearGradient(
                       colors: [
-                        Color(0xff4D3D79),
-                        Color(0xff8E71DF),
+                        Theme.of(context).colorScheme.primary,
+                        Theme.of(context).colorScheme.inversePrimary,
                       ],
                       begin: Alignment.centerLeft,
                       end: Alignment.centerRight,
                     ),
-                    borderRadius: BorderRadius.vertical(
+                    borderRadius: const BorderRadius.vertical(
                       top: Radius.circular(12),
                     ),
                   ),
@@ -483,171 +484,139 @@ class _ProfileScreenState extends State<ProfileScreen> {
     final double screenWidth = screenSize.width;
     return Scaffold(
       backgroundColor: Colors.white,
+      appBar: AppBar(
+        automaticallyImplyLeading: false,
+        title: const Row(
+          mainAxisAlignment: MainAxisAlignment.center,
+          crossAxisAlignment: CrossAxisAlignment.center,
+          children: [
+            SizedBox(width: 60),
+            Text(
+              'Profile',
+              style: TextStyle(
+                fontSize: 22,
+                fontWeight: FontWeight.bold,
+                height: 0,
+              ),
+            ),
+          ],
+        ),
+        actions: [
+          Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 12.0),
+            child: GestureDetector(
+              onTap: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => const NotificationScreen(),
+                  ),
+                );
+              },
+              child: Material(
+                borderRadius: BorderRadius.circular(12),
+                elevation: 5,
+                color: Theme.of(context).colorScheme.tertiary,
+                child: SizedBox(
+                  height: 50,
+                  width: 50,
+                  child: Center(
+                    child: Image.asset(
+                      'assets/notification_icon.png',
+                      height: 30,
+                      width: 30,
+                    ),
+                  ),
+                ),
+              ),
+            ),
+          ),
+        ],
+      ),
       body: Stack(
         children: [
           SingleChildScrollView(
-            child: SafeArea(
-              child: Padding(
-                padding: const EdgeInsets.symmetric(
-                  horizontal: 20.0,
-                  vertical: 10.0,
-                ),
-                child: Form(
-                  key: _formKey,
-                  child: Column(
-                    children: [
-                      SizedBox(
-                        height: 70,
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: [
-                            Container(
-                              width: 50,
-                              height: 50,
-                              decoration: BoxDecoration(
-                                color: Colors.transparent,
-                                borderRadius: BorderRadius.circular(12),
-                                boxShadow: const [
-                                  BoxShadow(
-                                    color: Colors.transparent,
-                                    offset: Offset(0, 4),
-                                    spreadRadius: 0,
-                                    blurRadius: 4,
-                                  ),
-                                ],
-                              ),
-                              child: GestureDetector(
-                                onTap: () {
-                                  Navigator.push(
-                                    context,
-                                    MaterialPageRoute(
-                                        builder: (context) =>
-                                            const HomeScreen()),
-                                  );
-                                },
-                                child: const Icon(
-                                  Icons.arrow_back,
-                                  color: Colors.transparent,
-                                ),
-                              ),
-                            ),
-                            const Text(
-                              'Profile',
-                              style: TextStyle(
-                                fontSize: 22,
-                                fontWeight: FontWeight.w600,
-                                height: 0,
-                              ),
-                            ),
-                            GestureDetector(
-                              onTap: () {
-                                Navigator.push(
-                                  context,
-                                  MaterialPageRoute(
-                                    builder: (context) =>
-                                        const NotificationScreen(),
-                                  ),
-                                );
-                              },
-                              child: Container(
-                                height: 50,
-                                width: 50,
-                                decoration: BoxDecoration(
-                                  color: const Color(0xffE6E8FD),
-                                  borderRadius: BorderRadius.circular(12),
-                                  boxShadow: const [
-                                    BoxShadow(
-                                      color: Colors.black12,
-                                      offset: Offset(2, 2),
-                                      blurRadius: 4,
-                                    ),
-                                  ],
-                                ),
-                                child: Center(
-                                  child: Image.asset(
-                                    'assets/notification_icon.png',
-                                    height: 30,
-                                    width: 30,
-                                  ),
-                                ),
-                              ),
-                            ),
-                          ],
-                        ),
-                      ),
-                      Stack(
-                        alignment: Alignment.center,
-                        children: [
-                          Container(
-                            width: 180,
-                            height: 180,
-                            decoration: BoxDecoration(
-                              shape: BoxShape.circle,
-                              border: Border.all(color: Colors.black, width: 1),
-                            ),
+            child: Padding(
+              padding: const EdgeInsets.symmetric(
+                horizontal: 20.0,
+                vertical: 10.0,
+              ),
+              child: Form(
+                key: _formKey,
+                child: Column(
+                  children: [
+                    Stack(
+                      alignment: Alignment.center,
+                      children: [
+                        Container(
+                          width: 180,
+                          height: 180,
+                          decoration: BoxDecoration(
+                            shape: BoxShape.circle,
+                            border: Border.all(color: Colors.black, width: 1),
                           ),
-                          _selectedImage != null
-                              ? ClipRRect(
-                                  borderRadius: BorderRadius.circular(900),
-                                  child: Image.file(
-                                    _selectedImage!,
-                                    width: 175,
-                                    height: 175,
-                                    fit: BoxFit.cover,
-                                  ),
-                                )
-                              : _imageUrl != null && _imageUrl!.isNotEmpty
-                                  ? ClipRRect(
-                                      borderRadius: BorderRadius.circular(900),
-                                      child: Image.network(
-                                        _imageUrl!,
-                                        width: 175,
-                                        height: 175,
-                                        fit: BoxFit.cover,
-                                      ),
-                                    )
-                                  : Container(
+                        ),
+                        _selectedImage != null
+                            ? ClipRRect(
+                                borderRadius: BorderRadius.circular(900),
+                                child: Image.file(
+                                  _selectedImage!,
+                                  width: 175,
+                                  height: 175,
+                                  fit: BoxFit.cover,
+                                ),
+                              )
+                            : _imageUrl != null && _imageUrl!.isNotEmpty
+                                ? ClipRRect(
+                                    borderRadius: BorderRadius.circular(900),
+                                    child: Image.network(
+                                      _imageUrl!,
                                       width: 175,
                                       height: 175,
-                                      decoration: const BoxDecoration(),
-                                      child: ClipRRect(
-                                        borderRadius:
-                                            BorderRadius.circular(900),
-                                        child: Image.asset(
-                                          'assets/aabb.jpg',
-                                          width: 180,
-                                          height: 180,
-                                          fit: BoxFit.cover,
-                                        ),
+                                      fit: BoxFit.cover,
+                                    ),
+                                  )
+                                : Container(
+                                    width: 175,
+                                    height: 175,
+                                    decoration: const BoxDecoration(),
+                                    child: ClipRRect(
+                                      borderRadius: BorderRadius.circular(900),
+                                      child: Image.asset(
+                                        'assets/aabb.jpg',
+                                        width: 180,
+                                        height: 180,
+                                        fit: BoxFit.cover,
                                       ),
                                     ),
-                          if (isEdited != false)
-                            Positioned(
-                              bottom: 0,
-                              right: 5,
-                              child: IconButton(
-                                onPressed: _pickImage,
-                                icon: CircleAvatar(
-                                    radius: 20,
-                                    backgroundColor: const Color(0xff7647EB),
-                                    child: Image.asset(
-                                      "assets/camera.png",
-                                      width: 20,
-                                      height: 20,
-                                      color: Colors.white,
-                                    )),
-                              ),
+                                  ),
+                        if (isEdited != false)
+                          Positioned(
+                            bottom: 0,
+                            right: 5,
+                            child: IconButton(
+                              onPressed: _pickImage,
+                              icon: CircleAvatar(
+                                  radius: 20,
+                                  backgroundColor:
+                                      Theme.of(context).colorScheme.primary,
+                                  child: Image.asset(
+                                    "assets/camera.png",
+                                    width: 20,
+                                    height: 20,
+                                    color: Colors.white,
+                                  )),
                             ),
-                        ],
-                      ),
-                      const SizedBox(height: 20),
-                      Container(
-                        padding: const EdgeInsets.symmetric(
-                            vertical: 20, horizontal: 10),
-                        width: double.infinity,
-                        decoration: BoxDecoration(
-                            color: const Color(0xffEFF1FF),
-                            borderRadius: BorderRadius.circular(18)),
+                          ),
+                      ],
+                    ),
+                    const SizedBox(height: 20),
+                    Material(
+                      color: Theme.of(context).colorScheme.tertiary,
+                      borderRadius: BorderRadius.circular(12),
+                      elevation: 5,
+                      child: Padding(
+                        padding: const EdgeInsets.all(12.0),
                         child: Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
@@ -655,10 +624,11 @@ class _ProfileScreenState extends State<ProfileScreen> {
                               'Name',
                               style: TextStyle(
                                 fontSize: 16,
-                                fontWeight: FontWeight.w600,
+                                fontWeight: FontWeight.w500,
                                 height: 0,
                               ),
                             ),
+                            const SizedBox(height: 5),
                             TextFormField(
                               controller: _nameController,
                               enabled: isEdited,
@@ -680,15 +650,16 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                 ),
                               ),
                             ),
-                            const SizedBox(height: 10),
+                            const SizedBox(height: 15),
                             const Text(
                               'Password',
                               style: TextStyle(
                                 fontSize: 16,
-                                fontWeight: FontWeight.w600,
+                                fontWeight: FontWeight.w500,
                                 height: 0,
                               ),
                             ),
+                            const SizedBox(height: 5),
                             TextFormField(
                               controller: _passwordController,
                               obscureText: !_isPasswordVisible,
@@ -721,15 +692,16 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                 ),
                               ),
                             ),
-                            const SizedBox(height: 10),
+                            const SizedBox(height: 15),
                             const Text(
                               'Phone Number',
                               style: TextStyle(
                                 fontSize: 16,
-                                fontWeight: FontWeight.w600,
+                                fontWeight: FontWeight.w500,
                                 height: 0,
                               ),
                             ),
+                            const SizedBox(height: 5),
                             TextFormField(
                               controller: _phoneController,
                               keyboardType: TextInputType.phone,
@@ -749,7 +721,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                 ),
                               ),
                             ),
-                            const SizedBox(height: 30),
+                            const SizedBox(height: 20),
                             if (!isEdited)
                               Row(
                                 mainAxisAlignment:
@@ -761,7 +733,9 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                       width: screenWidth * 0.4,
                                       height: screenHeight * 0.055,
                                       decoration: BoxDecoration(
-                                        color: const Color(0xff7647EB),
+                                        color: Theme.of(context)
+                                            .colorScheme
+                                            .primary,
                                         borderRadius: BorderRadius.circular(8),
                                       ),
                                       child: const Center(
@@ -779,7 +753,9 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                       width: screenWidth * 0.4,
                                       height: screenHeight * 0.055,
                                       decoration: BoxDecoration(
-                                        color: const Color(0xffEC5851),
+                                        color: Theme.of(context)
+                                            .colorScheme
+                                            .secondary,
                                         borderRadius: BorderRadius.circular(8),
                                       ),
                                       child: const Center(
@@ -828,7 +804,9 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                       width: screenWidth * 0.4,
                                       height: screenHeight * 0.055,
                                       decoration: BoxDecoration(
-                                        color: const Color(0xff7647EB),
+                                        color: Theme.of(context)
+                                            .colorScheme
+                                            .primary,
                                         borderRadius: BorderRadius.circular(8),
                                       ),
                                       child: const Center(
@@ -843,8 +821,8 @@ class _ProfileScreenState extends State<ProfileScreen> {
                           ],
                         ),
                       ),
-                    ],
-                  ),
+                    ),
+                  ],
                 ),
               ),
             ),

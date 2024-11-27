@@ -102,19 +102,19 @@ class Monthlyattendance extends StatelessWidget {
             child: PieChart(
               PieChartData(sections: [
                 PieChartSectionData(
-                  color: CustomTheme.theme.colorScheme.surface,
+                  color: StatusTheme.theme.colorScheme.surface,
                   value: presentCount.toDouble(),
                   title: '',
                   radius: 12,
                 ),
                 PieChartSectionData(
-                  color: CustomTheme.theme.colorScheme.primary,
+                  color: StatusTheme.theme.colorScheme.primary,
                   value: lateCount.toDouble(),
                   title: '',
                   radius: 12,
                 ),
                 PieChartSectionData(
-                  color: CustomTheme.theme.colorScheme.secondary,
+                  color: StatusTheme.theme.colorScheme.secondary,
                   value: absentCount.toDouble(),
                   title: '',
                   radius: 12,
@@ -129,7 +129,7 @@ class Monthlyattendance extends StatelessWidget {
                 style: TextStyle(
                   fontSize: responsiveFontSize,
                   fontWeight: FontWeight.w600,
-                  color: CustomTheme.theme.colorScheme.surface,
+                  color: StatusTheme.theme.colorScheme.surface,
                   height: 0,
                 ),
               ),
@@ -151,7 +151,7 @@ class Monthlyattendance extends StatelessWidget {
                 style: TextStyle(
                   fontSize: responsiveFontSize,
                   fontWeight: FontWeight.w600,
-                  color: CustomTheme.theme.colorScheme.primary,
+                  color: StatusTheme.theme.colorScheme.primary,
                   height: 0,
                 ),
               ),
@@ -173,7 +173,7 @@ class Monthlyattendance extends StatelessWidget {
                 style: TextStyle(
                   fontSize: responsiveFontSize,
                   fontWeight: FontWeight.w600,
-                  color: CustomTheme.theme.colorScheme.secondary,
+                  color: StatusTheme.theme.colorScheme.secondary,
                   height: 0,
                 ),
               ),

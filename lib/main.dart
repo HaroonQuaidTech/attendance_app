@@ -60,7 +60,7 @@ class _MyAppState extends State<MyApp> {
   }
 }
 
-class CustomTheme {
+class StatusTheme {
   static ThemeData get theme {
     return ThemeData(
       colorScheme: const ColorScheme.light(

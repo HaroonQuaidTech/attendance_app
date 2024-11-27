@@ -172,9 +172,9 @@ class _HomeScreenState extends State<HomeScreen> {
 
               Color eventColor;
               if (checkIn.isAfter(lateThreshold)) {
-                eventColor = CustomTheme.theme.colorScheme.primary;
+                eventColor = StatusTheme.theme.colorScheme.primary;
               } else {
-                eventColor = CustomTheme.theme.colorScheme.inversePrimary;
+                eventColor = StatusTheme.theme.colorScheme.inversePrimary;
               }
 
               _events[DateTime.utc(checkIn.year, checkIn.month, checkIn.day)] =
@@ -344,11 +344,14 @@ class _HomeScreenState extends State<HomeScreen> {
                     child: Column(
                       mainAxisSize: MainAxisSize.min,
                       children: [
-                        Image.asset(
-                          "assets/warning.png",
-                          width: 50,
-                          height: 50,
-                        ),
+                        CircleAvatar(
+                      radius: 25,
+                      backgroundColor: const Color(0xff3B3A3C),
+                      child: Image.asset(
+                        "assets/warning.png",
+                        
+                      ),
+                    ),
                         const SizedBox(height: 10),
                         const Text(
                           'Are you sure ?',
@@ -688,7 +691,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                           }
                                           Color? eventColor = events.isNotEmpty
                                               ? events.first as Color
-                                              : CustomTheme
+                                              : StatusTheme
                                                   .theme.colorScheme.secondary;
                                           return Container(
                                             margin: const EdgeInsets.symmetric(

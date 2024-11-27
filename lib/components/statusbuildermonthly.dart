@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:intl/intl.dart';
+import 'package:quaidtech/main.dart';
 
 class StatusBuilderMonthly extends StatefulWidget {
   const StatusBuilderMonthly({super.key});
@@ -108,58 +109,64 @@ class _StatusBuilerState extends State<StatusBuilderMonthly> {
     final DateTime date = firstDayOfMonth.add(Duration(days: index));
     final String day = DateFormat('EE').format(date);
     final String formattedDate = DateFormat('dd').format(date);
-    return Container(
-      padding: const EdgeInsets.all(12),
-      margin: const EdgeInsets.only(bottom: 10),
-      height: 82,
-      width: 360,
-      decoration: BoxDecoration(
-        borderRadius: BorderRadius.circular(12),
-        color: Colors.white,
-      ),
-      child: Row(
-        crossAxisAlignment: CrossAxisAlignment.center,
-        children: [
-          Column(
-            mainAxisAlignment: MainAxisAlignment.center,
+    return Column(
+      children: [
+        Container(
+          padding: const EdgeInsets.all(12),
+          height: 82,
+          decoration: BoxDecoration(
+            borderRadius: BorderRadius.circular(12),
+            color: Colors.white,
+          ),
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
               Container(
-                width: 53,
+                width: 55,
                 height: 55,
                 decoration: BoxDecoration(
-                    color: Colors.red, borderRadius: BorderRadius.circular(6)),
+                  color: StatusTheme.theme.colorScheme.secondary,
+                  borderRadius: BorderRadius.circular(6),
+                ),
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.center,
-                  crossAxisAlignment: CrossAxisAlignment.center,
                   children: [
                     Text(
                       formattedDate,
                       style: const TextStyle(
-                          fontSize: 22,
-                          fontWeight: FontWeight.w600,
-                          color: Colors.white),
+                        fontSize: 22,
+                        fontWeight: FontWeight.w600,
+                        color: Colors.white,
+                        height: 0,
+                      ),
                     ),
+                    const SizedBox(height: 5),
                     Text(
                       day,
                       style: const TextStyle(
-                          fontSize: 12,
-                          fontWeight: FontWeight.w400,
-                          color: Colors.white),
+                        fontSize: 12,
+                        fontWeight: FontWeight.w400,
+                        color: Colors.white,
+                        height: 0,
+                      ),
                     ),
                   ],
                 ),
               ),
+              const Text(
+                'Leave/Day off',
+                style: TextStyle(
+                  fontSize: 22,
+                  fontWeight: FontWeight.bold,
+                  height: 0,
+                ),
+              ),
+              const SizedBox(width: 10),
             ],
           ),
-          const Padding(
-            padding: EdgeInsets.only(left: 50.0),
-            child: Text(
-              'Leave/Day off',
-              style: TextStyle(fontSize: 22, fontWeight: FontWeight.bold),
-            ),
-          )
-        ],
-      ),
+        ),
+        const SizedBox(height: 10),
+      ],
     );
   }
 
@@ -227,57 +234,64 @@ class _StatusBuilerState extends State<StatusBuilderMonthly> {
     final DateTime date = firstDayOfMonth.add(Duration(days: index));
     final String day = DateFormat('EE').format(date);
     final String formattedDate = DateFormat('dd').format(date);
-    return Container(
-      padding: const EdgeInsets.symmetric(horizontal: 12),
-      margin: const EdgeInsets.only(bottom: 10),
-      height: 82,
-      decoration: BoxDecoration(
-        borderRadius: BorderRadius.circular(12),
-        color: Colors.white,
-      ),
-      child: Row(
-        children: [
-          Container(
-            width: 53,
-            height: 55,
-            decoration: BoxDecoration(
-                color: Colors.blueGrey, borderRadius: BorderRadius.circular(6)),
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              crossAxisAlignment: CrossAxisAlignment.center,
-              children: [
-                Text(
-                  formattedDate,
-                  style: const TextStyle(
-                      fontSize: 22,
-                      fontWeight: FontWeight.w600,
-                      color: Colors.white),
-                ),
-                Text(
-                  day,
-                  style: const TextStyle(
-                    fontSize: 12,
-                    fontWeight: FontWeight.w400,
-                    color: Colors.white,
-                  ),
-                ),
-              ],
-            ),
+    return Column(
+      children: [
+        Container(
+          padding: const EdgeInsets.symmetric(horizontal: 12),
+          height: 82,
+          decoration: BoxDecoration(
+            borderRadius: BorderRadius.circular(12),
+            color: Colors.white,
           ),
-          const SizedBox(width: 30),
-          const Padding(
-            padding: EdgeInsets.only(left: 20.0),
-            child: Text(
-              'Weekend Days',
-              style: TextStyle(
-                fontSize: 22,
-                fontWeight: FontWeight.bold,
-                height: 0,
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              Container(
+                width: 55,
+                height: 55,
+                decoration: BoxDecoration(
+                    color: StatusTheme.theme.colorScheme.secondaryFixed,
+                    borderRadius: BorderRadius.circular(6)),
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  children: [
+                    Text(
+                      formattedDate,
+                      style: const TextStyle(
+                        fontSize: 22,
+                        fontWeight: FontWeight.w600,
+                        color: Colors.white,
+                        height: 0,
+                      ),
+                    ),
+                    const SizedBox(height: 5),
+                    Text(
+                      day,
+                      style: const TextStyle(
+                        fontSize: 12,
+                        fontWeight: FontWeight.w400,
+                        color: Colors.white,
+                        height: 0,
+                      ),
+                    ),
+                  ],
+                ),
               ),
-            ),
-          )
-        ],
-      ),
+              const Text(
+                'Weekend Days',
+                style: TextStyle(
+                  fontSize: 22,
+                  fontWeight: FontWeight.bold,
+                  height: 0,
+                ),
+              ),
+              const SizedBox(width: 10),
+            ],
+          ),
+        ),
+        const SizedBox(height: 10),
+      ],
     );
   }
 
@@ -293,10 +307,27 @@ class _StatusBuilerState extends State<StatusBuilderMonthly> {
   Widget _buildAttendance(
       {required Color color, required List<Map<String, dynamic>?> data}) {
     if (data.isEmpty) {
-      return const Center(
-        child: Text(
-          'No attendance data found.',
-          style: TextStyle(fontSize: 20),
+      return Center(
+        child: Column(
+          children: [
+            const SizedBox(height: 30),
+            const Icon(
+              Icons.warning,
+              color: Colors.grey,
+              size: 50,
+            ),
+            const SizedBox(height: 5),
+            Text(
+              "No Data Available",
+              style: TextStyle(
+                fontWeight: FontWeight.bold,
+                height: 0,
+                fontSize: 20,
+                color: Colors.grey[400],
+              ),
+            ),
+            const SizedBox(height: 30),
+          ],
         ),
       );
     }
@@ -339,38 +370,37 @@ class _StatusBuilerState extends State<StatusBuilderMonthly> {
   }
 
   Color _determineContainerColor(DateTime? checkIn, DateTime? checkOut) {
+    int timeOfDayToMinutes(TimeOfDay time) {
+      return time.hour * 60 + time.minute;
+    }
+
     if (checkIn != null) {
       final TimeOfDay checkInTime = TimeOfDay.fromDateTime(checkIn);
-      const TimeOfDay earlyOnTime = TimeOfDay(hour: 7, minute: 50);
-      const TimeOfDay lateOnTime = TimeOfDay(hour: 8, minute: 10);
-      const TimeOfDay exactCheckIn = TimeOfDay(hour: 8, minute: 0);
-      const TimeOfDay lateArrival = TimeOfDay(hour: 8, minute: 10);
-      if ((checkInTime.hour == earlyOnTime.hour &&
-              checkInTime.minute >= earlyOnTime.minute) ||
-          (checkInTime.hour == lateOnTime.hour &&
-              checkInTime.minute <= lateOnTime.minute) ||
-          (checkInTime.hour > earlyOnTime.hour &&
-              checkInTime.hour < lateOnTime.hour)) {
-        return const Color(0xff22AF41);
-      } else if (checkInTime.hour > lateArrival.hour ||
-          (checkInTime.hour == lateArrival.hour &&
-              checkInTime.minute > lateArrival.minute)) {
-        return const Color(0xffF6C15B);
-      } else if (checkInTime.hour == exactCheckIn.hour &&
-          checkInTime.minute == exactCheckIn.minute) {
-        return const Color(0xff8E71DF);
+
+      const TimeOfDay ontime = TimeOfDay(hour: 8, minute: 15);
+      const TimeOfDay lateArrival = TimeOfDay(hour: 8, minute: 16);
+
+      final int checkInMinutes = timeOfDayToMinutes(checkInTime);
+      final int ontimeMinutes = timeOfDayToMinutes(ontime);
+      final int lateArrivalMinutes = timeOfDayToMinutes(lateArrival);
+
+      if (checkInMinutes <= ontimeMinutes) {
+        return StatusTheme.theme.colorScheme.inversePrimary;
+      } else if (checkInMinutes >= lateArrivalMinutes) {
+        return StatusTheme.theme.colorScheme.primary;
       }
     }
+
     if (checkOut != null) {
       final TimeOfDay checkOutTime = TimeOfDay.fromDateTime(checkOut);
       const TimeOfDay earlyCheckout = TimeOfDay(hour: 17, minute: 0);
       if (checkOutTime.hour < earlyCheckout.hour ||
           (checkOutTime.hour == earlyCheckout.hour &&
               checkOutTime.minute < earlyCheckout.minute)) {
-        return const Color.fromARGB(255, 223, 103, 11);
+        return StatusTheme.theme.colorScheme.tertiary;
       }
     }
-    return const Color(0xff8E71DF);
+    return StatusTheme.theme.colorScheme.secondary;
   }
 
   Widget _buildAttendanceRow({
@@ -408,7 +438,7 @@ class _StatusBuilerState extends State<StatusBuilderMonthly> {
   Widget _buildDateContainer(
       String formattedDate, String day, Color containerColor) {
     return Container(
-      width: 53,
+      width: 55,
       height: 55,
       decoration: BoxDecoration(
         color: containerColor,
@@ -420,12 +450,21 @@ class _StatusBuilerState extends State<StatusBuilderMonthly> {
           Text(
             formattedDate,
             style: const TextStyle(
-                fontSize: 22, fontWeight: FontWeight.w600, color: Colors.white),
+              fontSize: 22,
+              fontWeight: FontWeight.w600,
+              color: Colors.white,
+              height: 0,
+            ),
           ),
+          const SizedBox(height: 5),
           Text(
             day,
             style: const TextStyle(
-                fontSize: 12, fontWeight: FontWeight.w400, color: Colors.white),
+              fontSize: 12,
+              fontWeight: FontWeight.w400,
+              color: Colors.white,
+              height: 0,
+            ),
           ),
         ],
       ),
@@ -441,12 +480,21 @@ class _StatusBuilerState extends State<StatusBuilderMonthly> {
               ? _formatTime(timeOrHours)
               : timeOrHours.toString(),
           style: const TextStyle(
-              fontSize: 14, fontWeight: FontWeight.w800, color: Colors.black),
+            fontSize: 14,
+            fontWeight: FontWeight.w800,
+            color: Colors.black,
+            height: 0,
+          ),
         ),
+        const SizedBox(height: 5),
         Text(
           label,
           style: const TextStyle(
-              fontSize: 12, fontWeight: FontWeight.w600, color: Colors.black),
+            fontSize: 12,
+            fontWeight: FontWeight.w600,
+            color: Colors.black,
+            height: 0,
+          ),
         ),
       ],
     );
@@ -539,7 +587,10 @@ class _StatusBuilerState extends State<StatusBuilderMonthly> {
                           const Text(
                             'Monthly Times Log',
                             style: TextStyle(
-                                fontWeight: FontWeight.w600, fontSize: 18),
+                              fontWeight: FontWeight.w600,
+                              fontSize: 18,
+                              height: 0,
+                            ),
                           ),
                           const SizedBox(height: 20),
                           Row(
@@ -564,25 +615,33 @@ class _StatusBuilerState extends State<StatusBuilderMonthly> {
                                       const Text(
                                         'Time in Minutes',
                                         style: TextStyle(
-                                            fontWeight: FontWeight.w500,
-                                            fontSize: 14),
+                                          fontWeight: FontWeight.w500,
+                                          fontSize: 14,
+                                          height: 0,
+                                        ),
                                       ),
                                       Text(
                                         '$totalTime Minutes',
                                         style: const TextStyle(
-                                            fontWeight: FontWeight.w600,
-                                            fontSize: 20),
+                                          fontWeight: FontWeight.w600,
+                                          fontSize: 20,
+                                          height: 0,
+                                        ),
                                       ),
                                       LinearProgressIndicator(
                                         value: totalMinutes / maxMinutes,
                                         backgroundColor: Colors.grey[300],
-                                 color: Theme.of(context).colorScheme.primary,
+                                        color: Theme.of(context)
+                                            .colorScheme
+                                            .primary,
                                       ),
                                       Text(
                                         getCurrentMonthDateRange(),
                                         style: const TextStyle(
-                                            fontWeight: FontWeight.w600,
-                                            fontSize: 15),
+                                          fontWeight: FontWeight.w600,
+                                          fontSize: 15,
+                                          height: 0,
+                                        ),
                                       ),
                                     ],
                                   ),
@@ -607,25 +666,33 @@ class _StatusBuilerState extends State<StatusBuilderMonthly> {
                                       const Text(
                                         'Time in Hours',
                                         style: TextStyle(
-                                            fontWeight: FontWeight.w500,
-                                            fontSize: 14),
+                                          fontWeight: FontWeight.w500,
+                                          fontSize: 14,
+                                          height: 0,
+                                        ),
                                       ),
                                       Text(
                                         '$totalHoursFormatted Hours',
                                         style: const TextStyle(
-                                            fontWeight: FontWeight.w600,
-                                            fontSize: 20),
+                                          fontWeight: FontWeight.w600,
+                                          fontSize: 20,
+                                          height: 0,
+                                        ),
                                       ),
                                       LinearProgressIndicator(
                                         value: progressValue,
                                         backgroundColor: Colors.grey[300],
-                                      color: Theme.of(context).colorScheme.primary,
+                                        color: Theme.of(context)
+                                            .colorScheme
+                                            .primary,
                                       ),
                                       Text(
                                         getCurrentMonthDateRange(),
                                         style: const TextStyle(
-                                            fontWeight: FontWeight.w600,
-                                            fontSize: 15),
+                                          fontWeight: FontWeight.w600,
+                                          fontSize: 15,
+                                          height: 0,
+                                        ),
                                       ),
                                     ],
                                   ),
