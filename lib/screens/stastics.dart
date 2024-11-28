@@ -318,8 +318,10 @@ class _StatsticsScreenState extends State<StatsticsScreen> {
                                             elevation: 16,
                                             isExpanded: true,
                                             style: const TextStyle(
-                                                color: Colors.black,
-                                                fontSize: 16),
+                                              color: Colors.black,
+                                              fontSize: 16,
+                                              height: 0,
+                                            ),
                                             underline: const SizedBox(),
                                             onChanged: (String? newValue) {
                                               setState(() {

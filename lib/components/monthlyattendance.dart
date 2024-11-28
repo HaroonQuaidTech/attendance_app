@@ -91,16 +91,15 @@ class Monthlyattendance extends StatelessWidget {
     double baseFontSize1 = 14;
     double responsiveFontSize1 = baseFontSize1 * (screenWidth / 375);
 
-    return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 12.0),
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-        children: [
-          SizedBox(
-            height: 90,
-            width: 90,
-            child: PieChart(
-              PieChartData(sections: [
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+      children: [
+        SizedBox(
+          height: 90,
+          width: 90,
+          child: PieChart(
+            PieChartData(
+              sections: [
                 PieChartSectionData(
                   color: StatusTheme.theme.colorScheme.surface,
                   value: presentCount.toDouble(),
@@ -119,77 +118,79 @@ class Monthlyattendance extends StatelessWidget {
                   title: '',
                   radius: 12,
                 ),
-              ], sectionsSpace: 0, centerSpaceRadius: 26),
+              ],
+              sectionsSpace: 0,
+              centerSpaceRadius: 26,
             ),
           ),
-          Column(
-            children: [
-              Text(
-                presentCount.toString(),
-                style: TextStyle(
-                  fontSize: responsiveFontSize,
-                  fontWeight: FontWeight.w600,
-                  color: StatusTheme.theme.colorScheme.surface,
-                  height: 0,
-                ),
+        ),
+        Column(
+          children: [
+            Text(
+              presentCount.toString(),
+              style: TextStyle(
+                fontSize: responsiveFontSize,
+                fontWeight: FontWeight.w600,
+                color: StatusTheme.theme.colorScheme.surface,
+                height: 0,
               ),
-              const SizedBox(height: 10),
-              Text(
-                'Present',
-                style: TextStyle(
-                  fontSize: responsiveFontSize1,
-                  color: Theme.of(context).colorScheme.secondary,
-                  height: 0,
-                ),
+            ),
+            const SizedBox(height: 10),
+            Text(
+              'Present',
+              style: TextStyle(
+                fontSize: responsiveFontSize1,
+                color: Theme.of(context).colorScheme.secondary,
+                height: 0,
               ),
-            ],
-          ),
-          Column(
-            children: [
-              Text(
-                lateCount.toString(),
-                style: TextStyle(
-                  fontSize: responsiveFontSize,
-                  fontWeight: FontWeight.w600,
-                  color: StatusTheme.theme.colorScheme.primary,
-                  height: 0,
-                ),
+            ),
+          ],
+        ),
+        Column(
+          children: [
+            Text(
+              lateCount.toString(),
+              style: TextStyle(
+                fontSize: responsiveFontSize,
+                fontWeight: FontWeight.w600,
+                color: StatusTheme.theme.colorScheme.primary,
+                height: 0,
               ),
-              const SizedBox(height: 10),
-              Text(
-                'Late',
-                style: TextStyle(
-                  fontSize: responsiveFontSize1,
-                  color: Theme.of(context).colorScheme.secondary,
-                  height: 0,
-                ),
+            ),
+            const SizedBox(height: 10),
+            Text(
+              'Late',
+              style: TextStyle(
+                fontSize: responsiveFontSize1,
+                color: Theme.of(context).colorScheme.secondary,
+                height: 0,
               ),
-            ],
-          ),
-          Column(
-            children: [
-              Text(
-                absentCount.toString(),
-                style: TextStyle(
-                  fontSize: responsiveFontSize,
-                  fontWeight: FontWeight.w600,
-                  color: StatusTheme.theme.colorScheme.secondary,
-                  height: 0,
-                ),
+            ),
+          ],
+        ),
+        Column(
+          children: [
+            Text(
+              absentCount.toString(),
+              style: TextStyle(
+                fontSize: responsiveFontSize,
+                fontWeight: FontWeight.w600,
+                color: StatusTheme.theme.colorScheme.secondary,
+                height: 0,
               ),
-              const SizedBox(height: 10),
-              Text(
-                'Absent',
-                style: TextStyle(
-                  fontSize: responsiveFontSize1,
-                  color: Theme.of(context).colorScheme.secondary,
-                  height: 0,
-                ),
+            ),
+            const SizedBox(height: 10),
+            Text(
+              'Absent',
+              style: TextStyle(
+                fontSize: responsiveFontSize1,
+                color: Theme.of(context).colorScheme.secondary,
+                height: 0,
               ),
-            ],
-          )
-        ],
-      ),
+            ),
+          ],
+        )
+      ],
     );
   }
 }

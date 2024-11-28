@@ -170,63 +170,6 @@ class _StatusBuilerState extends State<StatusBuilderMonthly> {
     );
   }
 
-  Widget _buildHNullAttendanceContainer(int index) {
-    final DateTime now = DateTime.now();
-    final DateTime firstDayOfMonth = DateTime(now.year, now.month, 1);
-    final DateTime date = firstDayOfMonth.add(Duration(days: index));
-    final String day = DateFormat('EE').format(date);
-    final String formattedDate = DateFormat('dd').format(date);
-    return Container(
-      padding: const EdgeInsets.symmetric(horizontal: 12),
-      margin: const EdgeInsets.only(bottom: 10),
-      height: 82,
-      decoration: BoxDecoration(
-        borderRadius: BorderRadius.circular(12),
-        color: Colors.white,
-      ),
-      child: Row(
-        children: [
-          Container(
-            width: 53,
-            height: 55,
-            decoration: BoxDecoration(
-                color: const Color(0xff8E71DF),
-                borderRadius: BorderRadius.circular(6)),
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              crossAxisAlignment: CrossAxisAlignment.center,
-              children: [
-                Text(
-                  formattedDate,
-                  style: const TextStyle(
-                      fontSize: 22,
-                      fontWeight: FontWeight.w600,
-                      color: Colors.white),
-                ),
-                Text(
-                  day,
-                  style: const TextStyle(
-                    fontSize: 12,
-                    fontWeight: FontWeight.w400,
-                    color: Colors.white,
-                  ),
-                ),
-              ],
-            ),
-          ),
-          const SizedBox(width: 30),
-          const Text(
-            'Data Not Available',
-            style: TextStyle(
-              fontSize: 22,
-              fontWeight: FontWeight.bold,
-              height: 0,
-            ),
-          )
-        ],
-      ),
-    );
-  }
 
   Widget _buildWeekendContainer(int index) {
     final DateTime now = DateTime.now();
@@ -346,11 +289,9 @@ class _StatusBuilerState extends State<StatusBuilderMonthly> {
             date.weekday == DateTime.sunday) {
           return _buildWeekendContainer(index);
         }
-        if (date.isAfter(now) || attendanceRecord == null) {
-          return _buildHNullAttendanceContainer(index);
-        }
-        final checkIn = (attendanceRecord['checkIn'] as Timestamp?)?.toDate();
-        final checkOut = (attendanceRecord['checkOut'] as Timestamp?)?.toDate();
+       
+        final checkIn = (attendanceRecord?['checkIn'] as Timestamp?)?.toDate();
+        final checkOut = (attendanceRecord?['checkOut'] as Timestamp?)?.toDate();
         if (checkIn == null && checkOut == null) {
           return _buildEmptyAttendanceContainer(index);
         }

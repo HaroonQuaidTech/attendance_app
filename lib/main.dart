@@ -54,7 +54,7 @@ class _MyAppState extends State<MyApp> {
           'profile': (context) => const ProfileScreen(),
           'stat': (context) => const StatsticsScreen(),
           'splash': (context) => const Splashscreen(),
-        },  
+        },
       ),
     );
   }

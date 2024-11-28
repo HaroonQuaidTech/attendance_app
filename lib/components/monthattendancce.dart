@@ -9,7 +9,8 @@ class MonthlyAttendance extends StatefulWidget {
   const MonthlyAttendance({
     super.key,
     required this.color,
-    required this.dropdownValue2, required String uid,
+    required this.dropdownValue2,
+    required String uid,
   });
 
   @override
@@ -75,7 +76,7 @@ class _MonthlyAttendanceState extends State<MonthlyAttendance> {
               if (checkInTime.isAfter(DateTime(currentDate.year,
                       currentDate.month, currentDate.day, 7, 50)) &&
                   checkInTime.isBefore(DateTime(currentDate.year,
-                      currentDate.month, currentDate.day, 8, 10))) {
+                      currentDate.month, currentDate.day, 8, 16))) {
                 statuses.add("On Time");
               }
             }
@@ -151,7 +152,6 @@ class _MonthlyAttendanceState extends State<MonthlyAttendance> {
                             .toList()
                         : monthlyData;
     return Column(
-      mainAxisSize: MainAxisSize.min,
       children: [
         if (isLoading)
           const Padding(
@@ -160,156 +160,176 @@ class _MonthlyAttendanceState extends State<MonthlyAttendance> {
               child: CircularProgressIndicator(),
             ),
           )
+        else if (filtereedData.isEmpty)
+          Center(
+            child: Column(
+              children: [
+                const SizedBox(height: 30),
+                const Icon(
+                  Icons.warning,
+                  color: Colors.grey,
+                  size: 50,
+                ),
+                const SizedBox(height: 5),
+                Text(
+                  "No Data Available",
+                  style: TextStyle(
+                    fontWeight: FontWeight.bold,
+                    height: 0,
+                    fontSize: 20,
+                    color: Colors.grey[400],
+                  ),
+                ),
+                const SizedBox(height: 30),
+              ],
+            ),
+          )
         else
-          Flexible(
-            fit: FlexFit.loose,
-            child: ListView.builder(
-                shrinkWrap: true,
-                itemBuilder: (context, index) {
-                  if (index >= 0 && index < filtereedData.length) {
-                    Map<String, dynamic> data = filtereedData[index];
-                    final DateTime date = DateFormat('MMM dd, yyyy')
-                        .parse(filtereedData[index]['formattedDate']);
-                    final String day = DateFormat('EE').format(date);
-                    final String formattedDate = DateFormat('dd').format(date);
+          ListView.builder(
+              primary: false,
+              shrinkWrap: true,
+              itemBuilder: (context, index) {
+                if (index >= 0 && index < filtereedData.length) {
+                  Map<String, dynamic> data = filtereedData[index];
+                  final DateTime date = DateFormat('MMM dd, yyyy')
+                      .parse(filtereedData[index]['formattedDate']);
+                  final String day = DateFormat('EE').format(date);
+                  final String formattedDate = DateFormat('dd').format(date);
 
-                    String checkInTime =
-                        _formatTime(data['checkIn'] as Timestamp?);
-                    String checkOutTime =
-                        _formatTime(data['checkOut'] as Timestamp?);
-                    String totalHours = _calculateTotalHours(
-                      data['checkIn'] as Timestamp?,
-                      data['checkOut'] as Timestamp?,
-                    );
+                  String checkInTime =
+                      _formatTime(data['checkIn'] as Timestamp?);
+                  String checkOutTime =
+                      _formatTime(data['checkOut'] as Timestamp?);
+                  String totalHours = _calculateTotalHours(
+                    data['checkIn'] as Timestamp?,
+                    data['checkOut'] as Timestamp?,
+                  );
 
-                    return Container(
-                      padding: const EdgeInsets.all(12),
-                      margin: const EdgeInsets.only(bottom: 10),
-                      height: 82,
-                      width: double.infinity,
-                      decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(12),
-                        color: Colors.white,
-                      ),
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        crossAxisAlignment: CrossAxisAlignment.center,
-                        children: [
-                          Column(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            children: [
-                              Container(
-                                width: 53,
-                                height: 55,
-                                decoration: BoxDecoration(
-                                  color: widget.color,
-                                  borderRadius: BorderRadius.circular(6),
-                                ),
-                                child: Column(
-                                  mainAxisAlignment: MainAxisAlignment.center,
-                                  children: [
-                                    Text(
-                                      formattedDate,
-                                      style: const TextStyle(
-                                        fontSize: 22,
-                                        fontWeight: FontWeight.w600,
-                                        color: Colors.white,
-                                      ),
-                                    ),
-                                    Text(
-                                      day,
-                                      style: const TextStyle(
-                                        fontSize: 12,
-                                        fontWeight: FontWeight.w400,
-                                        color: Colors.white,
-                                      ),
-                                    ),
-                                  ],
-                                ),
+                  return Container(
+                    padding: const EdgeInsets.all(12),
+                    margin: const EdgeInsets.only(bottom: 10),
+                    height: 82,
+                    width: double.infinity,
+                    decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(12),
+                      color: Colors.white,
+                    ),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      children: [
+                        Column(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            Container(
+                              width: 53,
+                              height: 55,
+                              decoration: BoxDecoration(
+                                color: widget.color,
+                                borderRadius: BorderRadius.circular(6),
                               ),
-                            ],
-                          ),
-                          Column(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            children: [
-                              Text(
-                                checkInTime,
-                                style: const TextStyle(
-                                  fontSize: 14,
-                                  fontWeight: FontWeight.bold,
-                                  color: Colors.black,
-                                ),
+                              child: Column(
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                children: [
+                                  Text(
+                                    formattedDate,
+                                    style: const TextStyle(
+                                      fontSize: 22,
+                                      fontWeight: FontWeight.w600,
+                                      color: Colors.white,
+                                    ),
+                                  ),
+                                  Text(
+                                    day,
+                                    style: const TextStyle(
+                                      fontSize: 12,
+                                      fontWeight: FontWeight.w400,
+                                      color: Colors.white,
+                                    ),
+                                  ),
+                                ],
                               ),
-                              const Text(
-                                'Check In',
-                                style: TextStyle(
+                            ),
+                          ],
+                        ),
+                        Column(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            Text(
+                              checkInTime,
+                              style: const TextStyle(
+                                fontSize: 14,
+                                fontWeight: FontWeight.bold,
+                                color: Colors.black,
+                              ),
+                            ),
+                            const Text(
+                              'Check In',
+                              style: TextStyle(
+                                fontSize: 10,
+                                fontWeight: FontWeight.bold,
+                                color: Colors.black,
+                              ),
+                            ),
+                          ],
+                        ),
+                        Container(
+                          width: 1,
+                          height: 50,
+                          decoration: const BoxDecoration(color: Colors.black),
+                        ),
+                        Column(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            Text(
+                              checkOutTime,
+                              style: const TextStyle(
+                                fontSize: 14,
+                                fontWeight: FontWeight.bold,
+                                color: Colors.black,
+                              ),
+                            ),
+                            const Text(
+                              'Check Out',
+                              style: TextStyle(
                                   fontSize: 10,
                                   fontWeight: FontWeight.bold,
-                                  color: Colors.black,
-                                ),
+                                  color: Colors.black),
+                            ),
+                          ],
+                        ),
+                        Container(
+                          width: 1,
+                          height: 50,
+                          decoration: const BoxDecoration(color: Colors.black),
+                        ),
+                        Column(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            Text(
+                              totalHours,
+                              style: const TextStyle(
+                                fontSize: 14,
+                                fontWeight: FontWeight.bold,
+                                color: Colors.black,
                               ),
-                            ],
-                          ),
-                          Container(
-                            width: 1,
-                            height: 50,
-                            decoration:
-                                const BoxDecoration(color: Colors.black),
-                          ),
-                          Column(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            children: [
-                              Text(
-                                checkOutTime,
-                                style: const TextStyle(
-                                  fontSize: 14,
-                                  fontWeight: FontWeight.bold,
-                                  color: Colors.black,
-                                ),
+                            ),
+                            const Text(
+                              'Total Hours',
+                              style: TextStyle(
+                                fontSize: 10,
+                                fontWeight: FontWeight.bold,
+                                color: Colors.black,
                               ),
-                              const Text(
-                                'Check Out',
-                                style: TextStyle(
-                                    fontSize: 10,
-                                    fontWeight: FontWeight.bold,
-                                    color: Colors.black),
-                              ),
-                            ],
-                          ),
-                          Container(
-                            width: 1,
-                            height: 50,
-                            decoration:
-                                const BoxDecoration(color: Colors.black),
-                          ),
-                          Column(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            children: [
-                              Text(
-                                totalHours,
-                                style: const TextStyle(
-                                  fontSize: 14,
-                                  fontWeight: FontWeight.bold,
-                                  color: Colors.black,
-                                ),
-                              ),
-                              const Text(
-                                'Total Hours',
-                                style: TextStyle(
-                                  fontSize: 10,
-                                  fontWeight: FontWeight.bold,
-                                  color: Colors.black,
-                                ),
-                              ),
-                            ],
-                          ),
-                        ],
-                      ),
-                    );
-                  }
-                  return null;
-                }),
-          ),
+                            ),
+                          ],
+                        ),
+                      ],
+                    ),
+                  );
+                }
+                return null;
+              }),
       ],
     );
   }

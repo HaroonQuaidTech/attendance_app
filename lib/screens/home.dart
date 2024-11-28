@@ -345,13 +345,12 @@ class _HomeScreenState extends State<HomeScreen> {
                       mainAxisSize: MainAxisSize.min,
                       children: [
                         CircleAvatar(
-                      radius: 25,
-                      backgroundColor: const Color(0xff3B3A3C),
-                      child: Image.asset(
-                        "assets/warning.png",
-                        
-                      ),
-                    ),
+                          radius: 25,
+                          backgroundColor: const Color(0xff3B3A3C),
+                          child: Image.asset(
+                            "assets/warning.png",
+                          ),
+                        ),
                         const SizedBox(height: 10),
                         const Text(
                           'Are you sure ?',
@@ -443,7 +442,8 @@ class _HomeScreenState extends State<HomeScreen> {
                   ? const ProfileScreen()
                   : Padding(
                       padding: const EdgeInsets.symmetric(
-                          horizontal: 12.0, vertical: 0),
+                        horizontal: 12.0,
+                      ),
                       child: Column(
                         children: [
                           FutureBuilder<DocumentSnapshot>(
@@ -556,25 +556,21 @@ class _HomeScreenState extends State<HomeScreen> {
                             elevation: 5,
                             color: Theme.of(context).colorScheme.tertiary,
                             borderRadius: BorderRadius.circular(12),
-                            child: Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                const SizedBox(height: 10),
-                                const Padding(
-                                  padding: EdgeInsets.only(left: 25.0),
-                                  child: Text(
+                            child: Padding(
+                              padding: const EdgeInsets.all(12.0),
+                              child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  const Text(
                                     'Monthly Attendance',
                                     style: TextStyle(
                                       fontSize: 18,
                                       height: 0,
+                                      fontWeight: FontWeight.w500,
                                     ),
                                   ),
-                                ),
-                                const SizedBox(height: 10),
-                                Padding(
-                                  padding: const EdgeInsets.symmetric(
-                                      horizontal: 10.0),
-                                  child: FutureBuilder<Map<String, int>>(
+                                  const SizedBox(height: 10),
+                                  FutureBuilder<Map<String, int>>(
                                     future: fetchMonthlyAttendance(user!.uid),
                                     builder: (context, snapshot) {
                                       if (snapshot.hasError) {
@@ -605,9 +601,8 @@ class _HomeScreenState extends State<HomeScreen> {
                                       );
                                     },
                                   ),
-                                ),
-                                const SizedBox(height: 10),
-                              ],
+                                ],
+                              ),
                             ),
                           ),
                           const SizedBox(height: 20),
@@ -620,92 +615,106 @@ class _HomeScreenState extends State<HomeScreen> {
                                     borderRadius: BorderRadius.circular(12),
                                     color:
                                         Theme.of(context).colorScheme.tertiary,
-                                    child: TableCalendar(
-                                      firstDay: DateTime.utc(2020, 10, 16),
-                                      lastDay: DateTime.utc(2030, 3, 14),
-                                      focusedDay: _focusedDay,
-                                      calendarFormat: _calendarFormat,
-                                      availableCalendarFormats: const {
-                                        CalendarFormat.month: 'Month',
-                                      },
-                                      availableGestures:
-                                          AvailableGestures.horizontalSwipe,
-                                      headerVisible: true,
-                                      selectedDayPredicate: (day) =>
-                                          isSameDay(_selectedDay, day),
-                                      onDaySelected: _onDaySelected,
-                                      onFormatChanged: (format) {
-                                        if (_calendarFormat != format) {
-                                          setState(() {
-                                            _calendarFormat = format;
-                                          });
-                                        }
-                                      },
-                                      onPageChanged: (focusedDay) {
-                                        _focusedDay = focusedDay;
-                                      },
-                                      eventLoader: _getEventsForDay,
-                                      calendarStyle: CalendarStyle(
-                                        todayDecoration: BoxDecoration(
-                                          color: Theme.of(context)
-                                              .colorScheme
-                                              .inversePrimary,
-                                          shape: BoxShape.circle,
-                                        ),
-                                        todayTextStyle: const TextStyle(
-                                          color: Colors.black,
-                                        ),
-                                      ),
-                                      calendarBuilders: CalendarBuilders(
-                                        selectedBuilder: (context, date, _) {
-                                          return Container(
-                                            margin: const EdgeInsets.all(8.0),
-                                            alignment: Alignment.center,
-                                            decoration: BoxDecoration(
+                                    child: Column(
+                                      children: [
+                                        TableCalendar(
+                                          firstDay: DateTime.utc(2020, 10, 16),
+                                          lastDay: DateTime.utc(2030, 3, 14),
+                                          focusedDay: _focusedDay,
+                                          calendarFormat: _calendarFormat,
+                                          availableCalendarFormats: const {
+                                            CalendarFormat.month: 'Month',
+                                          },
+                                          availableGestures:
+                                              AvailableGestures.horizontalSwipe,
+                                          headerVisible: true,
+                                          selectedDayPredicate: (day) =>
+                                              isSameDay(_selectedDay, day),
+                                          onDaySelected: _onDaySelected,
+                                          onFormatChanged: (format) {
+                                            if (_calendarFormat != format) {
+                                              setState(() {
+                                                _calendarFormat = format;
+                                              });
+                                            }
+                                          },
+                                          onPageChanged: (focusedDay) {
+                                            _focusedDay = focusedDay;
+                                          },
+                                          eventLoader: _getEventsForDay,
+                                          calendarStyle: CalendarStyle(
+                                            todayDecoration: BoxDecoration(
                                               color: Theme.of(context)
                                                   .colorScheme
-                                                  .primary,
+                                                  .inversePrimary,
                                               shape: BoxShape.circle,
                                             ),
-                                            child: Text(
-                                              '${date.day}',
-                                              style: const TextStyle(
-                                                color: Colors.white,
-                                                height: 0,
-                                              ),
+                                            todayTextStyle: const TextStyle(
+                                              color: Colors.black,
+                                              height: 0,
                                             ),
-                                          );
-                                        },
-                                        markerBuilder: (context, day, events) {
-                                          if (day.weekday ==
-                                                  DateTime.saturday ||
-                                              day.weekday == DateTime.sunday) {
-                                            return const SizedBox.shrink();
-                                          }
-                                          if (_firstCheckInDate != null &&
-                                              (day.isBefore(
-                                                      _firstCheckInDate!) ||
-                                                  day.isAfter(
-                                                      DateTime.now()))) {
-                                            return const SizedBox.shrink();
-                                          }
-                                          Color? eventColor = events.isNotEmpty
-                                              ? events.first as Color
-                                              : StatusTheme
-                                                  .theme.colorScheme.secondary;
-                                          return Container(
-                                            margin: const EdgeInsets.symmetric(
-                                              horizontal: 1.5,
-                                            ),
-                                            width: 6,
-                                            height: 6,
-                                            decoration: BoxDecoration(
-                                              shape: BoxShape.circle,
-                                              color: eventColor,
-                                            ),
-                                          );
-                                        },
-                                      ),
+                                          ),
+                                          calendarBuilders: CalendarBuilders(
+                                            selectedBuilder:
+                                                (context, date, _) {
+                                              return Container(
+                                                margin:
+                                                    const EdgeInsets.all(8.0),
+                                                alignment: Alignment.center,
+                                                decoration: BoxDecoration(
+                                                  color: Theme.of(context)
+                                                      .colorScheme
+                                                      .primary,
+                                                  shape: BoxShape.circle,
+                                                ),
+                                                child: Text(
+                                                  '${date.day}',
+                                                  style: const TextStyle(
+                                                    color: Colors.white,
+                                                    height: 0,
+                                                  ),
+                                                ),
+                                              );
+                                            },
+                                            markerBuilder:
+                                                (context, day, events) {
+                                              if (day.weekday ==
+                                                      DateTime.saturday ||
+                                                  day.weekday ==
+                                                      DateTime.sunday) {
+                                                return const SizedBox.shrink();
+                                              }
+                                              if (_firstCheckInDate != null &&
+                                                  (day.isBefore(
+                                                          _firstCheckInDate!) ||
+                                                      day.isAfter(
+                                                          DateTime.now()))) {
+                                                return const SizedBox.shrink();
+                                              }
+                                              Color? eventColor =
+                                                  events.isNotEmpty
+                                                      ? events.first as Color
+                                                      : StatusTheme
+                                                          .theme
+                                                          .colorScheme
+                                                          .secondary;
+                                              return Container(
+                                                margin:
+                                                    const EdgeInsets.symmetric(
+                                                  horizontal: 1.5,
+                                                ),
+                                                width: 6,
+                                                height: 6,
+                                                decoration: BoxDecoration(
+                                                  shape: BoxShape.circle,
+                                                  color: eventColor,
+                                                ),
+                                              );
+                                            },
+                                          ),
+                                        ),
+                                        const SizedBox(height: 10),
+                                      ],
                                     ),
                                   ),
                                   const SizedBox(height: 20),
@@ -734,6 +743,8 @@ class _HomeScreenState extends State<HomeScreen> {
                                                     style: TextStyle(
                                                       fontSize: 18,
                                                       height: 0,
+                                                      fontWeight:
+                                                          FontWeight.w500,
                                                     ),
                                                   ),
                                                   const SizedBox(height: 10),
