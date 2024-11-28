@@ -338,7 +338,7 @@ class _GraphicalbuilerState extends State<GraphicalbuilderMonthly> {
                                     ),
                                   );
                                 },
-                                reservedSize: 60,
+                                reservedSize: 40,
                                 interval: 5,
                               ),
                             ),
