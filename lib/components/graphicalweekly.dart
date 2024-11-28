@@ -376,7 +376,7 @@ class _GraphicalbuilerState extends State<GraphicalbuilderWeekly> {
                                     ),
                                   );
                                 },
-                                reservedSize: 40,
+                                reservedSize: 30,
                                 interval: 1,
                               ),
                             ),
