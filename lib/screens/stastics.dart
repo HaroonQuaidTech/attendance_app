@@ -1,5 +1,6 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:quaidtech/components/PreviousMonthStatusBuilder.dart';
 import 'package:quaidtech/components/graphicalbuildermonthly.dart';
 import 'package:quaidtech/components/graphicalweekly.dart';
 import 'package:quaidtech/components/monthattendancce.dart';
@@ -494,7 +495,7 @@ class _StatsticsScreenState extends State<StatsticsScreen> {
                           dropdownValue2 != 'Early Out' &&
                           dropdownValue2 != 'Late Arrival')
                         if (dropdownValue1 == 'Monthly' && _selectedIndex == 0)
-                          const StatusBuilderMonthly(),
+                         PreviousMonthlyAttendance(uid: uid,),
                       if (dropdownValue1 == 'Weekly' && _selectedIndex == 1)
                         const GraphicalbuilderWeekly(),
                       if (dropdownValue1 == 'Monthly' && _selectedIndex == 1)
