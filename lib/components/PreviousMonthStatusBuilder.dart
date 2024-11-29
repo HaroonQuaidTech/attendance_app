@@ -161,64 +161,58 @@ class _PreviousMonthlyAttendanceState extends State<PreviousMonthlyAttendance> {
     final String day =
         DateFormat('EE').format(date); // Day of the week (e.g., Mon, Tue)
     final String formattedDate = DateFormat('dd').format(date);
-    return Column(
-      children: [
-        Container(
-          padding: const EdgeInsets.all(12),
-          height: 82,
-          decoration: BoxDecoration(
-            borderRadius: BorderRadius.circular(12),
-            color: Colors.white,
-          ),
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+    return Container(
+      padding: const EdgeInsets.all(12),
+      margin: const EdgeInsets.only(bottom: 10),
+      height: 82,
+      width: 360,
+      decoration: BoxDecoration(
+        borderRadius: BorderRadius.circular(12),
+        color: Colors.white,
+      ),
+      child: Row(
+        crossAxisAlignment: CrossAxisAlignment.center,
+        children: [
+          Column(
+            mainAxisAlignment: MainAxisAlignment.center,
             children: [
               Container(
-                width: 55,
+                width: 53,
                 height: 55,
                 decoration: BoxDecoration(
-                  color: StatusTheme.theme.colorScheme.secondary,
-                  borderRadius: BorderRadius.circular(6),
-                ),
+                    color: Colors.red, borderRadius: BorderRadius.circular(6)),
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.center,
+                  crossAxisAlignment: CrossAxisAlignment.center,
                   children: [
                     Text(
                       formattedDate,
                       style: const TextStyle(
-                        fontSize: 22,
-                        fontWeight: FontWeight.w600,
-                        color: Colors.white,
-                        height: 0,
-                      ),
+                          fontSize: 22,
+                          fontWeight: FontWeight.w600,
+                          color: Colors.white),
                     ),
-                    const SizedBox(height: 5),
                     Text(
                       day,
                       style: const TextStyle(
-                        fontSize: 12,
-                        fontWeight: FontWeight.w400,
-                        color: Colors.white,
-                        height: 0,
-                      ),
+                          fontSize: 12,
+                          fontWeight: FontWeight.w400,
+                          color: Colors.white),
                     ),
                   ],
                 ),
               ),
-              const Text(
-                'Leave/Day off',
-                style: TextStyle(
-                  fontSize: 22,
-                  fontWeight: FontWeight.bold,
-                  height: 0,
-                ),
-              ),
-              const SizedBox(width: 10),
             ],
           ),
-        ),
-        const SizedBox(height: 10),
-      ],
+          const Padding(
+            padding: EdgeInsets.only(left: 50.0),
+            child: Text(
+              'Leave/Day off',
+              style: TextStyle(fontSize: 22, fontWeight: FontWeight.bold),
+            ),
+          )
+        ],
+      ),
     );
   }
 
@@ -299,64 +293,57 @@ class _PreviousMonthlyAttendanceState extends State<PreviousMonthlyAttendance> {
     final String day =
         DateFormat('EE').format(date); // Day of the week (e.g., Mon, Tue)
     final String formattedDate = DateFormat('dd').format(date);
-    return Column(
-      children: [
-        Container(
-          padding: const EdgeInsets.symmetric(horizontal: 12),
-          height: 82,
-          decoration: BoxDecoration(
-            borderRadius: BorderRadius.circular(12),
-            color: Colors.white,
-          ),
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              Container(
-                width: 55,
-                height: 55,
-                decoration: BoxDecoration(
-                    color: StatusTheme.theme.colorScheme.secondaryFixed,
-                    borderRadius: BorderRadius.circular(6)),
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  crossAxisAlignment: CrossAxisAlignment.center,
-                  children: [
-                    Text(
-                      formattedDate,
-                      style: const TextStyle(
-                        fontSize: 22,
-                        fontWeight: FontWeight.w600,
-                        color: Colors.white,
-                        height: 0,
-                      ),
-                    ),
-                    const SizedBox(height: 5),
-                    Text(
-                      day,
-                      style: const TextStyle(
-                        fontSize: 12,
-                        fontWeight: FontWeight.w400,
-                        color: Colors.white,
-                        height: 0,
-                      ),
-                    ),
-                  ],
+    return Container(
+      padding: const EdgeInsets.symmetric(horizontal: 12),
+      margin: const EdgeInsets.only(bottom: 10),
+      height: 82,
+      decoration: BoxDecoration(
+        borderRadius: BorderRadius.circular(12),
+        color: Colors.white,
+      ),
+      child: Row(
+        children: [
+          Container(
+            width: 53,
+            height: 55,
+            decoration: BoxDecoration(
+                color: Colors.blueGrey, borderRadius: BorderRadius.circular(6)),
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: [
+                Text(
+                  formattedDate,
+                  style: const TextStyle(
+                      fontSize: 22,
+                      fontWeight: FontWeight.w600,
+                      color: Colors.white),
                 ),
-              ),
-              const Text(
-                'Weekend Days',
-                style: TextStyle(
-                  fontSize: 22,
-                  fontWeight: FontWeight.bold,
-                  height: 0,
+                Text(
+                  day,
+                  style: const TextStyle(
+                    fontSize: 12,
+                    fontWeight: FontWeight.w400,
+                    color: Colors.white,
+                  ),
                 ),
-              ),
-              const SizedBox(width: 10),
-            ],
+              ],
+            ),
           ),
-        ),
-        const SizedBox(height: 10),
-      ],
+          const SizedBox(width: 30),
+          const Padding(
+            padding: EdgeInsets.only(left: 20.0),
+            child: Text(
+              'Weekend',
+              style: TextStyle(
+                fontSize: 22,
+                fontWeight: FontWeight.bold,
+                height: 0,
+              ),
+            ),
+          )
+        ],
+      ),
     );
   }
 
@@ -439,7 +426,7 @@ class _PreviousMonthlyAttendanceState extends State<PreviousMonthlyAttendance> {
   Widget _buildDateContainer(
       String formattedDate, String day, Color containerColor) {
     return Container(
-      width: 55,
+      width: 53,
       height: 55,
       decoration: BoxDecoration(
         color: containerColor,
@@ -449,23 +436,14 @@ class _PreviousMonthlyAttendanceState extends State<PreviousMonthlyAttendance> {
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
           Text(
-            formattedDate,
+            formattedDate, // Display the day of the month
             style: const TextStyle(
-              fontSize: 22,
-              fontWeight: FontWeight.w600,
-              color: Colors.white,
-              height: 0,
-            ),
+                fontSize: 22, fontWeight: FontWeight.w600, color: Colors.white),
           ),
-          const SizedBox(height: 5),
           Text(
-            day,
+            day, // Display the day name
             style: const TextStyle(
-              fontSize: 12,
-              fontWeight: FontWeight.w400,
-              color: Colors.white,
-              height: 0,
-            ),
+                fontSize: 12, fontWeight: FontWeight.w400, color: Colors.white),
           ),
         ],
       ),
@@ -511,287 +489,296 @@ class _PreviousMonthlyAttendanceState extends State<PreviousMonthlyAttendance> {
     final Size screenSize = MediaQuery.of(context).size;
     final double screenHeight = screenSize.height;
     final double screenWidth = screenSize.width;
-    return SingleChildScrollView(
-      child: Column(
-        children: [
-          const SizedBox(height: 20),
-          Material(
-            borderRadius: BorderRadius.circular(20),
-            color: Theme.of(context).colorScheme.tertiary,
-            elevation: 5,
-            child: Padding(
-              padding:
-                  const EdgeInsets.symmetric(horizontal: 10.0, vertical: 20.0),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  const Text(
-                    'Monthly filter log',
-                    style: TextStyle(
-                      fontWeight: FontWeight.w600,
-                      fontSize: 18,
-                      height: 0,
+    return Padding(
+      padding: const EdgeInsets.symmetric(vertical: 10.0),
+      child: SingleChildScrollView(
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            Material(
+              borderRadius: BorderRadius.circular(20),
+              color: Theme.of(context).colorScheme.tertiary,
+              child: Padding(
+                padding:
+                    const EdgeInsets.symmetric(horizontal: 5.0, vertical: 20.0),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    const Text(
+                      'Monthly filter log ',
+                      style:
+                          TextStyle(fontWeight: FontWeight.w600, fontSize: 18),
                     ),
-                  ),
-                  const SizedBox(height: 10),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      Expanded(
-                        child: Container(
-                          padding: const EdgeInsets.symmetric(horizontal: 10),
-                          decoration: BoxDecoration(
-                            color: Colors.white,
-                            borderRadius: BorderRadius.circular(12),
-                          ),
-                          child: DropdownButton<String>(
-                            value: selectedMonth,
-                            hint: const Text("Select Month"),
-                            isExpanded: true,
-                            underline: const SizedBox(),
-                            items: months.map((month) {
-                              return DropdownMenuItem(
-                                value: month,
-                                child: Text(DateFormat('MMMM')
-                                    .format(DateTime(0, int.parse(month)))),
-                              );
-                            }).toList(),
-                            onChanged: (value) {
-                              setState(() {
-                                selectedMonth = value;
-                              });
-                            },
-                          ),
-                        ),
-                      ),
-                      const SizedBox(width: 20),
-                      Expanded(
-                        child: Container(
-                          padding: const EdgeInsets.symmetric(horizontal: 10),
-                          decoration: BoxDecoration(
-                            color: Colors.white,
-                            borderRadius: BorderRadius.circular(12),
-                          ),
-                          child: DropdownButton<String>(
-                            value: selectedYear,
-                            hint: const Text("Select Year"),
-                            isExpanded: true,
-                            underline: const SizedBox(),
-                            items: years.map((year) {
-                              return DropdownMenuItem(
-                                value: year,
-                                child: Text(year),
-                              );
-                            }).toList(),
-                            onChanged: (value) {
-                              setState(() {
-                                selectedYear = value;
-                              });
-                            },
+                    const SizedBox(height: 10),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Expanded(
+                          child: Container(
+                            height: 50,
+                            padding: const EdgeInsets.symmetric(horizontal: 10),
+                            decoration: BoxDecoration(
+                              color: Colors.white,
+                              borderRadius: BorderRadius.circular(12),
+                              boxShadow: [
+                                BoxShadow(
+                                  color: Colors.grey.withOpacity(0.2),
+                                  spreadRadius: 2,
+                                  blurRadius: 4,
+                                  offset: const Offset(0, 2),
+                                ),
+                              ],
+                            ),
+                            child: DropdownButton<String>(
+                              value: selectedMonth,
+                              hint: const Text("Select Month"),
+                              isExpanded: true,
+                              underline: const SizedBox(),
+                              items: months.map((month) {
+                                return DropdownMenuItem(
+                                  value: month,
+                                  child: Text(DateFormat('MMMM')
+                                      .format(DateTime(0, int.parse(month)))),
+                                );
+                              }).toList(),
+                              onChanged: (value) {
+                                setState(() {
+                                  selectedMonth = value;
+                                });
+                              },
+                            ),
                           ),
                         ),
-                      ),
-                    ],
-                  ),
-                ],
+                        const SizedBox(width: 16),
+                        Expanded(
+                          child: Container(
+                            height: 50,
+                            padding: const EdgeInsets.symmetric(horizontal: 10),
+                            decoration: BoxDecoration(
+                              color: Colors.white,
+                              borderRadius: BorderRadius.circular(12),
+                              boxShadow: [
+                                BoxShadow(
+                                  color: Colors.grey.withOpacity(0.2),
+                                  spreadRadius: 2,
+                                  blurRadius: 4,
+                                  offset: const Offset(0, 2),
+                                ),
+                              ],
+                            ),
+                            child: DropdownButton<String>(
+                              value: selectedYear,
+                              hint: const Text("Select Year"),
+                              isExpanded: true,
+                              underline: const SizedBox(),
+                              items: years.map((year) {
+                                return DropdownMenuItem(
+                                  value: year,
+                                  child: Text(year),
+                                );
+                              }).toList(),
+                              onChanged: (value) {
+                                setState(() {
+                                  selectedYear = value;
+                                });
+                              },
+                            ),
+                          ),
+                        ),
+                      ],
+                    ),
+                  ],
+                ),
               ),
             ),
-          ),
-          const SizedBox(height: 20),
-          FutureBuilder<List<Map<String, dynamic>>>(
-            future: selectedMonth != null && selectedYear != null
-                ? _getMonthlyAttendanceDetails(
-                    widget.uid,
-                    int.parse(selectedMonth!),
-                    int.parse(selectedYear!),
-                  )
-                : null,
-            builder: (context, snapshot) {
-              if (snapshot.connectionState == ConnectionState.waiting) {
-                return const Padding(
-                  padding: EdgeInsets.only(top: 60.0),
-                  child: Center(child: CircularProgressIndicator()),
-                );
-              }
-              if (snapshot.hasError) {
-                return Center(child: Text('Error: ${snapshot.error}'));
-              }
-              if (!snapshot.hasData || snapshot.data!.isEmpty) {
-                return const Center(child: Text('No attendance data found.'));
-              }
-
-              final attendanceData = snapshot.data!;
-
-              int totalMinutes = 0;
-
-              for (var entry in attendanceData) {
-                final checkIn = entry['checkIn'] as Timestamp?;
-                final checkOut = entry['checkOut'] as Timestamp?;
-
-                if (checkIn != null && checkOut != null) {
-                  final checkInDate = checkIn.toDate();
-                  final checkOutDate = checkOut.toDate();
-                  totalMinutes +=
-                      checkOutDate.difference(checkInDate).inMinutes;
+            const SizedBox(height: 20),
+            FutureBuilder<List<Map<String, dynamic>>>(
+              future: selectedMonth != null && selectedYear != null
+                  ? _getMonthlyAttendanceDetails(
+                      widget.uid,
+                      int.parse(selectedMonth!),
+                      int.parse(selectedYear!),
+                    )
+                  : null,
+              builder: (context, snapshot) {
+                if (snapshot.connectionState == ConnectionState.waiting) {
+                  return const Padding(
+                    padding: EdgeInsets.only(top: 60.0),
+                    child: Center(child: CircularProgressIndicator()),
+                  );
                 }
-              }
-              const int maxMinutes = 10392;
-              const double maxHours = 173.2;
-              int totalHours = totalMinutes ~/ 60;
-              double progressValueInHours =
-                  maxHours != 0 ? totalHours / maxHours : 0.0;
+                if (snapshot.hasError) {
+                  return Center(child: Text('Error: ${snapshot.error}'));
+                }
+                if (!snapshot.hasData || snapshot.data!.isEmpty) {
+                  return const Center(child: Text('No attendance data found.'));
+                }
 
-              int totalMinutesFromHours = totalHours * 60;
-              return Column(children: [
-                Material(
-                  borderRadius: BorderRadius.circular(20),
-                  color: Theme.of(context).colorScheme.tertiary,
-                  child: Padding(
-                    padding: const EdgeInsets.symmetric(
-                        horizontal: 10.0, vertical: 10.0),
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        const Text(
-                          'Monthly Times Log',
-                          style: TextStyle(
-                              fontWeight: FontWeight.w600, fontSize: 18),
-                        ),
-                        const SizedBox(height: 20),
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: [
-                            Container(
-                              height: screenHeight * 0.15,
-                              width: screenWidth * 0.43,
-                              decoration: BoxDecoration(
-                                borderRadius: BorderRadius.circular(12),
-                                color: Colors.white,
-                              ),
-                              child: Padding(
-                                padding: const EdgeInsets.symmetric(
-                                    horizontal: 10.0),
-                                child: Column(
-                                  mainAxisAlignment:
-                                      MainAxisAlignment.spaceAround,
-                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                  children: [
-                                    const Text(
-                                      'Time in Minutes',
-                                      style: TextStyle(
-                                        fontWeight: FontWeight.w500,
-                                        fontSize: 14,
-                                        height: 0,
+                final attendanceData = snapshot.data!;
+
+                int totalMinutes = 0;
+
+                for (var entry in attendanceData) {
+                  final checkIn = entry['checkIn'] as Timestamp?;
+                  final checkOut = entry['checkOut'] as Timestamp?;
+
+                  if (checkIn != null && checkOut != null) {
+                    final checkInDate = checkIn.toDate();
+                    final checkOutDate = checkOut.toDate();
+                    totalMinutes +=
+                        checkOutDate.difference(checkInDate).inMinutes;
+                  }
+                }
+                const int maxMinutes = 10392;
+                const double maxHours = 173.2;
+                int totalHours = totalMinutes ~/ 60;
+                double progressValueInHours =
+                    maxHours != 0 ? totalHours / maxHours : 0.0;
+
+                int totalMinutesFromHours = totalHours * 60;
+                return Column(children: [
+                  Material(
+                    borderRadius: BorderRadius.circular(20),
+                    color: Theme.of(context).colorScheme.tertiary,
+                    child: Padding(
+                      padding: const EdgeInsets.symmetric(
+                          horizontal: 10.0, vertical: 10.0),
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          const Text(
+                            'Monthly Times Log',
+                            style: TextStyle(
+                                fontWeight: FontWeight.w600, fontSize: 18),
+                          ),
+                          const SizedBox(height: 20),
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              Container(
+                                height: screenHeight * 0.15,
+                                width: screenWidth * 0.40,
+                                decoration: BoxDecoration(
+                                  borderRadius: BorderRadius.circular(12),
+                                  color: Colors.white,
+                                ),
+                                child: Padding(
+                                  padding: const EdgeInsets.symmetric(
+                                      horizontal: 10.0),
+                                  child: Column(
+                                    mainAxisAlignment:
+                                        MainAxisAlignment.spaceAround,
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.start,
+                                    children: [
+                                      const Text(
+                                        'Time in Minutes',
+                                        style: TextStyle(
+                                            fontWeight: FontWeight.w500,
+                                            fontSize: 14),
                                       ),
-                                    ),
-                                    Text(
-                                      '$totalMinutesFromHours Minutes',
-                                      style: const TextStyle(
-                                        fontWeight: FontWeight.w600,
-                                        fontSize: 20,
-                                        height: 0,
+                                      Text(
+                                        '$totalMinutesFromHours Minutes',
+                                        style: const TextStyle(
+                                            fontWeight: FontWeight.w600,
+                                            fontSize: 20),
                                       ),
-                                    ),
-                                    LinearProgressIndicator(
-                                      value: totalMinutes / maxMinutes,
-                                      backgroundColor: Colors.grey[300],
-                                      color:
-                                          Theme.of(context).colorScheme.primary,
-                                    ),
-                                    Text(
-                                      _getMonthDateRange(),
-                                      style: const TextStyle(
-                                        fontWeight: FontWeight.w600,
-                                        fontSize: 15,
-                                        height: 0,
+                                      LinearProgressIndicator(
+                                        value: totalMinutes / maxMinutes,
+                                        backgroundColor: Colors.grey[300],
+                                        color: Theme.of(context)
+                                            .colorScheme
+                                            .primary,
                                       ),
-                                    ),
-                                  ],
+                                      Text(
+                                        _getMonthDateRange(),
+                                        style: const TextStyle(
+                                            fontWeight: FontWeight.w600,
+                                            fontSize: 15),
+                                      ),
+                                    ],
+                                  ),
                                 ),
                               ),
-                            ),
-                            Container(
-                              height: screenHeight * 0.15,
-                              width: screenWidth * 0.43,
-                              decoration: BoxDecoration(
-                                borderRadius: BorderRadius.circular(12),
-                                color: Colors.white,
-                              ),
-                              child: Padding(
-                                padding: const EdgeInsets.symmetric(
-                                    horizontal: 10.0),
-                                child: Column(
-                                  mainAxisAlignment:
-                                      MainAxisAlignment.spaceAround,
-                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                  children: [
-                                    const Text(
-                                      'Time in Hours',
-                                      style: TextStyle(
-                                        fontWeight: FontWeight.w500,
-                                        fontSize: 14,
-                                        height: 0,
+                              Container(
+                                height: screenHeight * 0.15,
+                                width: screenWidth * 0.42,
+                                decoration: BoxDecoration(
+                                  borderRadius: BorderRadius.circular(12),
+                                  color: Colors.white,
+                                ),
+                                child: Padding(
+                                  padding: const EdgeInsets.symmetric(
+                                      horizontal: 10.0),
+                                  child: Column(
+                                    mainAxisAlignment:
+                                        MainAxisAlignment.spaceAround,
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.start,
+                                    children: [
+                                      const Text(
+                                        'Time in Hours',
+                                        style: TextStyle(
+                                            fontWeight: FontWeight.w500,
+                                            fontSize: 14),
                                       ),
-                                    ),
-                                    Text(
-                                      '$totalHours Hours',
-                                      style: const TextStyle(
-                                        fontWeight: FontWeight.w600,
-                                        fontSize: 20,
-                                        height: 0,
+                                      Text(
+                                        '$totalHours Hours',
+                                        style: const TextStyle(
+                                            fontWeight: FontWeight.w600,
+                                            fontSize: 20),
                                       ),
-                                    ),
-                                    LinearProgressIndicator(
-                                      value: progressValueInHours,
-                                      backgroundColor: Colors.grey[300],
-                                      color:
-                                          Theme.of(context).colorScheme.primary,
-                                    ),
-                                    Text(
-                                      _getMonthDateRange(),
-                                      style: const TextStyle(
-                                        fontWeight: FontWeight.w600,
-                                        fontSize: 15,
-                                        height: 0,
+                                      LinearProgressIndicator(
+                                        value: progressValueInHours,
+                                        backgroundColor: Colors.grey[300],
+                                        color: Theme.of(context)
+                                            .colorScheme
+                                            .primary,
                                       ),
-                                    ),
-                                  ],
+                                      Text(
+                                        _getMonthDateRange(),
+                                        style: const TextStyle(
+                                            fontWeight: FontWeight.w600,
+                                            fontSize: 15),
+                                      ),
+                                    ],
+                                  ),
                                 ),
                               ),
-                            ),
-                          ],
-                        ),
-                      ],
+                            ],
+                          ),
+                        ],
+                      ),
                     ),
                   ),
-                ),
-                const SizedBox(height: 20),
-                Material(
-                  color: Theme.of(context).colorScheme.tertiary,
-                  borderRadius: BorderRadius.circular(20),
-                  child: Container(
-                    padding: const EdgeInsets.symmetric(
-                        horizontal: 12, vertical: 10),
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Text(
-                          'Month Date Range: ${_getMonthDateRange()}',
-                          style: const TextStyle(
-                              fontWeight: FontWeight.w600, fontSize: 18),
-                        ),
-                        const SizedBox(height: 10),
-                        _buildAttendance(
-                            color: const Color(0xff9478F7),
-                            data: attendanceData),
-                      ],
+                  const SizedBox(height: 20),
+                  Material(
+                    color: Theme.of(context).colorScheme.tertiary,
+                    borderRadius: BorderRadius.circular(20),
+                    child: Container(
+                      padding: const EdgeInsets.symmetric(
+                          horizontal: 12, vertical: 10),
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text(
+                            'Month Date Range: ${_getMonthDateRange()}',
+                            style: const TextStyle(
+                                fontWeight: FontWeight.w600, fontSize: 18),
+                          ),
+                          const SizedBox(height: 10),
+                          _buildAttendance(
+                              color: const Color(0xff9478F7),
+                              data: attendanceData),
+                        ],
+                      ),
                     ),
-                  ),
-                )
-              ]);
-            },
-          ),
-        ],
+                  )
+                ]);
+              },
+            ),
+          ],
+        ),
       ),
     );
   }
