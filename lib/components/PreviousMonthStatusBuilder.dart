@@ -150,14 +150,15 @@ class _PreviousMonthlyAttendanceState extends State<PreviousMonthlyAttendance> {
   }
 
   Widget _buildEmptyAttendanceContainer(int index) {
-     final int month = int.parse(selectedMonth!);
-  final int year = int.parse(selectedYear!);
+    final int month = int.parse(selectedMonth!);
+    final int year = int.parse(selectedYear!);
 
-  // Calculate the exact date based on index
-  final DateTime date = DateTime(year, month, index + 1);
+    final DateTime firstDayOfMonth = DateTime(year, month, 1);
+    final DateTime date = firstDayOfMonth.add(Duration(days: index));
 
-  final String day = DateFormat('EE').format(date); // Day of the week (e.g., Mon, Tue)
-  final String formattedDate = DateFormat('dd').format(date);
+    final String day =
+        DateFormat('EE').format(date); // Day of the week (e.g., Mon, Tue)
+    final String formattedDate = DateFormat('dd').format(date);
     return Container(
       padding: const EdgeInsets.all(12),
       margin: const EdgeInsets.only(bottom: 10),
@@ -214,16 +215,15 @@ class _PreviousMonthlyAttendanceState extends State<PreviousMonthlyAttendance> {
   }
 
   Widget _buildHNullAttendanceContainer(int index) {
+    final int month = int.parse(selectedMonth!);
+    final int year = int.parse(selectedYear!);
 
-        final int month = int.parse(selectedMonth!);
-        final int year = int.parse(selectedYear!);
+    final DateTime firstDayOfMonth = DateTime(year, month, 1);
+    final DateTime date = firstDayOfMonth.add(Duration(days: index));
 
-        final DateTime firstDayOfMonth = DateTime(year, month, 1);
-        final DateTime date = firstDayOfMonth.add(Duration(days: index));
-
-        final String day =
-            DateFormat('EE').format(date); // Day of the week (e.g., Mon, Tue)
-        final String formattedDate = DateFormat('dd').format(date);
+    final String day =
+        DateFormat('EE').format(date); // Day of the week (e.g., Mon, Tue)
+    final String formattedDate = DateFormat('dd').format(date);
 
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: 12),
@@ -282,16 +282,17 @@ class _PreviousMonthlyAttendanceState extends State<PreviousMonthlyAttendance> {
   }
 
   Widget _buildWeekendContainer(int index) {
-  final int month = int.parse(selectedMonth!);
-  final int year = int.parse(selectedYear!);
+    final int month = int.parse(selectedMonth!);
+    final int year = int.parse(selectedYear!);
 
-  // Calculate the exact date based on index
-  final DateTime date = DateTime(year, month, index + 1);
+    final DateTime firstDayOfMonth = DateTime(year, month, 1);
+    final DateTime date = firstDayOfMonth.add(Duration(days: index));
 
-  final String day = DateFormat('EE').format(date); 
-  final String formattedDate = DateFormat('dd').format(date);
+    final String day =
+        DateFormat('EE').format(date); // Day of the week (e.g., Mon, Tue)
+    final String formattedDate = DateFormat('dd').format(date);
     return Container(
-      padding: const EdgeInsets.symmetric(horizontal: 2),
+      padding: const EdgeInsets.symmetric(horizontal: 12),
       margin: const EdgeInsets.only(bottom: 10),
       height: 82,
       decoration: BoxDecoration(
