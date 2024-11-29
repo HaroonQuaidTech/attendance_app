@@ -44,14 +44,11 @@ class _PreviousMonthlyAttendanceState extends State<PreviousMonthlyAttendance> {
           .get();
     });
 
-  
     final snapshots = await Future.wait(snapshotFutures);
 
-  
     for (int i = 0; i < snapshots.length; i++) {
       final date = firstDayOfMonth.add(Duration(days: i));
-      final formattedDate =
-          DateFormat('MMM d, yyyy').format(date); 
+      final formattedDate = DateFormat('MMM d, yyyy').format(date);
       final snapshot = snapshots[i];
       final data = snapshot.data();
       final checkIn = (data?['checkIn'] as Timestamp?)?.toDate();
@@ -70,22 +67,18 @@ class _PreviousMonthlyAttendanceState extends State<PreviousMonthlyAttendance> {
   }
 
   String _getMonthDateRange() {
-    if (selectedMonth != null && selectedYear != null) {
-      int month = int.parse(selectedMonth!);
-      int year = int.parse(selectedYear!);
-
-     
-      DateTime firstDayOfMonth = DateTime(year, month, 1);
-      DateTime lastDayOfMonth =
-          DateTime(year, month + 1, 0); 
-
-    
-      String startDate = DateFormat('MMM dd').format(firstDayOfMonth);
-      String endDate = DateFormat('MMM dd').format(lastDayOfMonth);
-
-      return '$startDate - $endDate';
+    if (selectedMonth == null || selectedYear == null) {
+      return "Select a month and year";
     }
-    return '';
+
+    final int month = int.parse(selectedMonth!);
+    final int year = int.parse(selectedYear!);
+
+    final DateTime firstDayOfMonth = DateTime(year, month, 1);
+    final DateTime lastDayOfMonth = DateTime(year, month + 1, 0);
+
+    final DateFormat formatter = DateFormat('MMM d');
+    return "${formatter.format(firstDayOfMonth)} - ${formatter.format(lastDayOfMonth)}";
   }
 
   Widget _buildAttendance({
@@ -106,20 +99,23 @@ class _PreviousMonthlyAttendanceState extends State<PreviousMonthlyAttendance> {
       shrinkWrap: true,
       itemBuilder: (context, index) {
         final attendanceRecord = data[index];
-        final DateTime now = DateTime.now();
-        final DateTime firstDayOfMonth = DateTime(now.year, now.month, 1);
+        final int month = int.parse(selectedMonth!);
+        final int year = int.parse(selectedYear!);
+
+        final DateTime firstDayOfMonth = DateTime(year, month, 1);
         final DateTime date = firstDayOfMonth.add(Duration(days: index));
-        final String day = DateFormat('EE').format(date);
+
+        final String day =
+            DateFormat('EE').format(date); // Day of the week (e.g., Mon, Tue)
         final String formattedDate = DateFormat('dd').format(date);
 
         if (date.weekday == DateTime.saturday ||
             date.weekday == DateTime.sunday) {
           return _buildWeekendContainer(index);
         }
-        if (date.isAfter(now) || attendanceRecord == null) {
+        if (date.isAfter(DateTime.now()) || attendanceRecord == null) {
           return _buildHNullAttendanceContainer(index);
         }
-
         final checkIn = (attendanceRecord['checkIn'] as Timestamp?)?.toDate();
         final checkOut = (attendanceRecord['checkOut'] as Timestamp?)?.toDate();
         if (checkIn == null && checkOut == null) {
@@ -154,11 +150,14 @@ class _PreviousMonthlyAttendanceState extends State<PreviousMonthlyAttendance> {
   }
 
   Widget _buildEmptyAttendanceContainer(int index) {
-    final DateTime now = DateTime.now();
-    final DateTime firstDayOfMonth = DateTime(now.year, now.month, 1);
-    final DateTime date = firstDayOfMonth.add(Duration(days: index));
-    final String day = DateFormat('EE').format(date);
-    final String formattedDate = DateFormat('dd').format(date);
+     final int month = int.parse(selectedMonth!);
+  final int year = int.parse(selectedYear!);
+
+  // Calculate the exact date based on index
+  final DateTime date = DateTime(year, month, index + 1);
+
+  final String day = DateFormat('EE').format(date); // Day of the week (e.g., Mon, Tue)
+  final String formattedDate = DateFormat('dd').format(date);
     return Container(
       padding: const EdgeInsets.all(12),
       margin: const EdgeInsets.only(bottom: 10),
@@ -215,75 +214,84 @@ class _PreviousMonthlyAttendanceState extends State<PreviousMonthlyAttendance> {
   }
 
   Widget _buildHNullAttendanceContainer(int index) {
-  final date = DateTime(DateTime.now().year, DateTime.now().month, 1).add(Duration(days: index));
-  final formattedDate = DateFormat('dd').format(date);
-  final day = DateFormat('EE').format(date);
 
-  return Container(
-    padding: const EdgeInsets.symmetric(horizontal: 12),
-    margin: const EdgeInsets.only(bottom: 10),
-    height: 82,
-    decoration: BoxDecoration(
-      borderRadius: BorderRadius.circular(12),
-      color: Colors.white,
-    ),
-    child: Row(
-      children: [
-        _buildDateBox(formattedDate, day),
-        const SizedBox(width: 30),
-        const Text(
-          'Data Not Available',
-          style: TextStyle(
-            fontSize: 22,
-            fontWeight: FontWeight.bold,
-          ),
-        ),
-      ],
-    ),
-  );
-}
+        final int month = int.parse(selectedMonth!);
+        final int year = int.parse(selectedYear!);
 
-Widget _buildDateBox(String date, String day) {
-  return Container(
-    width: 53,
-    height: 55,
-    decoration: BoxDecoration(
-      color: const Color(0xff8E71DF),
-      borderRadius: BorderRadius.circular(6),
-    ),
-    child: Column(
-      mainAxisAlignment: MainAxisAlignment.center,
-      children: [
-        Text(
-          date,
-          style: const TextStyle(
-            fontSize: 22,
-            fontWeight: FontWeight.w600,
-            color: Colors.white,
-          ),
-        ),
-        Text(
-          day,
-          style: const TextStyle(
-            fontSize: 12,
-            fontWeight: FontWeight.w400,
-            color: Colors.white,
-          ),
-        ),
-      ],
-    ),
-  );
-}
+        final DateTime firstDayOfMonth = DateTime(year, month, 1);
+        final DateTime date = firstDayOfMonth.add(Duration(days: index));
 
+        final String day =
+            DateFormat('EE').format(date); // Day of the week (e.g., Mon, Tue)
+        final String formattedDate = DateFormat('dd').format(date);
 
-  Widget _buildWeekendContainer(int index) {
-    final DateTime now = DateTime.now();
-    final DateTime firstDayOfMonth = DateTime(now.year, now.month, 1);
-    final DateTime date = firstDayOfMonth.add(Duration(days: index));
-    final String day = DateFormat('EE').format(date);
-    final String formattedDate = DateFormat('dd').format(date);
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: 12),
+      margin: const EdgeInsets.only(bottom: 10),
+      height: 82,
+      decoration: BoxDecoration(
+        borderRadius: BorderRadius.circular(12),
+        color: Colors.white,
+      ),
+      child: Row(
+        children: [
+          _buildDateBox(formattedDate, day),
+          const SizedBox(width: 30),
+          const Text(
+            'Data Not Available',
+            style: TextStyle(
+              fontSize: 22,
+              fontWeight: FontWeight.bold,
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildDateBox(String date, String day) {
+    return Container(
+      width: 53,
+      height: 55,
+      decoration: BoxDecoration(
+        color: const Color(0xff8E71DF),
+        borderRadius: BorderRadius.circular(6),
+      ),
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          Text(
+            date,
+            style: const TextStyle(
+              fontSize: 22,
+              fontWeight: FontWeight.w600,
+              color: Colors.white,
+            ),
+          ),
+          Text(
+            day,
+            style: const TextStyle(
+              fontSize: 12,
+              fontWeight: FontWeight.w400,
+              color: Colors.white,
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildWeekendContainer(int index) {
+  final int month = int.parse(selectedMonth!);
+  final int year = int.parse(selectedYear!);
+
+  // Calculate the exact date based on index
+  final DateTime date = DateTime(year, month, index + 1);
+
+  final String day = DateFormat('EE').format(date); 
+  final String formattedDate = DateFormat('dd').format(date);
+    return Container(
+      padding: const EdgeInsets.symmetric(horizontal: 2),
       margin: const EdgeInsets.only(bottom: 10),
       height: 82,
       decoration: BoxDecoration(
@@ -570,8 +578,8 @@ Widget _buildDateBox(String date, String day) {
               future: selectedMonth != null && selectedYear != null
                   ? _getMonthlyAttendanceDetails(
                       widget.uid,
-                      int.parse(selectedMonth!), 
-                      int.parse(selectedYear!), 
+                      int.parse(selectedMonth!),
+                      int.parse(selectedYear!),
                     )
                   : null,
               builder: (context, snapshot) {
