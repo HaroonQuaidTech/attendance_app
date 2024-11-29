@@ -1,5 +1,7 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 import 'package:quaidtech/components/PreviousMonthStatusBuilder.dart';
 import 'package:quaidtech/components/graphicalbuildermonthly.dart';
 import 'package:quaidtech/components/graphicalweekly.dart';
@@ -65,34 +67,426 @@ class _StatsticsScreenState extends State<StatsticsScreen> {
     );
   }
 
-  Widget _buildMonthlyAttendance(
-      String text, Color color, String dropdownValue2) {
+  Widget _buildAttendance({
+    required Color color,
+    required List<Map<String, dynamic>?> data,
+  }) {
+    if (data.isEmpty) {
+      return const Center(
+        child: Text(
+          'No attendance data found.',
+          style: TextStyle(fontSize: 20),
+        ),
+      );
+    }
+    return ListView.builder(
+      itemCount: data.length,
+      primary: false,
+      shrinkWrap: true,
+      itemBuilder: (context, index) {
+        final attendanceRecord = data[index];
+        final int month = int.parse(selectedMonth!);
+        final int year = int.parse(selectedYear!);
+
+        final DateTime firstDayOfMonth = DateTime(year, month, 1);
+        final DateTime date = firstDayOfMonth.add(Duration(days: index));
+
+        final String day =
+            DateFormat('EE').format(date); // Day of the week (e.g., Mon, Tue)
+        final String formattedDate = DateFormat('dd').format(date);
+
+        if (date.weekday == DateTime.saturday ||
+            date.weekday == DateTime.sunday) {
+          return _buildWeekendContainer(index);
+        }
+        if (date.isAfter(DateTime.now()) || attendanceRecord == null) {
+          return _buildHNullAttendanceContainer(index);
+        }
+        final checkIn = (attendanceRecord['checkIn'] as Timestamp?)?.toDate();
+        final checkOut = (attendanceRecord['checkOut'] as Timestamp?)?.toDate();
+        if (checkIn == null && checkOut == null) {
+          return _buildEmptyAttendanceContainer(index);
+        }
+
+        final totalHours = _calculateTotalHours(checkIn, checkOut);
+        final Color containerColor =
+            _determineContainerColor(checkIn, checkOut);
+        return _buildAttendanceRow(
+          formattedDate: formattedDate,
+          day: day,
+          checkIn: checkIn,
+          checkOut: checkOut,
+          totalHours: totalHours,
+          containerColor: containerColor,
+        );
+      },
+    );
+  }
+
+  Widget _buildAttendanceRow({
+    required String formattedDate,
+    required String day,
+    required DateTime? checkIn,
+    required DateTime? checkOut,
+    required String? totalHours,
+    required Color containerColor,
+  }) {
     return Container(
       padding: const EdgeInsets.all(12),
-      width: double.infinity,
+      margin: const EdgeInsets.only(bottom: 10),
+      height: 82,
+      width: 360,
       decoration: BoxDecoration(
-        borderRadius: BorderRadius.circular(20),
-        color: Theme.of(context).colorScheme.tertiary,
+        borderRadius: BorderRadius.circular(12),
+        color: Colors.white,
+      ),
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        crossAxisAlignment: CrossAxisAlignment.center,
+        children: [
+          _buildDateContainer(formattedDate, day, containerColor),
+          _buildCheckTimeColumn(
+              checkIn != null
+                  ? DateFormat('hh:mm a')
+                      .format(checkIn) // Format Check-In Time
+                  : 'N/A',
+              'Check In'),
+          _buildDivider(),
+          _buildCheckTimeColumn(
+              checkOut != null
+                  ? DateFormat('hh:mm a')
+                      .format(checkOut) // Format Check-Out Time
+                  : 'N/A',
+              'Check Out'),
+          _buildDivider(),
+          _buildCheckTimeColumn(totalHours ?? 'N/A', 'Total Hrs'),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildCheckTimeColumn(dynamic timeOrHours, String label) {
+    return Column(
+      mainAxisAlignment: MainAxisAlignment.center,
+      children: [
+        Text(
+          timeOrHours is DateTime
+              ? _formatTime(timeOrHours)
+              : timeOrHours.toString(),
+          style: const TextStyle(
+              fontSize: 14, fontWeight: FontWeight.w800, color: Colors.black),
+        ),
+        Text(
+          label,
+          style: const TextStyle(
+              fontSize: 12, fontWeight: FontWeight.w600, color: Colors.black),
+        ),
+      ],
+    );
+  }
+
+  Widget _buildDivider() {
+    return Container(
+      width: 1,
+      height: 50,
+      color: Colors.black,
+    );
+  }
+
+  String _formatTime(DateTime time) {
+    final hour = time.hour;
+    final minute = time.minute;
+    return '${hour.toString().padLeft(2, '0')}:${minute.toString().padLeft(2, '0')}';
+  }
+
+  Widget _buildDateContainer(
+      String formattedDate, String day, Color containerColor) {
+    return Container(
+      width: 55,
+      height: 55,
+      decoration: BoxDecoration(
+        color: containerColor,
+        borderRadius: BorderRadius.circular(6),
       ),
       child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
+        mainAxisAlignment: MainAxisAlignment.center,
         children: [
           Text(
-            text,
+            formattedDate,
             style: const TextStyle(
+              fontSize: 22,
               fontWeight: FontWeight.w600,
-              fontSize: 18,
+              color: Colors.white,
               height: 0,
             ),
           ),
-          const SizedBox(height: 10),
-          MonthlyAttendance(
-            color: color,
-            dropdownValue2: dropdownValue2,
-            uid: uid,
+          const SizedBox(height: 5),
+          Text(
+            day,
+            style: const TextStyle(
+              fontSize: 12,
+              fontWeight: FontWeight.w400,
+              color: Colors.white,
+              height: 0,
+            ),
           ),
         ],
       ),
+    );
+  }
+
+  Color _determineContainerColor(DateTime? checkIn, DateTime? checkOut) {
+    int timeOfDayToMinutes(TimeOfDay time) {
+      return time.hour * 60 + time.minute;
+    }
+
+    if (checkIn != null) {
+      final TimeOfDay checkInTime = TimeOfDay.fromDateTime(checkIn);
+
+      const TimeOfDay ontime = TimeOfDay(hour: 8, minute: 15);
+      const TimeOfDay lateArrival = TimeOfDay(hour: 8, minute: 16);
+
+      final int checkInMinutes = timeOfDayToMinutes(checkInTime);
+      final int ontimeMinutes = timeOfDayToMinutes(ontime);
+      final int lateArrivalMinutes = timeOfDayToMinutes(lateArrival);
+
+      if (checkInMinutes <= ontimeMinutes) {
+        return StatusTheme.theme.colorScheme.inversePrimary;
+      } else if (checkInMinutes >= lateArrivalMinutes) {
+        return StatusTheme.theme.colorScheme.primary;
+      }
+    }
+
+    if (checkOut != null) {
+      final TimeOfDay checkOutTime = TimeOfDay.fromDateTime(checkOut);
+      const TimeOfDay earlyCheckout = TimeOfDay(hour: 17, minute: 0);
+      if (checkOutTime.hour < earlyCheckout.hour ||
+          (checkOutTime.hour == earlyCheckout.hour &&
+              checkOutTime.minute < earlyCheckout.minute)) {
+        return StatusTheme.theme.colorScheme.tertiary;
+      }
+    }
+    return StatusTheme.theme.colorScheme.secondary;
+  }
+
+  String _calculateTotalHours(DateTime? checkIn, DateTime? checkOut) {
+    if (checkIn == null || checkOut == null) {
+      return "00:00";
+    }
+    Duration duration = checkOut.difference(checkIn);
+    int hours = duration.inHours;
+    int minutes = duration.inMinutes.remainder(60);
+    final String formattedHours = hours.toString().padLeft(2, '0');
+    final String formattedMinutes = minutes.toString().padLeft(2, '0');
+    return '$formattedHours:$formattedMinutes';
+  }
+
+  Widget _buildEmptyAttendanceContainer(int index) {
+    final int month = int.parse(selectedMonth!);
+    final int year = int.parse(selectedYear!);
+
+    final DateTime firstDayOfMonth = DateTime(year, month, 1);
+    final DateTime date = firstDayOfMonth.add(Duration(days: index));
+
+    final String day =
+        DateFormat('EE').format(date); // Day of the week (e.g., Mon, Tue)
+    final String formattedDate = DateFormat('dd').format(date);
+    return Column(
+      children: [
+        Container(
+          padding: const EdgeInsets.all(12),
+          height: 82,
+          decoration: BoxDecoration(
+            borderRadius: BorderRadius.circular(12),
+            color: Colors.white,
+          ),
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              Container(
+                width: 55,
+                height: 55,
+                decoration: BoxDecoration(
+                  color: StatusTheme.theme.colorScheme.secondary,
+                  borderRadius: BorderRadius.circular(6),
+                ),
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Text(
+                      formattedDate,
+                      style: const TextStyle(
+                        fontSize: 22,
+                        fontWeight: FontWeight.w600,
+                        color: Colors.white,
+                        height: 0,
+                      ),
+                    ),
+                    const SizedBox(height: 5),
+                    Text(
+                      day,
+                      style: const TextStyle(
+                        fontSize: 12,
+                        fontWeight: FontWeight.w400,
+                        color: Colors.white,
+                        height: 0,
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+              const Text(
+                'Leave/Day off',
+                style: TextStyle(
+                  fontSize: 22,
+                  fontWeight: FontWeight.bold,
+                  height: 0,
+                ),
+              ),
+              const SizedBox(width: 10),
+            ],
+          ),
+        ),
+        const SizedBox(height: 10),
+      ],
+    );
+  }
+
+  Widget _buildHNullAttendanceContainer(int index) {
+    final int month = int.parse(selectedMonth!);
+    final int year = int.parse(selectedYear!);
+
+    final DateTime firstDayOfMonth = DateTime(year, month, 1);
+    final DateTime date = firstDayOfMonth.add(Duration(days: index));
+
+    final String day =
+        DateFormat('EE').format(date); // Day of the week (e.g., Mon, Tue)
+    final String formattedDate = DateFormat('dd').format(date);
+
+    return Container(
+      padding: const EdgeInsets.symmetric(horizontal: 12),
+      margin: const EdgeInsets.only(bottom: 10),
+      height: 82,
+      decoration: BoxDecoration(
+        borderRadius: BorderRadius.circular(12),
+        color: Colors.white,
+      ),
+      child: Row(
+        children: [
+          _buildDateBox(formattedDate, day),
+          const SizedBox(width: 30),
+          const Text(
+            'Data Not Available',
+            style: TextStyle(
+              fontSize: 22,
+              fontWeight: FontWeight.bold,
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildDateBox(String date, String day) {
+    return Container(
+      width: 53,
+      height: 55,
+      decoration: BoxDecoration(
+        color: const Color(0xff8E71DF),
+        borderRadius: BorderRadius.circular(6),
+      ),
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          Text(
+            date,
+            style: const TextStyle(
+              fontSize: 22,
+              fontWeight: FontWeight.w600,
+              color: Colors.white,
+            ),
+          ),
+          Text(
+            day,
+            style: const TextStyle(
+              fontSize: 12,
+              fontWeight: FontWeight.w400,
+              color: Colors.white,
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildWeekendContainer(int index) {
+    final int month = int.parse(selectedMonth!);
+    final int year = int.parse(selectedYear!);
+
+    final DateTime firstDayOfMonth = DateTime(year, month, 1);
+    final DateTime date = firstDayOfMonth.add(Duration(days: index));
+
+    final String day =
+        DateFormat('EE').format(date); // Day of the week (e.g., Mon, Tue)
+    final String formattedDate = DateFormat('dd').format(date);
+    return Column(
+      children: [
+        Container(
+          padding: const EdgeInsets.symmetric(horizontal: 12),
+          height: 82,
+          decoration: BoxDecoration(
+            borderRadius: BorderRadius.circular(12),
+            color: Colors.white,
+          ),
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              Container(
+                width: 55,
+                height: 55,
+                decoration: BoxDecoration(
+                    color: StatusTheme.theme.colorScheme.secondaryFixed,
+                    borderRadius: BorderRadius.circular(6)),
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  children: [
+                    Text(
+                      formattedDate,
+                      style: const TextStyle(
+                        fontSize: 22,
+                        fontWeight: FontWeight.w600,
+                        color: Colors.white,
+                        height: 0,
+                      ),
+                    ),
+                    const SizedBox(height: 5),
+                    Text(
+                      day,
+                      style: const TextStyle(
+                        fontSize: 12,
+                        fontWeight: FontWeight.w400,
+                        color: Colors.white,
+                        height: 0,
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+              const Text(
+                'Weekend Days',
+                style: TextStyle(
+                  fontSize: 22,
+                  fontWeight: FontWeight.bold,
+                  height: 0,
+                ),
+              ),
+              const SizedBox(width: 10),
+            ],
+          ),
+        ),
+        const SizedBox(height: 10),
+      ],
     );
   }
 
@@ -161,9 +555,7 @@ class _StatsticsScreenState extends State<StatsticsScreen> {
         return const SizedBox.shrink();
     }
 
-    return isWeekly
-        ? _buildWeeklyAttendance(detailsType, detailsColor, dropdownValue2)
-        : _buildMonthlyAttendance(detailsType, detailsColor, dropdownValue2);
+    return _buildWeeklyAttendance(detailsType, detailsColor, dropdownValue2);
   }
 
   @override
@@ -300,6 +692,7 @@ class _StatsticsScreenState extends State<StatsticsScreen> {
                                         ),
                                       ),
                                       const SizedBox(width: 20),
+                                      
                                       Expanded(
                                         child: Container(
                                           padding: const EdgeInsets.symmetric(
@@ -352,113 +745,6 @@ class _StatsticsScreenState extends State<StatsticsScreen> {
                           ),
                         ),
                       const SizedBox(height: 20),
-                      // if (dropdownValue1 == 'Monthly')
-                      //   Material(
-                      //     borderRadius: BorderRadius.circular(20),
-                      //     color: Theme.of(context).colorScheme.tertiary,
-                      //     child: Padding(
-                      //       padding: const EdgeInsets.symmetric(
-                      //           horizontal: 10.0, vertical: 20),
-                      //       child: Column(
-                      //         crossAxisAlignment: CrossAxisAlignment.start,
-                      //         children: [
-                      //           const Text(
-                      //             'Monthly filter',
-                      //             style: TextStyle(
-                      //                 fontWeight: FontWeight.w600,
-                      //                 fontSize: 18),
-                      //           ),
-                      //           const SizedBox(height: 10),
-                      //           Row(
-                      //             mainAxisAlignment:
-                      //                 MainAxisAlignment.spaceBetween,
-                      //             children: [
-                      //               Expanded(
-                      //                 child: Container(
-                      //                   height: 50,
-                      //                   padding: const EdgeInsets.symmetric(
-                      //                       horizontal: 10),
-                      //                   decoration: BoxDecoration(
-                      //                     color: Colors.white,
-                      //                     borderRadius:
-                      //                         BorderRadius.circular(12),
-                      //                     boxShadow: [
-                      //                       BoxShadow(
-                      //                         color:
-                      //                             Colors.grey.withOpacity(0.2),
-                      //                         spreadRadius: 2,
-                      //                         blurRadius: 4,
-                      //                         offset: const Offset(0, 2),
-                      //                       ),
-                      //                     ],
-                      //                   ),
-                      //                   child: DropdownButton<String>(
-                      //                     value: selectedMonth,
-                      //                     hint: const Text("Select Month"),
-                      //                     isExpanded: true,
-                      //                     underline: const SizedBox(),
-                      //                     items: months.map((month) {
-                      //                       return DropdownMenuItem(
-                      //                         value: month,
-                      //                         child: Text(DateFormat('MMMM')
-                      //                             .format(DateTime(
-                      //                                 0, int.parse(month)))),
-                      //                       );
-                      //                     }).toList(),
-                      //                     onChanged: (value) {
-                      //                       setState(() {
-                      //                         selectedMonth = value;
-                      //                       });
-                      //                     },
-                      //                   ),
-                      //                 ),
-                      //               ),
-                      //               const SizedBox(width: 16),
-                      //               Expanded(
-                      //                 child: Container(
-                      //                   height: 50,
-                      //                   padding: const EdgeInsets.symmetric(
-                      //                       horizontal: 10),
-                      //                   decoration: BoxDecoration(
-                      //                     color: Colors.white,
-                      //                     borderRadius:
-                      //                         BorderRadius.circular(12),
-                      //                     boxShadow: [
-                      //                       BoxShadow(
-                      //                         color:
-                      //                             Colors.grey.withOpacity(0.2),
-                      //                         spreadRadius: 2,
-                      //                         blurRadius: 4,
-                      //                         offset: const Offset(0, 2),
-                      //                       ),
-                      //                     ],
-                      //                   ),
-                      //                   child: DropdownButton<String>(
-                      //                     value: selectedYear,
-                      //                     hint: const Text("Select Year"),
-                      //                     isExpanded: true,
-                      //                     underline: const SizedBox(),
-                      //                     items: years.map((year) {
-                      //                       return DropdownMenuItem(
-                      //                         value: year,
-                      //                         child: Text(year),
-                      //                       );
-                      //                     }).toList(),
-                      //                     onChanged: (value) {
-                      //                       setState(() {
-                      //                         selectedYear = value;
-                      //                       });
-                      //                     },
-                      //                   ),
-                      //                 ),
-                      //               ),
-                      //             ],
-                      //           ),
-                      //         ],
-                      //       ),
-                      //     ),
-                      //   ),
-                      // const SizedBox(height: 20),
                       Padding(
                         padding: const EdgeInsets.only(top: 1.0),
                         child: Column(
