@@ -8,7 +8,6 @@ import 'package:quaidtech/components/statusbuilderweekly.dart';
 import 'package:quaidtech/components/weeklyattenance.dart';
 import 'package:quaidtech/main.dart';
 import 'package:quaidtech/screens/notification.dart';
-import 'package:intl/intl.dart';
 
 class StatsticsScreen extends StatefulWidget {
   const StatsticsScreen({super.key});
