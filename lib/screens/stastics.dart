@@ -364,7 +364,7 @@ class _StatsticsScreenState extends State<StatsticsScreen> {
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
                                 const Text(
-                                  'Monthly filter log ',
+                                  'Monthly filter',
                                   style: TextStyle(
                                       fontWeight: FontWeight.w600,
                                       fontSize: 18),
@@ -507,7 +507,9 @@ class _StatsticsScreenState extends State<StatsticsScreen> {
                           dropdownValue2 != 'Early Out' &&
                           dropdownValue2 != 'Late Arrival')
                         if (dropdownValue1 == 'Monthly' && _selectedIndex == 0)
-                         PreviousMonthlyAttendance(uid: uid,),
+                          PreviousMonthlyAttendance(
+                            uid: uid,
+                          ),
                       if (dropdownValue1 == 'Weekly' && _selectedIndex == 1)
                         const GraphicalbuilderWeekly(),
                       if (dropdownValue1 == 'Monthly' && _selectedIndex == 1)
