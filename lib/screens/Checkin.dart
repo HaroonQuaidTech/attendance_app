@@ -19,10 +19,40 @@ class AttendanceService {
         );
       },
     );
+
     try {
+      Position currentPosition = await Geolocator.getCurrentPosition(
+        desiredAccuracy: LocationAccuracy.high,
+      );
+
+      double targetLatitude = 33.6084548;
+      double targetLongitude = 73.0171062;
+
+      double distance = Geolocator.distanceBetween(
+        currentPosition.latitude,
+        currentPosition.longitude,
+        targetLatitude,
+        targetLongitude,
+      );
+
+      const double maxRange = 50.0;
+
+      if (distance > maxRange) {
+        Navigator.pop(context);
+
+        _showAlertDialog(
+          context: context,
+          mounted: true,
+          title: 'Out of Range',
+          image: 'assets/failed.png',
+          message: 'You are not within the allowed range to check in.',
+          closeCallback: () {},
+        );
+        return;
+      }
+
       Timestamp checkInTime = Timestamp.now();
       DateTime now = DateTime.now();
-
       String formattedDate = DateFormat('yMMMd').format(now);
 
       await FirebaseFirestore.instance
@@ -41,7 +71,7 @@ class AttendanceService {
         mounted: true,
         title: 'Checked In',
         image: 'assets/checkin_alert.png',
-        message: 'Successfully checkedin',
+        message: 'Successfully checked in.',
         closeCallback: () {
           Navigator.pushReplacement(
             context,
@@ -53,8 +83,8 @@ class AttendanceService {
       );
     } catch (e) {
       Navigator.pop(context);
-      String errorMessage = 'Something went wrong!';
 
+      String errorMessage = 'Something went wrong!';
       if (e is FirebaseAuthException) {
         errorMessage = e.message ?? errorMessage;
       }
@@ -82,6 +112,36 @@ class AttendanceService {
     );
 
     try {
+      Position currentPosition = await Geolocator.getCurrentPosition(
+        desiredAccuracy: LocationAccuracy.high,
+      );
+
+      double targetLatitude = 33.6084548;
+      double targetLongitude = 73.0171062;
+
+      double distance = Geolocator.distanceBetween(
+        currentPosition.latitude,
+        currentPosition.longitude,
+        targetLatitude,
+        targetLongitude,
+      );
+
+      const double maxRange = 50.0;
+
+      if (distance > maxRange) {
+        Navigator.pop(context);
+
+        _showAlertDialog(
+          context: context,
+          mounted: true,
+          title: 'Out of Range',
+          image: 'assets/failed.png',
+          message: 'You are not within the allowed range to check out.',
+          closeCallback: () {},
+        );
+        return;
+      }
+
       Timestamp checkOutTime = Timestamp.now();
       DateTime now = DateTime.now();
       String formattedDate = DateFormat('yMMMd').format(now);
@@ -100,7 +160,7 @@ class AttendanceService {
         mounted: true,
         title: 'Checked Out',
         image: 'assets/checkout_alert.png',
-        message: 'Successfully checkedout',
+        message: 'Successfully checked out.',
         closeCallback: () {
           Navigator.pushReplacement(
             context,
@@ -112,8 +172,8 @@ class AttendanceService {
       );
     } catch (e) {
       Navigator.pop(context);
-      String errorMessage = 'Something went wrong!';
 
+      String errorMessage = 'Something went wrong!';
       if (e is FirebaseAuthException) {
         errorMessage = e.message ?? errorMessage;
       }
@@ -459,21 +519,6 @@ class _CheckinScreenState extends State<CheckinScreen> {
                   if (checkIn == null && checkOut == null)
                     GestureDetector(
                       onTap: () async {
-                        Position currentPosition =
-                            await Geolocator.getCurrentPosition(
-                          desiredAccuracy: LocationAccuracy.high,
-                        );
-
-                        double targetLatitude = 33.6084548;
-                        double targetLongitude = 73.0171062;
-
-                        Geolocator.distanceBetween(
-                          currentPosition.latitude,
-                          currentPosition.longitude,
-                          targetLatitude,
-                          targetLongitude,
-                        );
-
                         await _attendanceService.checkIn(context, userId);
                       },
                       child: Stack(
@@ -564,10 +609,13 @@ class _CheckinScreenState extends State<CheckinScreen> {
                                     child: Column(
                                       mainAxisSize: MainAxisSize.min,
                                       children: [
-                                        Image.asset(
-                                          "assets/warning.png",
-                                          width: 50,
-                                          height: 50,
+                                        CircleAvatar(
+                                          radius: 25,
+                                          backgroundColor:
+                                              const Color(0xff3B3A3C),
+                                          child: Image.asset(
+                                            "assets/warning.png",
+                                          ),
                                         ),
                                         const SizedBox(height: 10),
                                         const Text(
@@ -621,25 +669,6 @@ class _CheckinScreenState extends State<CheckinScreen> {
                                             ),
                                             GestureDetector(
                                               onTap: () async {
-                                                Position currentPosition =
-                                                    await Geolocator
-                                                        .getCurrentPosition(
-                                                  desiredAccuracy:
-                                                      LocationAccuracy.high,
-                                                );
-
-                                                double targetLatitude =
-                                                    33.6084548;
-                                                double targetLongitude =
-                                                    73.0171062;
-
-                                                Geolocator.distanceBetween(
-                                                  currentPosition.latitude,
-                                                  currentPosition.longitude,
-                                                  targetLatitude,
-                                                  targetLongitude,
-                                                );
-
                                                 await _attendanceService
                                                     .checkOut(context, userId);
                                               },
