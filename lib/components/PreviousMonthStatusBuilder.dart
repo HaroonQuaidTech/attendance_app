@@ -4,12 +4,13 @@ import 'package:intl/intl.dart';
 
 class PreviousMonthlyAttendance extends StatefulWidget {
   final String uid;
-
-  const PreviousMonthlyAttendance({super.key, required this.uid});
+  const PreviousMonthlyAttendance({
+    super.key,
+    required this.uid,
+  });
 
   @override
-  // ignore: library_private_types_in_public_api
-  _PreviousMonthlyAttendanceState createState() =>
+  State<PreviousMonthlyAttendance> createState() =>
       _PreviousMonthlyAttendanceState();
 }
 
