@@ -1,6 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
+import 'package:quaidtech/main.dart';
 
 class PreviousMonthlyAttendance extends StatefulWidget {
   final String uid;
@@ -347,22 +348,37 @@ class _PreviousMonthlyAttendanceState extends State<PreviousMonthlyAttendance> {
   }
 
   Color _determineContainerColor(DateTime? checkIn, DateTime? checkOut) {
+    int timeOfDayToMinutes(TimeOfDay time) {
+      return time.hour * 60 + time.minute;
+    }
+
     if (checkIn != null) {
       final TimeOfDay checkInTime = TimeOfDay.fromDateTime(checkIn);
-      const TimeOfDay earlyOnTime = TimeOfDay(hour: 7, minute: 50);
-      const TimeOfDay lateOnTime = TimeOfDay(hour: 8, minute: 10);
-      if ((checkInTime.hour == earlyOnTime.hour &&
-              checkInTime.minute >= earlyOnTime.minute) ||
-          (checkInTime.hour == lateOnTime.hour &&
-              checkInTime.minute <= lateOnTime.minute)) {
-        return const Color(0xff22AF41); // Green color
-      } else if (checkInTime.hour > lateOnTime.hour) {
-        return const Color(0xffF6C15B); // Yellow color
-      } else {
-        return const Color(0xff8E71DF); // Purple color
+
+      const TimeOfDay ontime = TimeOfDay(hour: 8, minute: 15);
+      const TimeOfDay lateArrival = TimeOfDay(hour: 8, minute: 16);
+
+      final int checkInMinutes = timeOfDayToMinutes(checkInTime);
+      final int ontimeMinutes = timeOfDayToMinutes(ontime);
+      final int lateArrivalMinutes = timeOfDayToMinutes(lateArrival);
+
+      if (checkInMinutes <= ontimeMinutes) {
+        return StatusTheme.theme.colorScheme.inversePrimary;
+      } else if (checkInMinutes >= lateArrivalMinutes) {
+        return StatusTheme.theme.colorScheme.primary;
       }
     }
-    return const Color(0xff8E71DF);
+
+    if (checkOut != null) {
+      final TimeOfDay checkOutTime = TimeOfDay.fromDateTime(checkOut);
+      const TimeOfDay earlyCheckout = TimeOfDay(hour: 17, minute: 0);
+      if (checkOutTime.hour < earlyCheckout.hour ||
+          (checkOutTime.hour == earlyCheckout.hour &&
+              checkOutTime.minute < earlyCheckout.minute)) {
+        return StatusTheme.theme.colorScheme.tertiary;
+      }
+    }
+    return StatusTheme.theme.colorScheme.secondary;
   }
 
   Widget _buildAttendanceRow({
