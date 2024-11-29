@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:quaidtech/components/PreviousMonthStatusBuilder.dart';
 import 'package:quaidtech/components/graphicalbuildermonthly.dart';
 import 'package:quaidtech/components/graphicalweekly.dart';
+import 'package:quaidtech/components/monthattendancce.dart';
 import 'package:quaidtech/components/statusbuilderweekly.dart';
 import 'package:quaidtech/components/weeklyattenance.dart';
 import 'package:quaidtech/main.dart';
@@ -60,6 +61,37 @@ class _StatsticsScreenState extends State<StatsticsScreen> {
             ),
           ],
         ),
+      ),
+    );
+  }
+
+  Widget _buildMonthlyAttendance(
+      String text, Color color, String dropdownValue2) {
+    return Container(
+      padding: const EdgeInsets.all(12),
+      width: double.infinity,
+      decoration: BoxDecoration(
+        borderRadius: BorderRadius.circular(20),
+        color: Theme.of(context).colorScheme.tertiary,
+      ),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Text(
+            text,
+            style: const TextStyle(
+              fontWeight: FontWeight.w600,
+              fontSize: 18,
+              height: 0,
+            ),
+          ),
+          const SizedBox(height: 10),
+          MonthlyAttendance(
+            color: color,
+            dropdownValue2: dropdownValue2,
+            uid: uid,
+          ),
+        ],
       ),
     );
   }
@@ -129,7 +161,9 @@ class _StatsticsScreenState extends State<StatsticsScreen> {
         return const SizedBox.shrink();
     }
 
-    return _buildWeeklyAttendance(detailsType, detailsColor, dropdownValue2);
+    return isWeekly
+        ? _buildWeeklyAttendance(detailsType, detailsColor, dropdownValue2)
+        : _buildMonthlyAttendance(detailsType, detailsColor, dropdownValue2);
   }
 
   @override
@@ -318,6 +352,113 @@ class _StatsticsScreenState extends State<StatsticsScreen> {
                           ),
                         ),
                       const SizedBox(height: 20),
+                      // if (dropdownValue1 == 'Monthly')
+                      //   Material(
+                      //     borderRadius: BorderRadius.circular(20),
+                      //     color: Theme.of(context).colorScheme.tertiary,
+                      //     child: Padding(
+                      //       padding: const EdgeInsets.symmetric(
+                      //           horizontal: 10.0, vertical: 20),
+                      //       child: Column(
+                      //         crossAxisAlignment: CrossAxisAlignment.start,
+                      //         children: [
+                      //           const Text(
+                      //             'Monthly filter',
+                      //             style: TextStyle(
+                      //                 fontWeight: FontWeight.w600,
+                      //                 fontSize: 18),
+                      //           ),
+                      //           const SizedBox(height: 10),
+                      //           Row(
+                      //             mainAxisAlignment:
+                      //                 MainAxisAlignment.spaceBetween,
+                      //             children: [
+                      //               Expanded(
+                      //                 child: Container(
+                      //                   height: 50,
+                      //                   padding: const EdgeInsets.symmetric(
+                      //                       horizontal: 10),
+                      //                   decoration: BoxDecoration(
+                      //                     color: Colors.white,
+                      //                     borderRadius:
+                      //                         BorderRadius.circular(12),
+                      //                     boxShadow: [
+                      //                       BoxShadow(
+                      //                         color:
+                      //                             Colors.grey.withOpacity(0.2),
+                      //                         spreadRadius: 2,
+                      //                         blurRadius: 4,
+                      //                         offset: const Offset(0, 2),
+                      //                       ),
+                      //                     ],
+                      //                   ),
+                      //                   child: DropdownButton<String>(
+                      //                     value: selectedMonth,
+                      //                     hint: const Text("Select Month"),
+                      //                     isExpanded: true,
+                      //                     underline: const SizedBox(),
+                      //                     items: months.map((month) {
+                      //                       return DropdownMenuItem(
+                      //                         value: month,
+                      //                         child: Text(DateFormat('MMMM')
+                      //                             .format(DateTime(
+                      //                                 0, int.parse(month)))),
+                      //                       );
+                      //                     }).toList(),
+                      //                     onChanged: (value) {
+                      //                       setState(() {
+                      //                         selectedMonth = value;
+                      //                       });
+                      //                     },
+                      //                   ),
+                      //                 ),
+                      //               ),
+                      //               const SizedBox(width: 16),
+                      //               Expanded(
+                      //                 child: Container(
+                      //                   height: 50,
+                      //                   padding: const EdgeInsets.symmetric(
+                      //                       horizontal: 10),
+                      //                   decoration: BoxDecoration(
+                      //                     color: Colors.white,
+                      //                     borderRadius:
+                      //                         BorderRadius.circular(12),
+                      //                     boxShadow: [
+                      //                       BoxShadow(
+                      //                         color:
+                      //                             Colors.grey.withOpacity(0.2),
+                      //                         spreadRadius: 2,
+                      //                         blurRadius: 4,
+                      //                         offset: const Offset(0, 2),
+                      //                       ),
+                      //                     ],
+                      //                   ),
+                      //                   child: DropdownButton<String>(
+                      //                     value: selectedYear,
+                      //                     hint: const Text("Select Year"),
+                      //                     isExpanded: true,
+                      //                     underline: const SizedBox(),
+                      //                     items: years.map((year) {
+                      //                       return DropdownMenuItem(
+                      //                         value: year,
+                      //                         child: Text(year),
+                      //                       );
+                      //                     }).toList(),
+                      //                     onChanged: (value) {
+                      //                       setState(() {
+                      //                         selectedYear = value;
+                      //                       });
+                      //                     },
+                      //                   ),
+                      //                 ),
+                      //               ),
+                      //             ],
+                      //           ),
+                      //         ],
+                      //       ),
+                      //     ),
+                      //   ),
+                      // const SizedBox(height: 20),
                       Padding(
                         padding: const EdgeInsets.only(top: 1.0),
                         child: Column(
@@ -365,7 +506,9 @@ class _StatsticsScreenState extends State<StatsticsScreen> {
                           dropdownValue2 != 'Early Out' &&
                           dropdownValue2 != 'Late Arrival')
                         if (dropdownValue1 == 'Monthly' && _selectedIndex == 0)
-                          PreviousMonthlyAttendance(uid: uid),
+                          PreviousMonthlyAttendance(
+                            uid: uid,
+                          ),
                       if (dropdownValue1 == 'Weekly' && _selectedIndex == 1)
                         const GraphicalbuilderWeekly(),
                       if (dropdownValue1 == 'Monthly' && _selectedIndex == 1)
