@@ -1,16 +1,16 @@
+
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 
 class PreviousMonthlyAttendance extends StatefulWidget {
   final String uid;
-  const PreviousMonthlyAttendance({
-    super.key,
-    required this.uid,
-  });
+
+  const PreviousMonthlyAttendance({super.key, required this.uid});
 
   @override
-  State<PreviousMonthlyAttendance> createState() =>
+  // ignore: library_private_types_in_public_api
+  _PreviousMonthlyAttendanceState createState() =>
       _PreviousMonthlyAttendanceState();
 }
 
@@ -45,7 +45,6 @@ class _PreviousMonthlyAttendanceState extends State<PreviousMonthlyAttendance> {
           .get();
     });
 
-  
     final snapshots = await Future.wait(snapshotFutures);
 
     for (int i = 0; i < snapshots.length; i++) {
@@ -69,22 +68,18 @@ class _PreviousMonthlyAttendanceState extends State<PreviousMonthlyAttendance> {
   }
 
   String _getMonthDateRange() {
-    if (selectedMonth != null && selectedYear != null) {
-      int month = int.parse(selectedMonth!);
-      int year = int.parse(selectedYear!);
-
-     
-      DateTime firstDayOfMonth = DateTime(year, month, 1);
-      DateTime lastDayOfMonth =
-          DateTime(year, month + 1, 0); 
-
-    
-      String startDate = DateFormat('MMM dd').format(firstDayOfMonth);
-      String endDate = DateFormat('MMM dd').format(lastDayOfMonth);
-
-      return '$startDate - $endDate';
+    if (selectedMonth == null || selectedYear == null) {
+      return "Select a month and year";
     }
-    return '';
+
+    final int month = int.parse(selectedMonth!);
+    final int year = int.parse(selectedYear!);
+
+    final DateTime firstDayOfMonth = DateTime(year, month, 1);
+    final DateTime lastDayOfMonth = DateTime(year, month + 1, 0);
+
+    final DateFormat formatter = DateFormat('MMM d');
+    return "${formatter.format(firstDayOfMonth)} - ${formatter.format(lastDayOfMonth)}";
   }
 
   Widget _buildAttendance({
@@ -220,9 +215,16 @@ class _PreviousMonthlyAttendanceState extends State<PreviousMonthlyAttendance> {
   }
 
   Widget _buildHNullAttendanceContainer(int index) {
-  final date = DateTime(DateTime.now().year, DateTime.now().month, 1).add(Duration(days: index));
-  final formattedDate = DateFormat('dd').format(date);
-  final day = DateFormat('EE').format(date);
+
+        final int month = int.parse(selectedMonth!);
+        final int year = int.parse(selectedYear!);
+
+        final DateTime firstDayOfMonth = DateTime(year, month, 1);
+        final DateTime date = firstDayOfMonth.add(Duration(days: index));
+
+        final String day =
+            DateFormat('EE').format(date); // Day of the week (e.g., Mon, Tue)
+        final String formattedDate = DateFormat('dd').format(date);
 
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: 12),
@@ -577,8 +579,8 @@ class _PreviousMonthlyAttendanceState extends State<PreviousMonthlyAttendance> {
               future: selectedMonth != null && selectedYear != null
                   ? _getMonthlyAttendanceDetails(
                       widget.uid,
-                      int.parse(selectedMonth!), 
-                      int.parse(selectedYear!), 
+                      int.parse(selectedMonth!),
+                      int.parse(selectedYear!),
                     )
                   : null,
               builder: (context, snapshot) {
@@ -595,168 +597,171 @@ class _PreviousMonthlyAttendanceState extends State<PreviousMonthlyAttendance> {
                   return const Center(child: Text('No attendance data found.'));
                 }
 
-              final attendanceData = snapshot.data!;
+                final attendanceData = snapshot.data!;
 
-              int totalMinutes = 0;
+                int totalMinutes = 0;
 
-              for (var entry in attendanceData) {
-                final checkIn = entry['checkIn'] as Timestamp?;
-                final checkOut = entry['checkOut'] as Timestamp?;
+                for (var entry in attendanceData) {
+                  final checkIn = entry['checkIn'] as Timestamp?;
+                  final checkOut = entry['checkOut'] as Timestamp?;
 
-                if (checkIn != null && checkOut != null) {
-                  final checkInDate = checkIn.toDate();
-                  final checkOutDate = checkOut.toDate();
-                  totalMinutes +=
-                      checkOutDate.difference(checkInDate).inMinutes;
+                  if (checkIn != null && checkOut != null) {
+                    final checkInDate = checkIn.toDate();
+                    final checkOutDate = checkOut.toDate();
+                    totalMinutes +=
+                        checkOutDate.difference(checkInDate).inMinutes;
+                  }
                 }
-              }
-              const int maxMinutes = 10392;
-              const double maxHours = 173.2;
-              int totalHours = totalMinutes ~/ 60;
-              double progressValueInHours =
-                  maxHours != 0 ? totalHours / maxHours : 0.0;
+                const int maxMinutes = 10392;
+                const double maxHours = 173.2;
+                int totalHours = totalMinutes ~/ 60;
+                double progressValueInHours =
+                    maxHours != 0 ? totalHours / maxHours : 0.0;
 
-              int totalMinutesFromHours = totalHours * 60;
-              return Column(children: [
-                Material(
-                  borderRadius: BorderRadius.circular(20),
-                  color: Theme.of(context).colorScheme.tertiary,
-                  child: Padding(
-                    padding: const EdgeInsets.symmetric(
-                        horizontal: 10.0, vertical: 10.0),
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        const Text(
-                          'Monthly Times Log',
-                          style: TextStyle(
-                              fontWeight: FontWeight.w600, fontSize: 18),
-                        ),
-                        const SizedBox(height: 20),
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: [
-                            Container(
-                              height: screenHeight * 0.18,
-                              width: screenWidth * 0.40,
-                              decoration: BoxDecoration(
-                                borderRadius: BorderRadius.circular(12),
-                                color: Colors.white,
-                              ),
-                              child: Padding(
-                                padding: const EdgeInsets.symmetric(
-                                    horizontal: 10.0),
-                                child: Column(
-                                  mainAxisAlignment:
-                                      MainAxisAlignment.spaceAround,
-                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                  children: [
-                                    const Text(
-                                      'Time in Minutes',
-                                      style: TextStyle(
-                                          fontWeight: FontWeight.w500,
-                                          fontSize: 14),
-                                    ),
-                                    Text(
-                                      '$totalMinutesFromHours Minutes',
-                                      style: const TextStyle(
-                                          fontWeight: FontWeight.w600,
-                                          fontSize: 20),
-                                    ),
-                                    LinearProgressIndicator(
-                                      value: totalMinutes / maxMinutes,
-                                      backgroundColor: Colors.grey[300],
-                                      color:
-                                          Theme.of(context).colorScheme.primary,
-                                    ),
-                                    Text(
-                                      _getMonthDateRange(),
-                                      style: const TextStyle(
-                                          fontWeight: FontWeight.w600,
-                                          fontSize: 15),
-                                    ),
-                                  ],
+                int totalMinutesFromHours = totalHours * 60;
+                return Column(children: [
+                  Material(
+                    borderRadius: BorderRadius.circular(20),
+                    color: Theme.of(context).colorScheme.tertiary,
+                    child: Padding(
+                      padding: const EdgeInsets.symmetric(
+                          horizontal: 10.0, vertical: 10.0),
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          const Text(
+                            'Monthly Times Log',
+                            style: TextStyle(
+                                fontWeight: FontWeight.w600, fontSize: 18),
+                          ),
+                          const SizedBox(height: 20),
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              Container(
+                                height: screenHeight * 0.18,
+                                width: screenWidth * 0.40,
+                                decoration: BoxDecoration(
+                                  borderRadius: BorderRadius.circular(12),
+                                  color: Colors.white,
                                 ),
-                              ),
-                            ),
-                            Container(
-                              height: screenHeight * 0.18,
-                              width: screenWidth * 0.40,
-                              decoration: BoxDecoration(
-                                borderRadius: BorderRadius.circular(12),
-                                color: Colors.white,
-                              ),
-                              child: Padding(
-                                padding: const EdgeInsets.symmetric(
-                                    horizontal: 10.0),
-                                child: Column(
-                                  mainAxisAlignment:
-                                      MainAxisAlignment.spaceAround,
-                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                  children: [
-                                    const Text(
-                                      'Time in Hours',
-                                      style: TextStyle(
-                                          fontWeight: FontWeight.w500,
-                                          fontSize: 14),
-                                    ),
-                                    Text(
-                                      '$totalHours Hours',
-                                      style: const TextStyle(
-                                          fontWeight: FontWeight.w600,
-                                          fontSize: 20),
-                                    ),
-                                    LinearProgressIndicator(
-                                      value: progressValueInHours,
-                                      backgroundColor: Colors.grey[300],
-                                      color:
-                                          Theme.of(context).colorScheme.primary,
-                                    ),
-                                    Text(
-                                      _getMonthDateRange(),
-                                      style: const TextStyle(
-                                        fontWeight: FontWeight.w600,
-                                        fontSize: 15,
-                                        height: 0,
+                                child: Padding(
+                                  padding: const EdgeInsets.symmetric(
+                                      horizontal: 10.0),
+                                  child: Column(
+                                    mainAxisAlignment:
+                                        MainAxisAlignment.spaceAround,
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.start,
+                                    children: [
+                                      const Text(
+                                        'Time in Minutes',
+                                        style: TextStyle(
+                                            fontWeight: FontWeight.w500,
+                                            fontSize: 14),
                                       ),
-                                    ),
-                                  ],
+                                      Text(
+                                        '$totalMinutesFromHours Minutes',
+                                        style: const TextStyle(
+                                            fontWeight: FontWeight.w600,
+                                            fontSize: 20),
+                                      ),
+                                      LinearProgressIndicator(
+                                        value: totalMinutes / maxMinutes,
+                                        backgroundColor: Colors.grey[300],
+                                        color: Theme.of(context)
+                                            .colorScheme
+                                            .primary,
+                                      ),
+                                      Text(
+                                        _getMonthDateRange(),
+                                        style: const TextStyle(
+                                            fontWeight: FontWeight.w600,
+                                            fontSize: 15),
+                                      ),
+                                    ],
+                                  ),
                                 ),
                               ),
-                            ),
-                          ],
-                        ),
-                      ],
+                              Container(
+                                height: screenHeight * 0.18,
+                                width: screenWidth * 0.40,
+                                decoration: BoxDecoration(
+                                  borderRadius: BorderRadius.circular(12),
+                                  color: Colors.white,
+                                ),
+                                child: Padding(
+                                  padding: const EdgeInsets.symmetric(
+                                      horizontal: 10.0),
+                                  child: Column(
+                                    mainAxisAlignment:
+                                        MainAxisAlignment.spaceAround,
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.start,
+                                    children: [
+                                      const Text(
+                                        'Time in Hours',
+                                        style: TextStyle(
+                                            fontWeight: FontWeight.w500,
+                                            fontSize: 14),
+                                      ),
+                                      Text(
+                                        '$totalHours Hours',
+                                        style: const TextStyle(
+                                            fontWeight: FontWeight.w600,
+                                            fontSize: 20),
+                                      ),
+                                      LinearProgressIndicator(
+                                        value: progressValueInHours,
+                                        backgroundColor: Colors.grey[300],
+                                        color: Theme.of(context)
+                                            .colorScheme
+                                            .primary,
+                                      ),
+                                      Text(
+                                        _getMonthDateRange(),
+                                        style: const TextStyle(
+                                            fontWeight: FontWeight.w600,
+                                            fontSize: 15),
+                                      ),
+                                    ],
+                                  ),
+                                ),
+                              ),
+                            ],
+                          ),
+                        ],
+                      ),
                     ),
                   ),
-                ),
-                const SizedBox(height: 20),
-                Material(
-                  color: Theme.of(context).colorScheme.tertiary,
-                  borderRadius: BorderRadius.circular(20),
-                  child: Container(
-                    padding: const EdgeInsets.symmetric(
-                        horizontal: 12, vertical: 10),
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Text(
-                          'Month Date Range: ${_getMonthDateRange()}',
-                          style: const TextStyle(
-                              fontWeight: FontWeight.w600, fontSize: 18),
-                        ),
-                        const SizedBox(height: 10),
-                        _buildAttendance(
-                            color: const Color(0xff9478F7),
-                            data: attendanceData),
-                      ],
+                  const SizedBox(height: 20),
+                  Material(
+                    color: Theme.of(context).colorScheme.tertiary,
+                    borderRadius: BorderRadius.circular(20),
+                    child: Container(
+                      padding: const EdgeInsets.symmetric(
+                          horizontal: 12, vertical: 10),
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text(
+                            'Month Date Range: ${_getMonthDateRange()}',
+                            style: const TextStyle(
+                                fontWeight: FontWeight.w600, fontSize: 18),
+                          ),
+                          const SizedBox(height: 10),
+                          _buildAttendance(
+                              color: const Color(0xff9478F7),
+                              data: attendanceData),
+                        ],
+                      ),
                     ),
-                  ),
-                )
-              ]);
-            },
-          ),
-        ],
+                  )
+                ]);
+              },
+            ),
+          ],
+        ),
       ),
     );
   }
