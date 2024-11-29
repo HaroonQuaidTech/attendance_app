@@ -4,12 +4,10 @@ import 'package:quaidtech/components/PreviousMonthStatusBuilder.dart';
 import 'package:quaidtech/components/graphicalbuildermonthly.dart';
 import 'package:quaidtech/components/graphicalweekly.dart';
 import 'package:quaidtech/components/monthattendancce.dart';
-import 'package:quaidtech/components/statusbuildermonthly.dart';
 import 'package:quaidtech/components/statusbuilderweekly.dart';
 import 'package:quaidtech/components/weeklyattenance.dart';
 import 'package:quaidtech/main.dart';
 import 'package:quaidtech/screens/notification.dart';
-import 'package:intl/intl.dart';
 
 class StatsticsScreen extends StatefulWidget {
   const StatsticsScreen({super.key});
@@ -22,14 +20,15 @@ class _StatsticsScreenState extends State<StatsticsScreen> {
   String dropdownValue1 = 'Weekly';
   String dropdownValue2 = 'Select';
 
-  String? selectedMonth;
-  String? selectedYear;
+
 
   final List<String> months =
       List.generate(12, (index) => (index + 1).toString().padLeft(2, '0'));
   final List<String> years =
       List.generate(12, (index) => (DateTime.now().year - index).toString());
   int _selectedIndex = 0;
+
+  
   List<Map<String, dynamic>> attendanceDetails = [];
   final String uid = FirebaseAuth.instance.currentUser!.uid;
 
@@ -354,100 +353,6 @@ class _StatsticsScreenState extends State<StatsticsScreen> {
                           ),
                         ),
                       const SizedBox(height: 20),
-                      if (dropdownValue1 == 'Monthly')
-                        Column(
-                          children: [
-                            Material(
-                              elevation: 5,
-                              borderRadius: BorderRadius.circular(20),
-                              color: Theme.of(context).colorScheme.tertiary,
-                              child: Padding(
-                                padding: const EdgeInsets.symmetric(
-                                    horizontal: 10.0, vertical: 20),
-                                child: Column(
-                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                  children: [
-                                    const Text(
-                                      'Monthly filter log ',
-                                      style: TextStyle(
-                                        fontWeight: FontWeight.w600,
-                                        fontSize: 18,
-                                        height: 0,
-                                      ),
-                                    ),
-                                    const SizedBox(height: 20),
-                                    Row(
-                                      mainAxisAlignment:
-                                          MainAxisAlignment.spaceBetween,
-                                      children: [
-                                        Expanded(
-                                          child: Container(
-                                            padding: const EdgeInsets.symmetric(
-                                                horizontal: 10),
-                                            decoration: BoxDecoration(
-                                              color: Colors.white,
-                                              borderRadius:
-                                                  BorderRadius.circular(12),
-                                            ),
-                                            child: DropdownButton<String>(
-                                              value: selectedMonth,
-                                              hint: const Text("Select Month"),
-                                              isExpanded: true,
-                                              underline: const SizedBox(),
-                                              items: months.map((month) {
-                                                return DropdownMenuItem(
-                                                  value: month,
-                                                  child: Text(DateFormat('MMMM')
-                                                      .format(DateTime(0,
-                                                          int.parse(month)))),
-                                                );
-                                              }).toList(),
-                                              onChanged: (value) {
-                                                setState(() {
-                                                  selectedMonth = value;
-                                                });
-                                              },
-                                            ),
-                                          ),
-                                        ),
-                                        const SizedBox(width: 20),
-                                        Expanded(
-                                          child: Container(
-                                            padding: const EdgeInsets.symmetric(
-                                                horizontal: 10),
-                                            decoration: BoxDecoration(
-                                              color: Colors.white,
-                                              borderRadius:
-                                                  BorderRadius.circular(12),
-                                            ),
-                                            child: DropdownButton<String>(
-                                              value: selectedYear,
-                                              hint: const Text("Select Year"),
-                                              isExpanded: true,
-                                              underline: const SizedBox(),
-                                              items: years.map((year) {
-                                                return DropdownMenuItem(
-                                                  value: year,
-                                                  child: Text(year),
-                                                );
-                                              }).toList(),
-                                              onChanged: (value) {
-                                                setState(() {
-                                                  selectedYear = value;
-                                                });
-                                              },
-                                            ),
-                                          ),
-                                        ),
-                                      ],
-                                    ),
-                                  ],
-                                ),
-                              ),
-                            ),
-                            const SizedBox(height: 20),
-                          ],
-                        ),
                       Padding(
                         padding: const EdgeInsets.only(top: 1.0),
                         child: Column(
@@ -495,7 +400,9 @@ class _StatsticsScreenState extends State<StatsticsScreen> {
                           dropdownValue2 != 'Early Out' &&
                           dropdownValue2 != 'Late Arrival')
                         if (dropdownValue1 == 'Monthly' && _selectedIndex == 0)
-                         PreviousMonthlyAttendance(uid: uid,),
+                          PreviousMonthlyAttendance(
+                            uid: uid,
+                          ),
                       if (dropdownValue1 == 'Weekly' && _selectedIndex == 1)
                         const GraphicalbuilderWeekly(),
                       if (dropdownValue1 == 'Monthly' && _selectedIndex == 1)
