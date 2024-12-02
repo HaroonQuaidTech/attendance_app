@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
@@ -25,8 +27,10 @@ class AttendanceService {
         desiredAccuracy: LocationAccuracy.high,
       );
 
-      double targetLatitude = 33.6084548;
-      double targetLongitude = 73.0171062;
+      log('Current Position: Lat=${currentPosition.latitude}, Long=${currentPosition.longitude}');
+
+      double targetLatitude = 37.4219983;
+      double targetLongitude = -122.084;
 
       double distance = Geolocator.distanceBetween(
         currentPosition.latitude,
@@ -35,7 +39,9 @@ class AttendanceService {
         targetLongitude,
       );
 
-      const double maxRange = 50.0;
+      log('Calculated Distance: $distance meters');
+
+      const double maxRange = 200.0;
 
       if (distance > maxRange) {
         Navigator.pop(context);
