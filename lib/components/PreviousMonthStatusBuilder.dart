@@ -450,8 +450,7 @@ class _PreviousMonthlyAttendanceState extends State<PreviousMonthlyAttendance> {
       child: const SizedBox(
         width: double.infinity,
         child: Column(
-          mainAxisAlignment:
-              MainAxisAlignment.center, // Center the content vertically
+          mainAxisAlignment: MainAxisAlignment.center,
           children: [
             SizedBox(height: 30),
             Icon(
@@ -523,16 +522,20 @@ class _PreviousMonthlyAttendanceState extends State<PreviousMonthlyAttendance> {
             Material(
               borderRadius: BorderRadius.circular(20),
               color: Theme.of(context).colorScheme.tertiary,
+              elevation: 5,
               child: Padding(
-                padding:
-                    const EdgeInsets.symmetric(horizontal: 5.0, vertical: 20.0),
+                padding: const EdgeInsets.symmetric(
+                    horizontal: 10.0, vertical: 20.0),
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     const Text(
-                      'Monthly filter log ',
-                      style:
-                          TextStyle(fontWeight: FontWeight.w600, fontSize: 18),
+                      'Monthly filter log',
+                      style: TextStyle(
+                        fontWeight: FontWeight.w600,
+                        fontSize: 18,
+                        height: 0,
+                      ),
                     ),
                     const SizedBox(height: 10),
                     Row(
@@ -545,14 +548,6 @@ class _PreviousMonthlyAttendanceState extends State<PreviousMonthlyAttendance> {
                             decoration: BoxDecoration(
                               color: Colors.white,
                               borderRadius: BorderRadius.circular(12),
-                              boxShadow: [
-                                BoxShadow(
-                                  color: Colors.grey.withOpacity(0.2),
-                                  spreadRadius: 2,
-                                  blurRadius: 4,
-                                  offset: const Offset(0, 2),
-                                ),
-                              ],
                             ),
                             child: DropdownButton<String>(
                               value: selectedMonth,
@@ -582,14 +577,6 @@ class _PreviousMonthlyAttendanceState extends State<PreviousMonthlyAttendance> {
                             decoration: BoxDecoration(
                               color: Colors.white,
                               borderRadius: BorderRadius.circular(12),
-                              boxShadow: [
-                                BoxShadow(
-                                  color: Colors.grey.withOpacity(0.2),
-                                  spreadRadius: 2,
-                                  blurRadius: 4,
-                                  offset: const Offset(0, 2),
-                                ),
-                              ],
                             ),
                             child: DropdownButton<String>(
                               value: selectedYear,
@@ -653,7 +640,6 @@ class _PreviousMonthlyAttendanceState extends State<PreviousMonthlyAttendance> {
                     .every((entry) => entry['status'] == 'Absent');
 
                 if (allAbsent) {
-                  // If all entries are absent, show an empty container with a message
                   return Center(
                     child: _buildNoDataAvailableContainer(),
                   );
@@ -692,7 +678,10 @@ class _PreviousMonthlyAttendanceState extends State<PreviousMonthlyAttendance> {
                           const Text(
                             'Monthly Times Log',
                             style: TextStyle(
-                                fontWeight: FontWeight.w600, fontSize: 18),
+                              fontWeight: FontWeight.w600,
+                              fontSize: 18,
+                              height: 0,
+                            ),
                           ),
                           const SizedBox(height: 20),
                           Row(
@@ -717,14 +706,18 @@ class _PreviousMonthlyAttendanceState extends State<PreviousMonthlyAttendance> {
                                       const Text(
                                         'Time in Minutes',
                                         style: TextStyle(
-                                            fontWeight: FontWeight.w500,
-                                            fontSize: 14),
+                                          fontWeight: FontWeight.w500,
+                                          fontSize: 14,
+                                          height: 0,
+                                        ),
                                       ),
                                       Text(
                                         '$totalMinutesFromHours Minutes',
                                         style: const TextStyle(
-                                            fontWeight: FontWeight.w600,
-                                            fontSize: 20),
+                                          fontWeight: FontWeight.w600,
+                                          fontSize: 20,
+                                          height: 0,
+                                        ),
                                       ),
                                       LinearProgressIndicator(
                                         value: totalMinutes / maxMinutes,
@@ -736,8 +729,10 @@ class _PreviousMonthlyAttendanceState extends State<PreviousMonthlyAttendance> {
                                       Text(
                                         _getMonthDateRange(),
                                         style: const TextStyle(
-                                            fontWeight: FontWeight.w600,
-                                            fontSize: 15),
+                                          fontWeight: FontWeight.w600,
+                                          fontSize: 15,
+                                          height: 0,
+                                        ),
                                       ),
                                     ],
                                   ),
@@ -762,14 +757,18 @@ class _PreviousMonthlyAttendanceState extends State<PreviousMonthlyAttendance> {
                                       const Text(
                                         'Time in Hours',
                                         style: TextStyle(
-                                            fontWeight: FontWeight.w500,
-                                            fontSize: 14),
+                                          fontWeight: FontWeight.w500,
+                                          fontSize: 14,
+                                          height: 0,
+                                        ),
                                       ),
                                       Text(
                                         '$totalHours Hours',
                                         style: const TextStyle(
-                                            fontWeight: FontWeight.w600,
-                                            fontSize: 20),
+                                          fontWeight: FontWeight.w600,
+                                          fontSize: 20,
+                                          height: 0,
+                                        ),
                                       ),
                                       LinearProgressIndicator(
                                         value: progressValueInHours,
@@ -781,8 +780,10 @@ class _PreviousMonthlyAttendanceState extends State<PreviousMonthlyAttendance> {
                                       Text(
                                         _getMonthDateRange(),
                                         style: const TextStyle(
-                                            fontWeight: FontWeight.w600,
-                                            fontSize: 15),
+                                          fontWeight: FontWeight.w600,
+                                          fontSize: 15,
+                                          height: 0,
+                                        ),
                                       ),
                                     ],
                                   ),
@@ -807,7 +808,10 @@ class _PreviousMonthlyAttendanceState extends State<PreviousMonthlyAttendance> {
                           Text(
                             'Month Date Range: ${_getMonthDateRange()}',
                             style: const TextStyle(
-                                fontWeight: FontWeight.w600, fontSize: 18),
+                              fontWeight: FontWeight.w600,
+                              fontSize: 18,
+                              height: 0,
+                            ),
                           ),
                           const SizedBox(height: 10),
                           _buildAttendance(
