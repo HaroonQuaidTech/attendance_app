@@ -509,6 +509,7 @@ class _PreviousMonthlyAttendanceState extends State<PreviousMonthlyAttendance> {
     return '${hour.toString().padLeft(2, '0')}:${minute.toString().padLeft(2, '0')}';
   }
 
+
   @override
   Widget build(BuildContext context) {
     final Size screenSize = MediaQuery.of(context).size;
@@ -674,6 +675,9 @@ class _PreviousMonthlyAttendanceState extends State<PreviousMonthlyAttendance> {
                 }
                 const int maxMinutes = 10392;
                 const double maxHours = 173.2;
+                int remainingMinutes =
+                    totalMinutes % 60; // Get remaining minutes
+
                 int totalHours = totalMinutes ~/ 60;
                 double progressValueInHours =
                     maxHours != 0 ? totalHours / maxHours : 0.0;
@@ -766,7 +770,7 @@ class _PreviousMonthlyAttendanceState extends State<PreviousMonthlyAttendance> {
                                             fontSize: 14),
                                       ),
                                       Text(
-                                        '$totalHours Hours',
+                                        '$totalHours:$remainingMinutes Hours',
                                         style: const TextStyle(
                                             fontWeight: FontWeight.w600,
                                             fontSize: 20),
