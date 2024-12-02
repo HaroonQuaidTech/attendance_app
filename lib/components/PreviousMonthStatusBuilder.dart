@@ -441,37 +441,39 @@ class _PreviousMonthlyAttendanceState extends State<PreviousMonthlyAttendance> {
       ),
     );
   }
+
   Widget _buildNoDataAvailableContainer() {
-  return Material(
-    color: Theme.of(context).colorScheme.tertiary,
-    borderRadius: BorderRadius.circular(12),
-    elevation: 5,
-    child: const SizedBox(
-      width: double.infinity,
-      child: Column(
-        mainAxisAlignment: MainAxisAlignment.center,  // Center the content vertically
-        children: [
-          SizedBox(height: 30),
-          Icon(
-            Icons.warning,
-            color: Colors.grey,
-            size: 50,
-          ),
-          SizedBox(height: 5),
-          Text(
-            "No Data Available",
-            style: TextStyle(
-              fontWeight: FontWeight.bold,
-              fontSize: 20,
+    return Material(
+      color: Theme.of(context).colorScheme.tertiary,
+      borderRadius: BorderRadius.circular(12),
+      elevation: 5,
+      child: const SizedBox(
+        width: double.infinity,
+        child: Column(
+          mainAxisAlignment:
+              MainAxisAlignment.center, // Center the content vertically
+          children: [
+            SizedBox(height: 30),
+            Icon(
+              Icons.warning,
               color: Colors.grey,
+              size: 50,
             ),
-          ),
-          SizedBox(height: 30),
-        ],
+            SizedBox(height: 5),
+            Text(
+              "No Data Available",
+              style: TextStyle(
+                fontWeight: FontWeight.bold,
+                fontSize: 20,
+                color: Colors.grey,
+              ),
+            ),
+            SizedBox(height: 30),
+          ],
+        ),
       ),
-    ),
-  );
-}
+    );
+  }
 
   Widget _buildCheckTimeColumn(dynamic timeOrHours, String label) {
     return Column(
@@ -647,15 +649,16 @@ class _PreviousMonthlyAttendanceState extends State<PreviousMonthlyAttendance> {
                   );
                 }
                 final attendanceData = snapshot.data!;
-bool allAbsent = attendanceData.every((entry) => entry['status'] == 'Absent');
+                bool allAbsent = attendanceData
+                    .every((entry) => entry['status'] == 'Absent');
 
-if (allAbsent) {
-  // If all entries are absent, show an empty container with a message
-  return Center(
-    child: _buildNoDataAvailableContainer(),
-  );
-}
-                
+                if (allAbsent) {
+                  // If all entries are absent, show an empty container with a message
+                  return Center(
+                    child: _buildNoDataAvailableContainer(),
+                  );
+                }
+
                 int totalMinutes = 0;
 
                 for (var entry in attendanceData) {
