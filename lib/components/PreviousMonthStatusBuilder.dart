@@ -441,6 +441,37 @@ class _PreviousMonthlyAttendanceState extends State<PreviousMonthlyAttendance> {
       ),
     );
   }
+  Widget _buildNoDataAvailableContainer() {
+  return Material(
+    color: Theme.of(context).colorScheme.tertiary,
+    borderRadius: BorderRadius.circular(12),
+    elevation: 5,
+    child: const SizedBox(
+      width: double.infinity,
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.center,  // Center the content vertically
+        children: [
+          SizedBox(height: 30),
+          Icon(
+            Icons.warning,
+            color: Colors.grey,
+            size: 50,
+          ),
+          SizedBox(height: 5),
+          Text(
+            "No Data Available",
+            style: TextStyle(
+              fontWeight: FontWeight.bold,
+              fontSize: 20,
+              color: Colors.grey,
+            ),
+          ),
+          SizedBox(height: 30),
+        ],
+      ),
+    ),
+  );
+}
 
   Widget _buildCheckTimeColumn(dynamic timeOrHours, String label) {
     return Column(
@@ -603,11 +634,28 @@ class _PreviousMonthlyAttendanceState extends State<PreviousMonthlyAttendance> {
                   return Center(child: Text('Error: ${snapshot.error}'));
                 }
                 if (!snapshot.hasData || snapshot.data!.isEmpty) {
-                  return const Center(child: Text('No attendance data found.'));
+                  return const Center(
+                    child: Padding(
+                      padding: EdgeInsets.all(20.0),
+                      child: Text(
+                        'No Attendance Month Selected .',
+                        style: TextStyle(
+                            fontWeight: FontWeight.w500, fontSize: 20),
+                        textAlign: TextAlign.center,
+                      ),
+                    ),
+                  );
                 }
-
                 final attendanceData = snapshot.data!;
+bool allAbsent = attendanceData.every((entry) => entry['status'] == 'Absent');
 
+if (allAbsent) {
+  // If all entries are absent, show an empty container with a message
+  return Center(
+    child: _buildNoDataAvailableContainer(),
+  );
+}
+                
                 int totalMinutes = 0;
 
                 for (var entry in attendanceData) {
