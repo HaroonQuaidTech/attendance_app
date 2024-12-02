@@ -27,16 +27,18 @@ class _PreviousMonthlyAttendanceState extends State<PreviousMonthlyAttendance> {
       String uid, int month, int year) async {
     List<Map<String, dynamic>> monthlyAttendanceList = [];
 
-    // Define the first and last day of the month
     final firstDayOfMonth = DateTime(year, month, 1);
     final lastDayOfMonth = DateTime(year, month + 1, 0);
-    final daysInMonth = lastDayOfMonth.day;
+    final currentDate = DateTime.now();
 
-    // Prepare Firestore document fetches for all days in the month
+    final daysInMonth = currentDate.month == month && currentDate.year == year
+        ? currentDate.day
+        : lastDayOfMonth.day;
+
     final List<Future<DocumentSnapshot<Map<String, dynamic>>>> snapshotFutures =
         List.generate(daysInMonth, (i) {
       final date = firstDayOfMonth.add(Duration(days: i));
-      final formattedDate = DateFormat('yMMMd').format(date); // Adjusted format
+      final formattedDate = DateFormat('yMMMd').format(date);
 
       return FirebaseFirestore.instance
           .collection('AttendanceDetails')
@@ -107,8 +109,7 @@ class _PreviousMonthlyAttendanceState extends State<PreviousMonthlyAttendance> {
         final DateTime firstDayOfMonth = DateTime(year, month, 1);
         final DateTime date = firstDayOfMonth.add(Duration(days: index));
 
-        final String day =
-            DateFormat('EE').format(date); // Day of the week (e.g., Mon, Tue)
+        final String day = DateFormat('EE').format(date);
         final String formattedDate = DateFormat('dd').format(date);
 
         if (date.weekday == DateTime.saturday ||
@@ -158,8 +159,7 @@ class _PreviousMonthlyAttendanceState extends State<PreviousMonthlyAttendance> {
     final DateTime firstDayOfMonth = DateTime(year, month, 1);
     final DateTime date = firstDayOfMonth.add(Duration(days: index));
 
-    final String day =
-        DateFormat('EE').format(date); // Day of the week (e.g., Mon, Tue)
+    final String day = DateFormat('EE').format(date);
     final String formattedDate = DateFormat('dd').format(date);
     return Container(
       padding: const EdgeInsets.all(12),
@@ -223,8 +223,7 @@ class _PreviousMonthlyAttendanceState extends State<PreviousMonthlyAttendance> {
     final DateTime firstDayOfMonth = DateTime(year, month, 1);
     final DateTime date = firstDayOfMonth.add(Duration(days: index));
 
-    final String day =
-        DateFormat('EE').format(date); // Day of the week (e.g., Mon, Tue)
+    final String day = DateFormat('EE').format(date);
     final String formattedDate = DateFormat('dd').format(date);
 
     return Container(
@@ -290,8 +289,7 @@ class _PreviousMonthlyAttendanceState extends State<PreviousMonthlyAttendance> {
     final DateTime firstDayOfMonth = DateTime(year, month, 1);
     final DateTime date = firstDayOfMonth.add(Duration(days: index));
 
-    final String day =
-        DateFormat('EE').format(date); // Day of the week (e.g., Mon, Tue)
+    final String day = DateFormat('EE').format(date);
     final String formattedDate = DateFormat('dd').format(date);
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: 12),
@@ -404,17 +402,11 @@ class _PreviousMonthlyAttendanceState extends State<PreviousMonthlyAttendance> {
         children: [
           _buildDateContainer(formattedDate, day, containerColor),
           _buildCheckTimeColumn(
-              checkIn != null
-                  ? DateFormat('hh:mm a')
-                      .format(checkIn) // Format Check-In Time
-                  : 'N/A',
+              checkIn != null ? DateFormat('hh:mm a').format(checkIn) : 'N/A',
               'Check In'),
           _buildDivider(),
           _buildCheckTimeColumn(
-              checkOut != null
-                  ? DateFormat('hh:mm a')
-                      .format(checkOut) // Format Check-Out Time
-                  : 'N/A',
+              checkOut != null ? DateFormat('hh:mm a').format(checkOut) : 'N/A',
               'Check Out'),
           _buildDivider(),
           _buildCheckTimeColumn(totalHours ?? 'N/A', 'Total Hrs'),
@@ -436,12 +428,12 @@ class _PreviousMonthlyAttendanceState extends State<PreviousMonthlyAttendance> {
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
           Text(
-            formattedDate, // Display the day of the month
+            formattedDate,
             style: const TextStyle(
                 fontSize: 22, fontWeight: FontWeight.w600, color: Colors.white),
           ),
           Text(
-            day, // Display the day name
+            day,
             style: const TextStyle(
                 fontSize: 12, fontWeight: FontWeight.w400, color: Colors.white),
           ),
