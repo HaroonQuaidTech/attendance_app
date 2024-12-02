@@ -122,8 +122,8 @@ class AttendanceService {
         desiredAccuracy: LocationAccuracy.high,
       );
 
-      double targetLatitude = 33.6084548;
-      double targetLongitude = 73.0171062;
+      double targetLatitude = 37.4219983;
+      double targetLongitude = -122.084;
 
       double distance = Geolocator.distanceBetween(
         currentPosition.latitude,
@@ -132,7 +132,7 @@ class AttendanceService {
         targetLongitude,
       );
 
-      const double maxRange = 50.0;
+      const double maxRange = 200.0;
 
       if (distance > maxRange) {
         Navigator.pop(context);
