@@ -660,7 +660,8 @@ class _PreviousMonthlyAttendanceState extends State<PreviousMonthlyAttendance> {
                 }
                 const int maxMinutes = 10392;
                 const double maxHours = 173.2;
-                int remainingMinutes = totalMinutes % 60;
+                int remainingMinutes =
+                    totalMinutes % 60; // Get remaining minutes
 
                 int totalHours = totalMinutes ~/ 60;
                 double progressValueInHours =
