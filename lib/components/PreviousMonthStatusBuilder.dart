@@ -300,6 +300,7 @@ class _PreviousMonthlyAttendanceState extends State<PreviousMonthlyAttendance> {
         color: Colors.white,
       ),
       child: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
           Container(
             width: 53,
@@ -328,18 +329,15 @@ class _PreviousMonthlyAttendanceState extends State<PreviousMonthlyAttendance> {
               ],
             ),
           ),
-          const SizedBox(width: 30),
-          const Padding(
-            padding: EdgeInsets.only(left: 20.0),
-            child: Text(
-              'Weekend',
-              style: TextStyle(
-                fontSize: 22,
-                fontWeight: FontWeight.bold,
-                height: 0,
-              ),
+          const Text(
+            'Weekend',
+            style: TextStyle(
+              fontSize: 22,
+              fontWeight: FontWeight.bold,
+              height: 0,
             ),
-          )
+          ),
+          const SizedBox(width: 30),
         ],
       ),
     );
@@ -507,7 +505,6 @@ class _PreviousMonthlyAttendanceState extends State<PreviousMonthlyAttendance> {
     final minute = time.minute;
     return '${hour.toString().padLeft(2, '0')}:${minute.toString().padLeft(2, '0')}';
   }
-
 
   @override
   Widget build(BuildContext context) {
