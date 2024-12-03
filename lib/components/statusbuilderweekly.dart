@@ -365,30 +365,30 @@ class _StatusBuilerState extends State<StatusBuilderWeekly> {
 
   @override
   Widget build(BuildContext context) {
-    final Size screenSize = MediaQuery.of(context).size;
-    final double screenHeight = screenSize.height;
-    final double screenWidth = screenSize.width;
+    final screenSize = MediaQuery.of(context).size;
+    final screenHeight = screenSize.height;
+    final screenWidth = screenSize.width;
+
     final now = DateTime.now();
     final startOfWeek = now.subtract(Duration(days: now.weekday - 1));
     final endOfWeek = startOfWeek.add(const Duration(days: 4));
-    final String startFormatted = DateFormat('dd MMM').format(startOfWeek);
-    final String endFormatted = DateFormat('dd MMM').format(endOfWeek);
+    final dateRange =
+        '${DateFormat('dd MMM').format(startOfWeek)} - ${DateFormat('dd MMM').format(endOfWeek)}';
 
     return Padding(
       padding: const EdgeInsets.only(top: 20.0),
       child: Column(
         children: [
-          FutureBuilder(
+          FutureBuilder<Map<String, dynamic>>(
             future: _getWeeklyData(userId),
             builder: (context, snapshot) {
               if (snapshot.connectionState == ConnectionState.waiting) {
                 return const Padding(
                   padding: EdgeInsets.only(top: 150.0),
-                  child: Center(
-                    child: CircularProgressIndicator(),
-                  ),
+                  child: Center(child: CircularProgressIndicator()),
                 );
               }
+
               if (snapshot.hasError) {
                 return const Center(
                   child: Text(
@@ -397,6 +397,7 @@ class _StatusBuilerState extends State<StatusBuilderWeekly> {
                   ),
                 );
               }
+
               if (!snapshot.hasData || snapshot.data == null) {
                 return const Center(
                   child: Text(
@@ -407,144 +408,53 @@ class _StatusBuilerState extends State<StatusBuilderWeekly> {
               }
 
               final attendanceData = snapshot.data!['attendanceData']
-                  as List<Map<String, dynamic>?>;
-              final weeklyData = snapshot.data!['attendanceData']
                       as List<Map<String, dynamic>?>? ??
                   [];
-
-              final totalTime = _calculateWeeklyMins(weeklyData);
+              final totalMinutes = _calculateWeeklyMins(attendanceData);
               final totalHoursFormatted =
-                  _convertMinutesToTimeFormat(totalTime);
-              (totalTime / 60).toStringAsFixed(2);
+                  _convertMinutesToTimeFormat(totalMinutes);
 
               const double maxHours = 45;
-              final double progress = totalTime / 60 / maxHours;
+              final double progress = totalMinutes / 60 / maxHours;
 
               return Column(
                 children: [
                   Material(
                     borderRadius: BorderRadius.circular(20),
                     color: Theme.of(context).colorScheme.tertiary,
-                    elevation: 5,
                     child: Padding(
                       padding: const EdgeInsets.symmetric(
-                          horizontal: 10.0, vertical: 20.0),
+                          horizontal: 10.0, vertical: 10.0),
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           const Text(
-                            'Weekly Log Times',
+                            'Weekly Times Log',
                             style: TextStyle(
+                              fontWeight: FontWeight.w600,
                               fontSize: 18,
-                              height: 0,
-                              fontWeight: FontWeight.bold,
                             ),
                           ),
                           const SizedBox(height: 20),
                           Row(
                             mainAxisAlignment: MainAxisAlignment.spaceBetween,
                             children: [
-                              Container(
-                                height: screenHeight * 0.15,
-                                width: screenWidth * 0.43,
-                                decoration: BoxDecoration(
-                                  borderRadius: BorderRadius.circular(12),
-                                  color: Colors.white,
-                                ),
-                                child: Padding(
-                                  padding: const EdgeInsets.symmetric(
-                                      horizontal: 10.0, vertical: 10),
-                                  child: Column(
-                                    crossAxisAlignment:
-                                        CrossAxisAlignment.start,
-                                    mainAxisAlignment:
-                                        MainAxisAlignment.spaceBetween,
-                                    children: [
-                                      const Text(
-                                        'Time in Mints',
-                                        style: TextStyle(
-                                          fontWeight: FontWeight.w500,
-                                          fontSize: 15,
-                                          height: 0,
-                                        ),
-                                      ),
-                                      Text(
-                                        '$totalTime Mints',
-                                        style: const TextStyle(
-                                          fontWeight: FontWeight.bold,
-                                          fontSize: 20,
-                                          height: 0,
-                                        ),
-                                      ),
-                                      LinearProgressIndicator(
-                                        value: totalTime / 60 / maxHours,
-                                        backgroundColor: Colors.grey[300],
-                                        color: Theme.of(context)
-                                            .colorScheme
-                                            .primary,
-                                      ),
-                                      Text(
-                                        '$startFormatted - $endFormatted',
-                                        style: const TextStyle(
-                                          fontWeight: FontWeight.w600,
-                                          fontSize: 15,
-                                          height: 0,
-                                        ),
-                                      ),
-                                    ],
-                                  ),
-                                ),
+                              _buildTimeCard(
+                                screenHeight: screenHeight,
+                                screenWidth: screenWidth,
+                                title: 'Time in Minutes',
+                                value: '$totalMinutes Mins',
+                                progress: progress,
+                                dateRange: dateRange,
                               ),
-                              Container(
-                                height: screenHeight * 0.15,
-                                width: screenWidth * 0.43,
-                                decoration: BoxDecoration(
-                                  borderRadius: BorderRadius.circular(12),
-                                  color: Colors.white,
-                                ),
-                                child: Padding(
-                                  padding: const EdgeInsets.symmetric(
-                                      horizontal: 10.0, vertical: 10),
-                                  child: Column(
-                                    mainAxisAlignment:
-                                        MainAxisAlignment.spaceBetween,
-                                    crossAxisAlignment:
-                                        CrossAxisAlignment.start,
-                                    children: [
-                                      const Text(
-                                        'Time in Hours',
-                                        style: TextStyle(
-                                          fontWeight: FontWeight.w500,
-                                          fontSize: 15,
-                                          height: 0,
-                                        ),
-                                      ),
-                                      Text(
-                                        '$totalHoursFormatted Hours',
-                                        style: const TextStyle(
-                                          fontWeight: FontWeight.w600,
-                                          fontSize: 20,
-                                          height: 0,
-                                        ),
-                                      ),
-                                      LinearProgressIndicator(
-                                        value: progress,
-                                        backgroundColor: Colors.grey[300],
-                                        color: Theme.of(context)
-                                            .colorScheme
-                                            .primary,
-                                      ),
-                                      Text(
-                                        '$startFormatted - $endFormatted',
-                                        style: const TextStyle(
-                                          fontWeight: FontWeight.w600,
-                                          fontSize: 15,
-                                          height: 0,
-                                        ),
-                                      ),
-                                    ],
-                                  ),
-                                ),
+                              const SizedBox(height: 20),
+                              _buildTimeCard(
+                                screenHeight: screenHeight,
+                                screenWidth: screenWidth,
+                                title: 'Time in Hours',
+                                value: '$totalHoursFormatted Hours',
+                                progress: progress,
+                                dateRange: dateRange,
                               ),
                             ],
                           ),
@@ -552,18 +462,18 @@ class _StatusBuilerState extends State<StatusBuilderWeekly> {
                       ),
                     ),
                   ),
-                  const SizedBox(height: 30),
+                  const SizedBox(height: 20),
                   Material(
-                    borderRadius: BorderRadius.circular(20),
                     color: Theme.of(context).colorScheme.tertiary,
-                    elevation: 5,
+                    borderRadius: BorderRadius.circular(20),
                     child: Padding(
-                      padding: const EdgeInsets.all(12.0),
+                      padding: const EdgeInsets.symmetric(
+                          horizontal: 12, vertical: 10),
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           Text(
-                            'Weekly Attendance: ${'$startFormatted - $endFormatted'}',
+                            'Weekly Attendance: $dateRange',
                             style: const TextStyle(
                               fontWeight: FontWeight.bold,
                               fontSize: 18,
@@ -571,9 +481,7 @@ class _StatusBuilerState extends State<StatusBuilderWeekly> {
                             ),
                           ),
                           const SizedBox(height: 10),
-                          _buildAttendance(
-                            data: attendanceData,
-                          ),
+                          _buildAttendance(data: attendanceData),
                         ],
                       ),
                     ),
@@ -584,6 +492,60 @@ class _StatusBuilerState extends State<StatusBuilderWeekly> {
           ),
           const SizedBox(height: 20),
         ],
+      ),
+    );
+  }
+
+// Reusable widget for time display cards
+  Widget _buildTimeCard({
+    required double screenHeight,
+    required double screenWidth,
+    required String title,
+    required String value,
+    required double progress,
+    required String dateRange,
+  }) {
+    return Container(
+      height: screenHeight * 0.15,
+      width: screenWidth * 0.42,
+      decoration: BoxDecoration(
+        borderRadius: BorderRadius.circular(12),
+        color: Colors.white,
+      ),
+      child: Padding(
+        padding: const EdgeInsets.symmetric(horizontal: 10.0),
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.spaceAround,
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Text(
+              title,
+              style: const TextStyle(
+                fontWeight: FontWeight.w500,
+                fontSize: 14,
+              ),
+            ),
+            Text(
+              value,
+              style: const TextStyle(
+                fontWeight: FontWeight.w600,
+                fontSize: 20,
+              ),
+            ),
+            LinearProgressIndicator(
+              value: progress,
+              backgroundColor: Colors.grey[300],
+              color: Theme.of(context).colorScheme.primary,
+            ),
+            Text(
+              dateRange,
+              style: const TextStyle(
+                fontWeight: FontWeight.w600,
+                fontSize: 15,
+              ),
+            ),
+          ],
+        ),
       ),
     );
   }
