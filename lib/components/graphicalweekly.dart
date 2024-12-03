@@ -150,7 +150,7 @@ class _GraphicalbuilerState extends State<GraphicalbuilderWeekly> {
           attendanceStats["On Time"] = (attendanceStats["On Time"] ?? 0) + 1;
         }
 
-        if (checkInTime.hour == 8 && checkInTime.minute > 15) {
+        if (checkInTime.hour == 8 && checkInTime.minute == 16) {
           attendanceStats["Late Arrival"] =
               (attendanceStats["Late Arrival"] ?? 0) + 1;
         }
@@ -221,9 +221,8 @@ class _GraphicalbuilerState extends State<GraphicalbuilderWeekly> {
       if (checkIn != null) {
         final checkInTime = TimeOfDay.fromDateTime(checkIn);
 
-        // Check if the check-in is between 7:50 and 8:10 for "On Time"
         if ((checkInTime.hour == 7 && checkInTime.minute >= 50) ||
-            (checkInTime.hour == 8 && checkInTime.minute <= 16)) {
+            (checkInTime.hour == 8 && checkInTime.minute <= 15)) {
           onTimeCount++;
         }
       }
@@ -243,11 +242,11 @@ class _GraphicalbuilerState extends State<GraphicalbuilderWeekly> {
   }
 
   Map<String, double> weeklyHoursss = {
-    'Present': 0, // hours present
-    'Absent': 0, // days absent
-    'On Time': 0, // early on time
-    'Early Out': 0, // early check-outs
-    'Late Arrival': 0, // late days
+    'Present': 0,
+    'Absent': 0,
+    'On Time': 0,
+    'Early Out': 0,
+    'Late Arrival': 0,
   };
   @override
   void initState() {
