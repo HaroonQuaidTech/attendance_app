@@ -26,41 +26,36 @@ class MyApp extends StatefulWidget {
 class _MyAppState extends State<MyApp> {
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      builder: (context, child) {
-        return MediaQuery(
-          data: MediaQuery.of(context).copyWith(
-            textScaler: const TextScaler.linear(1.0),
-            devicePixelRatio: 1.0,
+    return MediaQuery(
+      data: MediaQuery.of(context)
+          .copyWith(textScaler: const TextScaler.linear(1)),
+      child: MaterialApp(
+        debugShowCheckedModeBanner: false,
+        theme: ThemeData(
+          colorScheme: const ColorScheme.light(
+            surface: Color(0xffFFFFFF),
+            primary: Color(0xffFF6100),
+            secondary: Color(0xff3B3A3C),
+            tertiary: Color(0xffEFEFEF),
+            inversePrimary: Color(0xffFFE9DC),
           ),
-          child: child!,
-        );
-      },
-      debugShowCheckedModeBanner: false,
-      theme: ThemeData(
-        colorScheme: const ColorScheme.light(
-          surface: Color(0xffFFFFFF),
-          primary: Color(0xffFF6100),
-          secondary: Color(0xff3B3A3C),
-          tertiary: Color(0xffEFEFEF),
-          inversePrimary: Color(0xffFFE9DC),
+          fontFamily: 'KumbhSans',
+          progressIndicatorTheme: const ProgressIndicatorThemeData(
+            color: Color(0xffFF6100),
+          ),
         ),
-        fontFamily: 'KumbhSans',
-        progressIndicatorTheme: const ProgressIndicatorThemeData(
-          color: Color(0xffFF6100),
-        ),
+        initialRoute: 'splash',
+        routes: {
+          'login': (context) => const LoginScreen(),
+          'signup': (context) => const SignUpScreen(),
+          'home': (context) => const HomeScreen(),
+          'checkin': (context) => const CheckinScreen(),
+          'notification': (context) => const NotificationScreen(),
+          'profile': (context) => const ProfileScreen(),
+          'stat': (context) => const StatsticsScreen(),
+          'splash': (context) => const Splashscreen(),
+        },
       ),
-      initialRoute: 'splash',
-      routes: {
-        'login': (context) => const LoginScreen(),
-        'signup': (context) => const SignUpScreen(),
-        'home': (context) => const HomeScreen(),
-        'checkin': (context) => const CheckinScreen(),
-        'notification': (context) => const NotificationScreen(),
-        'profile': (context) => const ProfileScreen(),
-        'stat': (context) => const StatsticsScreen(),
-        'splash': (context) => const Splashscreen(),
-      },
     );
   }
 }
