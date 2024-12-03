@@ -29,8 +29,8 @@ class AttendanceService {
 
       log('Current Position: Lat=${currentPosition.latitude}, Long=${currentPosition.longitude}');
 
-      double targetLatitude = 37.4219983;
-      double targetLongitude = -122.084;
+      double targetLatitude = 33.6084954;
+      double targetLongitude = 73.017087;
 
       double distance = Geolocator.distanceBetween(
         currentPosition.latitude,
