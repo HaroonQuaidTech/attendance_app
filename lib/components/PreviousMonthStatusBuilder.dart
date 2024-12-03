@@ -116,10 +116,8 @@ class _PreviousMonthlyAttendanceState extends State<PreviousMonthlyAttendance> {
             date.weekday == DateTime.sunday) {
           return _buildWeekendContainer(index);
         }
-        if (date.isAfter(DateTime.now()) || attendanceRecord == null) {
-          return _buildHNullAttendanceContainer(index);
-        }
-        final checkIn = (attendanceRecord['checkIn'] as Timestamp?)?.toDate();
+
+        final checkIn = (attendanceRecord!['checkIn'] as Timestamp?)?.toDate();
         final checkOut = (attendanceRecord['checkOut'] as Timestamp?)?.toDate();
         if (checkIn == null && checkOut == null) {
           return _buildEmptyAttendanceContainer(index);
@@ -161,26 +159,95 @@ class _PreviousMonthlyAttendanceState extends State<PreviousMonthlyAttendance> {
 
     final String day = DateFormat('EE').format(date);
     final String formattedDate = DateFormat('dd').format(date);
-    return Container(
-      padding: const EdgeInsets.all(12),
-      margin: const EdgeInsets.only(bottom: 10),
-      height: 82,
-      width: 360,
-      decoration: BoxDecoration(
-        borderRadius: BorderRadius.circular(12),
-        color: Colors.white,
-      ),
-      child: Row(
-        crossAxisAlignment: CrossAxisAlignment.center,
-        children: [
-          Column(
-            mainAxisAlignment: MainAxisAlignment.center,
+    return Column(
+      children: [
+        Container(
+          padding: const EdgeInsets.all(12),
+          decoration: BoxDecoration(
+            borderRadius: BorderRadius.circular(12),
+            color: Colors.white,
+          ),
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Container(
+                    width: 55,
+                    height: 55,
+                    decoration: BoxDecoration(
+                        color: StatusTheme.theme.colorScheme.secondary,
+                        borderRadius: BorderRadius.circular(6)),
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      children: [
+                        Text(
+                          formattedDate,
+                          style: const TextStyle(
+                            fontSize: 22,
+                            fontWeight: FontWeight.w600,
+                            color: Colors.white,
+                            height: 0,
+                          ),
+                        ),
+                        const SizedBox(height: 5),
+                        Text(
+                          day,
+                          style: const TextStyle(
+                            fontSize: 12,
+                            fontWeight: FontWeight.w400,
+                            color: Colors.white,
+                            height: 0,
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                ],
+              ),
+              const Text(
+                'Leave/Day off',
+                style: TextStyle(
+                  fontSize: 22,
+                  fontWeight: FontWeight.bold,
+                  height: 0,
+                ),
+              ),
+              const SizedBox(height: 50),
+            ],
+          ),
+        ),
+        const SizedBox(height: 10),
+      ],
+    );
+  }
+
+  Widget _buildWeekendContainer(int index) {
+    final int month = int.parse(selectedMonth!);
+    final int year = int.parse(selectedYear!);
+    final DateTime firstDayOfMonth = DateTime(year, month, 1);
+    final DateTime date = firstDayOfMonth.add(Duration(days: index));
+    final String day = DateFormat('EE').format(date);
+    final String formattedDate = DateFormat('dd').format(date);
+    return Column(
+      children: [
+        Container(
+          padding: const EdgeInsets.all(12),
+          decoration: BoxDecoration(
+            borderRadius: BorderRadius.circular(12),
+            color: Colors.white,
+          ),
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
               Container(
-                width: 53,
+                width: 55,
                 height: 55,
                 decoration: BoxDecoration(
-                    color: Colors.red, borderRadius: BorderRadius.circular(6)),
+                    color: StatusTheme.theme.colorScheme.secondaryFixed,
+                    borderRadius: BorderRadius.circular(6)),
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.center,
                   crossAxisAlignment: CrossAxisAlignment.center,
@@ -188,160 +255,39 @@ class _PreviousMonthlyAttendanceState extends State<PreviousMonthlyAttendance> {
                     Text(
                       formattedDate,
                       style: const TextStyle(
-                          fontSize: 22,
-                          fontWeight: FontWeight.w600,
-                          color: Colors.white),
+                        fontSize: 22,
+                        fontWeight: FontWeight.w600,
+                        color: Colors.white,
+                        height: 0,
+                      ),
                     ),
+                    const SizedBox(height: 5),
                     Text(
                       day,
                       style: const TextStyle(
-                          fontSize: 12,
-                          fontWeight: FontWeight.w400,
-                          color: Colors.white),
+                        fontSize: 12,
+                        fontWeight: FontWeight.w400,
+                        color: Colors.white,
+                        height: 0,
+                      ),
                     ),
                   ],
                 ),
               ),
+              const Text(
+                'Weekend',
+                style: TextStyle(
+                  fontSize: 22,
+                  fontWeight: FontWeight.bold,
+                  height: 0,
+                ),
+              ),
+              const SizedBox(height: 50),
             ],
           ),
-          const Padding(
-            padding: EdgeInsets.only(left: 50.0),
-            child: Text(
-              'Leave/Day off',
-              style: TextStyle(fontSize: 22, fontWeight: FontWeight.bold),
-            ),
-          )
-        ],
-      ),
-    );
-  }
-
-  Widget _buildHNullAttendanceContainer(int index) {
-    final int month = int.parse(selectedMonth!);
-    final int year = int.parse(selectedYear!);
-
-    final DateTime firstDayOfMonth = DateTime(year, month, 1);
-    final DateTime date = firstDayOfMonth.add(Duration(days: index));
-
-    final String day = DateFormat('EE').format(date);
-    final String formattedDate = DateFormat('dd').format(date);
-
-    return Container(
-      padding: const EdgeInsets.symmetric(horizontal: 12),
-      margin: const EdgeInsets.only(bottom: 10),
-      height: 82,
-      decoration: BoxDecoration(
-        borderRadius: BorderRadius.circular(12),
-        color: Colors.white,
-      ),
-      child: Row(
-        children: [
-          _buildDateBox(formattedDate, day),
-          const SizedBox(width: 30),
-          const Text(
-            'Data Not Available',
-            style: TextStyle(
-              fontSize: 22,
-              fontWeight: FontWeight.bold,
-            ),
-          ),
-        ],
-      ),
-    );
-  }
-
-  Widget _buildDateBox(String date, String day) {
-    return Container(
-      width: 53,
-      height: 55,
-      decoration: BoxDecoration(
-        color: const Color(0xff8E71DF),
-        borderRadius: BorderRadius.circular(6),
-      ),
-      child: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: [
-          Text(
-            date,
-            style: const TextStyle(
-              fontSize: 22,
-              fontWeight: FontWeight.w600,
-              color: Colors.white,
-            ),
-          ),
-          Text(
-            day,
-            style: const TextStyle(
-              fontSize: 12,
-              fontWeight: FontWeight.w400,
-              color: Colors.white,
-            ),
-          ),
-        ],
-      ),
-    );
-  }
-
-  Widget _buildWeekendContainer(int index) {
-    final int month = int.parse(selectedMonth!);
-    final int year = int.parse(selectedYear!);
-
-    final DateTime firstDayOfMonth = DateTime(year, month, 1);
-    final DateTime date = firstDayOfMonth.add(Duration(days: index));
-
-    final String day = DateFormat('EE').format(date);
-    final String formattedDate = DateFormat('dd').format(date);
-    return Container(
-      padding: const EdgeInsets.symmetric(horizontal: 12),
-      margin: const EdgeInsets.only(bottom: 10),
-      height: 82,
-      decoration: BoxDecoration(
-        borderRadius: BorderRadius.circular(12),
-        color: Colors.white,
-      ),
-      child: Row(
-        children: [
-          Container(
-            width: 53,
-            height: 55,
-            decoration: BoxDecoration(
-                color: Colors.blueGrey, borderRadius: BorderRadius.circular(6)),
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              crossAxisAlignment: CrossAxisAlignment.center,
-              children: [
-                Text(
-                  formattedDate,
-                  style: const TextStyle(
-                      fontSize: 22,
-                      fontWeight: FontWeight.w600,
-                      color: Colors.white),
-                ),
-                Text(
-                  day,
-                  style: const TextStyle(
-                    fontSize: 12,
-                    fontWeight: FontWeight.w400,
-                    color: Colors.white,
-                  ),
-                ),
-              ],
-            ),
-          ),
-          const SizedBox(width: 30),
-          const Padding(
-            padding: EdgeInsets.only(left: 20.0),
-            child: Text(
-              'Weekend',
-              style: TextStyle(
-                fontSize: 22,
-                fontWeight: FontWeight.bold,
-                height: 0,
-              ),
-            ),
-          )
-        ],
-      ),
+        ),
+        const SizedBox(height: 10),
+      ],
     );
   }
 
