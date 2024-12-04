@@ -25,9 +25,8 @@ class _PreviousMonthlyAttendanceState extends State<PreviousMonthlyAttendance> {
       List.generate(10, (index) => (DateTime.now().year - index).toString());
 
   Future<List<Map<String, dynamic>>> _getMonthlyAttendanceDetails(
-
       String uid, int month, int year) async {
-        monthlyAttendanceList.clear(); //list empty 
+    monthlyAttendanceList.clear();
     final firstDayOfMonth = DateTime(year, month, 1);
     final lastDayOfMonth = DateTime(year, month + 1, 0);
     final currentDate = DateTime.now();
