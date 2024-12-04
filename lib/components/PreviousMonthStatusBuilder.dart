@@ -5,10 +5,10 @@ import 'package:quaidtech/main.dart';
 
 class PreviousMonthlyAttendance extends StatefulWidget {
   final String uid;
-  final String? dropdownvalue;
-
-  const PreviousMonthlyAttendance(
-      {super.key, required this.uid, required this.dropdownvalue});
+  const PreviousMonthlyAttendance({
+    super.key,
+    required this.uid,
+  });
 
   @override
   State<PreviousMonthlyAttendance> createState() =>
@@ -16,7 +16,6 @@ class PreviousMonthlyAttendance extends StatefulWidget {
 }
 
 class _PreviousMonthlyAttendanceState extends State<PreviousMonthlyAttendance> {
-  List<Map<String, dynamic>> monthlyAttendanceList = [];
   String? selectedMonth;
   String? selectedYear;
   final List<String> months =
@@ -26,6 +25,8 @@ class _PreviousMonthlyAttendanceState extends State<PreviousMonthlyAttendance> {
 
   Future<List<Map<String, dynamic>>> _getMonthlyAttendanceDetails(
       String uid, int month, int year) async {
+    List<Map<String, dynamic>> monthlyAttendanceList = [];
+
     final firstDayOfMonth = DateTime(year, month, 1);
     final lastDayOfMonth = DateTime(year, month + 1, 0);
     final currentDate = DateTime.now();
@@ -96,48 +97,44 @@ class _PreviousMonthlyAttendanceState extends State<PreviousMonthlyAttendance> {
         ),
       );
     }
-    return Column(
-      children: [
-        ListView.builder(
-          itemCount: data.length,
-          primary: false,
-          shrinkWrap: true,
-          itemBuilder: (context, index) {
-            final attendanceRecord = data[index];
-            final int month = int.parse(selectedMonth!);
-            final int year = int.parse(selectedYear!);
-        
-            final DateTime firstDayOfMonth = DateTime(year, month, 1);
-            final DateTime date = firstDayOfMonth.add(Duration(days: index));
-        
-            final String day = DateFormat('EE').format(date);
-            final String formattedDate = DateFormat('dd').format(date);
-        
-            if (date.weekday == DateTime.saturday ||
-                date.weekday == DateTime.sunday) {
-              return _buildWeekendContainer(index);
-            }
-        
-            final checkIn = (attendanceRecord!['checkIn'] as Timestamp?)?.toDate();
-            final checkOut = (attendanceRecord['checkOut'] as Timestamp?)?.toDate();
-            if (checkIn == null && checkOut == null) {
-              return _buildEmptyAttendanceContainer(index);
-            }
-        
-            final totalHours = _calculateTotalHours(checkIn, checkOut);
-            final Color containerColor =
-                _determineContainerColor(checkIn, checkOut);
-            return _buildAttendanceRow(
-              formattedDate: formattedDate,
-              day: day,
-              checkIn: checkIn,
-              checkOut: checkOut,
-              totalHours: totalHours,
-              containerColor: containerColor,
-            );
-          },
-        ),
-      ],
+    return ListView.builder(
+      itemCount: data.length,
+      primary: false,
+      shrinkWrap: true,
+      itemBuilder: (context, index) {
+        final attendanceRecord = data[index];
+        final int month = int.parse(selectedMonth!);
+        final int year = int.parse(selectedYear!);
+
+        final DateTime firstDayOfMonth = DateTime(year, month, 1);
+        final DateTime date = firstDayOfMonth.add(Duration(days: index));
+
+        final String day = DateFormat('EE').format(date);
+        final String formattedDate = DateFormat('dd').format(date);
+
+        if (date.weekday == DateTime.saturday ||
+            date.weekday == DateTime.sunday) {
+          return _buildWeekendContainer(index);
+        }
+
+        final checkIn = (attendanceRecord!['checkIn'] as Timestamp?)?.toDate();
+        final checkOut = (attendanceRecord['checkOut'] as Timestamp?)?.toDate();
+        if (checkIn == null && checkOut == null) {
+          return _buildEmptyAttendanceContainer(index);
+        }
+
+        final totalHours = _calculateTotalHours(checkIn, checkOut);
+        final Color containerColor =
+            _determineContainerColor(checkIn, checkOut);
+        return _buildAttendanceRow(
+          formattedDate: formattedDate,
+          day: day,
+          checkIn: checkIn,
+          checkOut: checkOut,
+          totalHours: totalHours,
+          containerColor: containerColor,
+        );
+      },
     );
   }
 
@@ -612,8 +609,7 @@ class _PreviousMonthlyAttendanceState extends State<PreviousMonthlyAttendance> {
                 int remainingMinutes =
                     totalMinutes % 60; // Get remaining minutes
 
-                // ignore: division_optimization
-                int totalHours =  (totalMinutes / 60).toInt();
+                int totalHours = totalMinutes ~/ 60;
                 double progressValueInHours =
                     maxHours != 0 ? totalHours / maxHours : 0.0;
 

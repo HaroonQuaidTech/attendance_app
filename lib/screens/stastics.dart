@@ -508,7 +508,6 @@ class _StatsticsScreenState extends State<StatsticsScreen> {
                         if (dropdownValue1 == 'Monthly' && _selectedIndex == 0)
                           PreviousMonthlyAttendance(
                             uid: uid,
-                            dropdownvalue: dropdownValue2,
                           ),
                       if (dropdownValue1 == 'Weekly' && _selectedIndex == 1)
                         const GraphicalbuilderWeekly(),
