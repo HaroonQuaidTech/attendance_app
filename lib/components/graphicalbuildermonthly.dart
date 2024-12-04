@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
@@ -7,7 +9,10 @@ import 'package:fl_chart/fl_chart.dart' hide PieChart;
 import 'package:quaidtech/main.dart';
 
 class GraphicalbuilderMonthly extends StatefulWidget {
-  const GraphicalbuilderMonthly({super.key});
+  final int year;
+  final int month;
+  const GraphicalbuilderMonthly(
+      {super.key, required this.year, required this.month});
 
   @override
   State<GraphicalbuilderMonthly> createState() => _GraphicalbuilerState();
@@ -19,8 +24,13 @@ class _GraphicalbuilerState extends State<GraphicalbuilderMonthly> {
   Future<List<Map<String, dynamic>>?> fetchMonthlyAttendance(
       String userId) async {
     try {
-      DateTime now = DateTime.now();
+      log(widget.year.toString());
+      log(widget.month.toString());
+      DateTime now = DateTime(widget.year, widget.month,
+          widget.month == DateTime.now().month ? DateTime.now().day : 1);
       DateTime lastDayOfMonth = DateTime(now.year, now.month + 1, 0);
+
+      log(lastDayOfMonth.day.toString());
 
       List<Future<DocumentSnapshot>> futures = [];
 
@@ -29,7 +39,8 @@ class _GraphicalbuilerState extends State<GraphicalbuilderMonthly> {
 
         if (date.weekday == DateTime.saturday ||
             date.weekday == DateTime.sunday ||
-            date.isAfter(now)) {
+            (date.isAfter(now) && widget.month == DateTime.now().month)) {
+          log('Continue');
           continue;
         }
 
@@ -52,6 +63,7 @@ class _GraphicalbuilerState extends State<GraphicalbuilderMonthly> {
 
       return monthlyData;
     } catch (e) {
+      log(e.toString());
       return null;
     }
   }

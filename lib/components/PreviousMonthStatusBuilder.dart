@@ -1,14 +1,21 @@
+import 'dart:developer';
+
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:quaidtech/main.dart';
 
+typedef DropdownCallbackYear = Function(String);
+typedef DropdownCallbackMonth = Function(String);
+
 class PreviousMonthlyAttendance extends StatefulWidget {
   final String uid;
   final String? dropdownvalue;
+  final DropdownCallbackYear callbackYear;
+  final DropdownCallbackMonth callbackMonth;
 
   const PreviousMonthlyAttendance(
-      {super.key, required this.uid, required this.dropdownvalue});
+      {super.key, required this.uid, required this.dropdownvalue, required this.callbackYear, required this.callbackMonth});
 
   @override
   State<PreviousMonthlyAttendance> createState() =>
@@ -517,6 +524,8 @@ class _PreviousMonthlyAttendanceState extends State<PreviousMonthlyAttendance> {
                                 setState(() {
                                   selectedMonth = value;
                                 });
+                                log(selectedMonth!);
+                                widget.callbackMonth(selectedMonth!);
                               },
                             ),
                           ),
@@ -545,6 +554,7 @@ class _PreviousMonthlyAttendanceState extends State<PreviousMonthlyAttendance> {
                                 setState(() {
                                   selectedYear = value;
                                 });
+                                widget.callbackYear(selectedYear!);
                               },
                             ),
                           ),
