@@ -25,7 +25,9 @@ class _PreviousMonthlyAttendanceState extends State<PreviousMonthlyAttendance> {
       List.generate(10, (index) => (DateTime.now().year - index).toString());
 
   Future<List<Map<String, dynamic>>> _getMonthlyAttendanceDetails(
+
       String uid, int month, int year) async {
+        monthlyAttendanceList.clear(); //list empty 
     final firstDayOfMonth = DateTime(year, month, 1);
     final lastDayOfMonth = DateTime(year, month + 1, 0);
     final currentDate = DateTime.now();
@@ -106,24 +108,26 @@ class _PreviousMonthlyAttendanceState extends State<PreviousMonthlyAttendance> {
             final attendanceRecord = data[index];
             final int month = int.parse(selectedMonth!);
             final int year = int.parse(selectedYear!);
-        
+
             final DateTime firstDayOfMonth = DateTime(year, month, 1);
             final DateTime date = firstDayOfMonth.add(Duration(days: index));
-        
+
             final String day = DateFormat('EE').format(date);
             final String formattedDate = DateFormat('dd').format(date);
-        
+
             if (date.weekday == DateTime.saturday ||
                 date.weekday == DateTime.sunday) {
               return _buildWeekendContainer(index);
             }
-        
-            final checkIn = (attendanceRecord!['checkIn'] as Timestamp?)?.toDate();
-            final checkOut = (attendanceRecord['checkOut'] as Timestamp?)?.toDate();
+
+            final checkIn =
+                (attendanceRecord!['checkIn'] as Timestamp?)?.toDate();
+            final checkOut =
+                (attendanceRecord['checkOut'] as Timestamp?)?.toDate();
             if (checkIn == null && checkOut == null) {
               return _buildEmptyAttendanceContainer(index);
             }
-        
+
             final totalHours = _calculateTotalHours(checkIn, checkOut);
             final Color containerColor =
                 _determineContainerColor(checkIn, checkOut);
@@ -613,7 +617,7 @@ class _PreviousMonthlyAttendanceState extends State<PreviousMonthlyAttendance> {
                     totalMinutes % 60; // Get remaining minutes
 
                 // ignore: division_optimization
-                int totalHours =  (totalMinutes / 60).toInt();
+                int totalHours = (totalMinutes / 60).toInt();
                 double progressValueInHours =
                     maxHours != 0 ? totalHours / maxHours : 0.0;
 
@@ -666,6 +670,7 @@ class _PreviousMonthlyAttendanceState extends State<PreviousMonthlyAttendance> {
                                       ),
                                       Text(
                                         '$totalMinutesFromHours Minutes',
+                                        maxLines: 1,
                                         style: const TextStyle(
                                           fontWeight: FontWeight.w600,
                                           fontSize: 20,
@@ -716,7 +721,8 @@ class _PreviousMonthlyAttendanceState extends State<PreviousMonthlyAttendance> {
                                         ),
                                       ),
                                       Text(
-                                        '$totalHours:$remainingMinutes Hours',
+                                        '$totalHours.$remainingMinutes Hours',
+                                        maxLines: 1,
                                         style: const TextStyle(
                                           fontWeight: FontWeight.w600,
                                           fontSize: 20,
