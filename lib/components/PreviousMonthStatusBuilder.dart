@@ -612,7 +612,8 @@ class _PreviousMonthlyAttendanceState extends State<PreviousMonthlyAttendance> {
                 int remainingMinutes =
                     totalMinutes % 60; // Get remaining minutes
 
-                int totalHours = totalMinutes ~/ 60;
+                // ignore: division_optimization
+                int totalHours =  (totalMinutes / 60).toInt();
                 double progressValueInHours =
                     maxHours != 0 ? totalHours / maxHours : 0.0;
 
