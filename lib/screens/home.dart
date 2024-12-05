@@ -309,6 +309,12 @@ class _HomeScreenState extends State<HomeScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final Size screenSize = MediaQuery.of(context).size;
+    final double screenWidth = screenSize.width;
+    double baseFontSize = 16;
+    double responsiveFontSize = baseFontSize * (screenWidth / 375);
+    double baseFontSize1 = 20;
+    double responsiveFontSize1 = baseFontSize1 * (screenWidth / 375);
     // ignore: deprecated_member_use
     return WillPopScope(
       onWillPop: () async {
@@ -324,7 +330,7 @@ class _HomeScreenState extends State<HomeScreen> {
                 mainAxisSize: MainAxisSize.min,
                 children: [
                   Container(
-                    height: 10,
+                    height: screenSize.height * 0.01,
                     decoration: BoxDecoration(
                       gradient: LinearGradient(
                         colors: [
@@ -340,6 +346,7 @@ class _HomeScreenState extends State<HomeScreen> {
                     ),
                   ),
                   Container(
+                    width: double.infinity,
                     padding: const EdgeInsets.all(20),
                     child: Column(
                       mainAxisSize: MainAxisSize.min,
@@ -380,8 +387,8 @@ class _HomeScreenState extends State<HomeScreen> {
                                 Navigator.of(context).pop();
                               },
                               child: Container(
-                                width: 110,
-                                height: 30,
+                                width: screenWidth * 0.3,
+                                height: screenSize.height * 0.04,
                                 decoration: BoxDecoration(
                                   color: const Color(0xffECECEC),
                                   borderRadius: BorderRadius.circular(10),
@@ -403,8 +410,8 @@ class _HomeScreenState extends State<HomeScreen> {
                                 exit(0);
                               },
                               child: Container(
-                                width: 110,
-                                height: 30,
+                                width: screenWidth * 0.3,
+                                height: screenSize.height * 0.04,
                                 decoration: BoxDecoration(
                                   color: Theme.of(context).colorScheme.primary,
                                   borderRadius: BorderRadius.circular(10),
@@ -466,8 +473,8 @@ class _HomeScreenState extends State<HomeScreen> {
                                       },
                                       child: Image.asset(
                                         'assets/notification_icon.png',
-                                        height: 30,
-                                        width: 30,
+                                        height: screenSize.height * 0.04,
+                                        width: screenSize.width * 0.04,
                                       ),
                                     )
                                   ]);
@@ -489,8 +496,8 @@ class _HomeScreenState extends State<HomeScreen> {
                                             BorderRadius.circular(900),
                                         child: Image.network(
                                           _imageUrl!,
-                                          width: 60,
-                                          height: 60,
+                                          width: screenSize.width * 0.17,
+                                          height: screenSize.height * 0.08,
                                           fit: BoxFit.cover,
                                         ),
                                       ),
@@ -502,16 +509,16 @@ class _HomeScreenState extends State<HomeScreen> {
                                     children: [
                                       Text(
                                         displayName,
-                                        style: const TextStyle(
-                                          fontSize: 20,
+                                        style: TextStyle(
+                                          fontSize: responsiveFontSize1,
                                           fontWeight: FontWeight.w600,
                                           height: 0,
                                         ),
                                       ),
                                       Text(
                                         email,
-                                        style: const TextStyle(
-                                          fontSize: 16,
+                                        style: TextStyle(
+                                          fontSize: responsiveFontSize,
                                           fontWeight: FontWeight.w400,
                                           height: 0,
                                         ),
@@ -536,13 +543,13 @@ class _HomeScreenState extends State<HomeScreen> {
                                           .colorScheme
                                           .tertiary,
                                       child: SizedBox(
-                                        width: 50,
-                                        height: 50,
+                                        width: screenSize.width * 0.12,
+                                        height: screenSize.height * 0.06,
                                         child: Center(
                                           child: Image.asset(
                                             'assets/notification_icon.png',
-                                            height: 30,
-                                            width: 30,
+                                            width: screenSize.width * 0.07,
+                                            height: screenSize.height * 0.07,
                                           ),
                                         ),
                                       ),
@@ -560,10 +567,10 @@ class _HomeScreenState extends State<HomeScreen> {
                               child: Column(
                                 crossAxisAlignment: CrossAxisAlignment.start,
                                 children: [
-                                  const Text(
+                                  Text(
                                     'Monthly Attendance',
                                     style: TextStyle(
-                                      fontSize: 18,
+                                      fontSize: responsiveFontSize,
                                       height: 0,
                                       fontWeight: FontWeight.w500,
                                     ),
@@ -604,7 +611,7 @@ class _HomeScreenState extends State<HomeScreen> {
                               ),
                             ),
                           ),
-                          const SizedBox(height: 20),
+                          const SizedBox(height: 10),
                           Expanded(
                             child: SingleChildScrollView(
                               child: Column(
@@ -617,6 +624,26 @@ class _HomeScreenState extends State<HomeScreen> {
                                     child: Column(
                                       children: [
                                         TableCalendar(
+                                          headerStyle: HeaderStyle(
+                                              leftChevronIcon: Icon(
+                                                Icons.chevron_left,
+                                                size:
+                                                    screenSize.height * 0.0275,
+                                              ),
+                                              rightChevronIcon: Icon(
+                                                Icons.chevron_right,
+                                                size:
+                                                    screenSize.height * 0.0275,
+                                              ),
+                                              titleTextStyle: TextStyle(
+                                                fontSize: responsiveFontSize,
+                                              ),
+                                              headerPadding:
+                                                  const EdgeInsets.symmetric(
+                                                      vertical: 0)),
+                                          rowHeight: screenSize.height * 0.055,
+                                          daysOfWeekHeight:
+                                              screenSize.height * 0.04,
                                           firstDay: DateTime.utc(2020, 10, 16),
                                           lastDay: DateTime.utc(2030, 3, 14),
                                           focusedDay: _focusedDay,
@@ -737,10 +764,11 @@ class _HomeScreenState extends State<HomeScreen> {
                                                     CrossAxisAlignment.start,
                                                 children: [
                                                   const SizedBox(height: 10),
-                                                  const Text(
+                                                  Text(
                                                     'Attendance Details',
                                                     style: TextStyle(
-                                                      fontSize: 18,
+                                                      fontSize:
+                                                          responsiveFontSize,
                                                       height: 0,
                                                       fontWeight:
                                                           FontWeight.w500,
@@ -781,6 +809,8 @@ class _HomeScreenState extends State<HomeScreen> {
             ? FutureBuilder<Map<String, dynamic>?>(
                 future: _getAttendanceDetails(userId, DateTime.now()),
                 builder: (context, snapshot) {
+                  final screenHeight = MediaQuery.of(context).size.height;
+
                   DateTime? checkIn;
                   DateTime? checkOut;
 
@@ -801,7 +831,7 @@ class _HomeScreenState extends State<HomeScreen> {
                               elevation: 5,
                               shape: const CircleBorder(),
                               child: CircleAvatar(
-                                radius: 45,
+                                radius: screenHeight * 0.06,
                                 backgroundColor: Colors.white,
                                 child: Container(
                                   decoration: BoxDecoration(
@@ -878,7 +908,7 @@ class _HomeScreenState extends State<HomeScreen> {
                               elevation: 4.0,
                               shape: const CircleBorder(),
                               child: CircleAvatar(
-                                radius: 45,
+                                radius: screenHeight * 0.06,
                                 backgroundColor: Colors.white,
                                 child: Container(
                                   decoration: BoxDecoration(
@@ -893,8 +923,8 @@ class _HomeScreenState extends State<HomeScreen> {
                               ),
                             ),
                             Container(
-                              width: 60,
-                              height: 60,
+                              width: screenSize.height * 0.025,
+                              height: screenSize.height * 0.025,
                               decoration: BoxDecoration(
                                 color: Colors.white,
                                 shape: BoxShape.circle,
@@ -953,7 +983,7 @@ class _HomeScreenState extends State<HomeScreen> {
         bottomNavigationBar: Padding(
           padding: const EdgeInsets.symmetric(horizontal: 10.0, vertical: 10.0),
           child: Container(
-            height: 65,
+            height: screenSize.height * 0.07,
             width: double.infinity,
             decoration: BoxDecoration(
               borderRadius: BorderRadius.circular(60),
@@ -1001,7 +1031,7 @@ class _HomeScreenState extends State<HomeScreen> {
     return GestureDetector(
       onTap: () => _onItemTapped(index),
       child: Container(
-        height: 50,
+        height: screenSize.height * 0.06,
         decoration: BoxDecoration(
           color: isSelected
               ? Theme.of(context).colorScheme.surface
@@ -1010,21 +1040,24 @@ class _HomeScreenState extends State<HomeScreen> {
         ),
         child: Row(
           children: [
-            const SizedBox(width: 20),
+            const SizedBox(width: 13),
             SizedBox(
               child: isSelected
                   ? Image(
                       image: image.image,
                       color: Theme.of(context).colorScheme.primary,
-                      width: 30,
-                      height: 30,
+                      width: screenSize.height * 0.03,
+                      height: screenSize.height * 0.03,
                     )
                   : Image.asset(
-                      width: 30,
-                      height: 30,
+                      width: screenSize.height * 0.03,
+                      height: screenSize.height * 0.03,
                       asset,
                       color: Theme.of(context).colorScheme.secondary,
                     ),
+            ),
+            const SizedBox(
+              width: 5,
             ),
             isSelected
                 ? Text(

@@ -265,12 +265,20 @@ class _StatusBuilerState extends State<StatusBuilderWeekly> {
 
   Widget _buildDateColumn(
       String formattedDate, String day, Color containerColor) {
+    final screenSize = MediaQuery.of(context).size;
+    final screenHeight = screenSize.height;
+    final screenWidth = screenSize.width;
+    double baseFontSize = 20;
+    double responsiveFontSize = baseFontSize * (screenWidth / 375);
+    double baseFontSize1 = 14;
+    double responsiveFontSize1 = baseFontSize1 * (screenWidth / 375);
+
     return Column(
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
         Container(
-          width: 55,
-          height: 55,
+          width: screenSize.width * 0.135,
+          height: screenHeight * 0.065,
           decoration: BoxDecoration(
             color: containerColor,
             borderRadius: BorderRadius.circular(6),
@@ -280,8 +288,8 @@ class _StatusBuilerState extends State<StatusBuilderWeekly> {
             children: [
               Text(
                 formattedDate,
-                style: const TextStyle(
-                  fontSize: 22,
+                style: TextStyle(
+                  fontSize: responsiveFontSize,
                   fontWeight: FontWeight.w600,
                   color: Colors.white,
                   height: 0,
@@ -290,8 +298,8 @@ class _StatusBuilerState extends State<StatusBuilderWeekly> {
               const SizedBox(height: 5),
               Text(
                 day,
-                style: const TextStyle(
-                  fontSize: 12,
+                style: TextStyle(
+                  fontSize: responsiveFontSize1,
                   fontWeight: FontWeight.w400,
                   color: Colors.white,
                   height: 0,
@@ -305,13 +313,19 @@ class _StatusBuilerState extends State<StatusBuilderWeekly> {
   }
 
   Widget _buildTimeColumn(DateTime? time, String label) {
+    final screenSize = MediaQuery.of(context).size;
+    final screenWidth = screenSize.width;
+    double baseFontSize = 12;
+    double responsiveFontSize = baseFontSize * (screenWidth / 375);
+    double baseFontSize1 = 14;
+    double responsiveFontSize1 = baseFontSize1 * (screenWidth / 375);
     return Column(
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
         Text(
           time != null ? _formatTime(time) : '--:--',
-          style: const TextStyle(
-            fontSize: 14,
+          style: TextStyle(
+            fontSize: responsiveFontSize1,
             fontWeight: FontWeight.bold,
             color: Colors.black,
             height: 0,
@@ -320,8 +334,8 @@ class _StatusBuilerState extends State<StatusBuilderWeekly> {
         const SizedBox(height: 5),
         Text(
           label,
-          style: const TextStyle(
-            fontSize: 10,
+          style: TextStyle(
+            fontSize: responsiveFontSize,
             fontWeight: FontWeight.w600,
             color: Colors.black,
             height: 0,
@@ -332,22 +346,28 @@ class _StatusBuilerState extends State<StatusBuilderWeekly> {
   }
 
   Widget _buildHoursColumn(String totalHours) {
+    final screenSize = MediaQuery.of(context).size;
+    final screenWidth = screenSize.width;
+    double baseFontSize = 12;
+    double responsiveFontSize = baseFontSize * (screenWidth / 375);
+    double baseFontSize1 = 14;
+    double responsiveFontSize1 = baseFontSize1 * (screenWidth / 375);
     return Column(
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
         Text(
           totalHours,
-          style: const TextStyle(
-            fontSize: 14,
+          style: TextStyle(
+            fontSize: responsiveFontSize1,
             fontWeight: FontWeight.bold,
             height: 0,
           ),
         ),
         const SizedBox(height: 5),
-        const Text(
+        Text(
           'Total Hrs',
           style: TextStyle(
-            fontSize: 10,
+            fontSize: responsiveFontSize,
             fontWeight: FontWeight.w600,
             height: 0,
           ),
@@ -368,6 +388,10 @@ class _StatusBuilerState extends State<StatusBuilderWeekly> {
     final screenSize = MediaQuery.of(context).size;
     final screenHeight = screenSize.height;
     final screenWidth = screenSize.width;
+    double baseFontSize2 = 16;
+    double responsiveFontSize2 = baseFontSize2 * (screenWidth / 375);
+    double baseFontSize3 = 17;
+    double responsiveFontSize3 = baseFontSize3 * (screenWidth / 375);
 
     final now = DateTime.now();
     final startOfWeek = now.subtract(Duration(days: now.weekday - 1));
@@ -428,11 +452,11 @@ class _StatusBuilerState extends State<StatusBuilderWeekly> {
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          const Text(
+                          Text(
                             'Weekly Times Log',
                             style: TextStyle(
                               fontWeight: FontWeight.w600,
-                              fontSize: 18,
+                              fontSize: responsiveFontSize2,
                             ),
                           ),
                           const SizedBox(height: 20),
@@ -474,9 +498,9 @@ class _StatusBuilerState extends State<StatusBuilderWeekly> {
                         children: [
                           Text(
                             'Weekly Attendance: $dateRange',
-                            style: const TextStyle(
+                            style: TextStyle(
                               fontWeight: FontWeight.bold,
-                              fontSize: 18,
+                              fontSize: responsiveFontSize3,
                               height: 0,
                             ),
                           ),
@@ -505,6 +529,13 @@ class _StatusBuilerState extends State<StatusBuilderWeekly> {
     required double progress,
     required String dateRange,
   }) {
+    final screenSize = MediaQuery.of(context).size;
+    final screenHeight = screenSize.height;
+    final screenWidth = screenSize.width;
+    double baseFontSize = 20;
+    double responsiveFontSize = baseFontSize * (screenWidth / 375);
+    double baseFontSize1 = 14;
+    double responsiveFontSize1 = baseFontSize1 * (screenWidth / 375);
     return Container(
       height: screenHeight * 0.15,
       width: screenWidth * 0.42,
@@ -520,16 +551,16 @@ class _StatusBuilerState extends State<StatusBuilderWeekly> {
           children: [
             Text(
               title,
-              style: const TextStyle(
+              style: TextStyle(
                 fontWeight: FontWeight.w500,
-                fontSize: 14,
+                fontSize: responsiveFontSize1,
               ),
             ),
             Text(
               value,
-              style: const TextStyle(
+              style: TextStyle(
                 fontWeight: FontWeight.w600,
-                fontSize: 20,
+                fontSize: responsiveFontSize,
               ),
             ),
             LinearProgressIndicator(
@@ -539,9 +570,9 @@ class _StatusBuilerState extends State<StatusBuilderWeekly> {
             ),
             Text(
               dateRange,
-              style: const TextStyle(
+              style: TextStyle(
                 fontWeight: FontWeight.w600,
-                fontSize: 15,
+                fontSize: responsiveFontSize1,
               ),
             ),
           ],

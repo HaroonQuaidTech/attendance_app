@@ -244,6 +244,10 @@ class _ProfileScreenState extends State<ProfileScreen> {
   }
 
   void _showLogoutConfirmationDialog(BuildContext context) {
+    final Size screenSize = MediaQuery.of(context).size;
+    final double screenWidth = screenSize.width;
+    double baseFontSize3 = 14;
+    double responsiveFontSize14 = baseFontSize3 * (screenWidth / 375);
     showDialog(
       context: context,
       barrierDismissible: false,
@@ -312,17 +316,17 @@ class _ProfileScreenState extends State<ProfileScreen> {
                             Navigator.of(context).pop();
                           },
                           child: Container(
-                            width: 110,
-                            height: 30,
+                            width: screenWidth * 0.3,
+                            height: screenSize.height * 0.04,
                             decoration: BoxDecoration(
                               color: const Color(0xffECECEC),
                               borderRadius: BorderRadius.circular(10),
                             ),
-                            child: const Center(
+                            child: Center(
                               child: Text(
                                 'Cancel',
                                 style: TextStyle(
-                                  fontSize: 14,
+                                  fontSize: responsiveFontSize14,
                                   color: Colors.black,
                                   height: 1.2,
                                 ),
@@ -336,17 +340,17 @@ class _ProfileScreenState extends State<ProfileScreen> {
                             _logout(context);
                           },
                           child: Container(
-                            width: 110,
-                            height: 30,
+                            width: screenWidth * 0.3,
+                            height: screenSize.height * 0.04,
                             decoration: BoxDecoration(
                               color: Theme.of(context).colorScheme.primary,
                               borderRadius: BorderRadius.circular(10),
                             ),
-                            child: const Center(
+                            child: Center(
                               child: Text(
                                 'Logout',
                                 style: TextStyle(
-                                  fontSize: 14,
+                                  fontSize: responsiveFontSize14,
                                   color: Colors.white,
                                   height: 1.2,
                                 ),
@@ -480,21 +484,26 @@ class _ProfileScreenState extends State<ProfileScreen> {
   @override
   Widget build(BuildContext context) {
     final Size screenSize = MediaQuery.of(context).size;
-    final double screenHeight = screenSize.height;
     final double screenWidth = screenSize.width;
+    double baseFontSize = 20;
+    double responsiveFontSize = baseFontSize * (screenWidth / 375);
+    double baseFontSize1 = 14;
+    double responsiveFontSize1 = baseFontSize1 * (screenWidth / 375);
+    double baseFontSize2 = 16;
+    double responsiveFontSize2 = baseFontSize2 * (screenWidth / 375);
     return Scaffold(
       backgroundColor: Colors.white,
       appBar: AppBar(
         automaticallyImplyLeading: false,
-        title: const Row(
+        title: Row(
           mainAxisAlignment: MainAxisAlignment.center,
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
-            SizedBox(width: 60),
+            SizedBox(width: screenSize.width * 0.18),
             Text(
               'Profile',
               style: TextStyle(
-                fontSize: 22,
+                fontSize: responsiveFontSize,
                 fontWeight: FontWeight.bold,
                 height: 0,
               ),
@@ -518,13 +527,13 @@ class _ProfileScreenState extends State<ProfileScreen> {
                 elevation: 5,
                 color: Theme.of(context).colorScheme.tertiary,
                 child: SizedBox(
-                  height: 50,
-                  width: 50,
+                  width: screenSize.width * 0.12,
+                  height: screenSize.height * 0.06,
                   child: Center(
                     child: Image.asset(
                       'assets/notification_icon.png',
-                      height: 30,
-                      width: 30,
+                      width: screenSize.width * 0.07,
+                      height: screenSize.height * 0.07,
                     ),
                   ),
                 ),
@@ -549,8 +558,8 @@ class _ProfileScreenState extends State<ProfileScreen> {
                       alignment: Alignment.center,
                       children: [
                         Container(
-                          width: 180,
-                          height: 180,
+                          width: screenSize.width * 0.5,
+                          height: screenSize.height * 0.192,
                           decoration: BoxDecoration(
                             shape: BoxShape.circle,
                             border: Border.all(color: Colors.black, width: 1),
@@ -561,8 +570,8 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                 borderRadius: BorderRadius.circular(900),
                                 child: Image.file(
                                   _selectedImage!,
-                                  width: 175,
-                                  height: 175,
+                                  width: screenSize.width * 0.4,
+                                  height: screenSize.height * 0.18,
                                   fit: BoxFit.cover,
                                 ),
                               )
@@ -571,8 +580,8 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                     borderRadius: BorderRadius.circular(900),
                                     child: Image.network(
                                       _imageUrl!,
-                                      width: 175,
-                                      height: 175,
+                                      width: screenSize.width * 0.4,
+                                      height: screenSize.height * 0.18,
                                       fit: BoxFit.cover,
                                     ),
                                   )
@@ -584,8 +593,8 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                       borderRadius: BorderRadius.circular(900),
                                       child: Image.asset(
                                         'assets/aabb.jpg',
-                                        width: 180,
-                                        height: 180,
+                                        width: screenSize.width * 0.4,
+                                        height: screenSize.height * 0.18,
                                         fit: BoxFit.cover,
                                       ),
                                     ),
@@ -611,117 +620,173 @@ class _ProfileScreenState extends State<ProfileScreen> {
                       ],
                     ),
                     const SizedBox(height: 20),
-                    Material(
-                      color: Theme.of(context).colorScheme.tertiary,
-                      borderRadius: BorderRadius.circular(12),
-                      elevation: 5,
+                    Container(
+                      decoration: BoxDecoration(
+                        color: Theme.of(context).colorScheme.tertiary,
+                        borderRadius: BorderRadius.circular(12),
+                        boxShadow: [
+                          BoxShadow(
+                            color: Colors.black.withOpacity(0.2),
+                            blurRadius: 5,
+                            offset: const Offset(0, 3),
+                          ),
+                        ],
+                      ),
                       child: Padding(
                         padding: const EdgeInsets.all(12.0),
                         child: Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
-                            const Text(
+                            Text(
                               'Name',
                               style: TextStyle(
-                                fontSize: 16,
+                                fontSize: responsiveFontSize2,
                                 fontWeight: FontWeight.w500,
                                 height: 0,
                               ),
                             ),
-                            const SizedBox(height: 5),
-                            TextFormField(
-                              controller: _nameController,
-                              enabled: isEdited,
-                              validator: (value) {
-                                if (value == null || value.isEmpty) {
-                                  return 'Username cannot be empty';
-                                }
-                                if (value.length < 5) {
-                                  return 'Username must be at least 5 characters long';
-                                }
-                                return null;
-                              },
-                              decoration: InputDecoration(
-                                filled: true,
-                                fillColor: Colors.white,
-                                border: OutlineInputBorder(
-                                  borderRadius: BorderRadius.circular(8.0),
-                                  borderSide: BorderSide.none,
+                            SizedBox(
+                              height: screenSize.height * 0.011,
+                            ),
+                            SizedBox(
+                              height: screenSize.height * 0.07,
+                              child: TextFormField(
+                                controller: _nameController,
+                                enabled: isEdited,
+                                validator: (value) {
+                                  if (value == null || value.isEmpty) {
+                                    return 'Username cannot be empty';
+                                  }
+                                  if (value.length < 5) {
+                                    return 'Username must be at least 5 characters long';
+                                  }
+                                  return null;
+                                },
+                                decoration: InputDecoration(
+                                  filled: true,
+                                  fillColor: Colors.white,
+                                  border: OutlineInputBorder(
+                                    borderRadius: BorderRadius.circular(8.0),
+                                    borderSide: BorderSide.none,
+                                  ),
+                                  hintStyle: TextStyle(
+                                    fontSize: responsiveFontSize2,
+                                    color: Colors.grey,
+                                  ),
+                                ),
+                                style: TextStyle(
+                                  fontSize: responsiveFontSize2,
+                                  color: Colors.grey,
                                 ),
                               ),
                             ),
-                            const SizedBox(height: 15),
-                            const Text(
+                            SizedBox(
+                              height: screenSize.height * 0.011,
+                            ),
+                            Text(
                               'Password',
                               style: TextStyle(
-                                fontSize: 16,
+                                fontSize: responsiveFontSize2,
                                 fontWeight: FontWeight.w500,
                                 height: 0,
                               ),
                             ),
-                            const SizedBox(height: 5),
-                            TextFormField(
-                              controller: _passwordController,
-                              obscureText: !_isPasswordVisible,
-                              enabled: isEdited,
-                              validator: (value) {
-                                if (value == null || value.isEmpty) {
-                                  return 'Password cannot be empty';
-                                }
-                                return null;
-                              },
-                              decoration: InputDecoration(
-                                filled: true,
-                                fillColor: Colors.white,
-                                hintText: 'New Password',
-                                border: OutlineInputBorder(
-                                  borderRadius: BorderRadius.circular(8.0),
-                                  borderSide: BorderSide.none,
-                                ),
-                                suffixIcon: IconButton(
-                                  icon: Icon(
-                                    _isPasswordVisible
-                                        ? Icons.visibility_off
-                                        : Icons.visibility,
+                            SizedBox(
+                              height: screenSize.height * 0.011,
+                            ),
+                            SizedBox(
+                              height: screenSize.height * 0.07,
+                              child: TextFormField(
+                                controller: _passwordController,
+                                obscureText:
+                                    !_isPasswordVisible, // Toggle visibility
+                                enabled: isEdited,
+                                validator: (value) {
+                                  if (value == null || value.isEmpty) {
+                                    return 'Password cannot be empty';
+                                  }
+                                  return null;
+                                },
+                                decoration: InputDecoration(
+                                  filled: true,
+                                  fillColor: Colors.white,
+                                  hintText: 'New Password',
+                                  border: OutlineInputBorder(
+                                    borderRadius: BorderRadius.circular(8.0),
+                                    borderSide: BorderSide.none,
                                   ),
-                                  onPressed: () {
-                                    setState(() {
-                                      _isPasswordVisible = !_isPasswordVisible;
-                                    });
-                                  },
+                                  hintStyle: TextStyle(
+                                    fontSize: responsiveFontSize2,
+                                    color: Colors.grey,
+                                  ),
+                                  suffixIcon: IconButton(
+                                    icon: Icon(
+                                      _isPasswordVisible
+                                          ? Icons.visibility_off
+                                          : Icons.visibility,
+                                      size: responsiveFontSize,
+                                    ),
+                                    onPressed: () {
+                                      setState(() {
+                                        _isPasswordVisible =
+                                            !_isPasswordVisible;
+                                      });
+                                    },
+                                  ),
+                                ),
+                                style: TextStyle(
+                                  fontSize: responsiveFontSize2,
+                                  color: Colors.grey,
                                 ),
                               ),
                             ),
-                            const SizedBox(height: 15),
-                            const Text(
+                            SizedBox(
+                              height: screenSize.height * 0.011,
+                            ),
+                            Text(
                               'Phone Number',
                               style: TextStyle(
-                                fontSize: 16,
+                                fontSize: responsiveFontSize2,
                                 fontWeight: FontWeight.w500,
                                 height: 0,
                               ),
                             ),
-                            const SizedBox(height: 5),
-                            TextFormField(
-                              controller: _phoneController,
-                              keyboardType: TextInputType.phone,
-                              enabled: isEdited,
-                              validator: (value) {
-                                if (value == null || value.isEmpty) {
-                                  return 'Phone cannot be empty';
-                                }
-                                return null;
-                              },
-                              decoration: InputDecoration(
-                                filled: true,
-                                fillColor: Colors.white,
-                                border: OutlineInputBorder(
-                                  borderRadius: BorderRadius.circular(8.0),
-                                  borderSide: BorderSide.none,
+                            SizedBox(
+                              height: screenSize.height * 0.011,
+                            ),
+                            SizedBox(
+                              height: screenSize.height * 0.07,
+                              child: TextFormField(
+                                controller: _phoneController,
+                                keyboardType: TextInputType.phone,
+                                enabled: isEdited,
+                                validator: (value) {
+                                  if (value == null || value.isEmpty) {
+                                    return 'Phone cannot be empty';
+                                  }
+                                  return null;
+                                },
+                                decoration: InputDecoration(
+                                  filled: true,
+                                  fillColor: Colors.white,
+                                  border: OutlineInputBorder(
+                                    borderRadius: BorderRadius.circular(8.0),
+                                    borderSide: BorderSide.none,
+                                  ),
+                                  hintStyle: TextStyle(
+                                    fontSize: responsiveFontSize2,
+                                    color: Colors.grey,
+                                  ),
+                                ),
+                                style: TextStyle(
+                                  fontSize: responsiveFontSize2,
+                                  color: Colors.grey,
                                 ),
                               ),
                             ),
-                            const SizedBox(height: 20),
+                            SizedBox(
+                              height: screenSize.height * 0.02,
+                            ),
                             if (!isEdited)
                               Row(
                                 mainAxisAlignment:
@@ -730,38 +795,47 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                   GestureDetector(
                                     onTap: _toggleEdit,
                                     child: Container(
-                                      width: screenWidth * 0.4,
-                                      height: screenHeight * 0.055,
+                                      width: screenSize.width * 0.38,
+                                      height: screenSize.height * 0.055,
                                       decoration: BoxDecoration(
                                         color: Theme.of(context)
                                             .colorScheme
                                             .primary,
                                         borderRadius: BorderRadius.circular(8),
                                       ),
-                                      child: const Center(
+                                      child: Center(
                                           child: Text(
                                         'Edit Profile',
-                                        style: TextStyle(color: Colors.white),
+                                        style: TextStyle(
+                                          color: Colors.white,
+                                          fontSize: responsiveFontSize1,
+                                        ),
                                       )),
                                     ),
+                                  ),
+                                  const SizedBox(
+                                    width: 5,
                                   ),
                                   GestureDetector(
                                     onTap: () {
                                       _showLogoutConfirmationDialog(context);
                                     },
                                     child: Container(
-                                      width: screenWidth * 0.4,
-                                      height: screenHeight * 0.055,
+                                      width: screenSize.width * 0.38,
+                                      height: screenSize.height * 0.055,
                                       decoration: BoxDecoration(
                                         color: Theme.of(context)
                                             .colorScheme
                                             .secondary,
                                         borderRadius: BorderRadius.circular(8),
                                       ),
-                                      child: const Center(
+                                      child: Center(
                                           child: Text(
                                         'Log Out',
-                                        style: TextStyle(color: Colors.white),
+                                        style: TextStyle(
+                                          color: Colors.white,
+                                          fontSize: responsiveFontSize1,
+                                        ),
                                       )),
                                     ),
                                   ),
@@ -779,16 +853,18 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                       }
                                     },
                                     child: Container(
-                                      width: screenWidth * 0.4,
-                                      height: screenHeight * 0.055,
+                                      width: screenSize.width * 0.38,
+                                      height: screenSize.height * 0.055,
                                       decoration: BoxDecoration(
                                         color: Colors.grey[400],
                                         borderRadius: BorderRadius.circular(8),
                                       ),
-                                      child: const Center(
+                                      child: Center(
                                         child: Text(
                                           'Cancel',
-                                          style: TextStyle(color: Colors.black),
+                                          style: TextStyle(
+                                              color: Colors.black,
+                                              fontSize: responsiveFontSize1),
                                         ),
                                       ),
                                     ),
@@ -801,18 +877,20 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                       _passwordController.text,
                                     ),
                                     child: Container(
-                                      width: screenWidth * 0.4,
-                                      height: screenHeight * 0.055,
+                                      width: screenSize.width * 0.38,
+                                      height: screenSize.height * 0.055,
                                       decoration: BoxDecoration(
                                         color: Theme.of(context)
                                             .colorScheme
                                             .primary,
                                         borderRadius: BorderRadius.circular(8),
                                       ),
-                                      child: const Center(
+                                      child: Center(
                                           child: Text(
                                         'Save Changes',
-                                        style: TextStyle(color: Colors.white),
+                                        style: TextStyle(
+                                            color: Colors.white,
+                                            fontSize: responsiveFontSize1),
                                       )),
                                     ),
                                   ),

@@ -359,8 +359,17 @@ class _CheckinScreenState extends State<CheckinScreen> {
   @override
   Widget build(BuildContext context) {
     final Size screenSize = MediaQuery.of(context).size;
-    final double screenHeight = screenSize.height;
     final double screenWidth = screenSize.width;
+    double baseFontSize5 = 40;
+    double responsiveFontSize40 = baseFontSize5 * (screenWidth / 375);
+    double baseFontSize = 20;
+    double responsiveFontSize20 = baseFontSize * (screenWidth / 375);
+    double baseFontSize1 = 18;
+    double responsiveFontSize18 = baseFontSize1 * (screenWidth / 375);
+    double baseFontSize2 = 16;
+    double responsiveFontSize16 = baseFontSize2 * (screenWidth / 375);
+    double baseFontSize3 = 14;
+    double responsiveFontSize14 = baseFontSize3 * (screenWidth / 375);
     DateTime now = DateTime.now();
     String formattedDate = DateFormat('yMMMd').format(now);
     String formattedDay = DateFormat('EEEE').format(now);
@@ -414,8 +423,8 @@ class _CheckinScreenState extends State<CheckinScreen> {
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
                       SizedBox(
-                        width: 50,
-                        height: 50,
+                        width: screenSize.width * 0.12,
+                        height: screenSize.height * 0.06,
                         child: Material(
                           elevation: 10,
                           color: Theme.of(context).colorScheme.tertiary,
@@ -429,34 +438,45 @@ class _CheckinScreenState extends State<CheckinScreen> {
                                 ),
                               );
                             },
-                            child: Center(
-                              child: Icon(
-                                Icons.arrow_back,
-                                color: Theme.of(context).colorScheme.secondary,
+                            child: Material(
+                              borderRadius: BorderRadius.circular(12),
+                              elevation: 5,
+                              color: Theme.of(context).colorScheme.tertiary,
+                              child: SizedBox(
+                                width: screenSize.width * 0.07,
+                                height: screenSize.height * 0.07,
+                                child: Center(
+                                  child: Icon(
+                                    Icons.arrow_back,
+                                    size: responsiveFontSize20,
+                                    color:
+                                        Theme.of(context).colorScheme.secondary,
+                                  ),
+                                ),
                               ),
                             ),
                           ),
                         ),
                       ),
                       if (checkIn == null && checkOut == null)
-                        const Text(
+                        Text(
                           'Check In',
                           style: TextStyle(
-                            fontSize: 22,
+                            fontSize: responsiveFontSize20,
                             height: 0,
                           ),
                         ),
                       if (checkIn != null && checkOut == null)
-                        const Text(
+                        Text(
                           'Check Out',
                           style: TextStyle(
-                            fontSize: 22,
+                            fontSize: responsiveFontSize20,
                             height: 0,
                           ),
                         ),
                       SizedBox(
-                        width: 50,
-                        height: 50,
+                        width: screenSize.width * 0.12,
+                        height: screenSize.height * 0.06,
                         child: Material(
                           elevation: 10,
                           color: Theme.of(context).colorScheme.tertiary,
@@ -471,11 +491,20 @@ class _CheckinScreenState extends State<CheckinScreen> {
                                 ),
                               );
                             },
-                            child: Center(
-                              child: Image.asset(
-                                'assets/notification_icon.png',
-                                height: 30,
-                                width: 30,
+                            child: Material(
+                              borderRadius: BorderRadius.circular(12),
+                              elevation: 5,
+                              color: Theme.of(context).colorScheme.tertiary,
+                              child: SizedBox(
+                                width: screenSize.width * 0.07,
+                                height: screenSize.height * 0.07,
+                                child: Center(
+                                  child: Image.asset(
+                                    'assets/notification_icon.png',
+                                    width: screenSize.width * 0.07,
+                                    height: screenSize.height * 0.07,
+                                  ),
+                                ),
                               ),
                             ),
                           ),
@@ -483,11 +512,11 @@ class _CheckinScreenState extends State<CheckinScreen> {
                       ),
                     ],
                   ),
-                  const SizedBox(height: 50),
+                  SizedBox(height: screenSize.height * 0.05),
                   Text(
                     formattedTime,
                     style: TextStyle(
-                      fontSize: 40,
+                      fontSize: responsiveFontSize40,
                       color: Theme.of(context).colorScheme.secondary,
                       height: 0,
                     ),
@@ -498,7 +527,7 @@ class _CheckinScreenState extends State<CheckinScreen> {
                       Text(
                         formattedDate,
                         style: TextStyle(
-                          fontSize: 20,
+                          fontSize: responsiveFontSize20,
                           color: Theme.of(context).colorScheme.secondary,
                           height: 0,
                         ),
@@ -514,14 +543,14 @@ class _CheckinScreenState extends State<CheckinScreen> {
                       Text(
                         formattedDay,
                         style: TextStyle(
-                          fontSize: 20,
+                          fontSize: responsiveFontSize20,
                           color: Theme.of(context).colorScheme.secondary,
                           height: 0,
                         ),
                       ),
                     ],
                   ),
-                  const SizedBox(height: 85),
+                  SizedBox(height: screenSize.height * 0.05),
                   if (checkIn == null && checkOut == null)
                     GestureDetector(
                       onTap: () async {
@@ -531,8 +560,8 @@ class _CheckinScreenState extends State<CheckinScreen> {
                         alignment: Alignment.center,
                         children: [
                           Container(
-                            width: 280,
-                            height: 280,
+                            width: screenSize.width * 0.8,
+                            height: screenSize.height * 0.3,
                             decoration: BoxDecoration(
                               color: Theme.of(context).colorScheme.tertiary,
                               shape: BoxShape.circle,
@@ -543,8 +572,8 @@ class _CheckinScreenState extends State<CheckinScreen> {
                             ),
                           ),
                           Container(
-                            width: 200,
-                            height: 200,
+                            width: screenSize.width * 0.42,
+                            height: screenSize.height * 0.3,
                             decoration: BoxDecoration(
                               color: Theme.of(context).colorScheme.surface,
                               shape: BoxShape.circle,
@@ -559,8 +588,8 @@ class _CheckinScreenState extends State<CheckinScreen> {
                             children: [
                               Image.asset(
                                 'assets/checkin_button.png',
-                                height: 70,
-                                width: 70,
+                                height: screenSize.height * 0.08,
+                                width: screenSize.height * 0.08,
                                 color: Theme.of(context).colorScheme.secondary,
                               ),
                               const SizedBox(height: 5),
@@ -569,7 +598,7 @@ class _CheckinScreenState extends State<CheckinScreen> {
                                 style: TextStyle(
                                   color:
                                       Theme.of(context).colorScheme.secondary,
-                                  fontSize: 25,
+                                  fontSize: responsiveFontSize20,
                                   height: 0,
                                 ),
                               ),
@@ -653,19 +682,21 @@ class _CheckinScreenState extends State<CheckinScreen> {
                                                 Navigator.of(context).pop();
                                               },
                                               child: Container(
-                                                width: 110,
-                                                height: 30,
+                                                width: screenSize.width * 0.3,
+                                                height:
+                                                    screenSize.height * 0.055,
                                                 decoration: BoxDecoration(
                                                   color:
                                                       const Color(0xffECECEC),
                                                   borderRadius:
                                                       BorderRadius.circular(10),
                                                 ),
-                                                child: const Center(
+                                                child: Center(
                                                   child: Text(
                                                     'Cancel',
                                                     style: TextStyle(
-                                                      fontSize: 14,
+                                                      fontSize:
+                                                          responsiveFontSize14,
                                                       color: Colors.black,
                                                       height: 0,
                                                     ),
@@ -679,8 +710,9 @@ class _CheckinScreenState extends State<CheckinScreen> {
                                                     .checkOut(context, userId);
                                               },
                                               child: Container(
-                                                width: 110,
-                                                height: 30,
+                                                width: screenSize.width * 0.3,
+                                                height:
+                                                    screenSize.height * 0.055,
                                                 decoration: BoxDecoration(
                                                   color: Theme.of(context)
                                                       .colorScheme
@@ -688,11 +720,12 @@ class _CheckinScreenState extends State<CheckinScreen> {
                                                   borderRadius:
                                                       BorderRadius.circular(10),
                                                 ),
-                                                child: const Center(
+                                                child: Center(
                                                   child: Text(
                                                     'Checkout',
                                                     style: TextStyle(
-                                                      fontSize: 14,
+                                                      fontSize:
+                                                          responsiveFontSize14,
                                                       color: Colors.white,
                                                       height: 0,
                                                     ),
@@ -723,9 +756,9 @@ class _CheckinScreenState extends State<CheckinScreen> {
                               ),
                             ),
                             elevation: 5,
-                            child: const SizedBox(
-                              width: 280,
-                              height: 280,
+                            child: SizedBox(
+                              width: screenSize.width * 0.8,
+                              height: screenSize.height * 0.3,
                             ),
                           ),
                           Material(
@@ -737,9 +770,9 @@ class _CheckinScreenState extends State<CheckinScreen> {
                               ),
                             ),
                             elevation: 10,
-                            child: const SizedBox(
-                              width: 200,
-                              height: 200,
+                            child: SizedBox(
+                              width: screenSize.width * 0.42,
+                              height: screenSize.height * 0.3,
                             ),
                           ),
                           Column(
@@ -747,8 +780,8 @@ class _CheckinScreenState extends State<CheckinScreen> {
                             children: [
                               Image.asset(
                                 'assets/checkout_button.png',
-                                height: 70,
-                                width: 70,
+                                height: screenSize.height * 0.08,
+                                width: screenSize.height * 0.08,
                                 color: Theme.of(context).colorScheme.secondary,
                               ),
                               const SizedBox(height: 5),
@@ -757,7 +790,7 @@ class _CheckinScreenState extends State<CheckinScreen> {
                                 style: TextStyle(
                                   color:
                                       Theme.of(context).colorScheme.secondary,
-                                  fontSize: 25,
+                                  fontSize: responsiveFontSize20,
                                   height: 0,
                                 ),
                               ),
@@ -775,7 +808,7 @@ class _CheckinScreenState extends State<CheckinScreen> {
                         borderRadius: BorderRadius.circular(12),
                         elevation: 5,
                         child: SizedBox(
-                          height: screenHeight * 0.14,
+                          height: screenSize.height * 0.16,
                           width: screenWidth * 0.29,
                           child: Padding(
                             padding: const EdgeInsets.all(8.0),
@@ -783,19 +816,22 @@ class _CheckinScreenState extends State<CheckinScreen> {
                               mainAxisAlignment: MainAxisAlignment.spaceBetween,
                               children: [
                                 Image.asset(
+                                  height: screenSize.height * 0.035,
+                                  width: screenWidth * 0.3,
                                   'assets/checkin_time.png',
                                   color: Theme.of(context).colorScheme.primary,
                                 ),
                                 Text(
                                   _formatTime(checkIn),
-                                  style: const TextStyle(
-                                    fontSize: 18,
+                                  style: TextStyle(
+                                    fontSize: responsiveFontSize18,
+                                    fontWeight: FontWeight.w500,
                                     height: 0,
                                   ),
                                 ),
                                 Container(
-                                  height: 25,
-                                  width: 80,
+                                  height: screenSize.height * 0.04,
+                                  width: screenWidth * 0.3,
                                   decoration: BoxDecoration(
                                     color:
                                         Theme.of(context).colorScheme.primary,
@@ -806,6 +842,7 @@ class _CheckinScreenState extends State<CheckinScreen> {
                                       'Check In',
                                       style: TextStyle(
                                         height: 0,
+                                        fontSize: responsiveFontSize16,
                                         color: Theme.of(context)
                                             .colorScheme
                                             .surface,
@@ -823,7 +860,7 @@ class _CheckinScreenState extends State<CheckinScreen> {
                         borderRadius: BorderRadius.circular(12),
                         elevation: 5,
                         child: SizedBox(
-                          height: screenHeight * 0.14,
+                          height: screenSize.height * 0.16,
                           width: screenWidth * 0.29,
                           child: Padding(
                             padding: const EdgeInsets.all(8.0),
@@ -833,20 +870,21 @@ class _CheckinScreenState extends State<CheckinScreen> {
                                 Image.asset(
                                   'assets/checkout_time.png',
                                   color: Theme.of(context).colorScheme.primary,
-                                  height: 26,
-                                  width: 26,
+                                  height: screenSize.height * 0.035,
+                                  width: screenWidth * 0.3,
                                   fit: BoxFit.fitHeight,
                                 ),
                                 Text(
                                   _formatTime(checkOut),
-                                  style: const TextStyle(
-                                    fontSize: 18,
+                                  style: TextStyle(
+                                    fontSize: responsiveFontSize18,
+                                    fontWeight: FontWeight.w500,
                                     height: 0,
                                   ),
                                 ),
                                 Container(
-                                  height: 25,
-                                  width: 80,
+                                  height: screenSize.height * 0.04,
+                                  width: screenWidth * 0.3,
                                   decoration: BoxDecoration(
                                     color:
                                         Theme.of(context).colorScheme.primary,
@@ -857,6 +895,7 @@ class _CheckinScreenState extends State<CheckinScreen> {
                                       'Check Out',
                                       style: TextStyle(
                                         height: 0,
+                                        fontSize: responsiveFontSize14,
                                         color: Theme.of(context)
                                             .colorScheme
                                             .surface,
@@ -874,7 +913,7 @@ class _CheckinScreenState extends State<CheckinScreen> {
                         borderRadius: BorderRadius.circular(12),
                         elevation: 5,
                         child: SizedBox(
-                          height: screenHeight * 0.14,
+                          height: screenSize.height * 0.16,
                           width: screenWidth * 0.29,
                           child: Padding(
                             padding: const EdgeInsets.all(8.0),
@@ -884,20 +923,21 @@ class _CheckinScreenState extends State<CheckinScreen> {
                                 Image.asset(
                                   'assets/total_hrs.png',
                                   color: Theme.of(context).colorScheme.primary,
-                                  height: 26,
-                                  width: 26,
+                                  height: screenSize.height * 0.035,
+                                  width: screenWidth * 0.3,
                                   fit: BoxFit.fitHeight,
                                 ),
                                 Text(
                                   totalHours,
-                                  style: const TextStyle(
-                                    fontSize: 18,
+                                  style: TextStyle(
+                                    fontSize: responsiveFontSize18,
+                                    fontWeight: FontWeight.w500,
                                     height: 0,
                                   ),
                                 ),
                                 Container(
-                                  height: 25,
-                                  width: 80,
+                                  height: screenSize.height * 0.04,
+                                  width: screenWidth * 0.3,
                                   decoration: BoxDecoration(
                                     color:
                                         Theme.of(context).colorScheme.primary,
@@ -908,6 +948,7 @@ class _CheckinScreenState extends State<CheckinScreen> {
                                       'Total Hrs',
                                       style: TextStyle(
                                         height: 0,
+                                        fontSize: responsiveFontSize14,
                                         color: Theme.of(context)
                                             .colorScheme
                                             .surface,

@@ -19,11 +19,12 @@ class _NotificationScreenState extends State<NotificationScreen> {
             children: [
               SizedBox(
                 height: 70,
+                width: double.infinity,
                 child: Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
                       Container(
-                        width: 50,
+                        width: double.infinity,
                         height: 50,
                         decoration: BoxDecoration(
                           color: Colors.grey[200],
@@ -57,7 +58,7 @@ class _NotificationScreenState extends State<NotificationScreen> {
                     ]),
               ),
               Container(
-                height: 500,
+                height: 250,
                 padding: const EdgeInsets.symmetric(vertical: 20),
                 width: double.infinity,
                 decoration: BoxDecoration(
@@ -66,7 +67,7 @@ class _NotificationScreenState extends State<NotificationScreen> {
                 child: Column(
                   children: [
                     Container(
-                        width: 330,
+                        width: double.infinity,
                         height: 80,
                         decoration: BoxDecoration(
                             color: Colors.white,
@@ -142,129 +143,10 @@ class _NotificationScreenState extends State<NotificationScreen> {
                             ],
                           ),
                         )),
-                    const SizedBox(height: 10),
-                    Container(
-                        width: 330,
-                        height: 80,
-                        decoration: BoxDecoration(
-                            color: Colors.white,
-                            borderRadius: BorderRadius.circular(12)),
-                        child: Padding(
-                          padding: const EdgeInsets.symmetric(horizontal: 10.0),
-                          child: Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            children: [
-                              Container(
-                                width: 42,
-                                height: 42,
-                                decoration: BoxDecoration(
-                                  color: Colors
-                                      .grey[200], // light background color
-                                  borderRadius: BorderRadius.circular(
-                                      40), // rounded corners
-                                ),
-                                child: const Icon(
-                                  Icons.notifications_none,
-                                  color: Colors.black,
-                                ),
-                              ),
-                              const Text(
-                                'Lorem ipsum dolor sit amet,\nconsectetur adipiscing elit dolor ',
-                                style: TextStyle(
-                                    fontSize: 13, fontWeight: FontWeight.w600),
-                              ),
-                              const Text(
-                                '2d ago.',
-                                style: TextStyle(
-                                    fontSize: 14,
-                                    fontWeight: FontWeight.w400,
-                                    color: Color(0xff6C6C6C)),
-                              ),
-                            ],
-                          ),
-                        )),
-                    const SizedBox(height: 10),
-                    Container(
-                        width: 330,
-                        height: 80,
-                        decoration: BoxDecoration(
-                            color: Colors.white,
-                            borderRadius: BorderRadius.circular(12)),
-                        child: Padding(
-                          padding: const EdgeInsets.symmetric(horizontal: 10.0),
-                          child: Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            children: [
-                              Container(
-                                width: 42,
-                                height: 42,
-                                decoration: BoxDecoration(
-                                  color: Colors
-                                      .grey[200], // light background color
-                                  borderRadius: BorderRadius.circular(
-                                      40), // rounded corners
-                                ),
-                                child: const Icon(
-                                  Icons.notifications_none,
-                                  color: Colors.black,
-                                ),
-                              ),
-                              const Text(
-                                'Lorem ipsum dolor sit amet,\nconsectetur adipiscing elit dolor ',
-                                style: TextStyle(
-                                    fontSize: 13, fontWeight: FontWeight.w600),
-                              ),
-                              const Text(
-                                '3d ago.',
-                                style: TextStyle(
-                                    fontSize: 14,
-                                    fontWeight: FontWeight.w400,
-                                    color: Color(0xff6C6C6C)),
-                              ),
-                            ],
-                          ),
-                        )),
-                    const SizedBox(height: 10),
-                    Container(
-                        width: 330,
-                        height: 80,
-                        decoration: BoxDecoration(
-                            color: Colors.white,
-                            borderRadius: BorderRadius.circular(12)),
-                        child: Padding(
-                          padding: const EdgeInsets.symmetric(horizontal: 10.0),
-                          child: Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            children: [
-                              Container(
-                                width: 42,
-                                height: 42,
-                                decoration: BoxDecoration(
-                                  color: Colors
-                                      .grey[200], // light background color
-                                  borderRadius: BorderRadius.circular(
-                                      40), // rounded corners
-                                ),
-                                child: const Icon(
-                                  Icons.notifications_none,
-                                  color: Colors.black,
-                                ),
-                              ),
-                              const Text(
-                                'Lorem ipsum dolor sit amet,\nconsectetur adipiscing elit dolor ',
-                                style: TextStyle(
-                                    fontSize: 13, fontWeight: FontWeight.w600),
-                              ),
-                              const Text(
-                                '1M ago.',
-                                style: TextStyle(
-                                    fontSize: 14,
-                                    fontWeight: FontWeight.w400,
-                                    color: Color(0xff6C6C6C)),
-                              ),
-                            ],
-                          ),
-                        )),
+                   
+                  
+                  
+                  
                   ],
                 ),
               ),

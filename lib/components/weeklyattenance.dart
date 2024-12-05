@@ -132,6 +132,16 @@ class _WeeklyAttendanceState extends State<WeeklyAttendance> {
 
   @override
   Widget build(BuildContext context) {
+    final Size screenSize = MediaQuery.of(context).size;
+    final double screenWidth = screenSize.width;
+    final double screenHeight = screenSize.height;
+    double baseFontSize = 20;
+    double responsiveFontSize20 = baseFontSize * (screenWidth / 375);
+    double baseFontSize4 = 12;
+    double responsiveFontSize12 = baseFontSize4 * (screenWidth / 375);
+    double baseFontSize5 = 10;
+    double responsiveFontSize10 = baseFontSize5 * (screenWidth / 375);
+
     List<Map<String, dynamic>> filteredData = widget.dropdownValue2 == 'Select'
         ? weeklyData
         : widget.dropdownValue2 == 'On Time'
@@ -205,9 +215,10 @@ class _WeeklyAttendanceState extends State<WeeklyAttendance> {
                   data['checkIn'] as Timestamp?,
                   data['checkOut'] as Timestamp?);
               return Container(
-                padding: const EdgeInsets.all(12),
+                padding: const EdgeInsets.symmetric(horizontal: 12,),
                 margin: const EdgeInsets.only(bottom: 10),
                 width: double.infinity,
+                height: screenHeight * 0.088,
                 decoration: BoxDecoration(
                   borderRadius: BorderRadius.circular(12),
                   color: Colors.white,
@@ -220,8 +231,8 @@ class _WeeklyAttendanceState extends State<WeeklyAttendance> {
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
                         Container(
-                          width: 55,
-                          height: 55,
+                          width: screenHeight * 0.065,
+                          height: screenHeight * 0.068,
                           decoration: BoxDecoration(
                             color: widget.color,
                             borderRadius: BorderRadius.circular(6),
@@ -231,8 +242,8 @@ class _WeeklyAttendanceState extends State<WeeklyAttendance> {
                             children: [
                               Text(
                                 formattedDate,
-                                style: const TextStyle(
-                                  fontSize: 22,
+                                style: TextStyle(
+                                  fontSize: responsiveFontSize20,
                                   fontWeight: FontWeight.w600,
                                   color: Colors.white,
                                   height: 0,
@@ -241,8 +252,8 @@ class _WeeklyAttendanceState extends State<WeeklyAttendance> {
                               const SizedBox(height: 5),
                               Text(
                                 day,
-                                style: const TextStyle(
-                                  fontSize: 12,
+                                style: TextStyle(
+                                  fontSize: responsiveFontSize12,
                                   fontWeight: FontWeight.w400,
                                   color: Colors.white,
                                   height: 0,
@@ -258,18 +269,18 @@ class _WeeklyAttendanceState extends State<WeeklyAttendance> {
                       children: [
                         Text(
                           checkInTime,
-                          style: const TextStyle(
-                            fontSize: 14,
+                          style: TextStyle(
+                            fontSize: responsiveFontSize12,
                             fontWeight: FontWeight.bold,
                             color: Colors.black,
                             height: 0,
                           ),
                         ),
                         const SizedBox(height: 5),
-                        const Text(
+                        Text(
                           'Check In',
                           style: TextStyle(
-                            fontSize: 10,
+                            fontSize: responsiveFontSize10,
                             fontWeight: FontWeight.bold,
                             color: Colors.black,
                             height: 0,
@@ -287,18 +298,18 @@ class _WeeklyAttendanceState extends State<WeeklyAttendance> {
                       children: [
                         Text(
                           checkOutTime,
-                          style: const TextStyle(
-                            fontSize: 14,
+                          style: TextStyle(
+                            fontSize: responsiveFontSize12,
                             fontWeight: FontWeight.bold,
                             color: Colors.black,
                             height: 0,
                           ),
                         ),
                         const SizedBox(height: 5),
-                        const Text(
+                        Text(
                           'Check Out',
                           style: TextStyle(
-                            fontSize: 10,
+                            fontSize: responsiveFontSize10,
                             fontWeight: FontWeight.bold,
                             color: Colors.black,
                             height: 0,
@@ -316,18 +327,18 @@ class _WeeklyAttendanceState extends State<WeeklyAttendance> {
                       children: [
                         Text(
                           totalHours,
-                          style: const TextStyle(
-                            fontSize: 14,
+                          style: TextStyle(
+                            fontSize: responsiveFontSize12,
                             fontWeight: FontWeight.bold,
                             color: Colors.black,
                             height: 0,
                           ),
                         ),
                         const SizedBox(height: 5),
-                        const Text(
+                        Text(
                           'Total Hrs',
                           style: TextStyle(
-                            fontSize: 10,
+                            fontSize: responsiveFontSize10,
                             fontWeight: FontWeight.bold,
                             color: Colors.black,
                             height: 0,

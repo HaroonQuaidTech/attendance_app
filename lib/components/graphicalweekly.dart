@@ -265,6 +265,14 @@ class _GraphicalbuilerState extends State<GraphicalbuilderWeekly> {
 
   @override
   Widget build(BuildContext context) {
+    final Size screenSize = MediaQuery.of(context).size;
+    final double screenWidth = screenSize.width;
+    double baseFontSize = 20;
+    double responsiveFontSize20 = baseFontSize * (screenWidth / 375);
+    double baseFontSize2 = 16;
+    double responsiveFontSize16 = baseFontSize2 * (screenWidth / 375);
+    double baseFontSize3 = 14;
+    double responsiveFontSize14 = baseFontSize3 * (screenWidth / 375);
     return FutureBuilder<List<Map<String, dynamic>>?>(
       future: fetchWeeklyAttendance(userId),
       builder: (context, snapshot) {
@@ -319,15 +327,16 @@ class _GraphicalbuilerState extends State<GraphicalbuilderWeekly> {
               color: Theme.of(context).colorScheme.tertiary,
               elevation: 5,
               child: Padding(
-                padding: const EdgeInsets.all(12.0),
+                padding:
+                    const EdgeInsets.only( top: 16.0,left: 16),
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    const Text(
+                    Text(
                       'Weekly',
                       style: TextStyle(
                         fontWeight: FontWeight.w600,
-                        fontSize: 18,
+                        fontSize: responsiveFontSize20,
                         height: 0,
                       ),
                     ),
@@ -336,26 +345,26 @@ class _GraphicalbuilerState extends State<GraphicalbuilderWeekly> {
                       crossAxisAlignment: CrossAxisAlignment.center,
                       children: [
                         Container(
-                          height: 18,
-                          width: 16,
+                          height: screenSize.height * 0.02,
+                          width: screenSize.height * 0.02,
                           decoration: BoxDecoration(
                             color: Theme.of(context).colorScheme.primary,
                           ),
                         ),
                         const SizedBox(width: 10),
-                        const Text(
+                        Text(
                           'TAT (Turn Around Time)',
                           style: TextStyle(
                             fontWeight: FontWeight.w400,
-                            fontSize: 18,
+                            fontSize: responsiveFontSize16,
                             height: 0,
                           ),
                         ),
                       ],
                     ),
-                    const SizedBox(height: 20),
+                     SizedBox(height: screenSize.height*0.03),
                     SizedBox(
-                      height: 400,
+                      height: screenSize.height * 0.45,
                       child: BarChart(
                         BarChartData(
                           maxY: 9,
@@ -367,9 +376,9 @@ class _GraphicalbuilerState extends State<GraphicalbuilderWeekly> {
                                 getTitlesWidget: (value, meta) {
                                   return Text(
                                     '${value.toInt()}H',
-                                    style: const TextStyle(
+                                    style: TextStyle(
                                       color: Colors.black,
-                                      fontSize: 15,
+                                      fontSize: responsiveFontSize14,
                                       fontWeight: FontWeight.w600,
                                       height: 0,
                                     ),
@@ -387,7 +396,8 @@ class _GraphicalbuilerState extends State<GraphicalbuilderWeekly> {
                                   return Column(
                                     mainAxisSize: MainAxisSize.min,
                                     children: [
-                                      const SizedBox(height: 30),
+                                      SizedBox(
+                                          height: screenSize.height * 0.02),
                                       Text(
                                         [
                                           'Mon',
@@ -396,8 +406,8 @@ class _GraphicalbuilerState extends State<GraphicalbuilderWeekly> {
                                           'Thur',
                                           'Fri'
                                         ][value.toInt()],
-                                        style: const TextStyle(
-                                          fontSize: 14,
+                                        style: TextStyle(
+                                          fontSize: responsiveFontSize14,
                                           fontWeight: FontWeight.w600,
                                           height: 0,
                                         ),
@@ -425,7 +435,7 @@ class _GraphicalbuilerState extends State<GraphicalbuilderWeekly> {
                                     toY: weeklyHours[day] ?? 0,
                                     color:
                                         Theme.of(context).colorScheme.primary,
-                                    width: 25,
+                                    width: screenWidth * 0.065,
                                     backDrawRodData: BackgroundBarChartRodData(
                                       show: true,
                                       toY: 9,
@@ -442,7 +452,7 @@ class _GraphicalbuilerState extends State<GraphicalbuilderWeekly> {
                 ),
               ),
             ),
-            const SizedBox(height: 20),
+           SizedBox(height: screenSize.height*0.02),
             Material(
               borderRadius: BorderRadius.circular(20),
               color: Theme.of(context).colorScheme.tertiary,
@@ -453,15 +463,15 @@ class _GraphicalbuilerState extends State<GraphicalbuilderWeekly> {
                   mainAxisAlignment: MainAxisAlignment.center,
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    const Text(
+                     Text(
                       'Weekly',
                       style: TextStyle(
-                        fontSize: 20,
+                        fontSize: responsiveFontSize20,
                         fontWeight: FontWeight.w600,
                         height: 0,
                       ),
                     ),
-                    const SizedBox(height: 10),
+                     SizedBox(height:screenSize.height*0.02),
                     pieChartData.isEmpty
                         ? Center(
                             child: Column(
@@ -497,13 +507,14 @@ class _GraphicalbuilerState extends State<GraphicalbuilderWeekly> {
                             ],
                             chartRadius:
                                 MediaQuery.of(context).size.width / 1.7,
-                            legendOptions: const LegendOptions(
+                            legendOptions:  LegendOptions(
                               legendPosition: LegendPosition.top,
                               showLegendsInRow: true,
                               showLegends: true,
                               legendShape: BoxShape.circle,
                               legendTextStyle: TextStyle(
                                 fontWeight: FontWeight.w500,
+                                fontSize: responsiveFontSize14,
                                 height: 0,
                               ),
                             ),
@@ -515,7 +526,7 @@ class _GraphicalbuilerState extends State<GraphicalbuilderWeekly> {
                 ),
               ),
             ),
-            const SizedBox(height: 20),
+            const SizedBox(height: 10),
           ],
         );
       },
