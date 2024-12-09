@@ -311,6 +311,10 @@ class _HomeScreenState extends State<HomeScreen> {
   Widget build(BuildContext context) {
     final Size screenSize = MediaQuery.of(context).size;
     final double screenWidth = screenSize.width;
+
+    double baseFontSize3 = 9;
+    double responsiveFontSize8 = baseFontSize3 * (screenWidth / 375);
+
     double baseFontSize = 16;
     double responsiveFontSize = baseFontSize * (screenWidth / 375);
     double baseFontSize1 = 20;
@@ -611,7 +615,7 @@ class _HomeScreenState extends State<HomeScreen> {
                               ),
                             ),
                           ),
-                          const SizedBox(height: 10),
+                          const SizedBox(height: 20),
                           Expanded(
                             child: SingleChildScrollView(
                               child: Column(
@@ -747,7 +751,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                   _isLoading
                                       ? const CircularProgressIndicator()
                                       : Material(
-                                          elevation: 10,
+                                          elevation: 5,
                                           color: Theme.of(context)
                                               .colorScheme
                                               .tertiary,
@@ -821,17 +825,18 @@ class _HomeScreenState extends State<HomeScreen> {
                   }
 
                   if (checkIn != null && checkOut == null) {
-                    return DraggableFab(
-                      child: Container(
-                        margin: const EdgeInsets.only(bottom: 20.0),
+                    return Container(
+                      margin: const EdgeInsets.only(bottom: 100),
+                      child: DraggableFab(
                         child: Stack(
                           alignment: Alignment.center,
                           children: [
                             Material(
-                              elevation: 5,
+                              elevation: 6,
                               shape: const CircleBorder(),
                               child: CircleAvatar(
-                                radius: screenHeight * 0.06,
+                                radius: screenHeight *
+                                    0.06, //OUTER CIRCLE Radius HEIGHT
                                 backgroundColor: Colors.white,
                                 child: Container(
                                   decoration: BoxDecoration(
@@ -846,14 +851,14 @@ class _HomeScreenState extends State<HomeScreen> {
                               ),
                             ),
                             Container(
-                              width: 60,
-                              height: 60,
+                              width: screenSize.height * 0.09,
+                              height: screenSize.height * 0.09,
                               decoration: BoxDecoration(
                                 color: Colors.white,
                                 shape: BoxShape.circle,
                                 border: Border.all(
                                   color: Theme.of(context).colorScheme.primary,
-                                  width: 1.0,
+                                  width: 2.0,
                                 ),
                               ),
                             ),
@@ -904,9 +909,9 @@ class _HomeScreenState extends State<HomeScreen> {
                       ),
                     );
                   } else if (checkIn == null && checkOut == null) {
-                    return DraggableFab(
-                      child: Container(
-                        margin: const EdgeInsets.only(bottom: 20.0),
+                    return Container(
+                      margin: const EdgeInsets.only(bottom: 100),
+                      child: DraggableFab(
                         child: Stack(
                           alignment: Alignment.center,
                           children: [
@@ -929,14 +934,14 @@ class _HomeScreenState extends State<HomeScreen> {
                               ),
                             ),
                             Container(
-                              width: screenSize.height * 0.025,
-                              height: screenSize.height * 0.025,
+                              width: screenSize.height * 0.09,
+                              height: screenSize.height * 0.09,
                               decoration: BoxDecoration(
                                 color: Colors.white,
                                 shape: BoxShape.circle,
                                 border: Border.all(
                                   color: Theme.of(context).colorScheme.primary,
-                                  width: 1.0,
+                                  width: 2.0,
                                 ),
                               ),
                             ),
