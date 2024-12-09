@@ -215,7 +215,9 @@ class _WeeklyAttendanceState extends State<WeeklyAttendance> {
                   data['checkIn'] as Timestamp?,
                   data['checkOut'] as Timestamp?);
               return Container(
-                padding: const EdgeInsets.symmetric(horizontal: 12,),
+                padding: const EdgeInsets.symmetric(
+                  horizontal: 12,
+                ),
                 margin: const EdgeInsets.only(bottom: 10),
                 width: double.infinity,
                 height: screenHeight * 0.088,

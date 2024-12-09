@@ -128,6 +128,17 @@ class _MonthlyAttendanceState extends State<MonthlyAttendance> {
 
   @override
   Widget build(BuildContext context) {
+    final Size screenSize = MediaQuery.of(context).size;
+    final double screenHeight = screenSize.height;
+    final double screenWidth = screenSize.width;
+    double baseFontSize40 = 40;
+    double responsiveFontSize40 = baseFontSize40 * (screenWidth / 375);
+    double baseFontSize20 = 20;
+    double responsiveFontSize20 = baseFontSize20 * (screenWidth / 375);
+    double baseFontSize12 = 12;
+    double responsiveFontSize12 = baseFontSize12 * (screenWidth / 375);
+    double baseFontSize10 = 10;
+    double responsiveFontSize10 = baseFontSize10 * (screenWidth / 375);
     List<Map<String, dynamic>> filtereedData = widget.dropdownValue2 == 'Select'
         ? monthlyData
         : widget.dropdownValue2 == 'On Time'
@@ -165,10 +176,10 @@ class _MonthlyAttendanceState extends State<MonthlyAttendance> {
             child: Column(
               children: [
                 const SizedBox(height: 30),
-                const Icon(
+                Icon(
                   Icons.warning,
                   color: Colors.grey,
-                  size: 50,
+                  size: responsiveFontSize40,
                 ),
                 const SizedBox(height: 5),
                 Text(
@@ -176,7 +187,7 @@ class _MonthlyAttendanceState extends State<MonthlyAttendance> {
                   style: TextStyle(
                     fontWeight: FontWeight.bold,
                     height: 0,
-                    fontSize: 20,
+                    fontSize: responsiveFontSize20,
                     color: Colors.grey[400],
                   ),
                 ),
@@ -206,9 +217,9 @@ class _MonthlyAttendanceState extends State<MonthlyAttendance> {
                   );
 
                   return Container(
-                    padding: const EdgeInsets.all(12),
+                    padding: const EdgeInsets.symmetric(horizontal: 12),
                     margin: const EdgeInsets.only(bottom: 10),
-                    height: 82,
+                    height: screenHeight * 0.088,
                     width: double.infinity,
                     decoration: BoxDecoration(
                       borderRadius: BorderRadius.circular(12),
@@ -222,8 +233,8 @@ class _MonthlyAttendanceState extends State<MonthlyAttendance> {
                           mainAxisAlignment: MainAxisAlignment.center,
                           children: [
                             Container(
-                              width: 53,
-                              height: 55,
+                              width: screenHeight * 0.065,
+                              height: screenHeight * 0.068,
                               decoration: BoxDecoration(
                                 color: widget.color,
                                 borderRadius: BorderRadius.circular(6),
@@ -233,16 +244,16 @@ class _MonthlyAttendanceState extends State<MonthlyAttendance> {
                                 children: [
                                   Text(
                                     formattedDate,
-                                    style: const TextStyle(
-                                      fontSize: 22,
+                                    style: TextStyle(
+                                      fontSize: responsiveFontSize20,
                                       fontWeight: FontWeight.w600,
                                       color: Colors.white,
                                     ),
                                   ),
                                   Text(
                                     day,
-                                    style: const TextStyle(
-                                      fontSize: 12,
+                                    style: TextStyle(
+                                      fontSize: responsiveFontSize12,
                                       fontWeight: FontWeight.w400,
                                       color: Colors.white,
                                     ),
@@ -257,16 +268,16 @@ class _MonthlyAttendanceState extends State<MonthlyAttendance> {
                           children: [
                             Text(
                               checkInTime,
-                              style: const TextStyle(
-                                fontSize: 14,
+                              style: TextStyle(
+                                fontSize: responsiveFontSize12,
                                 fontWeight: FontWeight.bold,
                                 color: Colors.black,
                               ),
                             ),
-                            const Text(
+                            Text(
                               'Check In',
                               style: TextStyle(
-                                fontSize: 10,
+                                fontSize: responsiveFontSize10,
                                 fontWeight: FontWeight.bold,
                                 color: Colors.black,
                               ),
@@ -283,16 +294,16 @@ class _MonthlyAttendanceState extends State<MonthlyAttendance> {
                           children: [
                             Text(
                               checkOutTime,
-                              style: const TextStyle(
-                                fontSize: 14,
+                              style: TextStyle(
+                                fontSize: responsiveFontSize12,
                                 fontWeight: FontWeight.bold,
                                 color: Colors.black,
                               ),
                             ),
-                            const Text(
+                            Text(
                               'Check Out',
                               style: TextStyle(
-                                  fontSize: 10,
+                                  fontSize: responsiveFontSize10,
                                   fontWeight: FontWeight.bold,
                                   color: Colors.black),
                             ),
@@ -308,16 +319,16 @@ class _MonthlyAttendanceState extends State<MonthlyAttendance> {
                           children: [
                             Text(
                               totalHours,
-                              style: const TextStyle(
-                                fontSize: 14,
+                              style: TextStyle(
+                                fontSize: responsiveFontSize12,
                                 fontWeight: FontWeight.bold,
                                 color: Colors.black,
                               ),
                             ),
-                            const Text(
+                            Text(
                               'Total Hours',
                               style: TextStyle(
-                                fontSize: 10,
+                                fontSize: responsiveFontSize10,
                                 fontWeight: FontWeight.bold,
                                 color: Colors.black,
                               ),

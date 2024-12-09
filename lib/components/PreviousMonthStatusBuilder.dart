@@ -213,8 +213,8 @@ class _PreviousMonthlyAttendanceState extends State<PreviousMonthlyAttendance> {
     double baseFontSize20 = 20;
     double responsiveFontSize20 = baseFontSize20 * (screenWidth / 375);
 
-    double baseFontSize14 = 14;
-    double responsiveFontSize14 = baseFontSize14 * (screenWidth / 375);
+    double baseFontSize12 = 12;
+    double responsiveFontSize12 = baseFontSize12 * (screenWidth / 375);
     final int month = int.parse(selectedMonth!);
     final int year = int.parse(selectedYear!);
 
@@ -226,9 +226,9 @@ class _PreviousMonthlyAttendanceState extends State<PreviousMonthlyAttendance> {
     return Column(
       children: [
         Container(
-          height: screenHeight * 0.11,
+          height: screenHeight * 0.088,
           width: double.infinity,
-          padding: const EdgeInsets.all(12),
+          padding: const EdgeInsets.symmetric(horizontal: 12),
           decoration: BoxDecoration(
             borderRadius: BorderRadius.circular(12),
             color: Colors.white,
@@ -241,7 +241,7 @@ class _PreviousMonthlyAttendanceState extends State<PreviousMonthlyAttendance> {
                 children: [
                   Container(
                     width: screenHeight * 0.065,
-                    height: screenHeight * 0.07,
+                    height: screenHeight * 0.068,
                     decoration: BoxDecoration(
                         color: StatusTheme.theme.colorScheme.secondary,
                         borderRadius: BorderRadius.circular(6)),
@@ -262,7 +262,7 @@ class _PreviousMonthlyAttendanceState extends State<PreviousMonthlyAttendance> {
                         Text(
                           day,
                           style: TextStyle(
-                            fontSize: responsiveFontSize14,
+                            fontSize: responsiveFontSize12,
                             fontWeight: FontWeight.w400,
                             color: Colors.white,
                             height: 0,
@@ -297,8 +297,8 @@ class _PreviousMonthlyAttendanceState extends State<PreviousMonthlyAttendance> {
     double baseFontSize20 = 20;
     double responsiveFontSize20 = baseFontSize20 * (screenWidth / 375);
 
-    double baseFontSize14 = 14;
-    double responsiveFontSize14 = baseFontSize14 * (screenWidth / 375);
+    double baseFontSize12 = 12;
+    double responsiveFontSize12 = baseFontSize12 * (screenWidth / 375);
     final int month = int.parse(selectedMonth!);
     final int year = int.parse(selectedYear!);
     final DateTime firstDayOfMonth = DateTime(year, month, 1);
@@ -308,9 +308,9 @@ class _PreviousMonthlyAttendanceState extends State<PreviousMonthlyAttendance> {
     return Column(
       children: [
         Container(
-          height: screenHeight * 0.098,
+          height: screenHeight * 0.088,
           width: double.infinity,
-          padding: const EdgeInsets.all(12),
+          padding: const EdgeInsets.symmetric(horizontal: 12),
           decoration: BoxDecoration(
             borderRadius: BorderRadius.circular(12),
             color: Colors.white,
@@ -320,7 +320,7 @@ class _PreviousMonthlyAttendanceState extends State<PreviousMonthlyAttendance> {
             children: [
               Container(
                 width: screenHeight * 0.065,
-                height: screenHeight * 0.07,
+                height: screenHeight * 0.068,
                 decoration: BoxDecoration(
                     color: StatusTheme.theme.colorScheme.secondaryFixed,
                     borderRadius: BorderRadius.circular(6)),
@@ -341,7 +341,7 @@ class _PreviousMonthlyAttendanceState extends State<PreviousMonthlyAttendance> {
                     Text(
                       day,
                       style: TextStyle(
-                        fontSize: responsiveFontSize14,
+                        fontSize: responsiveFontSize12,
                         fontWeight: FontWeight.w400,
                         color: Colors.white,
                         height: 0,
@@ -446,12 +446,11 @@ class _PreviousMonthlyAttendanceState extends State<PreviousMonthlyAttendance> {
     final double screenWidth = screenSize.width;
     double baseFontSize20 = 20;
     double responsiveFontSize20 = baseFontSize20 * (screenWidth / 375);
-
-    double baseFontSize14 = 14;
-    double responsiveFontSize14 = baseFontSize14 * (screenWidth / 375);
+    double baseFontSize12 = 12;
+    double responsiveFontSize12 = baseFontSize12 * (screenWidth / 375);
     return Container(
       width: screenHeight * 0.065,
-      height: screenHeight * 0.07,
+      height: screenHeight * 0.068,
       decoration: BoxDecoration(
         color: containerColor,
         borderRadius: BorderRadius.circular(6),
@@ -469,7 +468,7 @@ class _PreviousMonthlyAttendanceState extends State<PreviousMonthlyAttendance> {
           Text(
             day,
             style: TextStyle(
-                fontSize: responsiveFontSize14,
+                fontSize: responsiveFontSize12,
                 fontWeight: FontWeight.w400,
                 color: Colors.white),
           ),
@@ -519,8 +518,8 @@ class _PreviousMonthlyAttendanceState extends State<PreviousMonthlyAttendance> {
     final Size screenSize = MediaQuery.of(context).size;
     final double screenWidth = screenSize.width;
 
-    double baseFontSize14 = 14;
-    double responsiveFontSize14 = baseFontSize14 * (screenWidth / 375);
+    double baseFontSize14 = 10;
+    double responsiveFontSize10 = baseFontSize14 * (screenWidth / 375);
 
     double baseFontSize12 = 12;
     double responsiveFontSize12 = baseFontSize12 * (screenWidth / 375);
@@ -532,14 +531,14 @@ class _PreviousMonthlyAttendanceState extends State<PreviousMonthlyAttendance> {
               ? _formatTime(timeOrHours)
               : timeOrHours.toString(),
           style: TextStyle(
-              fontSize: responsiveFontSize14,
+              fontSize: responsiveFontSize12,
               fontWeight: FontWeight.w800,
               color: Colors.black),
         ),
         Text(
           label,
           style: TextStyle(
-              fontSize: responsiveFontSize12,
+              fontSize: responsiveFontSize10,
               fontWeight: FontWeight.w600,
               color: Colors.black),
         ),
@@ -618,15 +617,23 @@ class _PreviousMonthlyAttendanceState extends State<PreviousMonthlyAttendance> {
                                   hint: Text(
                                     "Select Month",
                                     style: TextStyle(
-                                        fontSize: responsiveFontSize15),
+                                        fontSize: responsiveFontSize15,color: Colors.black),
                                   ),
                                   isExpanded: true,
                                   underline: const SizedBox(),
                                   items: months.map((month) {
                                     return DropdownMenuItem(
                                       value: month,
-                                      child: Text(DateFormat('MMMM').format(
-                                          DateTime(0, int.parse(month)))),
+                                      child: Text(
+                                        DateFormat('MMMM').format(
+                                            DateTime(0, int.parse(month))),
+                                        style: TextStyle(
+                                          fontSize:
+                                              responsiveFontSize15, // Font size for dropdown items
+                                          color: Colors
+                                              .black, // Text color for dropdown items
+                                        ),
+                                      ),
                                     );
                                   }).toList(),
                                   onChanged: (value) {
@@ -653,10 +660,14 @@ class _PreviousMonthlyAttendanceState extends State<PreviousMonthlyAttendance> {
                                   hint: Text(
                                     "Select Year",
                                     style: TextStyle(
-                                        fontSize: responsiveFontSize15),
+                                        fontSize: responsiveFontSize15,color: Colors.black),
                                   ),
                                   isExpanded: true,
                                   underline: const SizedBox(),
+                                  style: TextStyle(
+                                    fontSize: responsiveFontSize15,
+                                    color: Colors.black,
+                                  ),
                                   items: years.map((year) {
                                     return DropdownMenuItem(
                                       value: year,
