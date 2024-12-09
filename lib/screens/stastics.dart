@@ -183,10 +183,9 @@ class _StatsticsScreenState extends State<StatsticsScreen> {
     double responsiveFontSize20 = baseFontSize20 * (screenWidth / 375);
     double baseFontSize18 = 18;
     double responsiveFontSize18 = baseFontSize18 * (screenWidth / 375);
-  
+
     double baseFontSize15 = 15;
     double responsiveFontSize15 = baseFontSize15 * (screenWidth / 375);
-
 
     return Scaffold(
       backgroundColor: Theme.of(context).colorScheme.surface,
@@ -276,7 +275,8 @@ class _StatsticsScreenState extends State<StatsticsScreen> {
                                           fontWeight: FontWeight.bold,
                                         ),
                                       ),
-                                      const SizedBox(height: 20),
+                                      SizedBox(
+                                          height: screenSize.height * 0.008),
                                       Row(
                                         mainAxisAlignment:
                                             MainAxisAlignment.spaceBetween,
@@ -457,7 +457,6 @@ class _StatsticsScreenState extends State<StatsticsScreen> {
                             ? GraphicalbuilderMonthly(
                                 year: DateTime.now().year,
                                 month: DateTime.now().month,
-                                
                               )
                             : GraphicalbuilderMonthly(
                                 year: int.parse(selectedYear!),
