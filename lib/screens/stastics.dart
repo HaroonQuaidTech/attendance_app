@@ -1,5 +1,4 @@
 import 'dart:developer';
-
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:quaidtech/components/PreviousMonthStatusBuilder.dart';
@@ -248,7 +247,6 @@ class _StatsticsScreenState extends State<StatsticsScreen> {
                           dropdownValue1 == 'Monthly' && _selectedIndex == 0)
                         Column(
                           children: [
-                            const SizedBox(height: 20),
                             Material(
                               borderRadius: BorderRadius.circular(20),
                               color: Theme.of(context).colorScheme.tertiary,
