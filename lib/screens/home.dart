@@ -881,8 +881,8 @@ class _HomeScreenState extends State<HomeScreen> {
                                 children: [
                                   Image.asset(
                                     'assets/checkout_button.png',
-                                    height: screenWidth * 0.08,
-                                    width: screenWidth * 0.08,
+                                    height: screenWidth * 0.06,
+                                    width: screenWidth * 0.06,
                                     color:
                                         Theme.of(context).colorScheme.primary,
                                   ),
@@ -958,8 +958,8 @@ class _HomeScreenState extends State<HomeScreen> {
                                 children: [
                                   Image.asset(
                                     'assets/checkin_button.png',
-                                    height: screenWidth * 0.08,
-                                    width: screenWidth * 0.08,
+                                    height: screenWidth * 0.06,
+                                    width: screenWidth * 0.06,
                                     color:
                                         Theme.of(context).colorScheme.primary,
                                   ),
