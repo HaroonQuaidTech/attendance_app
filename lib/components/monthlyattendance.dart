@@ -95,8 +95,8 @@ class Monthlyattendance extends StatelessWidget {
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: [
         SizedBox(
-          height: 90,
-          width: 90,
+          height: screenSize.height * 0.09,
+          width: screenSize.height * 0.1,
           child: PieChart(
             PieChartData(
               sections: [
@@ -104,23 +104,23 @@ class Monthlyattendance extends StatelessWidget {
                   color: StatusTheme.theme.colorScheme.surface,
                   value: presentCount.toDouble(),
                   title: '',
-                  radius: 12,
+                  radius: screenSize.height * 0.013,
                 ),
                 PieChartSectionData(
                   color: StatusTheme.theme.colorScheme.primary,
                   value: lateCount.toDouble(),
                   title: '',
-                  radius: 12,
+                  radius: screenSize.height * 0.013,
                 ),
                 PieChartSectionData(
                   color: StatusTheme.theme.colorScheme.secondary,
                   value: absentCount.toDouble(),
                   title: '',
-                  radius: 12,
+                  radius: screenSize.height * 0.013,
                 ),
               ],
               sectionsSpace: 0,
-              centerSpaceRadius: 26,
+              centerSpaceRadius: 22,
             ),
           ),
         ),

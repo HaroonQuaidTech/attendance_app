@@ -36,6 +36,13 @@ class _StatsticsScreenState extends State<StatsticsScreen> {
     Color color,
     String dropdownValue2,
   ) {
+    final Size screenSize = MediaQuery.of(context).size;
+    final double screenWidth = screenSize.width;
+   
+  
+  
+        double baseFontSize6 = 18;
+    double responsiveFontSize18 = baseFontSize6 * (screenWidth / 375);
     return Material(
       elevation: 5,
       borderRadius: BorderRadius.circular(20),
@@ -48,9 +55,9 @@ class _StatsticsScreenState extends State<StatsticsScreen> {
             const SizedBox(height: 10),
             Text(
               text,
-              style: const TextStyle(
+              style: TextStyle(
                 fontWeight: FontWeight.w600,
-                fontSize: 18,
+                fontSize: responsiveFontSize18,
                 height: 0,
               ),
             ),
@@ -97,6 +104,10 @@ class _StatsticsScreenState extends State<StatsticsScreen> {
   }
 
   Widget _buildSegment(String text, int index) {
+    final screenSize = MediaQuery.of(context).size;
+    final screenWidth = screenSize.width;
+    double baseFontSize = 16;
+    double responsiveFontSize = baseFontSize * (screenWidth / 375);
     bool isSelected = _selectedIndex == index;
     return Expanded(
       child: GestureDetector(
@@ -121,7 +132,7 @@ class _StatsticsScreenState extends State<StatsticsScreen> {
                     ? Theme.of(context).colorScheme.surface
                     : Theme.of(context).colorScheme.secondary,
                 fontWeight: isSelected ? FontWeight.bold : FontWeight.normal,
-                fontSize: 18,
+                fontSize: responsiveFontSize,
                 height: 0,
               ),
             ),
@@ -168,19 +179,26 @@ class _StatsticsScreenState extends State<StatsticsScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final Size screenSize = MediaQuery.of(context).size;
+    final double screenWidth = screenSize.width;
+    double baseFontSize = 20;
+    double responsiveFontSize = baseFontSize * (screenWidth / 375);
+    double baseFontSize2 = 16;
+    double responsiveFontSize2 = baseFontSize2 * (screenWidth / 375);
+
     return Scaffold(
       backgroundColor: Theme.of(context).colorScheme.surface,
       appBar: AppBar(
         automaticallyImplyLeading: false,
-        title: const Row(
+        title: Row(
           mainAxisAlignment: MainAxisAlignment.center,
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
-            SizedBox(width: 60),
+            SizedBox(width: screenWidth * 0.15),
             Text(
               'Statistics',
               style: TextStyle(
-                fontSize: 22,
+                fontSize: responsiveFontSize,
                 fontWeight: FontWeight.bold,
                 height: 0,
               ),
@@ -204,13 +222,13 @@ class _StatsticsScreenState extends State<StatsticsScreen> {
                 elevation: 5,
                 color: Theme.of(context).colorScheme.tertiary,
                 child: SizedBox(
-                  height: 50,
-                  width: 50,
+                  width: screenSize.width * 0.12,
+                  height: screenSize.height * 0.06,
                   child: Center(
                     child: Image.asset(
                       'assets/notification_icon.png',
-                      height: 30,
-                      width: 30,
+                      width: screenSize.width * 0.07,
+                      height: screenSize.height * 0.07,
                     ),
                   ),
                 ),
@@ -228,176 +246,253 @@ class _StatsticsScreenState extends State<StatsticsScreen> {
                 child: SingleChildScrollView(
                   child: Column(
                     children: [
-                      if (dropdownValue1 == 'Weekly' && _selectedIndex == 0)
-                        Column(
-                          children: [
-                            const SizedBox(height: 20),
-                            Material(
-                              borderRadius: BorderRadius.circular(20),
-                              color: Theme.of(context).colorScheme.tertiary,
-                              elevation: 5,
-                              child: SizedBox(
-                                width: double.infinity,
-                                child: Padding(
-                                  padding: const EdgeInsets.symmetric(
-                                    horizontal: 10.0,
-                                    vertical: 20,
+                      const SizedBox(height: 20),
+                      if (_selectedIndex != 1)
+                        Material(
+                          borderRadius: BorderRadius.circular(20),
+                          color: Theme.of(context).colorScheme.tertiary,
+                          elevation: 5,
+                          child: SizedBox(
+                            width: double.infinity,
+                            child: Padding(
+                              padding: const EdgeInsets.symmetric(
+                                horizontal: 10.0,
+                                vertical: 20,
+                              ),
+                              child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  const Text(
+                                    'Filter',
+                                    style: TextStyle(
+                                      fontSize: 18,
+                                      height: 0,
+                                      fontWeight: FontWeight.bold,
+                                    ),
                                   ),
-                                  child: Column(
-                                    crossAxisAlignment:
-                                        CrossAxisAlignment.start,
+                                  const SizedBox(height: 20),
+                                  Row(
+                                    mainAxisAlignment:
+                                        MainAxisAlignment.spaceBetween,
                                     children: [
-                                      const Text(
-                                        'Filter',
-                                        style: TextStyle(
-                                          fontSize: 18,
-                                          height: 0,
-                                          fontWeight: FontWeight.bold,
+                                      Expanded(
+                                        child: Container(
+                                          padding: const EdgeInsets.symmetric(
+                                              horizontal: 10),
+                                          decoration: BoxDecoration(
+                                            color: Theme.of(context)
+                                                .colorScheme
+                                                .surface,
+                                            borderRadius:
+                                                BorderRadius.circular(12),
+                                          ),
+                                          child: DropdownButton<String>(
+                                            value: dropdownValue1,
+                                            icon: const Icon(
+                                                Icons.arrow_drop_down),
+                                            iconSize: 24,
+                                            elevation: 16,
+                                            isExpanded: true,
+                                            style: const TextStyle(
+                                              color: Colors.black,
+                                              fontSize: 16,
+                                              height: 0,
+                                            ),
+                                            underline: const SizedBox(),
+                                            onChanged: (String? newValue) {
+                                              setState(() {
+                                                dropdownValue1 = newValue!;
+                                              });
+                                            },
+                                            items: <String>[
+                                              'Weekly',
+                                              'Monthly',
+                                            ].map<DropdownMenuItem<String>>(
+                                                (String value) {
+                                              return DropdownMenuItem<String>(
+                                                value: value,
+                                                child: Text(value),
+                                              );
+                                            }).toList(),
+                                          ),
                                         ),
                                       ),
-                                      const SizedBox(height: 20),
-                                      Row(
-                                        mainAxisAlignment:
-                                            MainAxisAlignment.spaceBetween,
-                                        children: [
-                                          Expanded(
-                                            child: Container(
-                                              padding:
-                                                  const EdgeInsets.symmetric(
-                                                      horizontal: 10),
-                                              decoration: BoxDecoration(
-                                                color: Theme.of(context)
-                                                    .colorScheme
-                                                    .surface,
-                                                borderRadius:
-                                                    BorderRadius.circular(12),
-                                              ),
-                                              child: DropdownButton<String>(
-                                                value: dropdownValue1,
-                                                icon: const Icon(
-                                                    Icons.arrow_drop_down),
-                                                iconSize: 24,
-                                                elevation: 16,
-                                                isExpanded: true,
-                                                style: const TextStyle(
-                                                  color: Colors.black,
-                                                  fontSize: 16,
-                                                  height: 0,
-                                                ),
-                                                underline: const SizedBox(),
-                                                onChanged: (String? newValue) {
-                                                  setState(() {
-                                                    dropdownValue1 = newValue!;
-                                                  });
-                                                },
-                                                items: <String>[
-                                                  'Weekly',
-                                                  'Monthly',
-                                                ].map<DropdownMenuItem<String>>(
-                                                    (String value) {
-                                                  return DropdownMenuItem<
-                                                      String>(
-                                                    value: value,
-                                                    child: Text(value),
-                                                  );
-                                                }).toList(),
-                                              ),
-                                            ),
+                                      const SizedBox(width: 20),
+                                      Expanded(
+                                        child: Container(
+                                          padding: const EdgeInsets.symmetric(
+                                              horizontal: 10),
+                                          decoration: BoxDecoration(
+                                            color: Colors.white,
+                                            borderRadius:
+                                                BorderRadius.circular(12),
                                           ),
-                                          const SizedBox(width: 20),
-                                          Expanded(
-                                            child: Container(
-                                              padding:
-                                                  const EdgeInsets.symmetric(
-                                                      horizontal: 10),
-                                              decoration: BoxDecoration(
-                                                color: Colors.white,
-                                                borderRadius:
-                                                    BorderRadius.circular(12),
-                                              ),
-                                              child: DropdownButton<String>(
-                                                value: dropdownValue2,
-                                                icon: const Icon(
-                                                    Icons.arrow_drop_down),
-                                                iconSize: 24,
-                                                elevation: 16,
-                                                isExpanded: true,
-                                                style: const TextStyle(
-                                                  color: Colors.black,
-                                                  fontSize: 16,
-                                                  height: 0,
-                                                ),
-                                                underline: const SizedBox(),
-                                                onChanged: (String? newValue) {
-                                                  setState(() {
-                                                    dropdownValue2 = newValue!;
-                                                  });
-                                                },
-                                                items: <String>[
-                                                  'Select',
-                                                  'Late Arrival',
-                                                  'Absent',
-                                                  'On Time',
-                                                  'Early Out',
-                                                  'Present'
-                                                ].map<DropdownMenuItem<String>>(
-                                                    (String value) {
-                                                  return DropdownMenuItem<
-                                                      String>(
-                                                    value: value,
-                                                    child: Text(value),
-                                                  );
-                                                }).toList(),
-                                              ),
+                                          child: DropdownButton<String>(
+                                            value: dropdownValue2,
+                                            icon: const Icon(
+                                                Icons.arrow_drop_down),
+                                            iconSize: 24,
+                                            elevation: 16,
+                                            isExpanded: true,
+                                            style: const TextStyle(
+                                              color: Colors.black,
+                                              fontSize: 16,
+                                              height: 0,
                                             ),
+                                            underline: const SizedBox(),
+                                            onChanged: (String? newValue) {
+                                              setState(() {
+                                                dropdownValue2 = newValue!;
+                                              });
+                                            },
+                                            items: <String>[
+                                              'Select',
+                                              'Late Arrival',
+                                              'Absent',
+                                              'On Time',
+                                              'Early Out',
+                                              'Present'
+                                            ].map<DropdownMenuItem<String>>(
+                                                (String value) {
+                                              return DropdownMenuItem<String>(
+                                                value: value,
+                                                child: Text(value),
+                                              );
+                                            }).toList(),
                                           ),
-                                        ],
+                                        ),
                                       ),
                                     ],
                                   ),
-                                ),
+                                ],
                               ),
                             ),
-                            const SizedBox(height: 20),
-                          ],
+                          ),
                         ),
-                      if (dropdownValue1 == 'Weekly')
-                        if (dropdownValue2 != 'Present' &&
-                            dropdownValue2 != 'On Time' &&
-                            dropdownValue2 != 'Absent' &&
-                            dropdownValue2 != 'Early Out' &&
-                            dropdownValue2 != 'Late Arrival')
-                          Column(
+                      const SizedBox(height: 20),
+                    if (dropdownValue1 == 'Monthly')
+                      Material(
+                        borderRadius: BorderRadius.circular(20),
+                        color: Theme.of(context).colorScheme.tertiary,
+                        elevation: 5,
+                        child: Padding(
+                          padding: const EdgeInsets.symmetric(
+                              horizontal: 10.0, vertical: 20.0),
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
-                              if (_selectedIndex == 1)
-                                const SizedBox(height: 20),
-                              Container(
-                                height: 65,
-                                width: double.infinity,
-                                decoration: BoxDecoration(
-                                  borderRadius: BorderRadius.circular(60),
-                                  color: Theme.of(context).colorScheme.tertiary,
+                              const Text(
+                                'Monthly filter log',
+                                style: TextStyle(
+                                  fontWeight: FontWeight.w600,
+                                  fontSize: 18,
+                                  height: 0,
                                 ),
-                                child: Row(
-                                  children: [
-                                    _buildSegment('Details Stats', 0),
-                                    _buildSegment('Graphical View', 1),
-                                  ],
-                                ),
+                              ),
+                              const SizedBox(height: 10),
+                              Row(
+                                mainAxisAlignment:
+                                    MainAxisAlignment.spaceBetween,
+                                children: [
+                                  Expanded(
+                                    child: Container(
+                                      height: 50,
+                                      padding: const EdgeInsets.symmetric(
+                                          horizontal: 10),
+                                      decoration: BoxDecoration(
+                                        color: Colors.white,
+                                        borderRadius: BorderRadius.circular(12),
+                                      ),
+                                      child: DropdownButton<String>(
+                                        value: selectedMonth,
+                                        hint: const Text("Select Month"),
+                                        isExpanded: true,
+                                        underline: const SizedBox(),
+                                        items: months.map((month) {
+                                          return DropdownMenuItem(
+                                            value: month,
+                                            child: Text(DateFormat('MMMM')
+                                                .format(DateTime(
+                                                    0, int.parse(month)))),
+                                          );
+                                        }).toList(),
+                                        onChanged: (value) {
+                                          setState(() {
+                                            selectedMonth = value;
+                                          });
+                                        },
+                                      ),
+                                    ),
+                                  ),
+                                  const SizedBox(width: 16),
+                                  Expanded(
+                                    child: Container(
+                                      height: 50,
+                                      padding: const EdgeInsets.symmetric(
+                                          horizontal: 10),
+                                      decoration: BoxDecoration(
+                                        color: Colors.white,
+                                        borderRadius: BorderRadius.circular(12),
+                                      ),
+                                      child: DropdownButton<String>(
+                                        value: selectedYear,
+                                        hint: const Text("Select Year"),
+                                        isExpanded: true,
+                                        underline: const SizedBox(),
+                                        items: years.map((year) {
+                                          return DropdownMenuItem(
+                                            value: year,
+                                            child: Text(year),
+                                          );
+                                        }).toList(),
+                                        onChanged: (value) {
+                                          setState(() {
+                                            selectedYear = value;
+                                          });
+                                        },
+                                      ),
+                                    ),
+                                  ),
+                                ],
                               ),
                             ],
                           ),
-                      Column(
-                        children: [
-                          if (_selectedIndex != 1)
-                            if (dropdownValue1 == 'Weekly') ...[
-                              _buildAttendanceBasedOnSelection(dropdownValue2,
-                                  isWeekly: true),
-                            ] else if (dropdownValue1 == 'Monthly') ...[
-                              _buildAttendanceBasedOnSelection(dropdownValue2,
-                                  isWeekly: false),
+                        ),
+                      ),
+                      const SizedBox(height: 10),
+                      if (dropdownValue2 != 'Present' &&
+                          dropdownValue2 != 'On Time' &&
+                          dropdownValue2 != 'Absent' &&
+                          dropdownValue2 != 'Early Out' &&
+                          dropdownValue2 != 'Late Arrival')
+                        Container(
+                          height: 65,
+                          width: double.infinity,
+                          decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(60),
+                            color: Theme.of(context).colorScheme.tertiary,
+                          ),
+                          child: Row(
+                            children: [
+                              _buildSegment('Details Stats', 0),
+                              _buildSegment('Graphical View', 1),
                             ],
-                        ],
+                          ),
+                        ),
+                      Padding(
+                        padding: const EdgeInsets.only(top: 1.0),
+                        child: Column(
+                          children: [
+                            if (_selectedIndex != 1)
+                              if (dropdownValue1 == 'Weekly') ...[
+                                _buildAttendanceBasedOnSelection(dropdownValue2,
+                                    isWeekly: true),
+                              ] else if (dropdownValue1 == 'Monthly') ...[
+                                _buildAttendanceBasedOnSelection(dropdownValue2,
+                                    isWeekly: false),
+                              ],
+                          ],
+                        ),
                       ),
                       if (dropdownValue2 != 'Present' &&
                           dropdownValue2 != 'On Time' &&

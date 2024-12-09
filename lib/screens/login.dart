@@ -194,43 +194,57 @@ class _LoginScreenState extends State<LoginScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final Size screenSize = MediaQuery.of(context).size;
+    final double screenWidth = screenSize.width;
+
+      double baseFontSize22 = 22;
+    double responsiveFontSize22 = baseFontSize22 * (screenWidth / 375);
+
+    double baseFontSize1 = 40;
+    double responsiveFontSize40 = baseFontSize1 * (screenWidth / 375);
+    double baseFontSize2 = 16;
+    double responsiveFontSize16 = baseFontSize2 * (screenWidth / 375);
+    double baseFontSize3 = 14;
+    double responsiveFontSize14 = baseFontSize3 * (screenWidth / 375);
+
     return Scaffold(
       backgroundColor: Theme.of(context).colorScheme.surface,
-      body: Center(
+      body: SingleChildScrollView(
         child: SafeArea(
-          child: SingleChildScrollView(
-            child: Padding(
-              padding: const EdgeInsets.symmetric(
-                horizontal: 25.0,
-              ),
-              child: Column(
-                children: [
-                  const SizedBox(height: 100),
-                  const Text(
-                    'Login to your account',
-                    style: TextStyle(
-                      fontSize: 40,
-                      height: 0,
-                      fontWeight: FontWeight.w500,
-                    ),
+          child: Padding(
+            padding: const EdgeInsets.symmetric(
+              horizontal: 15.0,
+            ),
+            child: Column(
+              children: [
+                SizedBox(height: screenSize.height * 0.1),
+                Text(
+                  'Login to your account',
+                  style: TextStyle(
+                    fontSize: responsiveFontSize40,
+                    height: 0,
+                    fontWeight: FontWeight.w500,
                   ),
-                  const SizedBox(height: 30),
-                  Form(
-                    key: _formKey,
-                    child: Column(
-                      mainAxisAlignment: MainAxisAlignment.start,
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        const Text(
-                          'Email Address',
-                          style: TextStyle(
-                            height: 0,
-                            fontSize: 15,
-                            fontWeight: FontWeight.w400,
-                          ),
+                ),
+                SizedBox(height: screenSize.height * 0.06),
+                Form(
+                  key: _formKey,
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.start,
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                        'Email Address',
+                        style: TextStyle(
+                          height: 0,
+                          fontSize: responsiveFontSize16,
+                          fontWeight: FontWeight.w400,
                         ),
-                        const SizedBox(height: 5),
-                        TextFormField(
+                      ),
+                      const SizedBox(height: 5),
+                      SizedBox(
+                        height: screenSize.height * 0.07,
+                        child: TextFormField(
                           controller: _emailController,
                           validator: (value) {
                             if (value == null || value.isEmpty) {
@@ -246,6 +260,7 @@ class _LoginScreenState extends State<LoginScreen> {
                             prefixIcon: Icon(
                               Icons.email,
                               color: Theme.of(context).colorScheme.primary,
+                              size: responsiveFontSize22,
                             ),
                             filled: true,
                             fillColor: Theme.of(context).colorScheme.tertiary,
@@ -256,17 +271,20 @@ class _LoginScreenState extends State<LoginScreen> {
                             ),
                           ),
                         ),
-                        const SizedBox(height: 20),
-                        const Text(
-                          'Password',
-                          style: TextStyle(
-                            height: 0,
-                            fontSize: 15,
-                            fontWeight: FontWeight.w400,
-                          ),
+                      ),
+                      const SizedBox(height: 20),
+                      Text(
+                        'Password',
+                        style: TextStyle(
+                          height: 0,
+                          fontSize: responsiveFontSize16,
+                          fontWeight: FontWeight.w400,
                         ),
-                        const SizedBox(height: 5),
-                        TextFormField(
+                      ),
+                      const SizedBox(height: 5),
+                      SizedBox(
+                         height: screenSize.height * 0.07,
+                        child: TextFormField(
                           controller: _passwordController,
                           obscureText: !isPasswordVisible,
                           validator: (value) {
@@ -279,6 +297,7 @@ class _LoginScreenState extends State<LoginScreen> {
                             prefixIcon: Icon(
                               Icons.password,
                               color: Theme.of(context).colorScheme.primary,
+                              size: responsiveFontSize22,
                             ),
                             filled: true,
                             fillColor: Theme.of(context).colorScheme.tertiary,
@@ -292,6 +311,7 @@ class _LoginScreenState extends State<LoginScreen> {
                                 isPasswordVisible
                                     ? Icons.visibility_off
                                     : Icons.visibility,
+                                size: responsiveFontSize22,
                               ),
                               onPressed: () {
                                 setState(() {
@@ -301,77 +321,77 @@ class _LoginScreenState extends State<LoginScreen> {
                             ),
                           ),
                         ),
-                        const SizedBox(height: 10),
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.start,
-                          crossAxisAlignment: CrossAxisAlignment.center,
-                          children: [
-                            Theme(
-                              data: Theme.of(context).copyWith(
-                                checkboxTheme: CheckboxThemeData(
-                                  side: BorderSide(
-                                    color:
-                                        Theme.of(context).colorScheme.secondary,
-                                    width: 2,
-                                  ),
-                                  shape: RoundedRectangleBorder(
-                                    borderRadius: BorderRadius.circular(4),
-                                  ),
+                      ),
+                      const SizedBox(height: 10),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.start,
+                        crossAxisAlignment: CrossAxisAlignment.center,
+                        children: [
+                          Theme(
+                            data: Theme.of(context).copyWith(
+                              checkboxTheme: CheckboxThemeData(
+                                side: BorderSide(
+                                  color:
+                                      Theme.of(context).colorScheme.secondary,
+                                  width: screenWidth * 0.2,
+                                ),
+                                shape: RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.circular(4),
                                 ),
                               ),
-                              child: Checkbox(
-                                value: _isCheck,
-                                onChanged: _toggleCheckbox,
-                              ),
                             ),
-                            const Text(
-                              'Remember me',
+                            child: Checkbox(
+                              value: _isCheck,
+                              onChanged: _toggleCheckbox,
+                            ),
+                          ),
+                          Text(
+                            'Remember me',
+                            style: TextStyle(
+                              fontWeight: FontWeight.w500,
+                              fontSize: responsiveFontSize14,
+                              height: 0,
+                            ),
+                          ),
+                        ],
+                      ),
+                      const SizedBox(height: 10),
+                      GestureDetector(
+                        onTap: () {
+                          _login(context);
+                        },
+                        child: Container(
+                          width: double.infinity,
+                          height: screenSize.height * 0.05,
+                          decoration: BoxDecoration(
+                            color: Theme.of(context).colorScheme.primary,
+                            borderRadius: BorderRadius.circular(8),
+                          ),
+                          child: Center(
+                            child: Text(
+                              'LOGIN',
                               style: TextStyle(
-                                fontWeight: FontWeight.w500,
-                                fontSize: 15,
+                                color: Colors.white,
                                 height: 0,
-                              ),
-                            ),
-                          ],
-                        ),
-                        const SizedBox(height: 10),
-                        GestureDetector(
-                          onTap: () {
-                            _login(context);
-                          },
-                          child: Container(
-                            width: double.infinity,
-                            height: 40,
-                            decoration: BoxDecoration(
-                              color: Theme.of(context).colorScheme.primary,
-                              borderRadius: BorderRadius.circular(8),
-                            ),
-                            child: const Center(
-                              child: Text(
-                                'LOGIN',
-                                style: TextStyle(
-                                  color: Colors.white,
-                                  height: 0,
-                                  fontSize: 14,
-                                  fontWeight: FontWeight.w700,
-                                ),
+                                fontSize: responsiveFontSize14,
+                                fontWeight: FontWeight.w700,
                               ),
                             ),
                           ),
                         ),
-                      ],
-                    ),
+                      ),
+                    ],
                   ),
-                  const SizedBox(height: 150),
-                  Center(
-                    child: Image.asset(
-                      'assets/logo.png',
-                      height: 90,
-                      width: 90,
-                    ),
+                ),
+                SizedBox(height: screenSize.height * 0.09),
+                Center(
+                  child: Image.asset(
+                    'assets/logo.png',
+                    height: 90,
+                    width: 90,
                   ),
-                ],
-              ),
+                ),
+              ],
             ),
           ),
         ),

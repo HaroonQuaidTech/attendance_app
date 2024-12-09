@@ -36,9 +36,13 @@ class _DailyAttendanceState extends State<DailyAttendance> {
   @override
   Widget build(BuildContext context) {
     final Size screenSize = MediaQuery.of(context).size;
-    final double screenHeight = screenSize.height;
     final double screenWidth = screenSize.width;
-
+    double baseFontSize = 20;
+    double responsiveFontSize = baseFontSize * (screenWidth / 375);
+    double baseFontSize1 = 14;
+    double responsiveFontSize1 = baseFontSize1 * (screenWidth / 375);
+    double baseFontSize2 = 12;
+    double responsiveFontSize2 = baseFontSize2 * (screenWidth / 375);
     final data = widget.data;
 
     DateTime? checkInTime = (data?['checkIn'] != null)
@@ -75,9 +79,9 @@ class _DailyAttendanceState extends State<DailyAttendance> {
     }
 
     return Container(
-      padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 8),
-      height: screenHeight * 0.1,
-      width: screenWidth * 0.90,
+      padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
+      height: screenSize.height * 0.09,
+      width: screenSize.height * 0.42,
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(12),
         color: Colors.white,
@@ -90,8 +94,8 @@ class _DailyAttendanceState extends State<DailyAttendance> {
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
               Container(
-                width: 55,
-                height: 55,
+                width: screenSize.height * 0.065,
+                height: screenSize.height * 0.066,
                 decoration: BoxDecoration(
                   color: boxColor,
                   borderRadius: BorderRadius.circular(6),
@@ -102,8 +106,8 @@ class _DailyAttendanceState extends State<DailyAttendance> {
                   children: [
                     Text(
                       DateFormat('dd').format(widget.selectedDay!),
-                      style: const TextStyle(
-                        fontSize: 22,
+                      style: TextStyle(
+                        fontSize: responsiveFontSize,
                         fontWeight: FontWeight.w600,
                         color: Colors.white,
                         height: 0,
@@ -112,8 +116,8 @@ class _DailyAttendanceState extends State<DailyAttendance> {
                     const SizedBox(height: 5),
                     Text(
                       DateFormat('EEE').format(widget.selectedDay!),
-                      style: const TextStyle(
-                        fontSize: 14,
+                      style: TextStyle(
+                        fontSize: responsiveFontSize2,
                         fontWeight: FontWeight.w400,
                         color: Colors.white,
                         height: 0,
@@ -129,18 +133,18 @@ class _DailyAttendanceState extends State<DailyAttendance> {
             children: [
               Text(
                 checkInTimeFormatted,
-                style: const TextStyle(
-                  fontSize: 16,
+                style: TextStyle(
+                  fontSize: responsiveFontSize1,
                   fontWeight: FontWeight.w600,
                   color: Colors.black,
                   height: 0,
                 ),
               ),
               const SizedBox(height: 5),
-              const Text(
+              Text(
                 'Check In',
                 style: TextStyle(
-                  fontSize: 10,
+                  fontSize: responsiveFontSize2,
                   fontWeight: FontWeight.w600,
                   color: Colors.black,
                   height: 0,
@@ -158,18 +162,18 @@ class _DailyAttendanceState extends State<DailyAttendance> {
             children: [
               Text(
                 checkOutTimeFormatted,
-                style: const TextStyle(
-                  fontSize: 16,
+                style: TextStyle(
+                  fontSize: responsiveFontSize1,
                   fontWeight: FontWeight.w600,
                   color: Colors.black,
                   height: 0,
                 ),
               ),
               const SizedBox(height: 5),
-              const Text(
+              Text(
                 'Check Out',
                 style: TextStyle(
-                  fontSize: 10,
+                  fontSize: responsiveFontSize2,
                   fontWeight: FontWeight.w600,
                   color: Colors.black,
                   height: 0,
@@ -187,18 +191,18 @@ class _DailyAttendanceState extends State<DailyAttendance> {
             children: [
               Text(
                 totalHours,
-                style: const TextStyle(
-                  fontSize: 16,
+                style: TextStyle(
+                  fontSize: responsiveFontSize1,
                   fontWeight: FontWeight.w600,
                   color: Colors.black,
                   height: 0,
                 ),
               ),
               const SizedBox(height: 5),
-              const Text(
+              Text(
                 'Total Hrs',
                 style: TextStyle(
-                  fontSize: 10,
+                  fontSize: responsiveFontSize2,
                   fontWeight: FontWeight.w600,
                   color: Colors.black,
                   height: 0,
