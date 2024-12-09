@@ -1,8 +1,8 @@
 import 'dart:developer';
-
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
+import 'package:quaidtech/components/graphicalbuildermonthly.dart';
 import 'package:quaidtech/main.dart';
 
 typedef DropdownCallbackYear = Function(String);
@@ -10,12 +10,15 @@ typedef DropdownCallbackMonth = Function(String);
 
 class PreviousMonthlyAttendance extends StatefulWidget {
   final String uid;
-  final String? dropdownvalue;
   final DropdownCallbackYear callbackYear;
   final DropdownCallbackMonth callbackMonth;
 
-  const PreviousMonthlyAttendance(
-      {super.key, required this.uid, required this.dropdownvalue, required this.callbackYear, required this.callbackMonth});
+  const PreviousMonthlyAttendance({
+    super.key,
+    required this.uid,
+    required this.callbackYear,
+    required this.callbackMonth,
+  });
 
   @override
   State<PreviousMonthlyAttendance> createState() =>
@@ -25,6 +28,8 @@ class PreviousMonthlyAttendance extends StatefulWidget {
 class _PreviousMonthlyAttendanceState extends State<PreviousMonthlyAttendance> {
   List<Map<String, dynamic>> monthlyAttendanceList = [];
   String? selectedMonth;
+  int _selectedIndex = 0;
+  int selectedIndex = 0;
   String? selectedYear;
   final List<String> months =
       List.generate(12, (index) => (index + 1).toString().padLeft(2, '0'));
@@ -75,6 +80,41 @@ class _PreviousMonthlyAttendanceState extends State<PreviousMonthlyAttendance> {
     }
 
     return monthlyAttendanceList;
+  }
+
+  Widget _buildSegment(String text, int index) {
+    bool isSelected = _selectedIndex == index;
+    return Expanded(
+      child: GestureDetector(
+        onTap: () {
+          setState(() {
+            _selectedIndex = index;
+          });
+        },
+        child: Container(
+          margin: const EdgeInsets.all(7.5),
+          decoration: BoxDecoration(
+            color: isSelected
+                ? Theme.of(context).colorScheme.primary
+                : Colors.transparent,
+            borderRadius: BorderRadius.circular(48.0),
+          ),
+          child: Center(
+            child: Text(
+              text,
+              style: TextStyle(
+                color: isSelected
+                    ? Theme.of(context).colorScheme.surface
+                    : Theme.of(context).colorScheme.secondary,
+                fontWeight: isSelected ? FontWeight.bold : FontWeight.normal,
+                fontSize: 18,
+                height: 0,
+              ),
+            ),
+          ),
+        ),
+      ),
+    );
   }
 
   String _getMonthDateRange() {
@@ -402,34 +442,39 @@ class _PreviousMonthlyAttendanceState extends State<PreviousMonthlyAttendance> {
   }
 
   Widget _buildNoDataAvailableContainer() {
-    return Material(
-      color: Theme.of(context).colorScheme.tertiary,
-      borderRadius: BorderRadius.circular(12),
-      elevation: 5,
-      child: const SizedBox(
-        width: double.infinity,
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            SizedBox(height: 30),
-            Icon(
-              Icons.warning,
-              color: Colors.grey,
-              size: 50,
+    return Column(
+      children: [
+        const SizedBox(height: 20),
+        Material(
+          color: Theme.of(context).colorScheme.tertiary,
+          borderRadius: BorderRadius.circular(12),
+          elevation: 5,
+          child: const SizedBox(
+            width: double.infinity,
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                SizedBox(height: 30),
+                Icon(
+                  Icons.warning,
+                  color: Colors.grey,
+                  size: 50,
+                ),
+                SizedBox(height: 5),
+                Text(
+                  "No Data Available",
+                  style: TextStyle(
+                    fontWeight: FontWeight.bold,
+                    fontSize: 20,
+                    color: Colors.grey,
+                  ),
+                ),
+                SizedBox(height: 30),
+              ],
             ),
-            SizedBox(height: 5),
-            Text(
-              "No Data Available",
-              style: TextStyle(
-                fontWeight: FontWeight.bold,
-                fontSize: 20,
-                color: Colors.grey,
-              ),
-            ),
-            SizedBox(height: 30),
-          ],
+          ),
         ),
-      ),
+      ],
     );
   }
 
@@ -472,100 +517,248 @@ class _PreviousMonthlyAttendanceState extends State<PreviousMonthlyAttendance> {
     final Size screenSize = MediaQuery.of(context).size;
     final double screenHeight = screenSize.height;
     final double screenWidth = screenSize.width;
-    return Padding(
-      padding: const EdgeInsets.symmetric(vertical: 10.0),
-      child: SingleChildScrollView(
-        child: Column(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            Material(
-              borderRadius: BorderRadius.circular(20),
-              color: Theme.of(context).colorScheme.tertiary,
-              elevation: 5,
-              child: Padding(
-                padding: const EdgeInsets.symmetric(
-                    horizontal: 10.0, vertical: 20.0),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    const Text(
-                      'Monthly filter log',
-                      style: TextStyle(
-                        fontWeight: FontWeight.w600,
-                        fontSize: 18,
-                        height: 0,
+    String dropdownValue1 = 'Weekly';
+    return SingleChildScrollView(
+      child: Column(
+        children: [
+          if (_selectedIndex == 0)
+            Column(
+              children: [
+                const SizedBox(height: 20),
+                Material(
+                  borderRadius: BorderRadius.circular(20),
+                  color: Theme.of(context).colorScheme.tertiary,
+                  elevation: 5,
+                  child: SizedBox(
+                    width: double.infinity,
+                    child: Padding(
+                      padding: const EdgeInsets.symmetric(
+                        horizontal: 10.0,
+                        vertical: 20,
+                      ),
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          const Text(
+                            'Filter',
+                            style: TextStyle(
+                              fontSize: 18,
+                              height: 0,
+                              fontWeight: FontWeight.bold,
+                            ),
+                          ),
+                          const SizedBox(height: 20),
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              Expanded(
+                                child: Container(
+                                  padding: const EdgeInsets.symmetric(
+                                      horizontal: 10),
+                                  decoration: BoxDecoration(
+                                    color:
+                                        Theme.of(context).colorScheme.surface,
+                                    borderRadius: BorderRadius.circular(12),
+                                  ),
+                                  child: DropdownButton<String>(
+                                    value: dropdownValue1,
+                                    icon: const Icon(Icons.arrow_drop_down),
+                                    iconSize: 24,
+                                    elevation: 16,
+                                    isExpanded: true,
+                                    style: const TextStyle(
+                                      color: Colors.black,
+                                      fontSize: 16,
+                                      height: 0,
+                                    ),
+                                    underline: const SizedBox(),
+                                    onChanged: (String? newValue) {
+                                      setState(() {
+                                        dropdownValue1 = newValue!;
+                                      });
+                                    },
+                                    items: <String>[
+                                      'Weekly',
+                                      'Monthly',
+                                    ].map<DropdownMenuItem<String>>(
+                                        (String value) {
+                                      return DropdownMenuItem<String>(
+                                        value: value,
+                                        child: Text(value),
+                                      );
+                                    }).toList(),
+                                  ),
+                                ),
+                              ),
+                              const SizedBox(width: 20),
+                              Expanded(
+                                child: Container(
+                                  padding: const EdgeInsets.symmetric(
+                                      horizontal: 10),
+                                  decoration: BoxDecoration(
+                                    color: Colors.white,
+                                    borderRadius: BorderRadius.circular(12),
+                                  ),
+                                  child: DropdownButton<String>(
+                                    // value: dropdownValue2,
+                                    icon: const Icon(Icons.arrow_drop_down),
+                                    iconSize: 24,
+                                    elevation: 16,
+                                    isExpanded: true,
+                                    style: const TextStyle(
+                                      color: Colors.black,
+                                      fontSize: 16,
+                                      height: 0,
+                                    ),
+                                    underline: const SizedBox(),
+                                    onChanged: (String? newValue) {
+                                      setState(() {
+                                        // dropdownValue2 = newValue!;
+                                      });
+                                    },
+                                    items: <String>[
+                                      'Select',
+                                      'Late Arrival',
+                                      'Absent',
+                                      'On Time',
+                                      'Early Out',
+                                      'Present'
+                                    ].map<DropdownMenuItem<String>>(
+                                        (String value) {
+                                      return DropdownMenuItem<String>(
+                                        value: value,
+                                        child: Text(value),
+                                      );
+                                    }).toList(),
+                                  ),
+                                ),
+                              ),
+                            ],
+                          ),
+                        ],
                       ),
                     ),
-                    const SizedBox(height: 10),
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  ),
+                ),
+                const SizedBox(height: 20),
+                Material(
+                  borderRadius: BorderRadius.circular(20),
+                  color: Theme.of(context).colorScheme.tertiary,
+                  elevation: 5,
+                  child: Padding(
+                    padding: const EdgeInsets.symmetric(
+                        horizontal: 10.0, vertical: 20.0),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        Expanded(
-                          child: Container(
-                            height: 50,
-                            padding: const EdgeInsets.symmetric(horizontal: 10),
-                            decoration: BoxDecoration(
-                              color: Colors.white,
-                              borderRadius: BorderRadius.circular(12),
-                            ),
-                            child: DropdownButton<String>(
-                              value: selectedMonth,
-                              hint: const Text("Select Month"),
-                              isExpanded: true,
-                              underline: const SizedBox(),
-                              items: months.map((month) {
-                                return DropdownMenuItem(
-                                  value: month,
-                                  child: Text(DateFormat('MMMM')
-                                      .format(DateTime(0, int.parse(month)))),
-                                );
-                              }).toList(),
-                              onChanged: (value) {
-                                setState(() {
-                                  selectedMonth = value;
-                                });
-                                log(selectedMonth!);
-                                widget.callbackMonth(selectedMonth!);
-                              },
-                            ),
+                        const Text(
+                          'Monthly filter log',
+                          style: TextStyle(
+                            fontWeight: FontWeight.w600,
+                            fontSize: 18,
+                            height: 0,
                           ),
                         ),
-                        const SizedBox(width: 16),
-                        Expanded(
-                          child: Container(
-                            height: 50,
-                            padding: const EdgeInsets.symmetric(horizontal: 10),
-                            decoration: BoxDecoration(
-                              color: Colors.white,
-                              borderRadius: BorderRadius.circular(12),
+                        const SizedBox(height: 10),
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            Expanded(
+                              child: Container(
+                                height: 50,
+                                padding:
+                                    const EdgeInsets.symmetric(horizontal: 10),
+                                decoration: BoxDecoration(
+                                  color: Colors.white,
+                                  borderRadius: BorderRadius.circular(12),
+                                ),
+                                child: DropdownButton<String>(
+                                  value: selectedMonth,
+                                  hint: const Text("Select Month"),
+                                  isExpanded: true,
+                                  underline: const SizedBox(),
+                                  items: months.map((month) {
+                                    return DropdownMenuItem(
+                                      value: month,
+                                      child: Text(DateFormat('MMMM').format(
+                                          DateTime(0, int.parse(month)))),
+                                    );
+                                  }).toList(),
+                                  onChanged: (value) {
+                                    setState(() {
+                                      selectedMonth = value;
+                                    });
+                                    log(selectedMonth!);
+                                    widget.callbackMonth(selectedMonth!);
+                                  },
+                                ),
+                              ),
                             ),
-                            child: DropdownButton<String>(
-                              value: selectedYear,
-                              hint: const Text("Select Year"),
-                              isExpanded: true,
-                              underline: const SizedBox(),
-                              items: years.map((year) {
-                                return DropdownMenuItem(
-                                  value: year,
-                                  child: Text(year),
-                                );
-                              }).toList(),
-                              onChanged: (value) {
-                                setState(() {
-                                  selectedYear = value;
-                                });
-                                widget.callbackYear(selectedYear!);
-                              },
+                            const SizedBox(width: 20),
+                            Expanded(
+                              child: Container(
+                                height: 50,
+                                padding:
+                                    const EdgeInsets.symmetric(horizontal: 10),
+                                decoration: BoxDecoration(
+                                  color: Colors.white,
+                                  borderRadius: BorderRadius.circular(12),
+                                ),
+                                child: DropdownButton<String>(
+                                  value: selectedYear,
+                                  hint: const Text("Select Year"),
+                                  isExpanded: true,
+                                  underline: const SizedBox(),
+                                  items: years.map((year) {
+                                    return DropdownMenuItem(
+                                      value: year,
+                                      child: Text(year),
+                                    );
+                                  }).toList(),
+                                  onChanged: (value) {
+                                    setState(() {
+                                      selectedYear = value;
+                                    });
+                                    widget.callbackYear(selectedYear!);
+                                  },
+                                ),
+                              ),
                             ),
-                          ),
+                          ],
                         ),
                       ],
                     ),
-                  ],
+                  ),
                 ),
-              ),
+                const SizedBox(height: 20),
+              ],
             ),
-            const SizedBox(height: 20),
+          if (_selectedIndex == 1) const SizedBox(height: 20),
+          Container(
+            height: 65,
+            width: double.infinity,
+            decoration: BoxDecoration(
+              borderRadius: BorderRadius.circular(60),
+              color: Theme.of(context).colorScheme.tertiary,
+            ),
+            child: Row(
+              children: [
+                _buildSegment('Details Stats', 0),
+                _buildSegment('Graphical View', 1),
+              ],
+            ),
+          ),
+          if (_selectedIndex == 1)
+            selectedMonth == null && selectedYear == null
+                ? GraphicalbuilderMonthly(
+                    year: DateTime.now().year,
+                    month: DateTime.now().month,
+                  )
+                : GraphicalbuilderMonthly(
+                    year: int.parse(selectedYear!),
+                    month: int.parse(selectedMonth!),
+                  ),
+          if (_selectedIndex == 0)
             FutureBuilder<List<Map<String, dynamic>>>(
               future: selectedMonth != null && selectedYear != null
                   ? _getMonthlyAttendanceDetails(
@@ -586,14 +779,19 @@ class _PreviousMonthlyAttendanceState extends State<PreviousMonthlyAttendance> {
                 }
                 if (!snapshot.hasData || snapshot.data!.isEmpty) {
                   return const Center(
-                    child: Padding(
-                      padding: EdgeInsets.all(20.0),
-                      child: Text(
-                        'No Attendance Month Selected .',
-                        style: TextStyle(
-                            fontWeight: FontWeight.w500, fontSize: 20),
-                        textAlign: TextAlign.center,
-                      ),
+                    child: Column(
+                      children: [
+                        SizedBox(height: 20),
+                        Text(
+                          'No Attendance Month Selected',
+                          style: TextStyle(
+                            fontWeight: FontWeight.w500,
+                            fontSize: 20,
+                            height: 0,
+                          ),
+                          textAlign: TextAlign.center,
+                        ),
+                      ],
                     ),
                   );
                 }
@@ -622,8 +820,7 @@ class _PreviousMonthlyAttendanceState extends State<PreviousMonthlyAttendance> {
                 }
                 const int maxMinutes = 10392;
                 const double maxHours = 173.2;
-                int remainingMinutes =
-                    totalMinutes % 60; // Get remaining minutes
+                int remainingMinutes = totalMinutes % 60;
 
                 // ignore: division_optimization
                 int totalHours = (totalMinutes / 60).toInt();
@@ -632,6 +829,7 @@ class _PreviousMonthlyAttendanceState extends State<PreviousMonthlyAttendance> {
 
                 int totalMinutesFromHours = totalHours * 60;
                 return Column(children: [
+                  const SizedBox(height: 20),
                   Material(
                     borderRadius: BorderRadius.circular(20),
                     color: Theme.of(context).colorScheme.tertiary,
@@ -792,8 +990,8 @@ class _PreviousMonthlyAttendanceState extends State<PreviousMonthlyAttendance> {
                 ]);
               },
             ),
-          ],
-        ),
+          const SizedBox(height: 20),
+        ],
       ),
     );
   }

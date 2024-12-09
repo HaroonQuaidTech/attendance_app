@@ -422,7 +422,7 @@ class _GraphicalbuilerState extends State<GraphicalbuilderWeekly> {
                                 x: day - 1,
                                 barRods: [
                                   BarChartRodData(
-                                    toY: weeklyHours[day] ?? 0,
+                                    toY: (weeklyHours[day] ?? 0).clamp(0, 9),
                                     color:
                                         Theme.of(context).colorScheme.primary,
                                     width: 25,

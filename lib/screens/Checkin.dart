@@ -32,6 +32,9 @@ class AttendanceService {
       double targetLatitude = 33.6084954;
       double targetLongitude = 73.017087;
 
+      // double targetLatitude = 37.4219983;
+      // double targetLongitude = -122.084;
+
       double distance = Geolocator.distanceBetween(
         currentPosition.latitude,
         currentPosition.longitude,
@@ -122,8 +125,8 @@ class AttendanceService {
         desiredAccuracy: LocationAccuracy.high,
       );
 
-      double targetLatitude = 33.6084954;
-      double targetLongitude = 73.017087;
+      double targetLatitude = 37.4219983;
+      double targetLongitude = -122.084;
 
       double distance = Geolocator.distanceBetween(
         currentPosition.latitude,
@@ -131,6 +134,8 @@ class AttendanceService {
         targetLatitude,
         targetLongitude,
       );
+
+      log('Calculated Distance: $distance meters');
 
       const double maxRange = 200.0;
 

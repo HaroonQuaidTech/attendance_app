@@ -398,7 +398,8 @@ class _GraphicalbuilerState extends State<GraphicalbuilderMonthly> {
                                 x: week - 1,
                                 barRods: [
                                   BarChartRodData(
-                                    toY: monthlyHours["Week $week"] ?? 0,
+                                    toY: (monthlyHours["Week $week"] ?? 0)
+                                        .clamp(0, 45),
                                     color:
                                         Theme.of(context).colorScheme.primary,
                                     width: 25,
