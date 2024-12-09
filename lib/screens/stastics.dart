@@ -184,8 +184,6 @@ class _StatsticsScreenState extends State<StatsticsScreen> {
     final double screenWidth = screenSize.width;
     double baseFontSize = 20;
     double responsiveFontSize = baseFontSize * (screenWidth / 375);
-    double baseFontSize2 = 16;
-    double responsiveFontSize2 = baseFontSize2 * (screenWidth / 375);
 
     return Scaffold(
       backgroundColor: Theme.of(context).colorScheme.surface,
