@@ -79,7 +79,9 @@ class _DailyAttendanceState extends State<DailyAttendance> {
     }
 
     return Container(
-      padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
+      padding: const EdgeInsets.symmetric(
+        horizontal: 12,
+      ),
       height: screenSize.height * 0.09,
       width: screenSize.height * 0.42,
       decoration: BoxDecoration(
@@ -94,7 +96,7 @@ class _DailyAttendanceState extends State<DailyAttendance> {
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
               Container(
-                width: screenSize.height * 0.065,
+                width: screenSize.height * 0.066,
                 height: screenSize.height * 0.066,
                 decoration: BoxDecoration(
                   color: boxColor,
