@@ -311,10 +311,6 @@ class _HomeScreenState extends State<HomeScreen> {
   Widget build(BuildContext context) {
     final Size screenSize = MediaQuery.of(context).size;
     final double screenWidth = screenSize.width;
-
-    double baseFontSize3 = 9;
-    double responsiveFontSize8 = baseFontSize3 * (screenWidth / 375);
-
     double baseFontSize = 16;
     double responsiveFontSize = baseFontSize * (screenWidth / 375);
     double baseFontSize1 = 20;
@@ -832,11 +828,10 @@ class _HomeScreenState extends State<HomeScreen> {
                           alignment: Alignment.center,
                           children: [
                             Material(
-                              elevation: 6,
+                              elevation: 5,
                               shape: const CircleBorder(),
                               child: CircleAvatar(
-                                radius: screenHeight *
-                                    0.06, //OUTER CIRCLE Radius HEIGHT
+                                radius: screenHeight * 0.06,
                                 backgroundColor: Colors.white,
                                 child: Container(
                                   decoration: BoxDecoration(
@@ -851,14 +846,14 @@ class _HomeScreenState extends State<HomeScreen> {
                               ),
                             ),
                             Container(
-                              width: screenSize.height * 0.09,
-                              height: screenSize.height * 0.09,
+                              width: 60,
+                              height: 60,
                               decoration: BoxDecoration(
                                 color: Colors.white,
                                 shape: BoxShape.circle,
                                 border: Border.all(
                                   color: Theme.of(context).colorScheme.primary,
-                                  width: 2.0,
+                                  width: 1.0,
                                 ),
                               ),
                             ),
@@ -881,17 +876,17 @@ class _HomeScreenState extends State<HomeScreen> {
                                 children: [
                                   Image.asset(
                                     'assets/checkout_button.png',
-                                    height: screenWidth * 0.06,
-                                    width: screenWidth * 0.06,
+                                    height: 20,
+                                    width: 20,
                                     color:
                                         Theme.of(context).colorScheme.primary,
                                   ),
-                                  SizedBox(height: screenHeight * 0.006),
-                                  Text(
+                                  const SizedBox(height: 4),
+                                  const Text(
                                     'Check Out',
                                     style: TextStyle(
                                       color: Colors.black,
-                                      fontSize: responsiveFontSize8,
+                                      fontSize: 8,
                                       height: 0,
                                     ),
                                   ),
@@ -928,14 +923,14 @@ class _HomeScreenState extends State<HomeScreen> {
                               ),
                             ),
                             Container(
-                              width: screenSize.height * 0.09,
-                              height: screenSize.height * 0.09,
+                              width: screenSize.height * 0.025,
+                              height: screenSize.height * 0.025,
                               decoration: BoxDecoration(
                                 color: Colors.white,
                                 shape: BoxShape.circle,
                                 border: Border.all(
                                   color: Theme.of(context).colorScheme.primary,
-                                  width: 2.0,
+                                  width: 1.0,
                                 ),
                               ),
                             ),
@@ -958,17 +953,17 @@ class _HomeScreenState extends State<HomeScreen> {
                                 children: [
                                   Image.asset(
                                     'assets/checkin_button.png',
-                                    height: screenWidth * 0.06,
-                                    width: screenWidth * 0.06,
+                                    height: 20,
+                                    width: 20,
                                     color:
                                         Theme.of(context).colorScheme.primary,
                                   ),
-                                  SizedBox(height: screenHeight * 0.006),
-                                  Text(
+                                  const SizedBox(height: 4),
+                                  const Text(
                                     'Check In',
                                     style: TextStyle(
                                       color: Colors.black,
-                                      fontSize: responsiveFontSize8,
+                                      fontSize: 8,
                                       height: 0,
                                     ),
                                   ),
