@@ -555,7 +555,7 @@ class _CheckinScreenState extends State<CheckinScreen> {
                       ),
                     ],
                   ),
-                  SizedBox(height: screenSize.height * 0.1),
+                  SizedBox(height: screenSize.height * 0.09),
                   if (checkIn == null && checkOut == null)
                     GestureDetector(
                       onTap: () async {
