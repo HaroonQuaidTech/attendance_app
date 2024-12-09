@@ -857,40 +857,46 @@ class _HomeScreenState extends State<HomeScreen> {
                                 ),
                               ),
                             ),
-                            FloatingActionButton(
-                              onPressed: () {
-                                Navigator.push(
-                                  context,
-                                  MaterialPageRoute(
-                                    builder: (context) => const CheckinScreen(),
-                                  ),
-                                );
-                              },
-                              backgroundColor:
-                                  Theme.of(context).colorScheme.inversePrimary,
-                              shape: RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(300),
-                              ),
-                              child: Column(
-                                mainAxisAlignment: MainAxisAlignment.center,
-                                children: [
-                                  Image.asset(
-                                    'assets/checkout_button.png',
-                                    height: 20,
-                                    width: 20,
-                                    color:
-                                        Theme.of(context).colorScheme.primary,
-                                  ),
-                                  const SizedBox(height: 4),
-                                  const Text(
-                                    'Check Out',
-                                    style: TextStyle(
-                                      color: Colors.black,
-                                      fontSize: 8,
-                                      height: 0,
+                            SizedBox(
+                              width: screenSize.width * 0.17,
+                              height: screenSize.height * 0.085,
+                              child: FloatingActionButton(
+                                onPressed: () {
+                                  Navigator.push(
+                                    context,
+                                    MaterialPageRoute(
+                                      builder: (context) =>
+                                          const CheckinScreen(),
                                     ),
-                                  ),
-                                ],
+                                  );
+                                },
+                                backgroundColor: Theme.of(context)
+                                    .colorScheme
+                                    .inversePrimary,
+                                shape: RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.circular(300),
+                                ),
+                                child: Column(
+                                  mainAxisAlignment: MainAxisAlignment.center,
+                                  children: [
+                                    Image.asset(
+                                      'assets/checkout_button.png',
+                                      height: screenWidth * 0.06,
+                                      width: screenWidth * 0.06,
+                                      color:
+                                          Theme.of(context).colorScheme.primary,
+                                    ),
+                                    SizedBox(height: screenHeight * 0.006),
+                                    Text(
+                                      'Check Out',
+                                      style: TextStyle(
+                                        color: Colors.black,
+                                        fontSize: responsiveFontSize8,
+                                        height: 0,
+                                      ),
+                                    ),
+                                  ],
+                                ),
                               ),
                             ),
                           ],
@@ -934,40 +940,46 @@ class _HomeScreenState extends State<HomeScreen> {
                                 ),
                               ),
                             ),
-                            FloatingActionButton(
-                              onPressed: () {
-                                Navigator.push(
-                                  context,
-                                  MaterialPageRoute(
-                                    builder: (context) => const CheckinScreen(),
-                                  ),
-                                );
-                              },
-                              backgroundColor:
-                                  Theme.of(context).colorScheme.inversePrimary,
-                              shape: RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(300),
-                              ),
-                              child: Column(
-                                mainAxisAlignment: MainAxisAlignment.center,
-                                children: [
-                                  Image.asset(
-                                    'assets/checkin_button.png',
-                                    height: 20,
-                                    width: 20,
-                                    color:
-                                        Theme.of(context).colorScheme.primary,
-                                  ),
-                                  const SizedBox(height: 4),
-                                  const Text(
-                                    'Check In',
-                                    style: TextStyle(
-                                      color: Colors.black,
-                                      fontSize: 8,
-                                      height: 0,
+                            SizedBox(
+                              width: screenSize.width * 0.17,
+                              height: screenSize.height * 0.085,
+                              child: FloatingActionButton(
+                                onPressed: () {
+                                  Navigator.push(
+                                    context,
+                                    MaterialPageRoute(
+                                      builder: (context) =>
+                                          const CheckinScreen(),
                                     ),
-                                  ),
-                                ],
+                                  );
+                                },
+                                backgroundColor: Theme.of(context)
+                                    .colorScheme
+                                    .inversePrimary,
+                                shape: RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.circular(300),
+                                ),
+                                child: Column(
+                                  mainAxisAlignment: MainAxisAlignment.center,
+                                  children: [
+                                    Image.asset(
+                                      'assets/checkin_button.png',
+                                      height: screenWidth * 0.06,
+                                      width: screenWidth * 0.06,
+                                      color:
+                                          Theme.of(context).colorScheme.primary,
+                                    ),
+                                    SizedBox(height: screenHeight * 0.006),
+                                    Text(
+                                      'Check In',
+                                      style: TextStyle(
+                                        color: Colors.black,
+                                        fontSize: responsiveFontSize8,
+                                        height: 0,
+                                      ),
+                                    ),
+                                  ],
+                                ),
                               ),
                             ),
                           ],
