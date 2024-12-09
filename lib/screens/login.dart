@@ -197,7 +197,7 @@ class _LoginScreenState extends State<LoginScreen> {
     final Size screenSize = MediaQuery.of(context).size;
     final double screenWidth = screenSize.width;
 
-      double baseFontSize22 = 22;
+    double baseFontSize22 = 22;
     double responsiveFontSize22 = baseFontSize22 * (screenWidth / 375);
 
     double baseFontSize1 = 40;
@@ -283,7 +283,7 @@ class _LoginScreenState extends State<LoginScreen> {
                       ),
                       const SizedBox(height: 5),
                       SizedBox(
-                         height: screenSize.height * 0.07,
+                        height: screenSize.height * 0.07,
                         child: TextFormField(
                           controller: _passwordController,
                           obscureText: !isPasswordVisible,
@@ -333,7 +333,7 @@ class _LoginScreenState extends State<LoginScreen> {
                                 side: BorderSide(
                                   color:
                                       Theme.of(context).colorScheme.secondary,
-                                  width: screenWidth * 0.2,
+                                  width: 2,
                                 ),
                                 shape: RoundedRectangleBorder(
                                   borderRadius: BorderRadius.circular(4),
