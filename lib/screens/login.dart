@@ -82,19 +82,18 @@ class _LoginScreenState extends State<LoginScreen> {
       log(userCredential.toString());
 
       await _saveLoginDetails(email, password);
+      Navigator.pushReplacement(
+        context,
+        MaterialPageRoute(
+          builder: (context) => const HomeScreen(),
+        ),
+      );
 
       _showAlertDialog(
         title: 'Success',
         image: 'assets/success.png',
         message: 'Login Successfully',
-        closeCallback: () {
-          Navigator.pushReplacement(
-            context,
-            MaterialPageRoute(
-              builder: (context) => const HomeScreen(),
-            ),
-          );
-        },
+        closeCallback: () {},
       );
     } catch (e) {
       Navigator.pop(context);
