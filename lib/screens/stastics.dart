@@ -179,8 +179,14 @@ class _StatsticsScreenState extends State<StatsticsScreen> {
   Widget build(BuildContext context) {
     final Size screenSize = MediaQuery.of(context).size;
     final double screenWidth = screenSize.width;
-    double baseFontSize = 20;
-    double responsiveFontSize = baseFontSize * (screenWidth / 375);
+    double baseFontSize20 = 20;
+    double responsiveFontSize20 = baseFontSize20 * (screenWidth / 375);
+    double baseFontSize18 = 18;
+    double responsiveFontSize18 = baseFontSize18 * (screenWidth / 375);
+  
+    double baseFontSize15 = 15;
+    double responsiveFontSize15 = baseFontSize15 * (screenWidth / 375);
+
 
     return Scaffold(
       backgroundColor: Theme.of(context).colorScheme.surface,
@@ -194,7 +200,7 @@ class _StatsticsScreenState extends State<StatsticsScreen> {
             Text(
               'Statistics',
               style: TextStyle(
-                fontSize: responsiveFontSize,
+                fontSize: responsiveFontSize20,
                 fontWeight: FontWeight.bold,
                 height: 0,
               ),
@@ -262,10 +268,10 @@ class _StatsticsScreenState extends State<StatsticsScreen> {
                                     crossAxisAlignment:
                                         CrossAxisAlignment.start,
                                     children: [
-                                      const Text(
+                                      Text(
                                         'Filter',
                                         style: TextStyle(
-                                          fontSize: 18,
+                                          fontSize: responsiveFontSize18,
                                           height: 0,
                                           fontWeight: FontWeight.bold,
                                         ),
@@ -291,12 +297,13 @@ class _StatsticsScreenState extends State<StatsticsScreen> {
                                                 value: dropdownValue1,
                                                 icon: const Icon(
                                                     Icons.arrow_drop_down),
-                                                iconSize: 24,
+                                                iconSize: responsiveFontSize20,
                                                 elevation: 16,
                                                 isExpanded: true,
-                                                style: const TextStyle(
+                                                style: TextStyle(
                                                   color: Colors.black,
-                                                  fontSize: 16,
+                                                  fontSize:
+                                                      responsiveFontSize15,
                                                   height: 0,
                                                 ),
                                                 underline: const SizedBox(),
@@ -334,12 +341,13 @@ class _StatsticsScreenState extends State<StatsticsScreen> {
                                                 value: dropdownValue2,
                                                 icon: const Icon(
                                                     Icons.arrow_drop_down),
-                                                iconSize: 24,
+                                                iconSize: responsiveFontSize20,
                                                 elevation: 16,
                                                 isExpanded: true,
-                                                style: const TextStyle(
+                                                style: TextStyle(
                                                   color: Colors.black,
-                                                  fontSize: 16,
+                                                  fontSize:
+                                                      responsiveFontSize15,
                                                   height: 0,
                                                 ),
                                                 underline: const SizedBox(),
