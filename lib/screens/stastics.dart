@@ -39,10 +39,8 @@ class _StatsticsScreenState extends State<StatsticsScreen> {
   ) {
     final Size screenSize = MediaQuery.of(context).size;
     final double screenWidth = screenSize.width;
-   
-  
-  
-        double baseFontSize6 = 18;
+
+    double baseFontSize6 = 18;
     double responsiveFontSize18 = baseFontSize6 * (screenWidth / 375);
     return Material(
       elevation: 5,
@@ -248,7 +246,8 @@ class _StatsticsScreenState extends State<StatsticsScreen> {
                   child: Column(
                     children: [
                       const SizedBox(height: 20),
-                      if (dropdownValue1 == 'Weekly' && _selectedIndex == 0)
+                      if (dropdownValue1 == 'Weekly' && _selectedIndex == 0 ||
+                          dropdownValue1 == 'Monthly' && _selectedIndex == 0)
                         Column(
                           children: [
                             const SizedBox(height: 20),
@@ -381,7 +380,6 @@ class _StatsticsScreenState extends State<StatsticsScreen> {
                             const SizedBox(height: 20),
                           ],
                         ),
-                      
                       if (dropdownValue1 == 'Weekly')
                         if (dropdownValue2 != 'Present' &&
                             dropdownValue2 != 'On Time' &&
