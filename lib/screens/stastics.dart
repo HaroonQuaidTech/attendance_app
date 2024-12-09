@@ -384,8 +384,6 @@ class _StatsticsScreenState extends State<StatsticsScreen> {
                             dropdownValue2 != 'Late Arrival')
                           Column(
                             children: [
-                              if (_selectedIndex == 1)
-                                const SizedBox(height: 20),
                               Container(
                                 height: 65,
                                 width: double.infinity,
@@ -451,6 +449,7 @@ class _StatsticsScreenState extends State<StatsticsScreen> {
                             ? GraphicalbuilderMonthly(
                                 year: DateTime.now().year,
                                 month: DateTime.now().month,
+                                
                               )
                             : GraphicalbuilderMonthly(
                                 year: int.parse(selectedYear!),
