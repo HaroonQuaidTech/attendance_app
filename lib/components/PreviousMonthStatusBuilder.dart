@@ -615,7 +615,6 @@ class _PreviousMonthlyAttendanceState extends State<PreviousMonthlyAttendance> {
                 const SizedBox(height: 20),
               ],
             ),
-          if (_selectedIndex == 1) const SizedBox(height: 20),
           Container(
             height: 65,
             width: double.infinity,
