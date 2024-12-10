@@ -242,7 +242,6 @@ class _LoginScreenState extends State<LoginScreen> {
                       ),
                       const SizedBox(height: 5),
                       SizedBox(
-                        height: screenSize.height * 0.07,
                         child: TextFormField(
                           controller: _emailController,
                           validator: (value) {
@@ -268,6 +267,7 @@ class _LoginScreenState extends State<LoginScreen> {
                               borderRadius: BorderRadius.circular(8.0),
                               borderSide: BorderSide.none,
                             ),
+                            errorStyle: const TextStyle(height: 0),
                           ),
                         ),
                       ),
@@ -281,50 +281,47 @@ class _LoginScreenState extends State<LoginScreen> {
                         ),
                       ),
                       const SizedBox(height: 5),
-                      SizedBox(
-                        height: screenSize.height * 0.07,
-                        child: TextFormField(
-                          controller: _passwordController,
-                          obscureText: !isPasswordVisible,
-                          validator: (value) {
-                            if (value == null || value.isEmpty) {
-                              return 'Password cannot be empty';
-                            }
-                            return null;
-                          },
-                          decoration: InputDecoration(
-                            prefixIcon: Icon(
-                              Icons.password,
-                              color: Theme.of(context).colorScheme.primary,
+                      TextFormField(
+                        controller: _passwordController,
+                        obscureText: !isPasswordVisible,
+                        validator: (value) {
+                          if (value == null || value.isEmpty) {
+                            return 'Password cannot be empty';
+                          }
+                          return null;
+                        },
+                        decoration: InputDecoration(
+                          prefixIcon: Icon(
+                            Icons.password,
+                            color: Theme.of(context).colorScheme.primary,
+                            size: responsiveFontSize22,
+                          ),
+                          filled: true,
+                          fillColor: Theme.of(context).colorScheme.tertiary,
+                          hintText: 'Enter your password',
+                          border: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(8.0),
+                            borderSide: BorderSide.none,
+                          ),
+                          suffixIcon: IconButton(
+                            icon: Icon(
+                              isPasswordVisible
+                                  ? Icons.visibility_off
+                                  : Icons.visibility,
+                              color: Colors.black,
                               size: responsiveFontSize22,
                             ),
-                            filled: true,
-                            fillColor: Theme.of(context).colorScheme.tertiary,
-                            hintText: 'Enter your password',
-                            border: OutlineInputBorder(
-                              borderRadius: BorderRadius.circular(8.0),
-                              borderSide: BorderSide.none,
-                            ),
-                            suffixIcon: IconButton(
-                              icon: Icon(
-                                isPasswordVisible
-                                    ? Icons.visibility_off
-                                    : Icons.visibility,
-                                size: responsiveFontSize22,
-                              ),
-                              onPressed: () {
-                                setState(() {
-                                  isPasswordVisible = !isPasswordVisible;
-                                });
-                              },
-                            ),
+                            onPressed: () {
+                              setState(() {
+                                isPasswordVisible = !isPasswordVisible;
+                              });
+                            },
                           ),
                         ),
                       ),
-                      const SizedBox(height: 10),
+                      SizedBox(height: screenSize.height * 0.01),
                       Row(
                         mainAxisAlignment: MainAxisAlignment.start,
-                        crossAxisAlignment: CrossAxisAlignment.center,
                         children: [
                           Theme(
                             data: Theme.of(context).copyWith(
@@ -386,8 +383,8 @@ class _LoginScreenState extends State<LoginScreen> {
                 Center(
                   child: Image.asset(
                     'assets/logo.png',
-                    height: 90,
-                    width: 90,
+                    height: screenSize.height * 0.1,
+                    width: screenWidth * 0.23,
                   ),
                 ),
               ],
