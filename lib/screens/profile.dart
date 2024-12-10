@@ -394,6 +394,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
     required String image,
     required CloseCallback closeCallback,
   }) {
+
     showDialog(
       context: context,
       barrierDismissible: false,
@@ -419,6 +420,19 @@ class _ProfileScreenState extends State<ProfileScreen> {
             }
           }
         });
+         final Size screenSize = MediaQuery.of(context).size;
+
+    final double screenWidth = screenSize.width;
+
+
+    double baseFontSize18 = 18;
+    double responsiveFontSize18 = baseFontSize18 * (screenWidth / 375);
+
+      double baseFontSize15= 15;
+    double responsiveFontSize15 = baseFontSize15 * (screenWidth / 375);
+
+
+  
         return PopScope(
           canPop: false,
           child: Dialog(
@@ -451,24 +465,25 @@ class _ProfileScreenState extends State<ProfileScreen> {
                     children: [
                       Image.asset(
                         image,
-                        width: 50,
-                        height: 50,
+                                     width: MediaQuery.of(context).size.height *
+                          0.1, // 10% of screen width
+                      height: MediaQuery.of(context).size.height * 0.1,
                       ),
-                      const SizedBox(height: 20),
+                       SizedBox(height: screenSize.height*0.015),
                       Text(
                         title,
-                        style: const TextStyle(
-                          fontSize: 18,
+                        style:TextStyle(
+                          fontSize: responsiveFontSize18,
                           fontWeight: FontWeight.bold,
                           height: 0,
                         ),
                         textAlign: TextAlign.center,
                       ),
-                      const SizedBox(height: 10),
+                     SizedBox(height: screenSize.height*0.005),
                       Text(
                         message,
-                        style: const TextStyle(
-                          fontSize: 10,
+                        style:  TextStyle(
+                          fontSize: responsiveFontSize15,
                           color: Colors.grey,
                           height: 0,
                         ),
