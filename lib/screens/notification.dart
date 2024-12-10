@@ -10,149 +10,91 @@ class NotificationScreen extends StatefulWidget {
 class _NotificationScreenState extends State<NotificationScreen> {
   @override
   Widget build(BuildContext context) {
+    final Size screenSize = MediaQuery.of(context).size;
+    final double screenWidth = screenSize.width;
+    double baseFontSize40 = 40;
+    double responsiveFontSize40 = baseFontSize40 * (screenWidth / 375);
+
+    double baseFontSize20 = 20;
+    double responsiveFontSize20 = baseFontSize20 * (screenWidth / 375);
+
     return Scaffold(
       backgroundColor: Colors.white,
-      body: SafeArea(
-        child: Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 20.0),
-          child: Column(
-            children: [
-              SizedBox(
-                height: 70,
-                width: double.infinity,
-                child: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      Container(
-                        width: double.infinity,
-                        height: 50,
-                        decoration: BoxDecoration(
-                          color: Colors.grey[200],
-                          borderRadius: BorderRadius.circular(12),
-                          boxShadow: const [
-                            BoxShadow(
-                              color: Colors.black12,
-                              offset: Offset(0, 4),
-                              spreadRadius: 0,
-                              blurRadius: 4,
-                            ),
-                          ],
-                        ),
-                        child: GestureDetector(
-                          onTap: () {
-                            Navigator.pop(context);
-                          },
-                          child: const Icon(
-                            Icons.arrow_back,
-                            color: Colors.black,
-                          ),
-                        ),
-                      ),
-                      const Text(
-                        'Notification',
-                        style: TextStyle(
-                          fontSize: 22,
-                          fontWeight: FontWeight.w600,
-                        ),
-                      ),
-                    ]),
+      appBar: AppBar(
+        leadingWidth: 65,
+    
+        title: Text(
+          "Notification Screen",
+          style: TextStyle(fontSize: responsiveFontSize20),
+        ),
+        backgroundColor: Colors.transparent,
+        centerTitle: true,
+        leading: Padding(
+          padding: const EdgeInsets.only(left: 10),
+          child: Material(
+            elevation: 5,
+            borderRadius: BorderRadius.circular(12),
+            color: Theme.of(context).colorScheme.tertiary,
+            child: SizedBox(
+              width: screenSize.width * 0.15,
+              height: screenSize.height * 0.06,
+              child: Center(
+                child: IconButton(
+                  icon: Icon(
+                    Icons.arrow_back,
+                    size: responsiveFontSize20,
+                    color: Colors.black,
+                  ),
+                  onPressed: () {
+                    Navigator.pop(context);
+                  },
+                ),
               ),
-              Container(
-                height: 250,
-                padding: const EdgeInsets.symmetric(vertical: 20),
-                width: double.infinity,
-                decoration: BoxDecoration(
-                    color: const Color(0xffEFF1FF),
-                    borderRadius: BorderRadius.circular(18)),
+            ),
+          ),
+        ),
+      ),
+      body: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          Padding(
+            padding: const EdgeInsets.all(8.0),
+            child: Container(
+              padding: const EdgeInsets.symmetric(
+                horizontal: 12,
+              ),
+              margin: const EdgeInsets.only(bottom: 10),
+              width: double.infinity,
+              decoration: BoxDecoration(
+                borderRadius: BorderRadius.circular(12),
+                color: Colors.white,
+              ),
+              child: Center(
                 child: Column(
                   children: [
-                    Container(
-                        width: double.infinity,
-                        height: 80,
-                        decoration: BoxDecoration(
-                            color: Colors.white,
-                            borderRadius: BorderRadius.circular(12)),
-                        child: Padding(
-                          padding: const EdgeInsets.symmetric(horizontal: 10.0),
-                          child: Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            children: [
-                              Container(
-                                width: 42,
-                                height: 42,
-                                decoration: BoxDecoration(
-                                  color: Colors.grey[200],
-                                  borderRadius: BorderRadius.circular(40),
-                                ),
-                                child: const Icon(
-                                  Icons.notifications_none,
-                                  color: Colors.black,
-                                ),
-                              ),
-                              const Text(
-                                'Lorem ipsum dolor sit amet,\nconsectetur adipiscing elit dolor ',
-                                style: TextStyle(
-                                    fontSize: 13, fontWeight: FontWeight.w600),
-                              ),
-                              const Text(
-                                '1m ago.',
-                                style: TextStyle(
-                                    fontSize: 14,
-                                    fontWeight: FontWeight.w400,
-                                    color: Color(0xff6C6C6C)),
-                              ),
-                            ],
-                          ),
-                        )),
-                    const SizedBox(height: 10),
-                    Container(
-                        width: 330,
-                        height: 80,
-                        decoration: BoxDecoration(
-                            color: Colors.white,
-                            borderRadius: BorderRadius.circular(12)),
-                        child: Padding(
-                          padding: const EdgeInsets.symmetric(horizontal: 10.0),
-                          child: Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            children: [
-                              Container(
-                                width: 42,
-                                height: 42,
-                                decoration: BoxDecoration(
-                                  color: Colors.grey[200],
-                                  borderRadius: BorderRadius.circular(40),
-                                ),
-                                child: const Icon(
-                                  Icons.notifications_none,
-                                  color: Colors.black,
-                                ),
-                              ),
-                              const Text(
-                                'Lorem ipsum dolor sit amet,\nconsectetur adipiscing elit dolor ',
-                                style: TextStyle(
-                                    fontSize: 13, fontWeight: FontWeight.w600),
-                              ),
-                              const Text(
-                                '1d ago.',
-                                style: TextStyle(
-                                    fontSize: 14,
-                                    fontWeight: FontWeight.w400,
-                                    color: Color(0xff6C6C6C)),
-                              ),
-                            ],
-                          ),
-                        )),
-                   
-                  
-                  
-                  
+                    const SizedBox(height: 30),
+                    Icon(
+                      Icons.warning,
+                      color: Colors.grey,
+                      size: responsiveFontSize40,
+                    ),
+                    const SizedBox(height: 5),
+                    Text(
+                      "No Notification Available",
+                      style: TextStyle(
+                        fontWeight: FontWeight.bold,
+                        height: 0,
+                        fontSize: responsiveFontSize20,
+                        color: Colors.grey[400],
+                      ),
+                    ),
+                    const SizedBox(height: 30),
                   ],
                 ),
               ),
-            ],
+            ),
           ),
-        ),
+        ],
       ),
     );
   }

@@ -31,13 +31,14 @@ class _MyAppState extends State<MyApp> {
           .copyWith(textScaler: const TextScaler.linear(1)),
       child: MaterialApp(
         debugShowCheckedModeBanner: false,
+      
         theme: ThemeData(
           colorScheme: const ColorScheme.light(
             surface: Color(0xffFFFFFF),
             primary: Color(0xffFF6100),
             secondary: Color(0xff3B3A3C),
             tertiary: Color(0xffEFEFEF),
-            inversePrimary: Color(0xffFFE9DC),
+            inversePrimary: Colors.white,
           ),
           fontFamily: 'KumbhSans',
           progressIndicatorTheme: const ProgressIndicatorThemeData(
