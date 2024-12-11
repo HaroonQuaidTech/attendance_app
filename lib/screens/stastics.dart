@@ -188,8 +188,11 @@ class _StatsticsScreenState extends State<StatsticsScreen> {
     double responsiveFontSize15 = baseFontSize15 * (screenWidth / 375);
 
     return Scaffold(
-      backgroundColor: Theme.of(context).colorScheme.surface,
+      backgroundColor: Colors.white,
       appBar: AppBar(
+        backgroundColor: Colors.white,
+        surfaceTintColor: Colors.white,
+        shadowColor: Colors.black,
         automaticallyImplyLeading: false,
         title: Row(
           mainAxisAlignment: MainAxisAlignment.center,

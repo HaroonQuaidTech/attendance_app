@@ -319,6 +319,11 @@ class _HomeScreenState extends State<HomeScreen> {
     double responsiveFontSize = baseFontSize * (screenWidth / 375);
     double baseFontSize1 = 20;
     double responsiveFontSize1 = baseFontSize1 * (screenWidth / 375);
+    double baseFontSize18 = 18;
+    double responsiveFontSize18 = baseFontSize18 * (screenWidth / 375);
+    double baseFontSize14 = 14;
+    double responsiveFontSize14 = baseFontSize14 * (screenWidth / 375);
+
     // ignore: deprecated_member_use
     return WillPopScope(
       onWillPop: () async {
@@ -362,27 +367,27 @@ class _HomeScreenState extends State<HomeScreen> {
                             "assets/warning.png",
                           ),
                         ),
-                        const SizedBox(height: 10),
-                        const Text(
+                       SizedBox(height: screenSize.height*0.008),
+                        Text(
                           'Are you sure ?',
                           style: TextStyle(
-                            fontSize: 18,
+                            fontSize: responsiveFontSize18,
                             fontWeight: FontWeight.bold,
                             height: 0,
                           ),
                           textAlign: TextAlign.center,
                         ),
-                        const SizedBox(height: 10),
-                        const Text(
+                        SizedBox(height: screenSize.height*0.006),
+                        Text(
                           'Do you want to exit app ?',
                           style: TextStyle(
-                            fontSize: 10,
+                            fontSize: responsiveFontSize14,
                             color: Colors.grey,
                             height: 0,
                           ),
                           textAlign: TextAlign.center,
                         ),
-                        const SizedBox(height: 20),
+                           SizedBox(height: screenSize.height*0.025),
                         Row(
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: [
@@ -397,11 +402,11 @@ class _HomeScreenState extends State<HomeScreen> {
                                   color: const Color(0xffECECEC),
                                   borderRadius: BorderRadius.circular(10),
                                 ),
-                                child: const Center(
+                                child: Center(
                                   child: Text(
                                     'Cancel',
                                     style: TextStyle(
-                                      fontSize: 14,
+                                      fontSize: responsiveFontSize14,
                                       color: Colors.black,
                                       height: 0,
                                     ),
@@ -420,11 +425,11 @@ class _HomeScreenState extends State<HomeScreen> {
                                   color: Theme.of(context).colorScheme.primary,
                                   borderRadius: BorderRadius.circular(10),
                                 ),
-                                child: const Center(
+                                child: Center(
                                   child: Text(
                                     'Continue',
                                     style: TextStyle(
-                                      fontSize: 14,
+                                      fontSize: responsiveFontSize14,
                                       color: Colors.white,
                                       height: 0,
                                     ),
@@ -445,7 +450,7 @@ class _HomeScreenState extends State<HomeScreen> {
         return exitApp;
       },
       child: Scaffold(
-        backgroundColor: Theme.of(context).colorScheme.surface,
+        backgroundColor: Colors.white,
         body: SafeArea(
           child: _selectedIndex == 1
               ? const StatsticsScreen()
@@ -748,58 +753,57 @@ class _HomeScreenState extends State<HomeScreen> {
                                     ),
                                   ),
                                   const SizedBox(height: 20),
-                                  _isLoading
-                                      ? const CircularProgressIndicator()
-                                      : Material(
-                                          elevation: 5,
-                                          color: Theme.of(context)
-                                              .colorScheme
-                                              .tertiary,
-                                          borderRadius:
-                                              BorderRadius.circular(12),
-                                          child: Row(
-                                            mainAxisAlignment:
-                                                MainAxisAlignment.center,
-                                            crossAxisAlignment:
-                                                CrossAxisAlignment.start,
-                                            children: [
-                                              Column(
-                                                crossAxisAlignment:
-                                                    CrossAxisAlignment.start,
-                                                children: [
-                                                  const SizedBox(height: 10),
-                                                  Text(
-                                                    'Attendance Details',
-                                                    style: TextStyle(
-                                                      fontSize:
-                                                          responsiveFontSize,
-                                                      height: 0,
-                                                      fontWeight:
-                                                          FontWeight.w500,
-                                                    ),
-                                                  ),
-                                                  const SizedBox(height: 10),
-                                                  Builder(
-                                                    builder: (context) {
-                                                      if (data == null) {
-                                                        return DailyEmptyAttendance(
+                                  Material(
+                                    elevation: 5,
+                                    color:
+                                        Theme.of(context).colorScheme.tertiary,
+                                    borderRadius: BorderRadius.circular(12),
+                                    child: Row(
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.center,
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.start,
+                                      children: [
+                                        Column(
+                                          crossAxisAlignment:
+                                              CrossAxisAlignment.start,
+                                          children: [
+                                            const SizedBox(height: 10),
+                                            Text(
+                                              'Attendance Details',
+                                              style: TextStyle(
+                                                fontSize: responsiveFontSize,
+                                                height: 0,
+                                                fontWeight: FontWeight.w500,
+                                              ),
+                                            ),
+                                            const SizedBox(height: 10),
+                                            Builder(
+                                              builder: (context) {
+                                                if (data == null) {
+                                                  return _isLoading
+                                                      ? const Center(
+                                                          child:
+                                                              CircularProgressIndicator(),
+                                                        )
+                                                      : DailyEmptyAttendance(
                                                           selectedDay:
                                                               _selectedDay,
                                                         );
-                                                      }
-                                                      return DailyAttendance(
-                                                        data: data!,
-                                                        selectedDay:
-                                                            _selectedDay,
-                                                      );
-                                                    },
-                                                  ),
-                                                  const SizedBox(height: 10),
-                                                ],
-                                              ),
-                                            ],
-                                          ),
+                                                }
+
+                                                return DailyAttendance(
+                                                  data: data!,
+                                                  selectedDay: _selectedDay,
+                                                );
+                                              },
+                                            ),
+                                            const SizedBox(height: 10),
+                                          ],
                                         ),
+                                      ],
+                                    ),
+                                  ),
                                   const SizedBox(height: 20),
                                 ],
                               ),
@@ -946,14 +950,12 @@ class _HomeScreenState extends State<HomeScreen> {
                                 Navigator.push(
                                   context,
                                   MaterialPageRoute(
-                                    builder: (context) =>
-                                        const CheckinScreen(),
+                                    builder: (context) => const CheckinScreen(),
                                   ),
                                 );
                               },
-                              backgroundColor: Theme.of(context)
-                                  .colorScheme
-                                  .inversePrimary,
+                              backgroundColor:
+                                  Theme.of(context).colorScheme.inversePrimary,
                               shape: RoundedRectangleBorder(
                                 borderRadius: BorderRadius.circular(300),
                               ),

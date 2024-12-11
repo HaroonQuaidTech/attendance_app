@@ -246,8 +246,12 @@ class _ProfileScreenState extends State<ProfileScreen> {
   void _showLogoutConfirmationDialog(BuildContext context) {
     final Size screenSize = MediaQuery.of(context).size;
     final double screenWidth = screenSize.width;
-    double baseFontSize3 = 14;
-    double responsiveFontSize14 = baseFontSize3 * (screenWidth / 375);
+    double baseFontSize18 = 18;
+    double responsiveFontSize18 = baseFontSize18 * (screenWidth / 375);
+ 
+    double baseFontSize14 = 14;
+    double responsiveFontSize14 = baseFontSize14 * (screenWidth / 375);
+  
     showDialog(
       context: context,
       barrierDismissible: false,
@@ -287,27 +291,27 @@ class _ProfileScreenState extends State<ProfileScreen> {
                         "assets/warning.png",
                       ),
                     ),
-                    const SizedBox(height: 10),
-                    const Text(
+                        SizedBox(height: screenSize.height*0.008),
+                    Text(
                       'Are you sure ?',
                       style: TextStyle(
-                        fontSize: 18,
+                        fontSize: responsiveFontSize18,
                         fontWeight: FontWeight.bold,
                         height: 1.2,
                       ),
                       textAlign: TextAlign.center,
                     ),
-                    const SizedBox(height: 10),
-                    const Text(
-                      'Do you want to logout ?',
+                       SizedBox(height: screenSize.height*0.006),
+                    Text(
+                      'Do you want to logout??',
                       style: TextStyle(
-                        fontSize: 10,
+                        fontSize: responsiveFontSize14,
                         color: Colors.grey,
                         height: 0,
                       ),
                       textAlign: TextAlign.center,
                     ),
-                    const SizedBox(height: 20),
+                         SizedBox(height: screenSize.height*0.025),
                     Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
@@ -390,6 +394,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
     required String image,
     required CloseCallback closeCallback,
   }) {
+
     showDialog(
       context: context,
       barrierDismissible: false,
@@ -415,6 +420,19 @@ class _ProfileScreenState extends State<ProfileScreen> {
             }
           }
         });
+         final Size screenSize = MediaQuery.of(context).size;
+
+    final double screenWidth = screenSize.width;
+
+
+    double baseFontSize18 = 18;
+    double responsiveFontSize18 = baseFontSize18 * (screenWidth / 375);
+
+      double baseFontSize15= 15;
+    double responsiveFontSize15 = baseFontSize15 * (screenWidth / 375);
+
+
+  
         return PopScope(
           canPop: false,
           child: Dialog(
@@ -447,24 +465,25 @@ class _ProfileScreenState extends State<ProfileScreen> {
                     children: [
                       Image.asset(
                         image,
-                        width: 50,
-                        height: 50,
+                                     width: MediaQuery.of(context).size.height *
+                          0.1, // 10% of screen width
+                      height: MediaQuery.of(context).size.height * 0.1,
                       ),
-                      const SizedBox(height: 20),
+                       SizedBox(height: screenSize.height*0.015),
                       Text(
                         title,
-                        style: const TextStyle(
-                          fontSize: 18,
+                        style:TextStyle(
+                          fontSize: responsiveFontSize18,
                           fontWeight: FontWeight.bold,
                           height: 0,
                         ),
                         textAlign: TextAlign.center,
                       ),
-                      const SizedBox(height: 10),
+                     SizedBox(height: screenSize.height*0.005),
                       Text(
                         message,
-                        style: const TextStyle(
-                          fontSize: 10,
+                        style:  TextStyle(
+                          fontSize: responsiveFontSize15,
                           color: Colors.grey,
                           height: 0,
                         ),
@@ -495,6 +514,9 @@ class _ProfileScreenState extends State<ProfileScreen> {
       backgroundColor: Colors.white,
       appBar: AppBar(
         automaticallyImplyLeading: false,
+        backgroundColor: Colors.white,
+        surfaceTintColor: Colors.white,
+        shadowColor: Colors.black,
         title: Row(
           mainAxisAlignment: MainAxisAlignment.center,
           crossAxisAlignment: CrossAxisAlignment.center,
@@ -558,8 +580,8 @@ class _ProfileScreenState extends State<ProfileScreen> {
                       alignment: Alignment.center,
                       children: [
                         Container(
-                          width: screenSize.width * 0.5,
-                          height: screenSize.height * 0.192,
+                          width: screenSize.height * 0.199,
+                          height: screenSize.height * 0.199,
                           decoration: BoxDecoration(
                             shape: BoxShape.circle,
                             border: Border.all(color: Colors.black, width: 1),
@@ -570,8 +592,8 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                 borderRadius: BorderRadius.circular(900),
                                 child: Image.file(
                                   _selectedImage!,
-                                  width: screenSize.width * 0.4,
-                                  height: screenSize.height * 0.18,
+                                  width: screenSize.height * 0.186,
+                                  height: screenSize.height * 0.186,
                                   fit: BoxFit.cover,
                                 ),
                               )
@@ -580,21 +602,21 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                     borderRadius: BorderRadius.circular(900),
                                     child: Image.network(
                                       _imageUrl!,
-                                      width: screenSize.width * 0.4,
-                                      height: screenSize.height * 0.18,
+                                      width: screenSize.height * 0.186,
+                                      height: screenSize.height * 0.186,
                                       fit: BoxFit.cover,
                                     ),
                                   )
                                 : Container(
-                                    width: 175,
-                                    height: 175,
+                                    width: screenSize.height * 0.186,
+                                    height: screenSize.height * 0.186,
                                     decoration: const BoxDecoration(),
                                     child: ClipRRect(
                                       borderRadius: BorderRadius.circular(900),
                                       child: Image.asset(
-                                        'assets/aabb.jpg',
-                                        width: screenSize.width * 0.4,
-                                        height: screenSize.height * 0.18,
+                                        'assets/ppppp.png',
+                                        width: screenSize.height * 0.186,
+                                        height: screenSize.height * 0.186,
                                         fit: BoxFit.cover,
                                       ),
                                     ),
