@@ -216,6 +216,28 @@ class _ProfileScreenState extends State<ProfileScreen> {
     }
   }
 
+  Future<void> reauthenticateAndSaveChanges(String password) async {
+    try {
+      User? user = _auth.currentUser;
+
+      AuthCredential credential = EmailAuthProvider.credential(
+        email: user!.email!,
+        password: password,
+      );
+
+      await user.reauthenticateWithCredential(credential);
+
+      updateUserData(
+        user.uid,
+        _nameController.text,
+        _phoneController.text,
+        _passwordController.text,
+      );
+    } catch (e) {
+      log("Reauthentication failed. Please check your password.");
+    }
+  }
+
   Future<void> _logout(BuildContext context) async {
     try {
       setState(() {
@@ -245,8 +267,6 @@ class _ProfileScreenState extends State<ProfileScreen> {
   }
 
   void _showLogoutConfirmationDialog(BuildContext context) {
-
-
     showDialog(
       context: context,
       barrierDismissible: false,
@@ -591,15 +611,15 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                     ),
                                   )
                                 : Container(
-                                        width: 165.sp,
-                                      height: 165.sp,
+                                    width: 165.sp,
+                                    height: 165.sp,
                                     decoration: const BoxDecoration(),
                                     child: ClipRRect(
                                       borderRadius: BorderRadius.circular(900),
                                       child: Image.asset(
                                         'assets/ppppp.png',
-                                             width: 165.sp,
-                                      height: 165.sp,
+                                        width: 165.sp,
+                                        height: 165.sp,
                                         fit: BoxFit.cover,
                                       ),
                                     ),

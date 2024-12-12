@@ -746,50 +746,51 @@ class _HomeScreenState extends State<HomeScreen> {
                                     color:
                                         Theme.of(context).colorScheme.tertiary,
                                     borderRadius: BorderRadius.circular(12),
-                                    child: Row(
-                                      mainAxisAlignment:
-                                          MainAxisAlignment.center,
-                                      crossAxisAlignment:
-                                          CrossAxisAlignment.start,
-                                      children: [
-                                        Column(
-                                          crossAxisAlignment:
-                                              CrossAxisAlignment.start,
-                                          children: [
-                                            SizedBox(height: 10.sp),
-                                            Text(
-                                              'Attendance Details',
-                                              style: TextStyle(
-                                                fontSize: 18.sp,
-                                                height: 0.sp,
-                                                fontWeight: FontWeight.w500,
-                                              ),
+                                    child: Padding(
+                                      padding: const EdgeInsets.all(8.0),
+                                      child: Column(
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.start,
+                                        crossAxisAlignment:
+                                            CrossAxisAlignment.start,
+                                        children: [
+                                          SizedBox(height: 10.sp),
+                                          Text(
+                                            'Attendance Details',
+                                            style: TextStyle(
+                                              fontSize: 18.sp,
+                                              height: 0.sp,
+                                              fontWeight: FontWeight.w500,
                                             ),
-                                            SizedBox(height: 10.sp),
-                                            Builder(
-                                              builder: (context) {
-                                                if (data == null) {
-                                                  return _isLoading
-                                                      ? const Center(
-                                                          child:
-                                                              CircularProgressIndicator(),
-                                                        )
-                                                      : DailyEmptyAttendance(
-                                                          selectedDay:
-                                                              _selectedDay,
-                                                        );
-                                                }
+                                            textAlign: TextAlign.start,
+                                          ),
+                                          SizedBox(height: 10.sp),
+                                          Builder(
+                                            builder: (context) {
+                                              if (data == null) {
+                                                return _isLoading
+                                                    ? const Center(
+                                                        child:
+                                                            CircularProgressIndicator())
+                                                    : DailyEmptyAttendance(
+                                                        selectedDay:
+                                                            _selectedDay,
+                                                      );
+                                              }
 
-                                                return DailyAttendance(
-                                                  data: data!,
-                                                  selectedDay: _selectedDay,
-                                                );
-                                              },
-                                            ),
-                                            SizedBox(height: 10.sp),
-                                          ],
-                                        ),
-                                      ],
+                                              return _isLoading
+                                                  ? const Center(
+                                                      child:
+                                                          CircularProgressIndicator())
+                                                  : DailyAttendance(
+                                                      data: data!,
+                                                      selectedDay: _selectedDay,
+                                                    );
+                                            },
+                                          ),
+                                          SizedBox(height: 10.sp),
+                                        ],
+                                      ),
                                     ),
                                   ),
                                   SizedBox(height: 20.sp),
