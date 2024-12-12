@@ -317,7 +317,7 @@ class _LoginScreenState extends State<LoginScreen> {
                           ),
                         ),
                       ),
-                      SizedBox(height: 10.sp),
+                      SizedBox(height: 20.sp),
                       Row(
                         mainAxisAlignment: MainAxisAlignment.start,
                         children: [
@@ -337,8 +337,13 @@ class _LoginScreenState extends State<LoginScreen> {
                             child: Checkbox(
                               value: _isCheck,
                               onChanged: _toggleCheckbox,
+                              materialTapTargetSize:
+                                  MaterialTapTargetSize.shrinkWrap,
+                              visualDensity: const VisualDensity(
+                                  horizontal: -4, vertical: -4),
                             ),
                           ),
+                          SizedBox(width: 10.sp),
                           Text(
                             'Remember me',
                             style: TextStyle(
@@ -349,7 +354,7 @@ class _LoginScreenState extends State<LoginScreen> {
                           ),
                         ],
                       ),
-                      SizedBox(height: 10.sp),
+                      SizedBox(height: 20.sp),
                       GestureDetector(
                         onTap: () {
                           _login(context);
