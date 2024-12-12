@@ -518,23 +518,6 @@ class _PreviousMonthlyAttendanceState extends State<PreviousMonthlyAttendance> {
     );
   }
 
-  void _showSelfClosingAlertDialog(BuildContext context) {
-    showDialog(
-      context: context,
-      builder: (BuildContext context) {
-        Future.delayed(const Duration(seconds: 2), () {
-          if (Navigator.of(context).canPop()) {
-            Navigator.of(context).pop();
-          }
-        });
-        return const AlertDialog(
-          title: Text('Action Disabled'),
-          content: Text('Please select both month and year to proceed.'),
-        );
-      },
-    );
-  }
-
   String _formatTime(DateTime time) {
     final hour = time.hour;
     final minute = time.minute;
@@ -676,24 +659,47 @@ class _PreviousMonthlyAttendanceState extends State<PreviousMonthlyAttendance> {
             child: Row(
               children: [
                 _buildSegment('Details Stats', 0),
-                GestureDetector(
-                  onTap: () {
-                    if ((selectedMonth != null && selectedYear == null) ||
-                        (selectedMonth == null && selectedYear != null)) {
-                      _showSelfClosingAlertDialog(context);
-                    } else {
-                      _buildSegment('Graphical View', 1);
-                    }
-                  },
-                ),
+                _buildSegment('Graphical View', 1),
               ],
             ),
           ),
           if (_selectedIndex == 1)
-            selectedMonth == null && selectedYear == null
-                ? GraphicalbuilderMonthly(
-                    year: DateTime.now().year,
-                    month: DateTime.now().month,
+            selectedMonth == null && selectedYear == null ||
+                    selectedMonth == null ||
+                    selectedYear == null
+                ? Column(
+                    children: [
+                      const SizedBox(height: 20),
+                      Material(
+                        color: Theme.of(context).colorScheme.tertiary,
+                        borderRadius: BorderRadius.circular(12),
+                        elevation: 5,
+                        child: const SizedBox(
+                          width: double.infinity,
+                          child: Column(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              SizedBox(height: 30),
+                              Icon(
+                                Icons.warning,
+                                color: Colors.grey,
+                                size: 50,
+                              ),
+                              SizedBox(height: 5),
+                              Text(
+                                "Please select both month and year to proceed",
+                                style: TextStyle(
+                                  fontWeight: FontWeight.bold,
+                                  color: Colors.grey,
+                                ),
+                                
+                              ),
+                              SizedBox(height: 30),
+                            ],
+                          ),
+                        ),
+                      ),
+                    ],
                   )
                 : GraphicalbuilderMonthly(
                     year: int.parse(selectedYear!),
