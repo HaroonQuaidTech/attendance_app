@@ -245,8 +245,6 @@ class _ProfileScreenState extends State<ProfileScreen> {
   }
 
   void _showLogoutConfirmationDialog(BuildContext context) {
-
-
     showDialog(
       context: context,
       barrierDismissible: false,
@@ -414,12 +412,6 @@ class _ProfileScreenState extends State<ProfileScreen> {
             }
           }
         });
-        final Size screenSize = MediaQuery.of(context).size;
-
-        final double screenWidth = screenSize.width;
-
-        double baseFontSize15 = 15;
-        double responsiveFontSize15 = baseFontSize15 * (screenWidth / 375);
 
         return PopScope(
           canPop: false,
@@ -451,7 +443,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                   child: Column(
                     mainAxisSize: MainAxisSize.min,
                     children: [
-                      Image.asset(image, width: 10.sp, height: 10.sp),
+                      Image.asset(image, width: 50.sp, height: 50.sp),
                       SizedBox(height: 20.sp),
                       Text(
                         title,
@@ -462,11 +454,11 @@ class _ProfileScreenState extends State<ProfileScreen> {
                         ),
                         textAlign: TextAlign.center,
                       ),
-                      SizedBox(height: screenSize.height * 0.005),
+                      SizedBox(height: 10.sp),
                       Text(
                         message,
                         style: TextStyle(
-                          fontSize: responsiveFontSize15,
+                          fontSize: 16.sp,
                           color: Colors.grey,
                           height: 0,
                         ),
@@ -591,15 +583,15 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                     ),
                                   )
                                 : Container(
-                                        width: 165.sp,
-                                      height: 165.sp,
+                                    width: 165.sp,
+                                    height: 165.sp,
                                     decoration: const BoxDecoration(),
                                     child: ClipRRect(
                                       borderRadius: BorderRadius.circular(900),
                                       child: Image.asset(
                                         'assets/ppppp.png',
-                                             width: 165.sp,
-                                      height: 165.sp,
+                                        width: 165.sp,
+                                        height: 165.sp,
                                         fit: BoxFit.cover,
                                       ),
                                     ),
