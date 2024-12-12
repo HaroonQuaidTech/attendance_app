@@ -77,9 +77,9 @@ class _DailyAttendanceState extends State<DailyAttendance> {
     }
 
     return Container(
-      padding:  EdgeInsets.symmetric(horizontal: 12.sp),
-         width:370.sp,
-        height: 80.sp,
+      padding: EdgeInsets.symmetric(horizontal: 12.sp),
+      width: 370.sp,
+      height: 80.sp,
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(12),
         color: Colors.white,

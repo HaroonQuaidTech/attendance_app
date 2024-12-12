@@ -266,13 +266,12 @@ class _GraphicalbuilerState extends State<GraphicalbuilderWeekly> {
 
   @override
   Widget build(BuildContext context) {
-
     return FutureBuilder<List<Map<String, dynamic>>?>(
       future: fetchWeeklyAttendance(userId),
       builder: (context, snapshot) {
         if (snapshot.connectionState == ConnectionState.waiting) {
-          return  Padding(
-           padding: EdgeInsets.only(top: 240.0.sp),
+          return Padding(
+            padding: EdgeInsets.only(top: 240.0.sp),
             child: const CircularProgressIndicator(),
           );
         } else if (snapshot.hasError) {
@@ -281,8 +280,8 @@ class _GraphicalbuilerState extends State<GraphicalbuilderWeekly> {
           return Center(
             child: Column(
               children: [
-                 SizedBox(height: 30.sp),
-               Icon(
+                SizedBox(height: 30.sp),
+                Icon(
                   Icons.warning,
                   color: Colors.grey,
                   size: 50.sp,
@@ -320,8 +319,8 @@ class _GraphicalbuilerState extends State<GraphicalbuilderWeekly> {
               borderRadius: BorderRadius.circular(20),
               color: Theme.of(context).colorScheme.tertiary,
               elevation: 5,
-           child: Padding(
-                padding:EdgeInsets.all(12.0.sp),
+              child: Padding(
+                padding: EdgeInsets.all(12.0.sp),
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
@@ -329,7 +328,7 @@ class _GraphicalbuilerState extends State<GraphicalbuilderWeekly> {
                       'Weekly',
                       style: TextStyle(
                         fontWeight: FontWeight.w600,
-                          fontSize: 20.sp,
+                        fontSize: 20.sp,
                         height: 0,
                       ),
                     ),
@@ -338,7 +337,7 @@ class _GraphicalbuilerState extends State<GraphicalbuilderWeekly> {
                       crossAxisAlignment: CrossAxisAlignment.center,
                       children: [
                         Container(
-                            width: 18.sp,
+                          width: 18.sp,
                           height: 18.sp,
                           decoration: BoxDecoration(
                             color: Theme.of(context).colorScheme.primary,
@@ -349,15 +348,15 @@ class _GraphicalbuilerState extends State<GraphicalbuilderWeekly> {
                           'TAT (Turn Around Time)',
                           style: TextStyle(
                             fontWeight: FontWeight.w400,
-                         fontSize: 16.sp,
+                            fontSize: 16.sp,
                             height: 0.sp,
                           ),
                         ),
                       ],
                     ),
-                   SizedBox(height: 30.sp),
+                    SizedBox(height: 30.sp),
                     SizedBox(
-                        height: 400.sp,
+                      height: 400.sp,
                       child: BarChart(
                         BarChartData(
                           maxY: 9.sp,
@@ -371,7 +370,7 @@ class _GraphicalbuilerState extends State<GraphicalbuilderWeekly> {
                                     '${value.toInt()}H',
                                     style: TextStyle(
                                       color: Colors.black,
-                                           fontSize:14.sp,
+                                      fontSize: 14.sp,
                                       fontWeight: FontWeight.w600,
                                       height: 0.sp,
                                     ),
@@ -399,7 +398,7 @@ class _GraphicalbuilerState extends State<GraphicalbuilderWeekly> {
                                           'Fri'
                                         ][value.toInt()],
                                         style: TextStyle(
-                                            fontSize: 14.sp,
+                                          fontSize: 14.sp,
                                           fontWeight: FontWeight.w600,
                                           height: 0.sp,
                                         ),
@@ -427,7 +426,7 @@ class _GraphicalbuilerState extends State<GraphicalbuilderWeekly> {
                                     toY: (weeklyHours[day] ?? 0).clamp(0, 9),
                                     color:
                                         Theme.of(context).colorScheme.primary,
-                                     width: 25.sp,
+                                    width: 25.sp,
                                     backDrawRodData: BackgroundBarChartRodData(
                                       show: true,
                                       toY: 9.sp,
@@ -444,7 +443,7 @@ class _GraphicalbuilerState extends State<GraphicalbuilderWeekly> {
                 ),
               ),
             ),
-   SizedBox(height: 15.sp),
+            SizedBox(height: 15.sp),
             Material(
               borderRadius: BorderRadius.circular(20),
               color: Theme.of(context).colorScheme.tertiary,
@@ -455,26 +454,26 @@ class _GraphicalbuilerState extends State<GraphicalbuilderWeekly> {
                   mainAxisAlignment: MainAxisAlignment.center,
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                     Text(
+                    Text(
                       'Weekly',
                       style: TextStyle(
-                       fontSize: 20.sp,
+                        fontSize: 20.sp,
                         fontWeight: FontWeight.w600,
                         height: 0.sp,
                       ),
                     ),
-                      SizedBox(height: 10.sp),
+                    SizedBox(height: 10.sp),
                     pieChartData.isEmpty
                         ? Center(
                             child: Column(
                               children: [
-                                   SizedBox(height: 30.sp),
-                            Icon(
+                                SizedBox(height: 30.sp),
+                                Icon(
                                   Icons.warning,
                                   color: Colors.grey,
                                   size: 50.sp,
                                 ),
-                        SizedBox(height: 5.sp),
+                                SizedBox(height: 5.sp),
                                 Text(
                                   "No Data Available",
                                   style: TextStyle(
@@ -484,7 +483,7 @@ class _GraphicalbuilerState extends State<GraphicalbuilderWeekly> {
                                     color: Colors.grey[400],
                                   ),
                                 ),
-                            SizedBox(height: 25.sp),
+                                SizedBox(height: 25.sp),
                               ],
                             ),
                           )
@@ -499,13 +498,13 @@ class _GraphicalbuilerState extends State<GraphicalbuilderWeekly> {
                             ],
                             chartRadius:
                                 MediaQuery.of(context).size.width / 1.7,
-                            legendOptions:  LegendOptions(
+                            legendOptions: LegendOptions(
                               legendPosition: LegendPosition.top,
                               showLegendsInRow: true,
                               showLegends: true,
                               legendShape: BoxShape.circle,
                               legendTextStyle: TextStyle(
-                               fontWeight: FontWeight.w500,
+                                fontWeight: FontWeight.w500,
                                 fontSize: 14.sp,
                                 height: 0.sp,
                               ),
@@ -518,7 +517,7 @@ class _GraphicalbuilerState extends State<GraphicalbuilderWeekly> {
                 ),
               ),
             ),
-              SizedBox(height: 20.sp),
+            SizedBox(height: 20.sp),
           ],
         );
       },

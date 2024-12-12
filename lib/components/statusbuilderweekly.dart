@@ -146,7 +146,7 @@ class _StatusBuilerState extends State<StatusBuilderWeekly> {
                     Text(
                       formattedDate,
                       style: TextStyle(
-                         fontSize: 22.sp,
+                        fontSize: 22.sp,
                         fontWeight: FontWeight.w600,
                         color: Colors.white,
                         height: 0,
@@ -156,7 +156,7 @@ class _StatusBuilerState extends State<StatusBuilderWeekly> {
                     Text(
                       day,
                       style: TextStyle(
-                           fontSize: 14.sp,
+                        fontSize: 14.sp,
                         fontWeight: FontWeight.w400,
                         color: Colors.white,
                         height: 0,

@@ -1,5 +1,4 @@
 import 'dart:developer';
-
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
@@ -252,9 +251,6 @@ class _GraphicalbuilerState extends State<GraphicalbuilderMonthly> {
 
   @override
   Widget build(BuildContext context) {
-  
-
-
     return FutureBuilder<List<Map<String, dynamic>>?>(
       future: fetchMonthlyAttendance(userId),
       builder: (context, snapshot) {
@@ -292,7 +288,7 @@ class _GraphicalbuilerState extends State<GraphicalbuilderMonthly> {
               color: Theme.of(context).colorScheme.tertiary,
               elevation: 5,
               child: Padding(
-                padding:  EdgeInsets.all(12.0.sp),
+                padding: EdgeInsets.all(12.0.sp),
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
@@ -315,7 +311,7 @@ class _GraphicalbuilerState extends State<GraphicalbuilderMonthly> {
                             color: Theme.of(context).colorScheme.primary,
                           ),
                         ),
-                     SizedBox(width: 10.sp),
+                        SizedBox(width: 10.sp),
                         Text(
                           'TAT (Turn Around Time)',
                           style: TextStyle(
@@ -343,7 +339,7 @@ class _GraphicalbuilerState extends State<GraphicalbuilderMonthly> {
                                     '${value.toInt()}H',
                                     style: TextStyle(
                                       color: Colors.black,
-                                      fontSize:14.sp,
+                                      fontSize: 14.sp,
                                       fontWeight: FontWeight.w600,
                                       height: 0.sp,
                                     ),
@@ -443,13 +439,13 @@ class _GraphicalbuilerState extends State<GraphicalbuilderMonthly> {
                         ? Center(
                             child: Column(
                               children: [
-                                 SizedBox(height: 30.sp),
-                                 Icon(
+                                SizedBox(height: 30.sp),
+                                Icon(
                                   Icons.warning,
                                   color: Colors.grey,
                                   size: 50.sp,
                                 ),
-                          SizedBox(height: 5.sp),
+                                SizedBox(height: 5.sp),
                                 Text(
                                   "No Data Available",
                                   style: TextStyle(
@@ -459,7 +455,7 @@ class _GraphicalbuilerState extends State<GraphicalbuilderMonthly> {
                                     color: Colors.grey[400],
                                   ),
                                 ),
-                                 SizedBox(height: 25.sp),
+                                SizedBox(height: 25.sp),
                               ],
                             ),
                           )
@@ -496,7 +492,7 @@ class _GraphicalbuilerState extends State<GraphicalbuilderMonthly> {
                 ),
               ),
             ),
-             SizedBox(height: 20.sp),
+            SizedBox(height: 20.sp),
           ],
         );
       },

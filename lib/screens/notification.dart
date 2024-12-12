@@ -21,7 +21,6 @@ class _NotificationScreenState extends State<NotificationScreen> {
       backgroundColor: Colors.white,
       appBar: AppBar(
         leadingWidth: 65.sp,
-    
         title: Text(
           "Notification Screen",
           style: TextStyle(fontSize: responsiveFontSize20),
@@ -35,7 +34,7 @@ class _NotificationScreenState extends State<NotificationScreen> {
             borderRadius: BorderRadius.circular(12),
             color: Theme.of(context).colorScheme.tertiary,
             child: SizedBox(
-              width:12.sp,
+              width: 12.sp,
               height: 20.sp,
               child: Center(
                 child: IconButton(
@@ -71,7 +70,7 @@ class _NotificationScreenState extends State<NotificationScreen> {
               child: Center(
                 child: Column(
                   children: [
-                   SizedBox(height: 30.sp),
+                    SizedBox(height: 30.sp),
                     Icon(
                       Icons.warning,
                       color: Colors.grey,
@@ -87,7 +86,7 @@ class _NotificationScreenState extends State<NotificationScreen> {
                         color: Colors.grey[400],
                       ),
                     ),
-                SizedBox(height: 30.sp),
+                    SizedBox(height: 30.sp),
                   ],
                 ),
               ),

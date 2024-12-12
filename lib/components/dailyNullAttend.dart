@@ -23,7 +23,6 @@ class _DailyAttendanceState extends State<DailyEmptyAttendance> {
 
   @override
   Widget build(BuildContext context) {
-
     String message;
     Color containerColor;
 

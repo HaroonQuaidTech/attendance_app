@@ -155,7 +155,7 @@ class Monthlyattendance extends StatelessWidget {
             Text(
               'Late',
               style: TextStyle(
-                      fontSize: 16.sp,
+                fontSize: 16.sp,
                 color: Theme.of(context).colorScheme.secondary,
                 height: 0,
               ),
@@ -177,7 +177,7 @@ class Monthlyattendance extends StatelessWidget {
             Text(
               'Absent',
               style: TextStyle(
-                  fontSize: 16.sp,
+                fontSize: 16.sp,
                 color: Theme.of(context).colorScheme.secondary,
                 height: 0,
               ),

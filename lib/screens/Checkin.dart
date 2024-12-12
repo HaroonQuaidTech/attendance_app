@@ -367,8 +367,7 @@ class _CheckinScreenState extends State<CheckinScreen> {
     final double screenWidth = screenSize.width;
     double baseFontSize = 20;
     double responsiveFontSize20 = baseFontSize * (screenWidth / 375);
-   
-   
+
     DateTime now = DateTime.now();
     String formattedDate = DateFormat('yMMMd').format(now);
     String formattedDay = DateFormat('EEEE').format(now);
@@ -461,7 +460,7 @@ class _CheckinScreenState extends State<CheckinScreen> {
                         Text(
                           'Check In',
                           style: TextStyle(
-                      fontSize: 22.sp,
+                            fontSize: 22.sp,
                             height: 0,
                           ),
                         ),
@@ -662,8 +661,8 @@ class _CheckinScreenState extends State<CheckinScreen> {
                                           ),
                                           textAlign: TextAlign.center,
                                         ),
-                                      SizedBox(height: 4.sp),
-                                     Text(
+                                        SizedBox(height: 4.sp),
+                                        Text(
                                           'Do you want to checkout ?',
                                           style: TextStyle(
                                             fontSize: 16.sp,
@@ -682,9 +681,8 @@ class _CheckinScreenState extends State<CheckinScreen> {
                                                 Navigator.of(context).pop();
                                               },
                                               child: Container(
-                                                width:120.sp,
-                                                height:
-                                                  40.sp,
+                                                width: 120.sp,
+                                                height: 40.sp,
                                                 decoration: BoxDecoration(
                                                   color:
                                                       const Color(0xffECECEC),
@@ -695,8 +693,7 @@ class _CheckinScreenState extends State<CheckinScreen> {
                                                   child: Text(
                                                     'Cancel',
                                                     style: TextStyle(
-                                                      fontSize:
-                                                          14.sp,
+                                                      fontSize: 14.sp,
                                                       color: Colors.black,
                                                       height: 0.sp,
                                                     ),
@@ -710,9 +707,8 @@ class _CheckinScreenState extends State<CheckinScreen> {
                                                     .checkOut(context, userId);
                                               },
                                               child: Container(
-                                                     width:120.sp,
-                                                height:
-                                                  40.sp,
+                                                width: 120.sp,
+                                                height: 40.sp,
                                                 decoration: BoxDecoration(
                                                   color: Theme.of(context)
                                                       .colorScheme
@@ -724,8 +720,7 @@ class _CheckinScreenState extends State<CheckinScreen> {
                                                   child: Text(
                                                     'Checkout',
                                                     style: TextStyle(
-                                                      fontSize:14.sp
-                                                          ,
+                                                      fontSize: 14.sp,
                                                       color: Colors.white,
                                                       height: 0,
                                                     ),

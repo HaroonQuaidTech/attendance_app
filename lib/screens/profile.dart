@@ -434,6 +434,12 @@ class _ProfileScreenState extends State<ProfileScreen> {
             }
           }
         });
+        final Size screenSize = MediaQuery.of(context).size;
+
+        final double screenWidth = screenSize.width;
+
+        double baseFontSize15 = 15;
+        double responsiveFontSize15 = baseFontSize15 * (screenWidth / 375);
 
         return PopScope(
           canPop: false,
@@ -465,7 +471,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                   child: Column(
                     mainAxisSize: MainAxisSize.min,
                     children: [
-                      Image.asset(image, width: 50.sp, height: 50.sp),
+                      Image.asset(image, width: 10.sp, height: 10.sp),
                       SizedBox(height: 20.sp),
                       Text(
                         title,
@@ -476,11 +482,11 @@ class _ProfileScreenState extends State<ProfileScreen> {
                         ),
                         textAlign: TextAlign.center,
                       ),
-                      SizedBox(height: 10.sp),
+                      SizedBox(height: screenSize.height * 0.005),
                       Text(
                         message,
                         style: TextStyle(
-                          fontSize: 16.sp,
+                          fontSize: responsiveFontSize15,
                           color: Colors.grey,
                           height: 0,
                         ),

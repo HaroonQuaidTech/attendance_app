@@ -137,7 +137,7 @@ class _PreviousMonthlyAttendanceState extends State<PreviousMonthlyAttendance> {
     required List<Map<String, dynamic>?> data,
   }) {
     if (data.isEmpty) {
-      return  Center(
+      return Center(
         child: Text(
           'No attendance data found.',
           style: TextStyle(fontSize: 20.sp),
@@ -204,7 +204,6 @@ class _PreviousMonthlyAttendanceState extends State<PreviousMonthlyAttendance> {
   }
 
   Widget _buildEmptyAttendanceContainer(int index) {
-
     final int month = int.parse(selectedMonth!);
     final int year = int.parse(selectedYear!);
 
@@ -230,8 +229,8 @@ class _PreviousMonthlyAttendanceState extends State<PreviousMonthlyAttendance> {
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
                   Container(
-                     width: 60.sp,
-          height: 60.sp,
+                    width: 60.sp,
+                    height: 60.sp,
                     decoration: BoxDecoration(
                         color: StatusTheme.theme.colorScheme.secondary,
                         borderRadius: BorderRadius.circular(6)),
@@ -242,17 +241,17 @@ class _PreviousMonthlyAttendanceState extends State<PreviousMonthlyAttendance> {
                         Text(
                           formattedDate,
                           style: TextStyle(
-                           fontSize: 22.sp,
+                            fontSize: 22.sp,
                             fontWeight: FontWeight.w600,
                             color: Colors.white,
                             height: 0.sp,
                           ),
                         ),
-                 SizedBox(height: 5.sp),
+                        SizedBox(height: 5.sp),
                         Text(
                           day,
                           style: TextStyle(
-                              fontSize: 14.sp,
+                            fontSize: 14.sp,
                             fontWeight: FontWeight.w400,
                             color: Colors.white,
                             height: 0,
@@ -271,11 +270,11 @@ class _PreviousMonthlyAttendanceState extends State<PreviousMonthlyAttendance> {
                   height: 0,
                 ),
               ),
-           SizedBox(height: 50.sp),
+              SizedBox(height: 50.sp),
             ],
           ),
         ),
-   SizedBox(height: 10.sp),
+        SizedBox(height: 10.sp),
       ],
     );
   }
@@ -301,8 +300,8 @@ class _PreviousMonthlyAttendanceState extends State<PreviousMonthlyAttendance> {
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
               Container(
-                          width: 60.sp,
-          height: 60.sp,
+                width: 60.sp,
+                height: 60.sp,
                 decoration: BoxDecoration(
                     color: StatusTheme.theme.colorScheme.secondaryFixed,
                     borderRadius: BorderRadius.circular(6)),
@@ -313,7 +312,7 @@ class _PreviousMonthlyAttendanceState extends State<PreviousMonthlyAttendance> {
                     Text(
                       formattedDate,
                       style: TextStyle(
-                fontSize: 22.sp,
+                        fontSize: 22.sp,
                         fontWeight: FontWeight.w600,
                         color: Colors.white,
                         height: 0,
@@ -323,7 +322,7 @@ class _PreviousMonthlyAttendanceState extends State<PreviousMonthlyAttendance> {
                     Text(
                       day,
                       style: TextStyle(
-                         fontSize: 14.sp,
+                        fontSize: 14.sp,
                         fontWeight: FontWeight.w400,
                         color: Colors.white,
                         height: 0,
@@ -335,16 +334,16 @@ class _PreviousMonthlyAttendanceState extends State<PreviousMonthlyAttendance> {
               Text(
                 'Weekend',
                 style: TextStyle(
-                 fontSize: 22.sp,
+                  fontSize: 22.sp,
                   fontWeight: FontWeight.bold,
                   height: 0,
                 ),
               ),
-           SizedBox(height: 50.sp),
+              SizedBox(height: 50.sp),
             ],
           ),
         ),
-    SizedBox(height: 10.sp),
+        SizedBox(height: 10.sp),
       ],
     );
   }
@@ -391,8 +390,6 @@ class _PreviousMonthlyAttendanceState extends State<PreviousMonthlyAttendance> {
     required String? totalHours,
     required Color containerColor,
   }) {
-  
-  
     return Container(
       padding: const EdgeInsets.all(12),
       margin: EdgeInsets.only(bottom: 10.sp),
@@ -423,10 +420,9 @@ class _PreviousMonthlyAttendanceState extends State<PreviousMonthlyAttendance> {
 
   Widget _buildDateContainer(
       String formattedDate, String day, Color containerColor) {
-   
     return Container(
-       width: 60.sp,
-                height: 60.sp,
+      width: 60.sp,
+      height: 60.sp,
       decoration: BoxDecoration(
         color: containerColor,
         borderRadius: BorderRadius.circular(6),
@@ -444,7 +440,7 @@ class _PreviousMonthlyAttendanceState extends State<PreviousMonthlyAttendance> {
           Text(
             day,
             style: TextStyle(
-                fontSize:14.sp,
+                fontSize: 14.sp,
                 fontWeight: FontWeight.w400,
                 color: Colors.white),
           ),
@@ -491,7 +487,6 @@ class _PreviousMonthlyAttendanceState extends State<PreviousMonthlyAttendance> {
   }
 
   Widget _buildCheckTimeColumn(dynamic timeOrHours, String label) {
-
     return Column(
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
@@ -507,7 +502,7 @@ class _PreviousMonthlyAttendanceState extends State<PreviousMonthlyAttendance> {
         Text(
           label,
           style: TextStyle(
-              fontSize:12.sp,
+              fontSize: 12.sp,
               fontWeight: FontWeight.w600,
               color: Colors.black),
         ),
@@ -523,6 +518,23 @@ class _PreviousMonthlyAttendanceState extends State<PreviousMonthlyAttendance> {
     );
   }
 
+  void _showSelfClosingAlertDialog(BuildContext context) {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        Future.delayed(const Duration(seconds: 2), () {
+          if (Navigator.of(context).canPop()) {
+            Navigator.of(context).pop();
+          }
+        });
+        return const AlertDialog(
+          title: Text('Action Disabled'),
+          content: Text('Please select both month and year to proceed.'),
+        );
+      },
+    );
+  }
+
   String _formatTime(DateTime time) {
     final hour = time.hour;
     final minute = time.minute;
@@ -534,7 +546,6 @@ class _PreviousMonthlyAttendanceState extends State<PreviousMonthlyAttendance> {
     final Size screenSize = MediaQuery.of(context).size;
     final double screenHeight = screenSize.height;
     final double screenWidth = screenSize.width;
-  
 
     double baseFontSize15 = 15;
     double responsiveFontSize15 = baseFontSize15 * (screenWidth / 375);
@@ -592,10 +603,8 @@ class _PreviousMonthlyAttendanceState extends State<PreviousMonthlyAttendance> {
                                         DateFormat('MMMM').format(
                                             DateTime(0, int.parse(month))),
                                         style: TextStyle(
-                                          fontSize:
-                                              responsiveFontSize15, // Font size for dropdown items
-                                          color: Colors
-                                              .black, // Text color for dropdown items
+                                          fontSize: responsiveFontSize15,
+                                          color: Colors.black,
                                         ),
                                       ),
                                     );
@@ -667,14 +676,21 @@ class _PreviousMonthlyAttendanceState extends State<PreviousMonthlyAttendance> {
             child: Row(
               children: [
                 _buildSegment('Details Stats', 0),
-                _buildSegment('Graphical View', 1),
+                GestureDetector(
+                  onTap: () {
+                    if ((selectedMonth != null && selectedYear == null) ||
+                        (selectedMonth == null && selectedYear != null)) {
+                      _showSelfClosingAlertDialog(context);
+                    } else {
+                      _buildSegment('Graphical View', 1);
+                    }
+                  },
+                ),
               ],
             ),
           ),
           if (_selectedIndex == 1)
-            selectedMonth == null && selectedYear == null ||
-                    selectedMonth != null && selectedYear == null ||
-                    selectedMonth == null && selectedYear != null
+            selectedMonth == null && selectedYear == null
                 ? GraphicalbuilderMonthly(
                     year: DateTime.now().year,
                     month: DateTime.now().month,
@@ -899,7 +915,7 @@ class _PreviousMonthlyAttendanceState extends State<PreviousMonthlyAttendance> {
                           Text(
                             'Month Date Range: ${_getMonthDateRange()}',
                             style: TextStyle(
-                          fontWeight: FontWeight.bold,
+                              fontWeight: FontWeight.bold,
                               fontSize: 18.sp,
                               height: 0,
                             ),
