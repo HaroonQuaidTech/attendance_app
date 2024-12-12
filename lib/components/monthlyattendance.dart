@@ -1,6 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:fl_chart/fl_chart.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:quaidtech/main.dart';
 
 Future<Map<String, int>> fetchMonthlyAttendance(String userId) async {
@@ -84,19 +85,12 @@ class Monthlyattendance extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final Size screenSize = MediaQuery.of(context).size;
-    final double screenWidth = screenSize.width;
-    double baseFontSize = 20;
-    double responsiveFontSize = baseFontSize * (screenWidth / 375);
-    double baseFontSize1 = 14;
-    double responsiveFontSize1 = baseFontSize1 * (screenWidth / 375);
-
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: [
         SizedBox(
-          height: screenSize.height * 0.09,
-          width: screenSize.height * 0.1,
+          height: 80.sp,
+          width: 90.sp,
           child: PieChart(
             PieChartData(
               sections: [
@@ -104,23 +98,23 @@ class Monthlyattendance extends StatelessWidget {
                   color: StatusTheme.theme.colorScheme.surface,
                   value: presentCount.toDouble(),
                   title: '',
-                  radius: screenSize.height * 0.013,
+                  radius: 10.sp,
                 ),
                 PieChartSectionData(
                   color: StatusTheme.theme.colorScheme.primary,
                   value: lateCount.toDouble(),
                   title: '',
-                  radius: screenSize.height * 0.013,
+                  radius: 10.sp,
                 ),
                 PieChartSectionData(
                   color: StatusTheme.theme.colorScheme.secondary,
                   value: absentCount.toDouble(),
                   title: '',
-                  radius: screenSize.height * 0.013,
+                  radius: 10.sp,
                 ),
               ],
-              sectionsSpace: 0,
-              centerSpaceRadius: 22,
+              sectionsSpace: 0.sp,
+              centerSpaceRadius: 22.sp,
             ),
           ),
         ),
@@ -129,17 +123,17 @@ class Monthlyattendance extends StatelessWidget {
             Text(
               presentCount.toString(),
               style: TextStyle(
-                fontSize: responsiveFontSize,
+                fontSize: 22.sp,
                 fontWeight: FontWeight.w600,
                 color: StatusTheme.theme.colorScheme.surface,
                 height: 0,
               ),
             ),
-            const SizedBox(height: 10),
+            SizedBox(height: 6.sp),
             Text(
               'Present',
               style: TextStyle(
-                fontSize: responsiveFontSize1,
+                fontSize: 16.sp,
                 color: Theme.of(context).colorScheme.secondary,
                 height: 0,
               ),
@@ -151,17 +145,17 @@ class Monthlyattendance extends StatelessWidget {
             Text(
               lateCount.toString(),
               style: TextStyle(
-                fontSize: responsiveFontSize,
+                fontSize: 22.sp,
                 fontWeight: FontWeight.w600,
                 color: StatusTheme.theme.colorScheme.primary,
                 height: 0,
               ),
             ),
-            const SizedBox(height: 10),
+            SizedBox(height: 6.sp),
             Text(
               'Late',
               style: TextStyle(
-                fontSize: responsiveFontSize1,
+                      fontSize: 16.sp,
                 color: Theme.of(context).colorScheme.secondary,
                 height: 0,
               ),
@@ -173,17 +167,17 @@ class Monthlyattendance extends StatelessWidget {
             Text(
               absentCount.toString(),
               style: TextStyle(
-                fontSize: responsiveFontSize,
+                fontSize: 22.sp,
                 fontWeight: FontWeight.w600,
                 color: StatusTheme.theme.colorScheme.secondary,
                 height: 0,
               ),
             ),
-            const SizedBox(height: 10),
+            SizedBox(height: 6.sp),
             Text(
               'Absent',
               style: TextStyle(
-                fontSize: responsiveFontSize1,
+                  fontSize: 16.sp,
                 color: Theme.of(context).colorScheme.secondary,
                 height: 0,
               ),

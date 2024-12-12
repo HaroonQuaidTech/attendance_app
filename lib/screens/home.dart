@@ -4,6 +4,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:draggable_fab/draggable_fab.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:quaidtech/components/dailyAttendancedetails.dart';
 import 'package:quaidtech/components/dailyNullAttend.dart';
 import 'package:quaidtech/components/monthlyattendance.dart';
@@ -312,17 +313,8 @@ class _HomeScreenState extends State<HomeScreen> {
     final Size screenSize = MediaQuery.of(context).size;
     final double screenWidth = screenSize.width;
 
-    double baseFontSize3 = 9;
-    double responsiveFontSize8 = baseFontSize3 * (screenWidth / 375);
-
     double baseFontSize = 16;
     double responsiveFontSize = baseFontSize * (screenWidth / 375);
-    double baseFontSize1 = 20;
-    double responsiveFontSize1 = baseFontSize1 * (screenWidth / 375);
-    double baseFontSize18 = 18;
-    double responsiveFontSize18 = baseFontSize18 * (screenWidth / 375);
-    double baseFontSize14 = 14;
-    double responsiveFontSize14 = baseFontSize14 * (screenWidth / 375);
 
     // ignore: deprecated_member_use
     return WillPopScope(
@@ -339,7 +331,7 @@ class _HomeScreenState extends State<HomeScreen> {
                 mainAxisSize: MainAxisSize.min,
                 children: [
                   Container(
-                    height: screenSize.height * 0.01,
+                    height: 10.sp,
                     decoration: BoxDecoration(
                       gradient: LinearGradient(
                         colors: [
@@ -361,33 +353,33 @@ class _HomeScreenState extends State<HomeScreen> {
                       mainAxisSize: MainAxisSize.min,
                       children: [
                         CircleAvatar(
-                          radius: 25,
+                          radius: 25.sp,
                           backgroundColor: const Color(0xff3B3A3C),
                           child: Image.asset(
                             "assets/warning.png",
                           ),
                         ),
-                       SizedBox(height: screenSize.height*0.008),
+                        SizedBox(height: 10.sp),
                         Text(
                           'Are you sure ?',
                           style: TextStyle(
-                            fontSize: responsiveFontSize18,
+                            fontSize: 18.sp,
                             fontWeight: FontWeight.bold,
                             height: 0,
                           ),
                           textAlign: TextAlign.center,
                         ),
-                        SizedBox(height: screenSize.height*0.006),
+                        SizedBox(height: 6.sp),
                         Text(
                           'Do you want to exit app ?',
                           style: TextStyle(
-                            fontSize: responsiveFontSize14,
+                            fontSize: 14.sp,
                             color: Colors.grey,
                             height: 0,
                           ),
                           textAlign: TextAlign.center,
                         ),
-                           SizedBox(height: screenSize.height*0.025),
+                        SizedBox(height: 20.sp),
                         Row(
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: [
@@ -396,8 +388,8 @@ class _HomeScreenState extends State<HomeScreen> {
                                 Navigator.of(context).pop();
                               },
                               child: Container(
-                                width: screenWidth * 0.3,
-                                height: screenSize.height * 0.04,
+                                width: 120.sp,
+                                height: 40.sp,
                                 decoration: BoxDecoration(
                                   color: const Color(0xffECECEC),
                                   borderRadius: BorderRadius.circular(10),
@@ -406,7 +398,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                   child: Text(
                                     'Cancel',
                                     style: TextStyle(
-                                      fontSize: responsiveFontSize14,
+                                      fontSize: 14.sp,
                                       color: Colors.black,
                                       height: 0,
                                     ),
@@ -419,8 +411,8 @@ class _HomeScreenState extends State<HomeScreen> {
                                 exit(0);
                               },
                               child: Container(
-                                width: screenWidth * 0.3,
-                                height: screenSize.height * 0.04,
+                                width: 120.sp,
+                                height: 40.sp,
                                 decoration: BoxDecoration(
                                   color: Theme.of(context).colorScheme.primary,
                                   borderRadius: BorderRadius.circular(10),
@@ -429,7 +421,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                   child: Text(
                                     'Continue',
                                     style: TextStyle(
-                                      fontSize: responsiveFontSize14,
+                                      fontSize: 14.sp,
                                       color: Colors.white,
                                       height: 0,
                                     ),
@@ -457,8 +449,8 @@ class _HomeScreenState extends State<HomeScreen> {
               : _selectedIndex == 2
                   ? const ProfileScreen()
                   : Padding(
-                      padding: const EdgeInsets.symmetric(
-                          horizontal: 12.0, vertical: 16),
+                      padding: EdgeInsets.symmetric(
+                          horizontal: 12.0.sp, vertical: 16.sp),
                       child: Column(
                         children: [
                           FutureBuilder<DocumentSnapshot>(
@@ -482,8 +474,8 @@ class _HomeScreenState extends State<HomeScreen> {
                                       },
                                       child: Image.asset(
                                         'assets/notification_icon.png',
-                                        height: screenSize.height * 0.04,
-                                        width: screenSize.width * 0.04,
+                                        height: 20.sp,
+                                        width: 20.sp,
                                       ),
                                     )
                                   ]);
@@ -498,15 +490,14 @@ class _HomeScreenState extends State<HomeScreen> {
                                   if (_imageUrl != null &&
                                       _imageUrl!.isNotEmpty)
                                     Padding(
-                                      padding:
-                                          const EdgeInsets.only(right: 10.0),
+                                      padding: EdgeInsets.only(right: 10.0.sp),
                                       child: ClipRRect(
                                         borderRadius:
                                             BorderRadius.circular(900),
                                         child: Image.network(
                                           _imageUrl!,
-                                          width: screenSize.width * 0.17,
-                                          height: screenSize.height * 0.08,
+                                          width: 70.sp,
+                                          height: 70.sp,
                                           fit: BoxFit.cover,
                                         ),
                                       ),
@@ -519,7 +510,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                       Text(
                                         displayName,
                                         style: TextStyle(
-                                          fontSize: responsiveFontSize1,
+                                          fontSize: 20.sp,
                                           fontWeight: FontWeight.w600,
                                           height: 0,
                                         ),
@@ -527,7 +518,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                       Text(
                                         email,
                                         style: TextStyle(
-                                          fontSize: responsiveFontSize,
+                                          fontSize: 18.sp,
                                           fontWeight: FontWeight.w400,
                                           height: 0,
                                         ),
@@ -552,13 +543,13 @@ class _HomeScreenState extends State<HomeScreen> {
                                           .colorScheme
                                           .tertiary,
                                       child: SizedBox(
-                                        width: screenSize.width * 0.12,
-                                        height: screenSize.height * 0.06,
+                                        width: 50.sp,
+                                        height: 55.sp,
                                         child: Center(
                                           child: Image.asset(
                                             'assets/notification_icon.png',
-                                            width: screenSize.width * 0.07,
-                                            height: screenSize.height * 0.07,
+                                            width: 30.sp,
+                                            height: 35.sp,
                                           ),
                                         ),
                                       ),
@@ -566,7 +557,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                   ),
                                 ]);
                               }),
-                          const SizedBox(height: 30),
+                          SizedBox(height: 30.sp),
                           Material(
                             elevation: 5,
                             color: Theme.of(context).colorScheme.tertiary,
@@ -579,12 +570,12 @@ class _HomeScreenState extends State<HomeScreen> {
                                   Text(
                                     'Monthly Attendance',
                                     style: TextStyle(
-                                      fontSize: responsiveFontSize,
+                                      fontSize: 18.sp,
                                       height: 0,
                                       fontWeight: FontWeight.w500,
                                     ),
                                   ),
-                                  const SizedBox(height: 10),
+                                  SizedBox(height: 10.sp),
                                   FutureBuilder<Map<String, int>>(
                                     future: fetchMonthlyAttendance(user!.uid),
                                     builder: (context, snapshot) {
@@ -620,7 +611,7 @@ class _HomeScreenState extends State<HomeScreen> {
                               ),
                             ),
                           ),
-                          const SizedBox(height: 20),
+                          SizedBox(height: 20.sp),
                           Expanded(
                             child: SingleChildScrollView(
                               child: Column(
@@ -636,13 +627,11 @@ class _HomeScreenState extends State<HomeScreen> {
                                           headerStyle: HeaderStyle(
                                               leftChevronIcon: Icon(
                                                 Icons.chevron_left,
-                                                size:
-                                                    screenSize.height * 0.0275,
+                                                size: 24.sp,
                                               ),
                                               rightChevronIcon: Icon(
                                                 Icons.chevron_right,
-                                                size:
-                                                    screenSize.height * 0.0275,
+                                                size: 24.sp,
                                               ),
                                               titleTextStyle: TextStyle(
                                                 fontSize: responsiveFontSize,
@@ -650,9 +639,8 @@ class _HomeScreenState extends State<HomeScreen> {
                                               headerPadding:
                                                   const EdgeInsets.symmetric(
                                                       vertical: 0)),
-                                          rowHeight: screenSize.height * 0.055,
-                                          daysOfWeekHeight:
-                                              screenSize.height * 0.04,
+                                          rowHeight: 50.sp,
+                                          daysOfWeekHeight: 30.sp,
                                           firstDay: DateTime.utc(2020, 10, 16),
                                           lastDay: DateTime.utc(2030, 3, 14),
                                           focusedDay: _focusedDay,
@@ -684,9 +672,9 @@ class _HomeScreenState extends State<HomeScreen> {
                                                   .inversePrimary,
                                               shape: BoxShape.circle,
                                             ),
-                                            todayTextStyle: const TextStyle(
+                                            todayTextStyle: TextStyle(
                                               color: Colors.black,
-                                              height: 0,
+                                              height: 0.sp,
                                             ),
                                           ),
                                           calendarBuilders: CalendarBuilders(
@@ -704,9 +692,9 @@ class _HomeScreenState extends State<HomeScreen> {
                                                 ),
                                                 child: Text(
                                                   '${date.day}',
-                                                  style: const TextStyle(
+                                                  style: TextStyle(
                                                     color: Colors.white,
-                                                    height: 0,
+                                                    height: 0.sp,
                                                   ),
                                                 ),
                                               );
@@ -738,8 +726,8 @@ class _HomeScreenState extends State<HomeScreen> {
                                                     const EdgeInsets.symmetric(
                                                   horizontal: 1.5,
                                                 ),
-                                                width: 6,
-                                                height: 6,
+                                                width: 6.sp,
+                                                height: 6.sp,
                                                 decoration: BoxDecoration(
                                                   shape: BoxShape.circle,
                                                   color: eventColor,
@@ -748,11 +736,11 @@ class _HomeScreenState extends State<HomeScreen> {
                                             },
                                           ),
                                         ),
-                                        const SizedBox(height: 10),
+                                        SizedBox(height: 10.sp),
                                       ],
                                     ),
                                   ),
-                                  const SizedBox(height: 20),
+                                  SizedBox(height: 16.sp),
                                   Material(
                                     elevation: 5,
                                     color:
@@ -768,16 +756,16 @@ class _HomeScreenState extends State<HomeScreen> {
                                           crossAxisAlignment:
                                               CrossAxisAlignment.start,
                                           children: [
-                                            const SizedBox(height: 10),
+                                            SizedBox(height: 10.sp),
                                             Text(
                                               'Attendance Details',
                                               style: TextStyle(
-                                                fontSize: responsiveFontSize,
-                                                height: 0,
+                                                fontSize: 18.sp,
+                                                height: 0.sp,
                                                 fontWeight: FontWeight.w500,
                                               ),
                                             ),
-                                            const SizedBox(height: 10),
+                                            SizedBox(height: 10.sp),
                                             Builder(
                                               builder: (context) {
                                                 if (data == null) {
@@ -798,13 +786,13 @@ class _HomeScreenState extends State<HomeScreen> {
                                                 );
                                               },
                                             ),
-                                            const SizedBox(height: 10),
+                                            SizedBox(height: 10.sp),
                                           ],
                                         ),
                                       ],
                                     ),
                                   ),
-                                  const SizedBox(height: 20),
+                                  SizedBox(height: 20.sp),
                                 ],
                               ),
                             ),
@@ -817,8 +805,6 @@ class _HomeScreenState extends State<HomeScreen> {
             ? FutureBuilder<Map<String, dynamic>?>(
                 future: _getAttendanceDetails(userId, DateTime.now()),
                 builder: (context, snapshot) {
-                  final screenHeight = MediaQuery.of(context).size.height;
-
                   DateTime? checkIn;
                   DateTime? checkOut;
 
@@ -837,8 +823,7 @@ class _HomeScreenState extends State<HomeScreen> {
                             elevation: 6,
                             shape: const CircleBorder(),
                             child: CircleAvatar(
-                              radius: screenHeight *
-                                  0.06, //OUTER CIRCLE Radius HEIGHT
+                              radius: 60.sp, //OUTER CIRCLE Radius HEIGHT
                               backgroundColor: Colors.white,
                               child: Container(
                                 decoration: BoxDecoration(
@@ -853,8 +838,8 @@ class _HomeScreenState extends State<HomeScreen> {
                             ),
                           ),
                           Container(
-                            width: screenSize.height * 0.09,
-                            height: screenSize.height * 0.09,
+                            width: 80.sp,
+                            height: 80.sp,
                             decoration: BoxDecoration(
                               color: Colors.white,
                               shape: BoxShape.circle,
@@ -865,8 +850,8 @@ class _HomeScreenState extends State<HomeScreen> {
                             ),
                           ),
                           SizedBox(
-                            width: screenSize.width * 0.17,
-                            height: screenSize.height * 0.085,
+                            width: 77.sp,
+                            height: 77.sp,
                             child: FloatingActionButton(
                               onPressed: () {
                                 Navigator.push(
@@ -886,18 +871,18 @@ class _HomeScreenState extends State<HomeScreen> {
                                 children: [
                                   Image.asset(
                                     'assets/checkout_button.png',
-                                    height: screenWidth * 0.06,
-                                    width: screenWidth * 0.06,
+                                    width: 30.sp,
+                                    height: 30.sp,
                                     color:
                                         Theme.of(context).colorScheme.primary,
                                   ),
-                                  SizedBox(height: screenHeight * 0.006),
+                                  SizedBox(height: 8.sp),
                                   Text(
                                     'Check Out',
                                     style: TextStyle(
                                       color: Colors.black,
-                                      fontSize: responsiveFontSize8,
-                                      height: 0,
+                                      fontSize: 10.sp,
+                                      height: 0.sp,
                                     ),
                                   ),
                                 ],
@@ -916,7 +901,7 @@ class _HomeScreenState extends State<HomeScreen> {
                             elevation: 4.0,
                             shape: const CircleBorder(),
                             child: CircleAvatar(
-                              radius: screenHeight * 0.06,
+                              radius: 60.sp, //OUTER CIRCLE Radius HEIGHT
                               backgroundColor: Colors.white,
                               child: Container(
                                 decoration: BoxDecoration(
@@ -931,8 +916,8 @@ class _HomeScreenState extends State<HomeScreen> {
                             ),
                           ),
                           Container(
-                            width: screenSize.height * 0.09,
-                            height: screenSize.height * 0.09,
+                            width: 80.sp,
+                            height: 80.sp,
                             decoration: BoxDecoration(
                               color: Colors.white,
                               shape: BoxShape.circle,
@@ -943,8 +928,8 @@ class _HomeScreenState extends State<HomeScreen> {
                             ),
                           ),
                           SizedBox(
-                            width: screenSize.width * 0.17,
-                            height: screenSize.height * 0.085,
+                            width: 77.sp,
+                            height: 77.sp,
                             child: FloatingActionButton(
                               onPressed: () {
                                 Navigator.push(
@@ -964,18 +949,18 @@ class _HomeScreenState extends State<HomeScreen> {
                                 children: [
                                   Image.asset(
                                     'assets/checkin_button.png',
-                                    height: screenWidth * 0.06,
-                                    width: screenWidth * 0.06,
+                                    width: 30.sp,
+                                    height: 30.sp,
                                     color:
                                         Theme.of(context).colorScheme.primary,
                                   ),
-                                  SizedBox(height: screenHeight * 0.006),
+                                  SizedBox(height: 8.sp),
                                   Text(
                                     'Check In',
                                     style: TextStyle(
                                       color: Colors.black,
-                                      fontSize: responsiveFontSize8,
-                                      height: 0,
+                                      fontSize: 10.sp,
+                                      height: 0.sp,
                                     ),
                                   ),
                                 ],
@@ -992,16 +977,16 @@ class _HomeScreenState extends State<HomeScreen> {
             : null,
         floatingActionButtonLocation: FloatingActionButtonLocation.endFloat,
         bottomNavigationBar: Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 10.0, vertical: 10.0),
+          padding: EdgeInsets.symmetric(horizontal: 10.0.sp, vertical: 10.0.sp),
           child: Container(
-            height: screenSize.height * 0.07,
+            height: 70.sp,
             width: double.infinity,
             decoration: BoxDecoration(
               borderRadius: BorderRadius.circular(60),
               color: Theme.of(context).colorScheme.tertiary,
             ),
             child: Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 5),
+              padding: EdgeInsets.symmetric(horizontal: 5.sp),
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
@@ -1032,17 +1017,13 @@ class _HomeScreenState extends State<HomeScreen> {
 
   Widget _buildSegmentNavigator(
       String text, int index, Image image, String asset) {
-    final Size screenSize = MediaQuery.of(context).size;
-    final double screenWidth = screenSize.width;
-    double baseFontSize = 16;
-    double responsiveFontSize = baseFontSize * (screenWidth / 375);
     bool isSelected = _selectedIndex == index;
     if (index == 1) const StatsticsScreen();
     if (index == 2) const ProfileScreen();
     return GestureDetector(
       onTap: () => _onItemTapped(index),
       child: Container(
-        height: screenSize.height * 0.06,
+        height: 52.sp,
         decoration: BoxDecoration(
           color: isSelected
               ? Theme.of(context).colorScheme.surface
@@ -1057,30 +1038,30 @@ class _HomeScreenState extends State<HomeScreen> {
                   ? Image(
                       image: image.image,
                       color: Theme.of(context).colorScheme.primary,
-                      width: screenSize.height * 0.03,
-                      height: screenSize.height * 0.03,
+                      width: 25.sp,
+                      height: 25.sp,
                     )
                   : Image.asset(
-                      width: screenSize.height * 0.03,
-                      height: screenSize.height * 0.03,
+                      width: 25.sp,
+                      height: 25.sp,
                       asset,
                       color: Theme.of(context).colorScheme.secondary,
                     ),
             ),
-            const SizedBox(
-              width: 5,
+            SizedBox(
+              width: 5.sp,
             ),
             isSelected
                 ? Text(
                     text,
                     style: TextStyle(
                       color: Theme.of(context).colorScheme.primary,
-                      fontSize: responsiveFontSize,
+                      fontSize: 18.sp,
                       height: 0,
                     ),
                   )
                 : Container(),
-            const SizedBox(width: 20),
+            SizedBox(width: 20.sp),
           ],
         ),
       ),
