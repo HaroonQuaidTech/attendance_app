@@ -255,14 +255,6 @@ class _GraphicalbuilerState extends State<GraphicalbuilderMonthly> {
   
 
 
-    final Size screenSize = MediaQuery.of(context).size;
-    final double screenWidth = screenSize.width;
-    double baseFontSize = 20;
-    double responsiveFontSize20 = baseFontSize * (screenWidth / 375);
-    double baseFontSize2 = 16;
-    double responsiveFontSize16 = baseFontSize2 * (screenWidth / 375);
-    double baseFontSize3 = 14;
-    double responsiveFontSize14 = baseFontSize3 * (screenWidth / 375);
     return FutureBuilder<List<Map<String, dynamic>>?>(
       future: fetchMonthlyAttendance(userId),
       builder: (context, snapshot) {
@@ -305,12 +297,10 @@ class _GraphicalbuilerState extends State<GraphicalbuilderMonthly> {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Text(
-                    Text(
                       'Monthly',
                       style: TextStyle(
                         fontWeight: FontWeight.w600,
                         fontSize: 20.sp,
-                        fontSize: responsiveFontSize20,
                         height: 0,
                       ),
                     ),
@@ -321,29 +311,22 @@ class _GraphicalbuilerState extends State<GraphicalbuilderMonthly> {
                         Container(
                           width: 18.sp,
                           height: 18.sp,
-                          height: screenSize.height * 0.02,
-                          width: screenSize.height * 0.02,
                           decoration: BoxDecoration(
                             color: Theme.of(context).colorScheme.primary,
                           ),
                         ),
                      SizedBox(width: 10.sp),
                         Text(
-                        const SizedBox(width: 10),
-                        Text(
                           'TAT (Turn Around Time)',
                           style: TextStyle(
                             fontWeight: FontWeight.w400,
                             fontSize: 16.sp,
                             height: 0.sp,
-                            fontSize: responsiveFontSize16,
-                            height: 0,
                           ),
                         ),
                       ],
                     ),
                     SizedBox(height: 30.sp),
-                    SizedBox(height: screenSize.height * 0.03),
                     SizedBox(
                       height: 400.sp,
                       child: BarChart(
@@ -361,7 +344,6 @@ class _GraphicalbuilerState extends State<GraphicalbuilderMonthly> {
                                     style: TextStyle(
                                       color: Colors.black,
                                       fontSize:14.sp,
-                                      fontSize: responsiveFontSize14,
                                       fontWeight: FontWeight.w600,
                                       height: 0.sp,
                                     ),
@@ -377,7 +359,6 @@ class _GraphicalbuilerState extends State<GraphicalbuilderMonthly> {
                                 reservedSize: 60.sp,
                                 getTitlesWidget: (value, meta) {
                                   SizedBox(height: 10.sp);
-                                  SizedBox(height: screenSize.height * 0.02);
                                   List<String> weekLabels = [
                                     'Week 1',
                                     'Week 2',
@@ -393,8 +374,6 @@ class _GraphicalbuilerState extends State<GraphicalbuilderMonthly> {
                                         weekLabels[value.toInt()],
                                         style: TextStyle(
                                           fontSize: 14.sp,
-                                        style: TextStyle(
-                                          fontSize: responsiveFontSize14,
                                           fontWeight: FontWeight.w600,
                                           height: 0.sp,
                                         ),
@@ -441,7 +420,6 @@ class _GraphicalbuilerState extends State<GraphicalbuilderMonthly> {
               ),
             ),
             SizedBox(height: 15.sp),
-            SizedBox(height: screenSize.height * 0.02),
             Material(
               borderRadius: BorderRadius.circular(20),
               color: Theme.of(context).colorScheme.tertiary,
@@ -453,17 +431,14 @@ class _GraphicalbuilerState extends State<GraphicalbuilderMonthly> {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Text(
-                    Text(
                       'Monthly',
                       style: TextStyle(
                         fontSize: 20.sp,
-                        fontSize: responsiveFontSize20,
                         fontWeight: FontWeight.w600,
                         height: 0.sp,
                       ),
                     ),
                     SizedBox(height: 10.sp),
-                    SizedBox(height: screenSize.height * 0.02),
                     pieChartData.isEmpty
                         ? Center(
                             child: Column(
@@ -508,8 +483,6 @@ class _GraphicalbuilerState extends State<GraphicalbuilderMonthly> {
                                 fontWeight: FontWeight.w500,
                                 fontSize: 14.sp,
                                 height: 0.sp,
-                                fontSize: responsiveFontSize14,
-                                height: 0,
                               ),
                             ),
                             chartValuesOptions: const ChartValuesOptions(
