@@ -823,7 +823,7 @@ class _HomeScreenState extends State<HomeScreen> {
                             elevation: 6,
                             shape: const CircleBorder(),
                             child: CircleAvatar(
-                              radius: 60.sp, //OUTER CIRCLE Radius HEIGHT
+                              radius: 50.sp, //OUTER CIRCLE Radius HEIGHT
                               backgroundColor: Colors.white,
                               child: Container(
                                 decoration: BoxDecoration(
@@ -838,8 +838,8 @@ class _HomeScreenState extends State<HomeScreen> {
                             ),
                           ),
                           Container(
-                            width: 80.sp,
-                            height: 80.sp,
+                            width: 70.sp,
+                            height: 70.sp,
                             decoration: BoxDecoration(
                               color: Colors.white,
                               shape: BoxShape.circle,
@@ -850,8 +850,8 @@ class _HomeScreenState extends State<HomeScreen> {
                             ),
                           ),
                           SizedBox(
-                            width: 77.sp,
-                            height: 77.sp,
+                            width: 65.sp,
+                            height: 65.sp,
                             child: FloatingActionButton(
                               onPressed: () {
                                 Navigator.push(
@@ -871,8 +871,8 @@ class _HomeScreenState extends State<HomeScreen> {
                                 children: [
                                   Image.asset(
                                     'assets/checkout_button.png',
-                                    width: 30.sp,
-                                    height: 30.sp,
+                                    width: 28.sp,
+                                    height: 28.sp,
                                     color:
                                         Theme.of(context).colorScheme.primary,
                                   ),
@@ -881,7 +881,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                     'Check Out',
                                     style: TextStyle(
                                       color: Colors.black,
-                                      fontSize: 10.sp,
+                                      fontSize: 8.sp,
                                       height: 0.sp,
                                     ),
                                   ),
@@ -901,7 +901,7 @@ class _HomeScreenState extends State<HomeScreen> {
                             elevation: 4.0,
                             shape: const CircleBorder(),
                             child: CircleAvatar(
-                              radius: 60.sp, //OUTER CIRCLE Radius HEIGHT
+                              radius: 50.sp, //OUTER CIRCLE Radius HEIGHT
                               backgroundColor: Colors.white,
                               child: Container(
                                 decoration: BoxDecoration(
@@ -916,8 +916,8 @@ class _HomeScreenState extends State<HomeScreen> {
                             ),
                           ),
                           Container(
-                            width: 80.sp,
-                            height: 80.sp,
+                            width: 70.sp,
+                            height: 70.sp,
                             decoration: BoxDecoration(
                               color: Colors.white,
                               shape: BoxShape.circle,
@@ -928,8 +928,8 @@ class _HomeScreenState extends State<HomeScreen> {
                             ),
                           ),
                           SizedBox(
-                            width: 77.sp,
-                            height: 77.sp,
+                            width: 65.sp,
+                            height: 65.sp,
                             child: FloatingActionButton(
                               onPressed: () {
                                 Navigator.push(
@@ -949,8 +949,8 @@ class _HomeScreenState extends State<HomeScreen> {
                                 children: [
                                   Image.asset(
                                     'assets/checkin_button.png',
-                                    width: 30.sp,
-                                    height: 30.sp,
+                                    width: 28.sp,
+                                    height: 28.sp,
                                     color:
                                         Theme.of(context).colorScheme.primary,
                                   ),
@@ -959,7 +959,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                     'Check In',
                                     style: TextStyle(
                                       color: Colors.black,
-                                      fontSize: 10.sp,
+                                      fontSize: 8.sp,
                                       height: 0.sp,
                                     ),
                                   ),
