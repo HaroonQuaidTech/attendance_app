@@ -617,7 +617,8 @@ class _PreviousMonthlyAttendanceState extends State<PreviousMonthlyAttendance> {
                                   hint: Text(
                                     "Select Month",
                                     style: TextStyle(
-                                        fontSize: responsiveFontSize15,color: Colors.black),
+                                        fontSize: responsiveFontSize15,
+                                        color: Colors.black),
                                   ),
                                   isExpanded: true,
                                   underline: const SizedBox(),
@@ -660,7 +661,8 @@ class _PreviousMonthlyAttendanceState extends State<PreviousMonthlyAttendance> {
                                   hint: Text(
                                     "Select Year",
                                     style: TextStyle(
-                                        fontSize: responsiveFontSize15,color: Colors.black),
+                                        fontSize: responsiveFontSize15,
+                                        color: Colors.black),
                                   ),
                                   isExpanded: true,
                                   underline: const SizedBox(),
@@ -707,7 +709,9 @@ class _PreviousMonthlyAttendanceState extends State<PreviousMonthlyAttendance> {
             ),
           ),
           if (_selectedIndex == 1)
-            selectedMonth == null && selectedYear == null
+            selectedMonth == null && selectedYear == null ||
+                    selectedMonth != null && selectedYear == null ||
+                    selectedMonth == null && selectedYear != null
                 ? GraphicalbuilderMonthly(
                     year: DateTime.now().year,
                     month: DateTime.now().month,

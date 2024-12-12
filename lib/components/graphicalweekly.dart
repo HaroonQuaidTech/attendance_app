@@ -327,8 +327,7 @@ class _GraphicalbuilerState extends State<GraphicalbuilderWeekly> {
               color: Theme.of(context).colorScheme.tertiary,
               elevation: 5,
               child: Padding(
-                padding:
-                    const EdgeInsets.only( top: 16.0,left: 16),
+                padding: const EdgeInsets.only(top: 16.0, left: 16),
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
@@ -362,7 +361,7 @@ class _GraphicalbuilerState extends State<GraphicalbuilderWeekly> {
                         ),
                       ],
                     ),
-                     SizedBox(height: screenSize.height*0.03),
+                    SizedBox(height: screenSize.height * 0.03),
                     SizedBox(
                       height: screenSize.height * 0.45,
                       child: BarChart(
@@ -452,7 +451,7 @@ class _GraphicalbuilerState extends State<GraphicalbuilderWeekly> {
                 ),
               ),
             ),
-           SizedBox(height: screenSize.height*0.02),
+            SizedBox(height: screenSize.height * 0.02),
             Material(
               borderRadius: BorderRadius.circular(20),
               color: Theme.of(context).colorScheme.tertiary,
@@ -463,7 +462,7 @@ class _GraphicalbuilerState extends State<GraphicalbuilderWeekly> {
                   mainAxisAlignment: MainAxisAlignment.center,
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                     Text(
+                    Text(
                       'Weekly',
                       style: TextStyle(
                         fontSize: responsiveFontSize20,
@@ -471,7 +470,7 @@ class _GraphicalbuilerState extends State<GraphicalbuilderWeekly> {
                         height: 0,
                       ),
                     ),
-                     SizedBox(height:screenSize.height*0.02),
+                    SizedBox(height: screenSize.height * 0.02),
                     pieChartData.isEmpty
                         ? Center(
                             child: Column(
@@ -507,7 +506,7 @@ class _GraphicalbuilerState extends State<GraphicalbuilderWeekly> {
                             ],
                             chartRadius:
                                 MediaQuery.of(context).size.width / 1.7,
-                            legendOptions:  LegendOptions(
+                            legendOptions: LegendOptions(
                               legendPosition: LegendPosition.top,
                               showLegendsInRow: true,
                               showLegends: true,

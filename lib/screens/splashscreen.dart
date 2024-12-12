@@ -1,4 +1,3 @@
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 
 class Splashscreen extends StatefulWidget {
@@ -9,21 +8,14 @@ class Splashscreen extends StatefulWidget {
 }
 
 class _SplashscreenState extends State<Splashscreen> {
-  void _checkUserLogin() async {
-    await Future.delayed(const Duration(seconds: 2));
-
-    User? user = FirebaseAuth.instance.currentUser;
-
-    if (user != null) {
-      Navigator.pushReplacementNamed(context, 'home');
-    } else {
-      Navigator.pushReplacementNamed(context, 'login');
-    }
+  void _navigateToLogin() async {
+    await Future.delayed(const Duration(seconds: 1));
+    Navigator.pushReplacementNamed(context, 'login');
   }
 
   @override
   void initState() {
-    _checkUserLogin();
+    _navigateToLogin();
     super.initState();
   }
 

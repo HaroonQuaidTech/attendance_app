@@ -165,7 +165,6 @@ class _WeeklyAttendanceState extends State<WeeklyAttendance> {
                                 .contains('Late Arrival'))
                             .toList()
                         : weeklyData;
-
     return Column(
       children: [
         if (isLoading)

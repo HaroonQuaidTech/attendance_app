@@ -170,7 +170,6 @@ class _StatusBuilerState extends State<StatusBuilderMonthly> {
     );
   }
 
-
   Widget _buildWeekendContainer(int index) {
     final DateTime now = DateTime.now();
     final DateTime firstDayOfMonth = DateTime(now.year, now.month, 1);
@@ -289,9 +288,10 @@ class _StatusBuilerState extends State<StatusBuilderMonthly> {
             date.weekday == DateTime.sunday) {
           return _buildWeekendContainer(index);
         }
-       
+
         final checkIn = (attendanceRecord?['checkIn'] as Timestamp?)?.toDate();
-        final checkOut = (attendanceRecord?['checkOut'] as Timestamp?)?.toDate();
+        final checkOut =
+            (attendanceRecord?['checkOut'] as Timestamp?)?.toDate();
         if (checkIn == null && checkOut == null) {
           return _buildEmptyAttendanceContainer(index);
         }

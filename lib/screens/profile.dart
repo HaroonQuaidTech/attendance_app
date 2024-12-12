@@ -248,10 +248,10 @@ class _ProfileScreenState extends State<ProfileScreen> {
     final double screenWidth = screenSize.width;
     double baseFontSize18 = 18;
     double responsiveFontSize18 = baseFontSize18 * (screenWidth / 375);
- 
+
     double baseFontSize14 = 14;
     double responsiveFontSize14 = baseFontSize14 * (screenWidth / 375);
-  
+
     showDialog(
       context: context,
       barrierDismissible: false,
@@ -291,7 +291,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                         "assets/warning.png",
                       ),
                     ),
-                        SizedBox(height: screenSize.height*0.008),
+                    SizedBox(height: screenSize.height * 0.008),
                     Text(
                       'Are you sure ?',
                       style: TextStyle(
@@ -301,7 +301,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                       ),
                       textAlign: TextAlign.center,
                     ),
-                       SizedBox(height: screenSize.height*0.006),
+                    SizedBox(height: screenSize.height * 0.006),
                     Text(
                       'Do you want to logout??',
                       style: TextStyle(
@@ -311,7 +311,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                       ),
                       textAlign: TextAlign.center,
                     ),
-                         SizedBox(height: screenSize.height*0.025),
+                    SizedBox(height: screenSize.height * 0.025),
                     Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
@@ -394,7 +394,6 @@ class _ProfileScreenState extends State<ProfileScreen> {
     required String image,
     required CloseCallback closeCallback,
   }) {
-
     showDialog(
       context: context,
       barrierDismissible: false,
@@ -420,19 +419,16 @@ class _ProfileScreenState extends State<ProfileScreen> {
             }
           }
         });
-         final Size screenSize = MediaQuery.of(context).size;
+        final Size screenSize = MediaQuery.of(context).size;
 
-    final double screenWidth = screenSize.width;
+        final double screenWidth = screenSize.width;
 
+        double baseFontSize18 = 18;
+        double responsiveFontSize18 = baseFontSize18 * (screenWidth / 375);
 
-    double baseFontSize18 = 18;
-    double responsiveFontSize18 = baseFontSize18 * (screenWidth / 375);
+        double baseFontSize15 = 15;
+        double responsiveFontSize15 = baseFontSize15 * (screenWidth / 375);
 
-      double baseFontSize15= 15;
-    double responsiveFontSize15 = baseFontSize15 * (screenWidth / 375);
-
-
-  
         return PopScope(
           canPop: false,
           child: Dialog(
@@ -465,24 +461,24 @@ class _ProfileScreenState extends State<ProfileScreen> {
                     children: [
                       Image.asset(
                         image,
-                                     width: MediaQuery.of(context).size.height *
-                          0.1, // 10% of screen width
-                      height: MediaQuery.of(context).size.height * 0.1,
+                        width: MediaQuery.of(context).size.height *
+                            0.1, // 10% of screen width
+                        height: MediaQuery.of(context).size.height * 0.1,
                       ),
-                       SizedBox(height: screenSize.height*0.015),
+                      SizedBox(height: screenSize.height * 0.015),
                       Text(
                         title,
-                        style:TextStyle(
+                        style: TextStyle(
                           fontSize: responsiveFontSize18,
                           fontWeight: FontWeight.bold,
                           height: 0,
                         ),
                         textAlign: TextAlign.center,
                       ),
-                     SizedBox(height: screenSize.height*0.005),
+                      SizedBox(height: screenSize.height * 0.005),
                       Text(
                         message,
-                        style:  TextStyle(
+                        style: TextStyle(
                           fontSize: responsiveFontSize15,
                           color: Colors.grey,
                           height: 0,
@@ -702,66 +698,72 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                 ),
                               ),
                             ),
-                            SizedBox(
-                              height: screenSize.height * 0.011,
-                            ),
-                            Text(
-                              'Password',
-                              style: TextStyle(
-                                fontSize: responsiveFontSize2,
-                                fontWeight: FontWeight.w500,
-                                height: 0,
-                              ),
-                            ),
-                            SizedBox(
-                              height: screenSize.height * 0.011,
-                            ),
-                            SizedBox(
-                              height: screenSize.height * 0.07,
-                              child: TextFormField(
-                                controller: _passwordController,
-                                obscureText:
-                                    !_isPasswordVisible, // Toggle visibility
-                                enabled: isEdited,
-                                validator: (value) {
-                                  if (value == null || value.isEmpty) {
-                                    return 'Password cannot be empty';
-                                  }
-                                  return null;
-                                },
-                                decoration: InputDecoration(
-                                  filled: true,
-                                  fillColor: Colors.white,
-                                  hintText: 'New Password',
-                                  border: OutlineInputBorder(
-                                    borderRadius: BorderRadius.circular(8.0),
-                                    borderSide: BorderSide.none,
+                            if (isEdited != false)
+                              Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  SizedBox(
+                                    height: screenSize.height * 0.011,
                                   ),
-                                  hintStyle: TextStyle(
-                                    fontSize: responsiveFontSize2,
-                                    color: Colors.grey,
-                                  ),
-                                  suffixIcon: IconButton(
-                                    icon: Icon(
-                                      _isPasswordVisible
-                                          ? Icons.visibility_off
-                                          : Icons.visibility,
-                                      size: responsiveFontSize,
+                                  Text(
+                                    'Password',
+                                    style: TextStyle(
+                                      fontSize: responsiveFontSize2,
+                                      fontWeight: FontWeight.w500,
+                                      height: 0,
                                     ),
-                                    onPressed: () {
-                                      setState(() {
-                                        _isPasswordVisible =
-                                            !_isPasswordVisible;
-                                      });
-                                    },
                                   ),
-                                ),
-                                style: TextStyle(
-                                  fontSize: responsiveFontSize2,
-                                  color: Colors.grey,
-                                ),
+                                  SizedBox(
+                                    height: screenSize.height * 0.011,
+                                  ),
+                                  SizedBox(
+                                    height: screenSize.height * 0.07,
+                                    child: TextFormField(
+                                      controller: _passwordController,
+                                      obscureText: !_isPasswordVisible,
+                                      enabled: isEdited,
+                                      validator: (value) {
+                                        if (value == null || value.isEmpty) {
+                                          return 'Password cannot be empty';
+                                        }
+                                        return null;
+                                      },
+                                      decoration: InputDecoration(
+                                        filled: true,
+                                        fillColor: Colors.white,
+                                        hintText: 'New Password',
+                                        border: OutlineInputBorder(
+                                          borderRadius:
+                                              BorderRadius.circular(8.0),
+                                          borderSide: BorderSide.none,
+                                        ),
+                                        hintStyle: TextStyle(
+                                          fontSize: responsiveFontSize2,
+                                          color: Colors.grey,
+                                        ),
+                                        suffixIcon: IconButton(
+                                          icon: Icon(
+                                            _isPasswordVisible
+                                                ? Icons.visibility_off
+                                                : Icons.visibility,
+                                            size: responsiveFontSize,
+                                          ),
+                                          onPressed: () {
+                                            setState(() {
+                                              _isPasswordVisible =
+                                                  !_isPasswordVisible;
+                                            });
+                                          },
+                                        ),
+                                      ),
+                                      style: TextStyle(
+                                        fontSize: responsiveFontSize2,
+                                        color: Colors.grey,
+                                      ),
+                                    ),
+                                  ),
+                                ],
                               ),
-                            ),
                             SizedBox(
                               height: screenSize.height * 0.011,
                             ),
