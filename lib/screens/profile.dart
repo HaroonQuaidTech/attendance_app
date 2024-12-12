@@ -471,7 +471,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                   child: Column(
                     mainAxisSize: MainAxisSize.min,
                     children: [
-                      Image.asset(image, width: 10.sp, height: 10.sp),
+                      Image.asset(image, width: 50.sp, height: 50.sp),
                       SizedBox(height: 20.sp),
                       Text(
                         title,
