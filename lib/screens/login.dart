@@ -1,6 +1,7 @@
 import 'dart:developer';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:quaidtech/screens/home.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -145,7 +146,7 @@ class _LoginScreenState extends State<LoginScreen> {
             mainAxisSize: MainAxisSize.min,
             children: [
               Container(
-                height: 10,
+                height: 10.sp,
                 decoration: BoxDecoration(
                   gradient: LinearGradient(
                     colors: [
@@ -203,19 +204,6 @@ class _LoginScreenState extends State<LoginScreen> {
 
   @override
   Widget build(BuildContext context) {
-    final Size screenSize = MediaQuery.of(context).size;
-    final double screenWidth = screenSize.width;
-
-    double baseFontSize22 = 22;
-    double responsiveFontSize22 = baseFontSize22 * (screenWidth / 375);
-
-    double baseFontSize1 = 40;
-    double responsiveFontSize40 = baseFontSize1 * (screenWidth / 375);
-    double baseFontSize2 = 16;
-    double responsiveFontSize16 = baseFontSize2 * (screenWidth / 375);
-    double baseFontSize3 = 14;
-    double responsiveFontSize14 = baseFontSize3 * (screenWidth / 375);
-
     return Scaffold(
       backgroundColor: Theme.of(context).colorScheme.surface,
       body: SingleChildScrollView(
@@ -226,16 +214,16 @@ class _LoginScreenState extends State<LoginScreen> {
             ),
             child: Column(
               children: [
-                SizedBox(height: screenSize.height * 0.1),
+                SizedBox(height: 120.sp),
                 Text(
                   'Login to your account',
                   style: TextStyle(
-                    fontSize: responsiveFontSize40,
-                    height: 0,
+                    fontSize: 40.sp,
+                    height: 0.sp,
                     fontWeight: FontWeight.w500,
                   ),
                 ),
-                SizedBox(height: screenSize.height * 0.06),
+                SizedBox(height: 50.sp),
                 Form(
                   key: _formKey,
                   child: Column(
@@ -246,11 +234,11 @@ class _LoginScreenState extends State<LoginScreen> {
                         'Email Address',
                         style: TextStyle(
                           height: 0,
-                          fontSize: responsiveFontSize16,
+                          fontSize: 18.sp,
                           fontWeight: FontWeight.w400,
                         ),
                       ),
-                      const SizedBox(height: 5),
+                      SizedBox(height: 8.sp),
                       SizedBox(
                         child: TextFormField(
                           controller: _emailController,
@@ -268,7 +256,7 @@ class _LoginScreenState extends State<LoginScreen> {
                             prefixIcon: Icon(
                               Icons.email,
                               color: Theme.of(context).colorScheme.primary,
-                              size: responsiveFontSize22,
+                              size: 22.sp,
                             ),
                             filled: true,
                             fillColor: Theme.of(context).colorScheme.tertiary,
@@ -281,16 +269,16 @@ class _LoginScreenState extends State<LoginScreen> {
                           ),
                         ),
                       ),
-                      const SizedBox(height: 20),
+                      SizedBox(height: 20.sp),
                       Text(
                         'Password',
                         style: TextStyle(
-                          height: 0,
-                          fontSize: responsiveFontSize16,
+                          height: 0.sp,
+                          fontSize: 18.sp,
                           fontWeight: FontWeight.w400,
                         ),
                       ),
-                      const SizedBox(height: 5),
+                      SizedBox(height: 8.sp),
                       TextFormField(
                         controller: _passwordController,
                         obscureText: !isPasswordVisible,
@@ -304,7 +292,7 @@ class _LoginScreenState extends State<LoginScreen> {
                           prefixIcon: Icon(
                             Icons.password,
                             color: Theme.of(context).colorScheme.primary,
-                            size: responsiveFontSize22,
+                            size: 22.sp,
                           ),
                           filled: true,
                           fillColor: Theme.of(context).colorScheme.tertiary,
@@ -319,7 +307,7 @@ class _LoginScreenState extends State<LoginScreen> {
                                   ? Icons.visibility_off
                                   : Icons.visibility,
                               color: Colors.black,
-                              size: responsiveFontSize22,
+                              size: 22.sp,
                             ),
                             onPressed: () {
                               setState(() {
@@ -329,7 +317,7 @@ class _LoginScreenState extends State<LoginScreen> {
                           ),
                         ),
                       ),
-                      SizedBox(height: screenSize.height * 0.01),
+                      SizedBox(height: 10.sp),
                       Row(
                         mainAxisAlignment: MainAxisAlignment.start,
                         children: [
@@ -355,20 +343,20 @@ class _LoginScreenState extends State<LoginScreen> {
                             'Remember me',
                             style: TextStyle(
                               fontWeight: FontWeight.w500,
-                              fontSize: responsiveFontSize14,
+                              fontSize: 15.sp,
                               height: 0,
                             ),
                           ),
                         ],
                       ),
-                      const SizedBox(height: 10),
+                      SizedBox(height: 10.sp),
                       GestureDetector(
                         onTap: () {
                           _login(context);
                         },
                         child: Container(
                           width: double.infinity,
-                          height: screenSize.height * 0.05,
+                          height: 42.sp,
                           decoration: BoxDecoration(
                             color: Theme.of(context).colorScheme.primary,
                             borderRadius: BorderRadius.circular(8),
@@ -378,8 +366,8 @@ class _LoginScreenState extends State<LoginScreen> {
                               'LOGIN',
                               style: TextStyle(
                                 color: Colors.white,
-                                height: 0,
-                                fontSize: responsiveFontSize14,
+                                height: 0.sp,
+                                fontSize: 14.sp,
                                 fontWeight: FontWeight.w700,
                               ),
                             ),
@@ -389,12 +377,12 @@ class _LoginScreenState extends State<LoginScreen> {
                     ],
                   ),
                 ),
-                SizedBox(height: screenSize.height * 0.09),
+                SizedBox(height: 100.sp),
                 Center(
                   child: Image.asset(
                     'assets/logo.png',
-                    height: screenSize.height * 0.1,
-                    width: screenWidth * 0.23,
+                    height: 90.sp,
+                    width: 90.sp,
                   ),
                 ),
               ],

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 class NotificationScreen extends StatefulWidget {
   const NotificationScreen({super.key});
@@ -12,8 +13,6 @@ class _NotificationScreenState extends State<NotificationScreen> {
   Widget build(BuildContext context) {
     final Size screenSize = MediaQuery.of(context).size;
     final double screenWidth = screenSize.width;
-    double baseFontSize40 = 40;
-    double responsiveFontSize40 = baseFontSize40 * (screenWidth / 375);
 
     double baseFontSize20 = 20;
     double responsiveFontSize20 = baseFontSize20 * (screenWidth / 375);
@@ -21,7 +20,7 @@ class _NotificationScreenState extends State<NotificationScreen> {
     return Scaffold(
       backgroundColor: Colors.white,
       appBar: AppBar(
-        leadingWidth: 65,
+        leadingWidth: 65.sp,
     
         title: Text(
           "Notification Screen",
@@ -36,8 +35,8 @@ class _NotificationScreenState extends State<NotificationScreen> {
             borderRadius: BorderRadius.circular(12),
             color: Theme.of(context).colorScheme.tertiary,
             child: SizedBox(
-              width: screenSize.width * 0.15,
-              height: screenSize.height * 0.06,
+              width:12.sp,
+              height: 20.sp,
               child: Center(
                 child: IconButton(
                   icon: Icon(
@@ -63,7 +62,7 @@ class _NotificationScreenState extends State<NotificationScreen> {
               padding: const EdgeInsets.symmetric(
                 horizontal: 12,
               ),
-              margin: const EdgeInsets.only(bottom: 10),
+              margin: EdgeInsets.only(bottom: 10.sp),
               width: double.infinity,
               decoration: BoxDecoration(
                 borderRadius: BorderRadius.circular(12),
@@ -72,23 +71,23 @@ class _NotificationScreenState extends State<NotificationScreen> {
               child: Center(
                 child: Column(
                   children: [
-                    const SizedBox(height: 30),
+                   SizedBox(height: 30.sp),
                     Icon(
                       Icons.warning,
                       color: Colors.grey,
-                      size: responsiveFontSize40,
+                      size: 44.sp,
                     ),
-                    const SizedBox(height: 5),
+                    SizedBox(height: 5.sp),
                     Text(
                       "No Notification Available",
                       style: TextStyle(
                         fontWeight: FontWeight.bold,
-                        height: 0,
-                        fontSize: responsiveFontSize20,
+                        height: 0.sp,
+                        fontSize: 22.sp,
                         color: Colors.grey[400],
                       ),
                     ),
-                    const SizedBox(height: 30),
+                SizedBox(height: 30.sp),
                   ],
                 ),
               ),

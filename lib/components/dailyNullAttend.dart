@@ -1,5 +1,6 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:intl/intl.dart';
 import 'package:quaidtech/main.dart';
 
@@ -22,9 +23,6 @@ class _DailyAttendanceState extends State<DailyEmptyAttendance> {
 
   @override
   Widget build(BuildContext context) {
-    final Size screenSize = MediaQuery.of(context).size;
-    final double screenHeight = screenSize.height;
-    final double screenWidth = screenSize.width;
 
     String message;
     Color containerColor;
@@ -50,9 +48,9 @@ class _DailyAttendanceState extends State<DailyEmptyAttendance> {
     }
 
     return Container(
-      padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 8),
-      height: screenHeight * 0.1,
-      width: screenWidth * 0.85,
+      padding: EdgeInsets.symmetric(horizontal: 8.sp, vertical: 8.sp),
+      width: 370.sp,
+      height: 80.sp,
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(12),
         color: Theme.of(context).colorScheme.surface,
@@ -64,8 +62,8 @@ class _DailyAttendanceState extends State<DailyEmptyAttendance> {
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
               Container(
-                width: 55,
-                height: 55,
+                width: 60.sp,
+                height: 60.sp,
                 decoration: BoxDecoration(
                   color: containerColor,
                   borderRadius: BorderRadius.circular(6),
@@ -78,8 +76,8 @@ class _DailyAttendanceState extends State<DailyEmptyAttendance> {
                       widget.selectedDay != null
                           ? DateFormat('dd').format(widget.selectedDay!)
                           : '--',
-                      style: const TextStyle(
-                        fontSize: 22,
+                      style: TextStyle(
+                        fontSize: 22.sp,
                         fontWeight: FontWeight.w600,
                         color: Colors.white,
                         height: 0,
@@ -90,8 +88,8 @@ class _DailyAttendanceState extends State<DailyEmptyAttendance> {
                       widget.selectedDay != null
                           ? DateFormat('EE').format(widget.selectedDay!)
                           : '--',
-                      style: const TextStyle(
-                        fontSize: 14,
+                      style: TextStyle(
+                        fontSize: 14.sp,
                         fontWeight: FontWeight.w400,
                         color: Colors.white,
                         height: 0,
@@ -102,12 +100,12 @@ class _DailyAttendanceState extends State<DailyEmptyAttendance> {
               ),
             ],
           ),
-          const SizedBox(width: 50),
+          SizedBox(width: 50.sp),
           Center(
             child: Text(
               message,
-              style: const TextStyle(
-                fontSize: 22,
+              style: TextStyle(
+                fontSize: 22.sp,
                 fontWeight: FontWeight.w600,
                 color: Colors.black,
               ),
