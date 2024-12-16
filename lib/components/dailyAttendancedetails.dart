@@ -36,11 +36,6 @@ class _DailyAttendanceState extends State<DailyAttendance> {
 
   @override
   Widget build(BuildContext context) {
-    final Size screenSize = MediaQuery.of(context).size;
-    final double screenWidth = screenSize.width;
-    double baseFontSize10 = 10;
-    // ignore: unused_local_variable
-    double responsiveFontSize10 = baseFontSize10 * (screenWidth / 375);
     final data = widget.data;
 
     DateTime? checkInTime = (data?['checkIn'] != null)
