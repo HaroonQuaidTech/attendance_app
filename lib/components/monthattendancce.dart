@@ -326,7 +326,7 @@ class _MonthlyAttendanceState extends State<MonthlyAttendance> {
                             Text(
                               'Total Hours',
                               style: TextStyle(
-                                fontSize: 16.sp,
+                                fontSize: 12.sp,
                                 fontWeight: FontWeight.bold,
                                 color: Colors.black,
                               ),
