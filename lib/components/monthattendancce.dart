@@ -58,13 +58,14 @@ class _MonthlyAttendanceState extends State<MonthlyAttendance> {
 
             List<String> statuses = [];
 
-            if (checkInTime == null) {
+            if (checkInTime == null && checkOutTime == null) {
               statuses.add("Absent");
             } else {
               statuses.add("Present");
 
-              if (checkInTime.isAfter(DateTime(currentDate.year,
-                  currentDate.month, currentDate.day, 8, 15))) {
+              if (checkInTime != null &&
+                  checkInTime.isAfter(DateTime(currentDate.year,
+                      currentDate.month, currentDate.day, 8, 15))) {
                 statuses.add("Late Arrival");
               }
 
@@ -74,7 +75,8 @@ class _MonthlyAttendanceState extends State<MonthlyAttendance> {
                 statuses.add("Early Out");
               }
 
-              if (checkInTime.isAfter(DateTime(currentDate.year,
+              if (checkInTime != null &&
+                  checkInTime.isAfter(DateTime(currentDate.year,
                       currentDate.month, currentDate.day, 7, 50)) &&
                   checkInTime.isBefore(DateTime(currentDate.year,
                       currentDate.month, currentDate.day, 8, 16))) {
