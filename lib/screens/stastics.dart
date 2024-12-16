@@ -1,6 +1,7 @@
 import 'dart:developer';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:quaidtech/components/PreviousMonthStatusBuilder.dart';
 import 'package:quaidtech/components/graphicalbuildermonthly.dart';
 import 'package:quaidtech/components/graphicalweekly.dart';
@@ -181,9 +182,6 @@ class _StatsticsScreenState extends State<StatsticsScreen> {
     final double screenWidth = screenSize.width;
     double baseFontSize20 = 20;
     double responsiveFontSize20 = baseFontSize20 * (screenWidth / 375);
-    double baseFontSize18 = 18;
-    double responsiveFontSize18 = baseFontSize18 * (screenWidth / 375);
-
     double baseFontSize15 = 15;
     double responsiveFontSize15 = baseFontSize15 * (screenWidth / 375);
 
@@ -198,11 +196,11 @@ class _StatsticsScreenState extends State<StatsticsScreen> {
           mainAxisAlignment: MainAxisAlignment.center,
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
-            SizedBox(width: screenWidth * 0.15),
+            SizedBox(width: 55.sp),
             Text(
               'Statistics',
               style: TextStyle(
-                fontSize: responsiveFontSize20,
+                fontSize: 22.sp,
                 fontWeight: FontWeight.bold,
                 height: 0,
               ),
@@ -222,35 +220,37 @@ class _StatsticsScreenState extends State<StatsticsScreen> {
                 );
               },
               child: Material(
-                borderRadius: BorderRadius.circular(12),
-                elevation: 5,
-                color: Theme.of(context).colorScheme.tertiary,
-                child: SizedBox(
-                  width: screenSize.width * 0.12,
-                  height: screenSize.height * 0.06,
-                  child: Center(
-                    child: Image.asset(
-                      'assets/notification_icon.png',
-                      width: screenSize.width * 0.07,
-                      height: screenSize.height * 0.07,
-                    ),
-                  ),
-                ),
-              ),
+                                      borderRadius: BorderRadius.circular(12),
+                                      elevation: 5,
+                                      color: Theme.of(context)
+                                          .colorScheme
+                                          .tertiary,
+                                      child: SizedBox(
+                                        width: 50.sp,
+                                        height: 55.sp,
+                                        child: Center(
+                                          child: Image.asset(
+                                            'assets/notification_icon.png',
+                                            width: 30.sp,
+                                            height: 35.sp,
+                                          ),
+                                        ),
+                                      ),
+                                    ),
             ),
           ),
         ],
       ),
       body: SafeArea(
         child: Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 10.0),
+          padding:  EdgeInsets.symmetric(horizontal: 10.0.sp),
           child: Column(
             children: [
               Expanded(
                 child: SingleChildScrollView(
                   child: Column(
                     children: [
-                      const SizedBox(height: 20),
+                     SizedBox(height: 20.sp),
                       if (dropdownValue1 == 'Weekly' && _selectedIndex == 0 ||
                           dropdownValue1 == 'Monthly' && _selectedIndex == 0)
                         Column(
@@ -262,9 +262,9 @@ class _StatsticsScreenState extends State<StatsticsScreen> {
                               child: SizedBox(
                                 width: double.infinity,
                                 child: Padding(
-                                  padding: const EdgeInsets.symmetric(
-                                    horizontal: 10.0,
-                                    vertical: 20,
+                                  padding:  EdgeInsets.symmetric(
+                                    horizontal: 10.0.sp,
+                                    vertical: 20.sp,
                                   ),
                                   child: Column(
                                     crossAxisAlignment:
@@ -273,13 +273,13 @@ class _StatsticsScreenState extends State<StatsticsScreen> {
                                       Text(
                                         'Filter',
                                         style: TextStyle(
-                                          fontSize: responsiveFontSize18,
+                                          fontSize: 20.sp,
                                           height: 0,
                                           fontWeight: FontWeight.bold,
                                         ),
                                       ),
                                       SizedBox(
-                                          height: screenSize.height * 0.008),
+                                          height: 6.sp),
                                       Row(
                                         mainAxisAlignment:
                                             MainAxisAlignment.spaceBetween,
