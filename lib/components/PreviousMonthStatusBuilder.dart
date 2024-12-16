@@ -82,52 +82,14 @@ class _PreviousMonthlyAttendanceState extends State<PreviousMonthlyAttendance> {
     return monthlyAttendanceList;
   }
 
-  Widget _buildSegment(String text, int index) {
-    bool isSelected = _selectedIndex == index;
-    return Expanded(
-      child: GestureDetector(
-        onTap: () {
-          setState(() {
-            _selectedIndex = index;
-          });
-        },
-        child: Container(
-          margin: const EdgeInsets.all(7.5),
-          decoration: BoxDecoration(
-            color: isSelected
-                ? Theme.of(context).colorScheme.primary
-                : Colors.transparent,
-            borderRadius: BorderRadius.circular(48.0),
-          ),
-          child: Center(
-            child: Text(
-              text,
-              style: TextStyle(
-                color: isSelected
-                    ? Theme.of(context).colorScheme.surface
-                    : Theme.of(context).colorScheme.secondary,
-                fontWeight: isSelected ? FontWeight.bold : FontWeight.normal,
-                fontSize: 16.sp,
-                height: 0.sp,
-              ),
-            ),
-          ),
-        ),
-      ),
-    );
-  }
-
   String _getMonthDateRange() {
     if (selectedMonth == null || selectedYear == null) {
       return "Select a month and year";
     }
-
     final int month = int.parse(selectedMonth!);
     final int year = int.parse(selectedYear!);
-
     final DateTime firstDayOfMonth = DateTime(year, month, 1);
     final DateTime lastDayOfMonth = DateTime(year, month + 1, 0);
-
     final DateFormat formatter = DateFormat('MMM d');
     return "${formatter.format(firstDayOfMonth)} - ${formatter.format(lastDayOfMonth)}";
   }
@@ -154,10 +116,8 @@ class _PreviousMonthlyAttendanceState extends State<PreviousMonthlyAttendance> {
             final attendanceRecord = data[index];
             final int month = int.parse(selectedMonth!);
             final int year = int.parse(selectedYear!);
-
             final DateTime firstDayOfMonth = DateTime(year, month, 1);
             final DateTime date = firstDayOfMonth.add(Duration(days: index));
-
             final String day = DateFormat('EE').format(date);
             final String formattedDate = DateFormat('dd').format(date);
 
@@ -206,10 +166,8 @@ class _PreviousMonthlyAttendanceState extends State<PreviousMonthlyAttendance> {
   Widget _buildEmptyAttendanceContainer(int index) {
     final int month = int.parse(selectedMonth!);
     final int year = int.parse(selectedYear!);
-
     final DateTime firstDayOfMonth = DateTime(year, month, 1);
     final DateTime date = firstDayOfMonth.add(Duration(days: index));
-
     final String day = DateFormat('EE').format(date);
     final String formattedDate = DateFormat('dd').format(date);
     return Column(
@@ -355,10 +313,8 @@ class _PreviousMonthlyAttendanceState extends State<PreviousMonthlyAttendance> {
 
     if (checkIn != null) {
       final TimeOfDay checkInTime = TimeOfDay.fromDateTime(checkIn);
-
       const TimeOfDay ontime = TimeOfDay(hour: 8, minute: 15);
       const TimeOfDay lateArrival = TimeOfDay(hour: 8, minute: 16);
-
       final int checkInMinutes = timeOfDayToMinutes(checkInTime);
       final int ontimeMinutes = timeOfDayToMinutes(ontime);
       final int lateArrivalMinutes = timeOfDayToMinutes(lateArrival);
@@ -686,6 +642,7 @@ class _PreviousMonthlyAttendanceState extends State<PreviousMonthlyAttendance> {
                                   fontWeight: FontWeight.bold,
                                   color: Colors.grey,
                                 ),
+                                
                               ),
                               SizedBox(height: 30),
                             ],
