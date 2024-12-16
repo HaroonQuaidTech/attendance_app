@@ -182,8 +182,6 @@ class _StatsticsScreenState extends State<StatsticsScreen> {
     final double screenWidth = screenSize.width;
     double baseFontSize20 = 20;
     double responsiveFontSize20 = baseFontSize20 * (screenWidth / 375);
-    double baseFontSize15 = 15;
-    double responsiveFontSize15 = baseFontSize15 * (screenWidth / 375);
 
     return Scaffold(
       backgroundColor: Colors.white,
