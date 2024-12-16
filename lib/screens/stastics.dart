@@ -287,8 +287,8 @@ class _StatsticsScreenState extends State<StatsticsScreen> {
                                           Expanded(
                                             child: Container(
                                               padding:
-                                                  const EdgeInsets.symmetric(
-                                                      horizontal: 10),
+                                               EdgeInsets.symmetric(
+                                                      horizontal: 10.sp),
                                               decoration: BoxDecoration(
                                                 color: Theme.of(context)
                                                     .colorScheme
@@ -298,15 +298,16 @@ class _StatsticsScreenState extends State<StatsticsScreen> {
                                               ),
                                               child: DropdownButton<String>(
                                                 value: dropdownValue1,
-                                                icon: const Icon(
+                                                // ignore: prefer_const_constructors
+                                                icon: Icon(
                                                     Icons.arrow_drop_down),
                                                 iconSize: responsiveFontSize20,
                                                 elevation: 16,
                                                 isExpanded: true,
                                                 style: TextStyle(
                                                   color: Colors.black,
-                                                  fontSize:
-                                                      responsiveFontSize15,
+                                                  fontSize:16.sp
+                                                    ,
                                                   height: 0,
                                                 ),
                                                 underline: const SizedBox(),
@@ -329,7 +330,7 @@ class _StatsticsScreenState extends State<StatsticsScreen> {
                                               ),
                                             ),
                                           ),
-                                          const SizedBox(width: 20),
+                                        SizedBox(width: 20.sp),
                                           Expanded(
                                             child: Container(
                                               padding:
@@ -350,7 +351,7 @@ class _StatsticsScreenState extends State<StatsticsScreen> {
                                                 style: TextStyle(
                                                   color: Colors.black,
                                                   fontSize:
-                                                      responsiveFontSize15,
+                                                      16.sp,
                                                   height: 0,
                                                 ),
                                                 underline: const SizedBox(),

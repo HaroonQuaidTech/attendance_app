@@ -526,12 +526,8 @@ class _PreviousMonthlyAttendanceState extends State<PreviousMonthlyAttendance> {
 
   @override
   Widget build(BuildContext context) {
-    final Size screenSize = MediaQuery.of(context).size;
-    final double screenHeight = screenSize.height;
-    final double screenWidth = screenSize.width;
+  
 
-    double baseFontSize15 = 15;
-    double responsiveFontSize15 = baseFontSize15 * (screenWidth / 375);
     return SingleChildScrollView(
       child: Column(
         children: [
@@ -553,7 +549,7 @@ class _PreviousMonthlyAttendanceState extends State<PreviousMonthlyAttendance> {
                           style: TextStyle(
                             fontWeight: FontWeight.w600,
                             fontSize: 18.sp,
-                            height: 0,
+                            height: 0.sp,
                           ),
                         ),
                         SizedBox(height: 10.sp),
@@ -562,7 +558,7 @@ class _PreviousMonthlyAttendanceState extends State<PreviousMonthlyAttendance> {
                           children: [
                             Expanded(
                               child: Container(
-                                height: screenHeight * 0.065,
+                                height: 50.sp,
                                 padding:
                                     const EdgeInsets.symmetric(horizontal: 10),
                                 decoration: BoxDecoration(
@@ -574,8 +570,7 @@ class _PreviousMonthlyAttendanceState extends State<PreviousMonthlyAttendance> {
                                   hint: Text(
                                     "Select Month",
                                     style: TextStyle(
-                                        fontSize: responsiveFontSize15,
-                                        color: Colors.black),
+                                        fontSize: 16.sp, color: Colors.black),
                                   ),
                                   isExpanded: true,
                                   underline: const SizedBox(),
@@ -586,7 +581,7 @@ class _PreviousMonthlyAttendanceState extends State<PreviousMonthlyAttendance> {
                                         DateFormat('MMMM').format(
                                             DateTime(0, int.parse(month))),
                                         style: TextStyle(
-                                          fontSize: responsiveFontSize15,
+                                          fontSize: 16.sp,
                                           color: Colors.black,
                                         ),
                                       ),
@@ -601,10 +596,10 @@ class _PreviousMonthlyAttendanceState extends State<PreviousMonthlyAttendance> {
                                 ),
                               ),
                             ),
-                            const SizedBox(width: 20),
+                            SizedBox(width: 20.sp),
                             Expanded(
                               child: Container(
-                                height: screenHeight * 0.065,
+                                height: 50.sp,
                                 padding:
                                     const EdgeInsets.symmetric(horizontal: 10),
                                 decoration: BoxDecoration(
@@ -616,13 +611,12 @@ class _PreviousMonthlyAttendanceState extends State<PreviousMonthlyAttendance> {
                                   hint: Text(
                                     "Select Year",
                                     style: TextStyle(
-                                        fontSize: responsiveFontSize15,
-                                        color: Colors.black),
+                                        fontSize: 16.sp, color: Colors.black),
                                   ),
                                   isExpanded: true,
                                   underline: const SizedBox(),
                                   style: TextStyle(
-                                    fontSize: responsiveFontSize15,
+                                    fontSize: 16.sp,
                                     color: Colors.black,
                                   ),
                                   items: years.map((year) {
@@ -692,7 +686,6 @@ class _PreviousMonthlyAttendanceState extends State<PreviousMonthlyAttendance> {
                                   fontWeight: FontWeight.bold,
                                   color: Colors.grey,
                                 ),
-                                
                               ),
                               SizedBox(height: 30),
                             ],
