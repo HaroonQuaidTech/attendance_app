@@ -529,8 +529,7 @@ class _PreviousMonthlyAttendanceState extends State<PreviousMonthlyAttendance> {
                                   hint: Text(
                                     "Select Month",
                                     style: TextStyle(
-                                        fontSize: 16.sp,
-                                        color: Colors.black),
+                                        fontSize: 16.sp, color: Colors.black),
                                   ),
                                   isExpanded: true,
                                   underline: const SizedBox(),
@@ -571,8 +570,7 @@ class _PreviousMonthlyAttendanceState extends State<PreviousMonthlyAttendance> {
                                   hint: Text(
                                     "Select Year",
                                     style: TextStyle(
-                                        fontSize: 16.sp,
-                                        color: Colors.black),
+                                        fontSize: 16.sp, color: Colors.black),
                                   ),
                                   isExpanded: true,
                                   underline: const SizedBox(),
