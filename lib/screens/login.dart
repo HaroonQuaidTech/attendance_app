@@ -168,8 +168,7 @@ class _LoginScreenState extends State<LoginScreen> {
                   children: [
                     Image.asset(
                       image,
-                      width: MediaQuery.of(context).size.height *
-                          0.1, // 10% of screen width
+                      width: MediaQuery.of(context).size.height * 0.1,
                       height: MediaQuery.of(context).size.height * 0.1,
                     ),
                     SizedBox(height: screenSize.height * 0.001),

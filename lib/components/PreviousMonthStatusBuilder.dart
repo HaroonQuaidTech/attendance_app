@@ -82,52 +82,14 @@ class _PreviousMonthlyAttendanceState extends State<PreviousMonthlyAttendance> {
     return monthlyAttendanceList;
   }
 
-  Widget _buildSegment(String text, int index) {
-    bool isSelected = _selectedIndex == index;
-    return Expanded(
-      child: GestureDetector(
-        onTap: () {
-          setState(() {
-            _selectedIndex = index;
-          });
-        },
-        child: Container(
-          margin: const EdgeInsets.all(7.5),
-          decoration: BoxDecoration(
-            color: isSelected
-                ? Theme.of(context).colorScheme.primary
-                : Colors.transparent,
-            borderRadius: BorderRadius.circular(48.0),
-          ),
-          child: Center(
-            child: Text(
-              text,
-              style: TextStyle(
-                color: isSelected
-                    ? Theme.of(context).colorScheme.surface
-                    : Theme.of(context).colorScheme.secondary,
-                fontWeight: isSelected ? FontWeight.bold : FontWeight.normal,
-                fontSize: 16.sp,
-                height: 0.sp,
-              ),
-            ),
-          ),
-        ),
-      ),
-    );
-  }
-
   String _getMonthDateRange() {
     if (selectedMonth == null || selectedYear == null) {
       return "Select a month and year";
     }
-
     final int month = int.parse(selectedMonth!);
     final int year = int.parse(selectedYear!);
-
     final DateTime firstDayOfMonth = DateTime(year, month, 1);
     final DateTime lastDayOfMonth = DateTime(year, month + 1, 0);
-
     final DateFormat formatter = DateFormat('MMM d');
     return "${formatter.format(firstDayOfMonth)} - ${formatter.format(lastDayOfMonth)}";
   }
@@ -154,10 +116,8 @@ class _PreviousMonthlyAttendanceState extends State<PreviousMonthlyAttendance> {
             final attendanceRecord = data[index];
             final int month = int.parse(selectedMonth!);
             final int year = int.parse(selectedYear!);
-
             final DateTime firstDayOfMonth = DateTime(year, month, 1);
             final DateTime date = firstDayOfMonth.add(Duration(days: index));
-
             final String day = DateFormat('EE').format(date);
             final String formattedDate = DateFormat('dd').format(date);
 
@@ -206,10 +166,8 @@ class _PreviousMonthlyAttendanceState extends State<PreviousMonthlyAttendance> {
   Widget _buildEmptyAttendanceContainer(int index) {
     final int month = int.parse(selectedMonth!);
     final int year = int.parse(selectedYear!);
-
     final DateTime firstDayOfMonth = DateTime(year, month, 1);
     final DateTime date = firstDayOfMonth.add(Duration(days: index));
-
     final String day = DateFormat('EE').format(date);
     final String formattedDate = DateFormat('dd').format(date);
     return Column(
@@ -355,10 +313,8 @@ class _PreviousMonthlyAttendanceState extends State<PreviousMonthlyAttendance> {
 
     if (checkIn != null) {
       final TimeOfDay checkInTime = TimeOfDay.fromDateTime(checkIn);
-
       const TimeOfDay ontime = TimeOfDay(hour: 8, minute: 15);
       const TimeOfDay lateArrival = TimeOfDay(hour: 8, minute: 16);
-
       final int checkInMinutes = timeOfDayToMinutes(checkInTime);
       final int ontimeMinutes = timeOfDayToMinutes(ontime);
       final int lateArrivalMinutes = timeOfDayToMinutes(lateArrival);
@@ -658,53 +614,170 @@ class _PreviousMonthlyAttendanceState extends State<PreviousMonthlyAttendance> {
             ),
             child: Row(
               children: [
-                _buildSegment('Details Stats', 0),
-                _buildSegment('Graphical View', 1),
-              ],
-            ),
-          ),
-          if (_selectedIndex == 1)
-            selectedMonth == null && selectedYear == null ||
-                    selectedMonth == null ||
-                    selectedYear == null
-                ? Column(
-                    children: [
-                      const SizedBox(height: 20),
-                      Material(
-                        color: Theme.of(context).colorScheme.tertiary,
-                        borderRadius: BorderRadius.circular(12),
-                        elevation: 5,
-                        child: const SizedBox(
-                          width: double.infinity,
-                          child: Column(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            children: [
-                              SizedBox(height: 30),
-                              Icon(
-                                Icons.warning,
-                                color: Colors.grey,
-                                size: 50,
-                              ),
-                              SizedBox(height: 5),
-                              Text(
-                                "Please select both month and year to proceed",
-                                style: TextStyle(
-                                  fontWeight: FontWeight.bold,
-                                  color: Colors.grey,
-                                ),
-                                
-                              ),
-                              SizedBox(height: 30),
-                            ],
+                Expanded(
+                  child: GestureDetector(
+                    onTap: () {
+                      setState(() {
+                        _selectedIndex = 0;
+                      });
+                    },
+                    child: Container(
+                      margin: const EdgeInsets.all(7.5),
+                      decoration: BoxDecoration(
+                        color: _selectedIndex == 0
+                            ? Theme.of(context).colorScheme.primary
+                            : Colors.transparent,
+                        borderRadius: BorderRadius.circular(48.0),
+                      ),
+                      child: Center(
+                        child: Text(
+                          'Details Stats',
+                          style: TextStyle(
+                            color: _selectedIndex == 0
+                                ? Theme.of(context).colorScheme.surface
+                                : Theme.of(context).colorScheme.secondary,
+                            fontWeight: _selectedIndex == 0
+                                ? FontWeight.bold
+                                : FontWeight.normal,
+                            fontSize: 16.sp,
+                            height: 0.sp,
                           ),
                         ),
                       ),
-                    ],
-                  )
-                : GraphicalbuilderMonthly(
-                    year: int.parse(selectedYear!),
-                    month: int.parse(selectedMonth!),
+                    ),
                   ),
+                ),
+                Expanded(
+                  child: GestureDetector(
+                    onTap: () {
+                      if (selectedMonth == null || selectedYear == null) {
+                        showDialog(
+                          context: context,
+                          barrierDismissible: false,
+                          builder: (BuildContext context) {
+                            Future.delayed(const Duration(seconds: 2), () {
+                              if (mounted) {
+                                Navigator.of(context).pop(true);
+                              }
+                            });
+                            final Size screenSize = MediaQuery.of(context).size;
+
+                            final double screenWidth = screenSize.width;
+
+                            double baseFontSize15 = 15;
+                            double responsiveFontSize15 =
+                                baseFontSize15 * (screenWidth / 375);
+
+                            return Dialog(
+                              shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(12),
+                              ),
+                              child: Column(
+                                mainAxisSize: MainAxisSize.min,
+                                children: [
+                                  Container(
+                                    height: 10.sp,
+                                    decoration: BoxDecoration(
+                                      gradient: LinearGradient(
+                                        colors: [
+                                          Theme.of(context).colorScheme.primary,
+                                          Theme.of(context)
+                                              .colorScheme
+                                              .inversePrimary,
+                                        ],
+                                        begin: Alignment.centerLeft,
+                                        end: Alignment.centerRight,
+                                      ),
+                                      borderRadius: const BorderRadius.vertical(
+                                        top: Radius.circular(12),
+                                      ),
+                                    ),
+                                  ),
+                                  Container(
+                                    padding: const EdgeInsets.all(20),
+                                    child: Column(
+                                      mainAxisSize: MainAxisSize.min,
+                                      children: [
+                                        CircleAvatar(
+                                          radius: 25.sp,
+                                          backgroundColor:
+                                              const Color(0xff3B3A3C),
+                                          child: Image.asset(
+                                            'assets/warning.png',
+                                            width: 50.sp,
+                                            height: 50.sp,
+                                          ),
+                                        ),
+                                        SizedBox(height: 10.sp),
+                                        Text(
+                                          'Invalid Input',
+                                          style: TextStyle(
+                                            fontSize: 18.sp,
+                                            fontWeight: FontWeight.bold,
+                                            height: 0,
+                                          ),
+                                          textAlign: TextAlign.center,
+                                        ),
+                                        SizedBox(height: 10.sp),
+                                        Text(
+                                          'Please select both month & year to proceed',
+                                          style: TextStyle(
+                                            fontSize: responsiveFontSize15,
+                                            color: Colors.grey,
+                                            height: 0,
+                                          ),
+                                          textAlign: TextAlign.center,
+                                        ),
+                                      ],
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            );
+                          },
+                        );
+                      } else {
+                        setState(() {
+                          _selectedIndex = 1;
+                        });
+                      }
+                    },
+                    child: Container(
+                      margin: const EdgeInsets.all(7.5),
+                      decoration: BoxDecoration(
+                        color: _selectedIndex == 1
+                            ? Theme.of(context).colorScheme.primary
+                            : Colors.transparent,
+                        borderRadius: BorderRadius.circular(48.0),
+                      ),
+                      child: Center(
+                        child: Text(
+                          'Graphical View',
+                          style: TextStyle(
+                            color: _selectedIndex == 1
+                                ? Theme.of(context).colorScheme.surface
+                                : Theme.of(context).colorScheme.secondary,
+                            fontWeight: _selectedIndex == 1
+                                ? FontWeight.bold
+                                : FontWeight.normal,
+                            fontSize: 16.sp,
+                            height: 0.sp,
+                          ),
+                        ),
+                      ),
+                    ),
+                  ),
+                ),
+              ],
+            ),
+          ),
+          if (_selectedIndex == 1 &&
+              selectedMonth != null &&
+              selectedYear != null)
+            GraphicalbuilderMonthly(
+              year: int.parse(selectedYear!),
+              month: int.parse(selectedMonth!),
+            ),
           if (_selectedIndex == 0)
             FutureBuilder<List<Map<String, dynamic>>>(
               future: selectedMonth != null && selectedYear != null
