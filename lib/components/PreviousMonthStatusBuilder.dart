@@ -237,75 +237,6 @@ class _PreviousMonthlyAttendanceState extends State<PreviousMonthlyAttendance> {
     );
   }
 
-  Widget _buildWeekendContainer(int index) {
-    final int month = int.parse(selectedMonth!);
-    final int year = int.parse(selectedYear!);
-    final DateTime firstDayOfMonth = DateTime(year, month, 1);
-    final DateTime date = firstDayOfMonth.add(Duration(days: index));
-    final String day = DateFormat('EE').format(date);
-    final String formattedDate = DateFormat('dd').format(date);
-    return Column(
-      children: [
-        Container(
-          height: 80.sp,
-          width: double.infinity,
-          padding: const EdgeInsets.symmetric(horizontal: 12),
-          decoration: BoxDecoration(
-            borderRadius: BorderRadius.circular(12),
-            color: Colors.white,
-          ),
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              Container(
-                width: 60.sp,
-                height: 60.sp,
-                decoration: BoxDecoration(
-                    color: StatusTheme.theme.colorScheme.secondaryFixed,
-                    borderRadius: BorderRadius.circular(6)),
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  crossAxisAlignment: CrossAxisAlignment.center,
-                  children: [
-                    Text(
-                      formattedDate,
-                      style: TextStyle(
-                        fontSize: 22.sp,
-                        fontWeight: FontWeight.w600,
-                        color: Colors.white,
-                        height: 0,
-                      ),
-                    ),
-                    const SizedBox(height: 5),
-                    Text(
-                      day,
-                      style: TextStyle(
-                        fontSize: 14.sp,
-                        fontWeight: FontWeight.w400,
-                        color: Colors.white,
-                        height: 0,
-                      ),
-                    ),
-                  ],
-                ),
-              ),
-              Text(
-                'Weekend',
-                style: TextStyle(
-                  fontSize: 22.sp,
-                  fontWeight: FontWeight.bold,
-                  height: 0,
-                ),
-              ),
-              SizedBox(height: 50.sp),
-            ],
-          ),
-        ),
-        SizedBox(height: 10.sp),
-      ],
-    );
-  }
-
   Color _determineContainerColor(DateTime? checkIn, DateTime? checkOut) {
     int timeOfDayToMinutes(TimeOfDay time) {
       return time.hour * 60 + time.minute;
@@ -338,6 +269,76 @@ class _PreviousMonthlyAttendanceState extends State<PreviousMonthlyAttendance> {
     return StatusTheme.theme.colorScheme.secondary;
   }
 
+  Widget _buildWeekendContainer(int index) {
+    final int month = int.parse(selectedMonth!);
+    final int year = int.parse(selectedYear!);
+    final DateTime firstDayOfMonth = DateTime(year, month, 1);
+    final DateTime date = firstDayOfMonth.add(Duration(days: index));
+    final String day = DateFormat('EE').format(date);
+    final String formattedDate = DateFormat('dd').format(date);
+    return Column(
+      children: [
+        Container(
+          height: 80.sp,
+          width: double.infinity,
+          padding: const EdgeInsets.symmetric(horizontal: 12),
+          decoration: BoxDecoration(
+            borderRadius: BorderRadius.circular(12),
+            color: Colors.white,
+          ),
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            crossAxisAlignment: CrossAxisAlignment.center,
+            children: [
+              Container(
+                width: 60.sp,
+                height: 60.sp,
+                decoration: BoxDecoration(
+                    color: StatusTheme.theme.colorScheme.secondaryFixed,
+                    borderRadius: BorderRadius.circular(6)),
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  children: [
+                    Text(
+                      formattedDate,
+                      style: TextStyle(
+                        fontSize: 22.sp,
+                        fontWeight: FontWeight.w600,
+                        color: Colors.white,
+                        height: 0,
+                      ),
+                    ),
+                    SizedBox(height: 5.sp),
+                    Text(
+                      day,
+                      style: TextStyle(
+                        fontSize: 14.sp,
+                        fontWeight: FontWeight.w400,
+                        color: Colors.white,
+                        height: 0,
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+              Text(
+                'Weekend',
+                style: TextStyle(
+                  fontSize: 22.sp,
+                  fontWeight: FontWeight.bold,
+                  height: 0,
+                ),
+              ),
+              SizedBox(height: 50.sp),
+            ],
+          ),
+        ),
+        SizedBox(height: 10.sp),
+      ],
+    );
+  }
+
   Widget _buildAttendanceRow({
     required String formattedDate,
     required String day,
@@ -346,63 +347,101 @@ class _PreviousMonthlyAttendanceState extends State<PreviousMonthlyAttendance> {
     required String? totalHours,
     required Color containerColor,
   }) {
-    return Container(
-      padding: const EdgeInsets.all(12),
-      margin: EdgeInsets.only(bottom: 10.sp),
-      height: 80.sp,
-      width: double.infinity,
-      decoration: BoxDecoration(
-        borderRadius: BorderRadius.circular(12),
-        color: Colors.white,
-      ),
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-        crossAxisAlignment: CrossAxisAlignment.center,
-        children: [
-          _buildDateContainer(formattedDate, day, containerColor),
-          _buildCheckTimeColumn(
-              checkIn != null ? DateFormat('hh:mm a').format(checkIn) : 'N/A',
-              'Check In'),
-          _buildDivider(),
-          _buildCheckTimeColumn(
-              checkOut != null ? DateFormat('hh:mm a').format(checkOut) : 'N/A',
-              'Check Out'),
-          _buildDivider(),
-          _buildCheckTimeColumn(totalHours ?? 'N/A', 'Total Hrs'),
-        ],
-      ),
+    return Column(
+      children: [
+        Container(
+          height: 80.sp,
+          width: double.infinity,
+          padding: const EdgeInsets.symmetric(horizontal: 12),
+          decoration: BoxDecoration(
+            borderRadius: BorderRadius.circular(12),
+            color: Colors.white,
+          ),
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            crossAxisAlignment: CrossAxisAlignment.center,
+            children: [
+              Container(
+                width: 60.sp,
+                height: 60.sp,
+                decoration: BoxDecoration(
+                  color: containerColor,
+                  borderRadius: BorderRadius.circular(6),
+                ),
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Text(
+                      formattedDate,
+                      style: TextStyle(
+                        fontSize: 22.sp,
+                        fontWeight: FontWeight.w600,
+                        color: Colors.white,
+                        height: 0,
+                      ),
+                    ),
+                    SizedBox(height: 5.sp),
+                    Text(
+                      day,
+                      style: TextStyle(
+                        fontSize: 14.sp,
+                        fontWeight: FontWeight.w400,
+                        color: Colors.white,
+                        height: 0,
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+              _buildCheckTimeColumn(
+                  checkIn != null
+                      ? DateFormat('hh:mm a').format(checkIn)
+                      : 'N/A',
+                  'Check In'),
+              Container(width: 1, height: 50, color: Colors.black),
+              _buildCheckTimeColumn(
+                  checkOut != null
+                      ? DateFormat('hh:mm a').format(checkOut)
+                      : 'N/A',
+                  'Check Out'),
+              Container(width: 1, height: 50, color: Colors.black),
+              _buildCheckTimeColumn(totalHours ?? 'N/A', 'Total Hrs'),
+            ],
+          ),
+        ),
+        SizedBox(height: 10.sp),
+      ],
     );
   }
 
-  Widget _buildDateContainer(
-      String formattedDate, String day, Color containerColor) {
-    return Container(
-      width: 60.sp,
-      height: 60.sp,
-      decoration: BoxDecoration(
-        color: containerColor,
-        borderRadius: BorderRadius.circular(6),
-      ),
-      child: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: [
-          Text(
-            formattedDate,
-            style: TextStyle(
-                fontSize: 22.sp,
-                fontWeight: FontWeight.w600,
-                color: Colors.white),
-          ),
-          Text(
-            day,
-            style: TextStyle(
-                fontSize: 14.sp,
-                fontWeight: FontWeight.w400,
-                color: Colors.white),
-          ),
-        ],
-      ),
+  Widget _buildCheckTimeColumn(dynamic timeOrHours, String label) {
+    return Column(
+      mainAxisAlignment: MainAxisAlignment.center,
+      children: [
+        Text(
+          timeOrHours is DateTime
+              ? _formatTime(timeOrHours)
+              : timeOrHours.toString(),
+          style: TextStyle(
+              fontSize: 16.sp,
+              fontWeight: FontWeight.w800,
+              color: Colors.black),
+        ),
+        Text(
+          label,
+          style: TextStyle(
+              fontSize: 12.sp,
+              fontWeight: FontWeight.w600,
+              color: Colors.black),
+        ),
+      ],
     );
+  }
+
+  String _formatTime(DateTime time) {
+    final hour = time.hour;
+    final minute = time.minute;
+    return '${hour.toString().padLeft(2, '0')}:${minute.toString().padLeft(2, '0')}';
   }
 
   Widget _buildNoDataAvailableContainer() {
@@ -442,49 +481,10 @@ class _PreviousMonthlyAttendanceState extends State<PreviousMonthlyAttendance> {
     );
   }
 
-  Widget _buildCheckTimeColumn(dynamic timeOrHours, String label) {
-    return Column(
-      mainAxisAlignment: MainAxisAlignment.center,
-      children: [
-        Text(
-          timeOrHours is DateTime
-              ? _formatTime(timeOrHours)
-              : timeOrHours.toString(),
-          style: TextStyle(
-              fontSize: 16.sp,
-              fontWeight: FontWeight.w800,
-              color: Colors.black),
-        ),
-        Text(
-          label,
-          style: TextStyle(
-              fontSize: 12.sp,
-              fontWeight: FontWeight.w600,
-              color: Colors.black),
-        ),
-      ],
-    );
-  }
-
-  Widget _buildDivider() {
-    return Container(
-      width: 1,
-      height: 50,
-      color: Colors.black,
-    );
-  }
-
-  String _formatTime(DateTime time) {
-    final hour = time.hour;
-    final minute = time.minute;
-    return '${hour.toString().padLeft(2, '0')}:${minute.toString().padLeft(2, '0')}';
-  }
-
   @override
   Widget build(BuildContext context) {
     final Size screenSize = MediaQuery.of(context).size;
     final double screenWidth = screenSize.width;
-
     double baseFontSize15 = 15;
     double responsiveFontSize15 = baseFontSize15 * (screenWidth / 375);
     return SingleChildScrollView(
