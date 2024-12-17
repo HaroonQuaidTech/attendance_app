@@ -96,7 +96,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
         setState(() {
           _selectedImage = File(image.path);
         });
-        await _uploadImageToFirebase(image);
+        
       }
     } catch (e) {
       Navigator.pop(context);
@@ -120,7 +120,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
     }
   }
 
-  Future<void> _uploadImageToFirebase(XFile image) async {
+  Future<void> _uploadImageToFirebase(File image) async {
     final user = _auth.currentUser;
     if (user == null) return;
 
@@ -166,7 +166,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
   }
 
   Future<void> updateUserData(
-      String uid, String name, String phone, String password) async {
+      String uid, String name, String phone, String password, File image) async {
     if (_formKey.currentState == null || !_formKey.currentState!.validate()) {
       return;
     }
@@ -180,6 +180,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
       log('Current user email: ${user?.email}');
 
       log('The value of $password');
+      await _uploadImageToFirebase(image);
 
       await FirebaseFirestore.instance.collection("Users").doc(uid).update(
         {
@@ -796,7 +797,6 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                           controller: _passwordController,
                                           obscureText: !_isPasswordVisible,
                                           enabled: isEdited,
-                                          
                                           decoration: InputDecoration(
                                             filled: true,
                                             fillColor: Colors.white,
@@ -849,7 +849,6 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                   height: screenSize.height * 0.011,
                                 ),
                                 SizedBox(
-                           
                                   child: TextFormField(
                                     controller: _phoneController,
                                     keyboardType: TextInputType.phone,
@@ -975,6 +974,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                           _nameController.text,
                                           _phoneController.text,
                                           _passwordController.text,
+                                          _selectedImage!,
                                         ),
                                         child: Container(
                                           width: screenSize.width * 0.38,
