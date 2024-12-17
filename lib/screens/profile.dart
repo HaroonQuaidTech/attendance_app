@@ -676,17 +676,16 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                         ),
                                       )
                                     : Container(
-                                       width: 165.sp,
-                                          height: 165.sp,
-                           
+                                        width: 165.sp,
+                                        height: 165.sp,
                                         decoration: const BoxDecoration(),
                                         child: ClipRRect(
                                           borderRadius:
                                               BorderRadius.circular(900),
                                           child: Image.asset(
                                             'assets/ppppp.png',
-                                       width: 164.sp,
-                                          height: 164.sp,
+                                            width: 164.sp,
+                                            height: 164.sp,
                                             fit: BoxFit.cover,
                                           ),
                                         ),
@@ -797,13 +796,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                           controller: _passwordController,
                                           obscureText: !_isPasswordVisible,
                                           enabled: isEdited,
-                                          validator: (value) {
-                                            if (value == null ||
-                                                value.isEmpty) {
-                                              return 'Password cannot be empty';
-                                            }
-                                            return null;
-                                          },
+                                          
                                           decoration: InputDecoration(
                                             filled: true,
                                             fillColor: Colors.white,
