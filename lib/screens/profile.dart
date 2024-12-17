@@ -8,7 +8,6 @@ import 'package:image_picker/image_picker.dart';
 import 'package:quaidtech/screens/login.dart';
 import 'package:quaidtech/screens/notification.dart';
 import 'dart:io';
-import 'package:shared_preferences/shared_preferences.dart';
 
 typedef CloseCallback = Function();
 
@@ -26,7 +25,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
   final TextEditingController _passwordController = TextEditingController();
   final FirebaseAuth _auth = FirebaseAuth.instance;
   final ImagePicker _picker = ImagePicker();
-  final prefs = SharedPreferences.getInstance();
+
   bool isEdited = false;
   File? _selectedImage;
   String? _imageUrl;
