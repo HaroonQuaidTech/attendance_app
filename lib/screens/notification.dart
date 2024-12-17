@@ -20,7 +20,9 @@ class _NotificationScreenState extends State<NotificationScreen> {
     return Scaffold(
       backgroundColor: Colors.white,
       appBar: AppBar(
-        leadingWidth: 65.sp,
+        leadingWidth: 60.sp,
+    
+      
         title: Text(
           "Notification Screen",
           style: TextStyle(fontSize: responsiveFontSize20),
@@ -34,13 +36,11 @@ class _NotificationScreenState extends State<NotificationScreen> {
             borderRadius: BorderRadius.circular(12),
             color: Theme.of(context).colorScheme.tertiary,
             child: SizedBox(
-              width: 12.sp,
-              height: 20.sp,
               child: Center(
                 child: IconButton(
                   icon: Icon(
                     Icons.arrow_back,
-                    size: responsiveFontSize20,
+                    size: 25.sp,
                     color: Colors.black,
                   ),
                   onPressed: () {

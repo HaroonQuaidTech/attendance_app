@@ -519,7 +519,7 @@ class _PreviousMonthlyAttendanceState extends State<PreviousMonthlyAttendance> {
                               child: Container(
                                 height: 50.sp,
                                 padding:
-                                    const EdgeInsets.symmetric(horizontal: 10),
+                                    EdgeInsets.symmetric(horizontal: 10.sp),
                                 decoration: BoxDecoration(
                                   color: Colors.white,
                                   borderRadius: BorderRadius.circular(12),
@@ -529,8 +529,7 @@ class _PreviousMonthlyAttendanceState extends State<PreviousMonthlyAttendance> {
                                   hint: Text(
                                     "Select Month",
                                     style: TextStyle(
-                                        fontSize: 16.sp,
-                                        color: Colors.black),
+                                        fontSize: 15.sp, color: Colors.black),
                                   ),
                                   isExpanded: true,
                                   underline: const SizedBox(),
@@ -541,7 +540,7 @@ class _PreviousMonthlyAttendanceState extends State<PreviousMonthlyAttendance> {
                                         DateFormat('MMMM').format(
                                             DateTime(0, int.parse(month))),
                                         style: TextStyle(
-                                          fontSize: responsiveFontSize15,
+                                          fontSize: 15.sp,
                                           color: Colors.black,
                                         ),
                                       ),
@@ -556,12 +555,12 @@ class _PreviousMonthlyAttendanceState extends State<PreviousMonthlyAttendance> {
                                 ),
                               ),
                             ),
-                            const SizedBox(width: 20),
+                            SizedBox(width: 20.sp),
                             Expanded(
                               child: Container(
                                 height: 50.sp,
                                 padding:
-                                    const EdgeInsets.symmetric(horizontal: 10),
+                                    EdgeInsets.symmetric(horizontal: 10.sp),
                                 decoration: BoxDecoration(
                                   color: Colors.white,
                                   borderRadius: BorderRadius.circular(12),
@@ -571,13 +570,13 @@ class _PreviousMonthlyAttendanceState extends State<PreviousMonthlyAttendance> {
                                   hint: Text(
                                     "Select Year",
                                     style: TextStyle(
-                                        fontSize: 16.sp,
+                                        fontSize: responsiveFontSize15,
                                         color: Colors.black),
                                   ),
                                   isExpanded: true,
                                   underline: const SizedBox(),
                                   style: TextStyle(
-                                    fontSize: 16.sp,
+                                    fontSize: 15.sp,
                                     color: Colors.black,
                                   ),
                                   items: years.map((year) {

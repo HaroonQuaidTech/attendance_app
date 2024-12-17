@@ -324,7 +324,7 @@ class _GraphicalbuilerState extends State<GraphicalbuilderMonthly> {
                     ),
                     SizedBox(height: 30.sp),
                     SizedBox(
-                      height: 400.sp,
+                      height: 320.sp,
                       child: BarChart(
                         BarChartData(
                           alignment: BarChartAlignment.spaceAround,
@@ -469,7 +469,7 @@ class _GraphicalbuilerState extends State<GraphicalbuilderMonthly> {
                               StatusTheme.theme.colorScheme.primary,
                             ],
                             chartRadius:
-                                MediaQuery.of(context).size.width / 1.7,
+                                MediaQuery.of(context).size.width / 2.0.sp,
                             legendOptions: LegendOptions(
                               legendPosition: LegendPosition.top,
                               showLegendsInRow: true,

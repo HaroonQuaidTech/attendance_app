@@ -185,70 +185,114 @@ class _StatsticsScreenState extends State<StatsticsScreen> {
 
     return Scaffold(
       backgroundColor: Colors.white,
-      appBar: AppBar(
-        backgroundColor: Colors.white,
-        surfaceTintColor: Colors.white,
-        shadowColor: Colors.black,
-        automaticallyImplyLeading: false,
-        title: Row(
-          mainAxisAlignment: MainAxisAlignment.center,
-          crossAxisAlignment: CrossAxisAlignment.center,
-          children: [
-            SizedBox(width: 55.sp),
-            Text(
-              'Statistics',
-              style: TextStyle(
-                fontSize: 22.sp,
-                fontWeight: FontWeight.bold,
-                height: 0,
-              ),
-            ),
-          ],
-        ),
-        actions: [
-          Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 12.0),
-            child: GestureDetector(
-              onTap: () {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                    builder: (context) => const NotificationScreen(),
-                  ),
-                );
-              },
-              child: Material(
-                                      borderRadius: BorderRadius.circular(12),
-                                      elevation: 5,
-                                      color: Theme.of(context)
-                                          .colorScheme
-                                          .tertiary,
-                                      child: SizedBox(
-                                        width: 50.sp,
-                                        height: 55.sp,
-                                        child: Center(
-                                          child: Image.asset(
-                                            'assets/notification_icon.png',
-                                            width: 30.sp,
-                                            height: 35.sp,
-                                          ),
-                                        ),
-                                      ),
-                                    ),
-            ),
-          ),
-        ],
-      ),
+      // appBar: PreferredSize(
+      //   preferredSize: Size.fromHeight(50.0.sp),
+      //   child: AppBar(
+      //     backgroundColor: Colors.white,
+      //     surfaceTintColor: Colors.white,
+      //     shadowColor: Colors.black,
+      //     automaticallyImplyLeading: false,
+      //     title: Row(
+      //       mainAxisAlignment: MainAxisAlignment.center,
+      //       crossAxisAlignment: CrossAxisAlignment.center,
+      //       children: [
+      //         SizedBox(width: 55.sp),
+      //         Text(
+      //           'Statistics',
+      //           style: TextStyle(
+      //             fontSize: 22.sp,
+      //             fontWeight: FontWeight.bold,
+      //             height: 0,
+      //           ),
+      //         ),
+      //       ],
+      //     ),
+      //     actions: [
+      //       Padding(
+      //         padding: const EdgeInsets.symmetric(horizontal: 12.0),
+      //         child: GestureDetector(
+      //           onTap: () {
+      //             Navigator.push(
+      //               context,
+      //               MaterialPageRoute(
+      //                 builder: (context) => const NotificationScreen(),
+      //               ),
+      //             );
+      //           },
+      //           child: Material(
+      //             borderRadius: BorderRadius.circular(12),
+      //             elevation: 5,
+      //             color: Theme.of(context).colorScheme.tertiary,
+      //             child: SizedBox(
+      //               width: 50.sp,
+      //               height: 55.sp,
+      //               child: Center(
+      //                 child: Image.asset(
+      //                   'assets/notification_icon.png',
+      //                   width: 30.sp,
+      //                   height: 35.sp,
+      //                 ),
+      //               ),
+      //             ),
+      //           ),
+      //         ),
+      //       ),
+      //     ],
+      //   ),
+      // ),
       body: SafeArea(
         child: Padding(
-          padding:  EdgeInsets.symmetric(horizontal: 10.0.sp),
+          padding: EdgeInsets.symmetric(horizontal: 12.0.sp, vertical: 15.0.sp),
           child: Column(
             children: [
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                crossAxisAlignment: CrossAxisAlignment.center,
+                children: [
+                  SizedBox(
+                    width: 50.sp,
+                  ),
+                  Text(
+                    'Statistics',
+                    style: TextStyle(
+                      fontSize: 22.sp,
+                      fontWeight: FontWeight.bold,
+                      height: 0,
+                    ),
+                  ),
+                  GestureDetector(
+                    onTap: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => const NotificationScreen(),
+                        ),
+                      );
+                    },
+                    child: Material(
+                      borderRadius: BorderRadius.circular(12),
+                      elevation: 5,
+                      color: Theme.of(context).colorScheme.tertiary,
+                      child: SizedBox(
+                        width: 50.sp,
+                        height: 55.sp,
+                        child: Center(
+                          child: Image.asset(
+                            'assets/notification_icon.png',
+                            width: 30.sp,
+                            height: 35.sp,
+                          ),
+                        ),
+                      ),
+                    ),
+                  ),
+                ],
+              ),
               Expanded(
                 child: SingleChildScrollView(
                   child: Column(
                     children: [
-                     SizedBox(height: 20.sp),
+                      SizedBox(height: 20.sp),
                       if (dropdownValue1 == 'Weekly' && _selectedIndex == 0 ||
                           dropdownValue1 == 'Monthly' && _selectedIndex == 0)
                         Column(
@@ -260,7 +304,7 @@ class _StatsticsScreenState extends State<StatsticsScreen> {
                               child: SizedBox(
                                 width: double.infinity,
                                 child: Padding(
-                                  padding:  EdgeInsets.symmetric(
+                                  padding: EdgeInsets.symmetric(
                                     horizontal: 10.0.sp,
                                     vertical: 20.sp,
                                   ),
@@ -276,17 +320,15 @@ class _StatsticsScreenState extends State<StatsticsScreen> {
                                           fontWeight: FontWeight.bold,
                                         ),
                                       ),
-                                      SizedBox(
-                                          height: 6.sp),
+                                      SizedBox(height: 6.sp),
                                       Row(
                                         mainAxisAlignment:
                                             MainAxisAlignment.spaceBetween,
                                         children: [
                                           Expanded(
                                             child: Container(
-                                              padding:
-                                               EdgeInsets.symmetric(
-                                                      horizontal: 10.sp),
+                                              padding: EdgeInsets.symmetric(
+                                                  horizontal: 10.sp),
                                               decoration: BoxDecoration(
                                                 color: Theme.of(context)
                                                     .colorScheme
@@ -297,15 +339,14 @@ class _StatsticsScreenState extends State<StatsticsScreen> {
                                               child: DropdownButton<String>(
                                                 value: dropdownValue1,
                                                 // ignore: prefer_const_constructors
-                                                icon: Icon(
+                                                icon: const Icon(
                                                     Icons.arrow_drop_down),
                                                 iconSize: responsiveFontSize20,
                                                 elevation: 16,
                                                 isExpanded: true,
                                                 style: TextStyle(
                                                   color: Colors.black,
-                                                  fontSize:16.sp
-                                                    ,
+                                                  fontSize: 16.sp,
                                                   height: 0,
                                                 ),
                                                 underline: const SizedBox(),
@@ -328,7 +369,7 @@ class _StatsticsScreenState extends State<StatsticsScreen> {
                                               ),
                                             ),
                                           ),
-                                        SizedBox(width: 20.sp),
+                                          SizedBox(width: 20.sp),
                                           Expanded(
                                             child: Container(
                                               padding:
@@ -348,8 +389,7 @@ class _StatsticsScreenState extends State<StatsticsScreen> {
                                                 isExpanded: true,
                                                 style: TextStyle(
                                                   color: Colors.black,
-                                                  fontSize:
-                                                      16.sp,
+                                                  fontSize: 16.sp,
                                                   height: 0,
                                                 ),
                                                 underline: const SizedBox(),
