@@ -570,7 +570,8 @@ class _ProfileScreenState extends State<ProfileScreen> {
       body: Column(
         children: [
           Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 16.0),
+            padding:
+                EdgeInsets.symmetric(horizontal: 16.0.sp, vertical: 10.0.sp),
             child: Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               crossAxisAlignment: CrossAxisAlignment.center,
@@ -778,7 +779,6 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                         height: screenSize.height * 0.011,
                                       ),
                                       SizedBox(
-                                        height: screenSize.height * 0.07,
                                         child: TextFormField(
                                           controller: _passwordController,
                                           obscureText: !_isPasswordVisible,
