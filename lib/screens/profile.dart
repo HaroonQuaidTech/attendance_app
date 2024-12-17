@@ -9,6 +9,8 @@ import 'package:quaidtech/screens/login.dart';
 import 'package:quaidtech/screens/notification.dart';
 import 'dart:io';
 
+import 'package:shared_preferences/shared_preferences.dart';
+
 typedef CloseCallback = Function();
 
 class ProfileScreen extends StatefulWidget {
@@ -68,7 +70,6 @@ class _ProfileScreenState extends State<ProfileScreen> {
       if (e is FirebaseAuthException) {
         errorMessage = e.message ?? errorMessage;
       }
-
       if (mounted) {
         Navigator.pop(context);
         _showAlertDialog(
@@ -178,10 +179,14 @@ class _ProfileScreenState extends State<ProfileScreen> {
       final user = _auth.currentUser;
       log('Current user email: ${user?.email}');
 
-      await FirebaseFirestore.instance.collection("Users").doc(uid).set({
-        'name': name,
-        'phone': phone,
-      }, SetOptions(merge: true));
+      log('The value of $password');
+
+      await FirebaseFirestore.instance.collection("Users").doc(uid).update(
+        {
+          'name': name,
+          'phone': phone,
+        },
+      );
 
       if (password.isNotEmpty && user != null) {
         await user.updatePassword(password);
@@ -216,33 +221,42 @@ class _ProfileScreenState extends State<ProfileScreen> {
     }
   }
 
-  Future<void> reauthenticateAndSaveChanges(String password) async {
-    try {
-      User? user = _auth.currentUser;
+  // Future<void> reauthenticateAndSaveChanges(String password) async {
+  //   try {
+  //     User? user = _auth.currentUser;
 
-      AuthCredential credential = EmailAuthProvider.credential(
-        email: user!.email!,
-        password: password,
-      );
+  //     AuthCredential credential = EmailAuthProvider.credential(
+  //       email: user!.email!,
+  //       password: password,
+  //     );
 
-      await user.reauthenticateWithCredential(credential);
+  //     log('The value of $password');
 
-      updateUserData(
-        user.uid,
-        _nameController.text,
-        _phoneController.text,
-        _passwordController.text,
-      );
-    } catch (e) {
-      log("Reauthentication failed. Please check your password.");
-    }
-  }
+  //     await user.reauthenticateWithCredential(credential);
+
+  //     log('Reauth is working');
+
+  //     updateUserData(
+  //       user.uid,
+  //       _nameController.text,
+  //       _phoneController.text,
+  //       _passwordController.text,
+  //     );
+  //   } catch (e) {
+  //     log("Reauthentication failed. Please check your password.");
+  //   }
+  // }
 
   Future<void> _logout(BuildContext context) async {
     try {
       setState(() {
         _isLoading = true;
       });
+
+      final prefs = await SharedPreferences.getInstance();
+      await prefs.remove('email');
+      await prefs.remove('password');
+
       await _auth.signOut();
       _showAlertDialog(
         title: 'Logged Out',
