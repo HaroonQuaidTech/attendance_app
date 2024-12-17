@@ -483,10 +483,9 @@ class _PreviousMonthlyAttendanceState extends State<PreviousMonthlyAttendance> {
 
   @override
   Widget build(BuildContext context) {
-    final Size screenSize = MediaQuery.of(context).size;
-    final double screenWidth = screenSize.width;
-    double baseFontSize15 = 15;
-    double responsiveFontSize15 = baseFontSize15 * (screenWidth / 375);
+ 
+
+
     return SingleChildScrollView(
       child: Column(
         children: [
