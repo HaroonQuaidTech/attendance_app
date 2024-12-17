@@ -8,6 +8,7 @@ import 'package:image_picker/image_picker.dart';
 import 'package:quaidtech/screens/login.dart';
 import 'package:quaidtech/screens/notification.dart';
 import 'dart:io';
+
 import 'package:shared_preferences/shared_preferences.dart';
 
 typedef CloseCallback = Function();
@@ -676,17 +677,16 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                         ),
                                       )
                                     : Container(
-                                       width: 165.sp,
-                                          height: 165.sp,
-                           
+                                        width: 165.sp,
+                                        height: 165.sp,
                                         decoration: const BoxDecoration(),
                                         child: ClipRRect(
                                           borderRadius:
                                               BorderRadius.circular(900),
                                           child: Image.asset(
                                             'assets/ppppp.png',
-                                       width: 164.sp,
-                                          height: 164.sp,
+                                            width: 164.sp,
+                                            height: 164.sp,
                                             fit: BoxFit.cover,
                                           ),
                                         ),
@@ -741,7 +741,6 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                   height: screenSize.height * 0.011,
                                 ),
                                 SizedBox(
-                                  height: screenSize.height * 0.07,
                                   child: TextFormField(
                                     controller: _nameController,
                                     enabled: isEdited,
@@ -769,7 +768,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                     ),
                                     style: TextStyle(
                                       fontSize: responsiveFontSize2,
-                                      color: Colors.grey,
+                                      color: Colors.black,
                                     ),
                                   ),
                                 ),
@@ -822,6 +821,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                                 _isPasswordVisible
                                                     ? Icons.visibility_off
                                                     : Icons.visibility,
+                                                color: Colors.black,
                                                 size: responsiveFontSize,
                                               ),
                                               onPressed: () {
@@ -834,7 +834,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                           ),
                                           style: TextStyle(
                                             fontSize: responsiveFontSize2,
-                                            color: Colors.grey,
+                                            color: Colors.black,
                                           ),
                                         ),
                                       ),
@@ -855,7 +855,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                   height: screenSize.height * 0.011,
                                 ),
                                 SizedBox(
-                                  height: screenSize.height * 0.07,
+                           
                                   child: TextFormField(
                                     controller: _phoneController,
                                     keyboardType: TextInputType.phone,
@@ -881,7 +881,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                     ),
                                     style: TextStyle(
                                       fontSize: responsiveFontSize2,
-                                      color: Colors.grey,
+                                      color: Colors.black,
                                     ),
                                   ),
                                 ),
