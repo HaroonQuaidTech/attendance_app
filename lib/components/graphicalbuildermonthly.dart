@@ -11,8 +11,11 @@ import 'package:quaidtech/main.dart';
 class GraphicalbuilderMonthly extends StatefulWidget {
   final int year;
   final int month;
-  const GraphicalbuilderMonthly(
-      {super.key, required this.year, required this.month});
+  const GraphicalbuilderMonthly({
+    super.key,
+    required this.year,
+    required this.month,
+  });
 
   @override
   State<GraphicalbuilderMonthly> createState() => _GraphicalbuilerState();
