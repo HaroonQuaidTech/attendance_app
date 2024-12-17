@@ -356,7 +356,7 @@ class _GraphicalbuilerState extends State<GraphicalbuilderWeekly> {
                     ),
                     SizedBox(height: 30.sp),
                     SizedBox(
-                      height: 400.sp,
+                      height: 300.sp,
                       child: BarChart(
                         BarChartData(
                           maxY: 9.sp,
@@ -462,7 +462,7 @@ class _GraphicalbuilerState extends State<GraphicalbuilderWeekly> {
                         height: 0.sp,
                       ),
                     ),
-                    SizedBox(height: 10.sp),
+                    SizedBox(height: 6.sp),
                     pieChartData.isEmpty
                         ? Center(
                             child: Column(
@@ -497,7 +497,7 @@ class _GraphicalbuilerState extends State<GraphicalbuilderWeekly> {
                               StatusTheme.theme.colorScheme.primary,
                             ],
                             chartRadius:
-                                MediaQuery.of(context).size.width / 1.7,
+                                MediaQuery.of(context).size.width / 2.0.sp,
                             legendOptions: LegendOptions(
                               legendPosition: LegendPosition.top,
                               showLegendsInRow: true,

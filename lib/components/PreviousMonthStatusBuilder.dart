@@ -81,6 +81,13 @@ class _PreviousMonthlyAttendanceState extends State<PreviousMonthlyAttendance> {
 
     return monthlyAttendanceList;
   }
+   @override
+     void initState() {
+    super.initState();
+    final now = DateTime.now();
+    selectedMonth = now.month.toString().padLeft(2, '0'); 
+    selectedYear = now.year.toString();
+  }
 
   String _getMonthDateRange() {
     if (selectedMonth == null || selectedYear == null) {
@@ -483,10 +490,9 @@ class _PreviousMonthlyAttendanceState extends State<PreviousMonthlyAttendance> {
 
   @override
   Widget build(BuildContext context) {
-    final Size screenSize = MediaQuery.of(context).size;
-    final double screenWidth = screenSize.width;
-    double baseFontSize15 = 15;
-    double responsiveFontSize15 = baseFontSize15 * (screenWidth / 375);
+ 
+
+
     return SingleChildScrollView(
       child: Column(
         children: [
@@ -540,7 +546,7 @@ class _PreviousMonthlyAttendanceState extends State<PreviousMonthlyAttendance> {
                                         DateFormat('MMMM').format(
                                             DateTime(0, int.parse(month))),
                                         style: TextStyle(
-                                          fontSize: responsiveFontSize15,
+                                          fontSize:16.sp,
                                           color: Colors.black,
                                         ),
                                       ),
@@ -560,7 +566,7 @@ class _PreviousMonthlyAttendanceState extends State<PreviousMonthlyAttendance> {
                               child: Container(
                                 height: 50.sp,
                                 padding:
-                                    const EdgeInsets.symmetric(horizontal: 10),
+                                    EdgeInsets.symmetric(horizontal: 10.sp),
                                 decoration: BoxDecoration(
                                   color: Colors.white,
                                   borderRadius: BorderRadius.circular(12),
@@ -787,7 +793,7 @@ class _PreviousMonthlyAttendanceState extends State<PreviousMonthlyAttendance> {
               builder: (context, snapshot) {
                 if (snapshot.connectionState == ConnectionState.waiting) {
                   return Padding(
-                    padding: EdgeInsets.only(top: 60.0.sp),
+                    padding: EdgeInsets.only(top: 150.0.sp),
                     child: const Center(child: CircularProgressIndicator()),
                   );
                 }
