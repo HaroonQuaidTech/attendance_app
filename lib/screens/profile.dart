@@ -660,8 +660,8 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                     borderRadius: BorderRadius.circular(900),
                                     child: Image.file(
                                       _selectedImage!,
-                                      width: 175.sp,
-                                      height: 175.sp,
+                                      width: 164.sp,
+                                      height: 164.sp,
                                       fit: BoxFit.cover,
                                     ),
                                   )
@@ -671,22 +671,23 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                             BorderRadius.circular(900),
                                         child: Image.network(
                                           _imageUrl!,
-                                          width: 165.sp,
-                                          height: 165.sp,
+                                          width: 164.sp,
+                                          height: 164.sp,
                                           fit: BoxFit.cover,
                                         ),
                                       )
                                     : Container(
-                                        width: 165.sp,
-                                        height: 165.sp,
+                                       width: 165.sp,
+                                          height: 165.sp,
+                           
                                         decoration: const BoxDecoration(),
                                         child: ClipRRect(
                                           borderRadius:
                                               BorderRadius.circular(900),
                                           child: Image.asset(
                                             'assets/ppppp.png',
-                                            width: 165.sp,
-                                            height: 165.sp,
+                                       width: 164.sp,
+                                          height: 164.sp,
                                             fit: BoxFit.cover,
                                           ),
                                         ),
