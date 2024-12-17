@@ -902,7 +902,8 @@ class _CheckinScreenState extends State<CheckinScreen> {
                             ),
                           ),
                         ),
-                      ),     SizedBox(width: 10.sp),
+                      ),
+                      SizedBox(width: 10.sp),
                       Material(
                         color: Theme.of(context).colorScheme.tertiary,
                         borderRadius: BorderRadius.circular(12),

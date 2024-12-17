@@ -8,7 +8,6 @@ import 'package:image_picker/image_picker.dart';
 import 'package:quaidtech/screens/login.dart';
 import 'package:quaidtech/screens/notification.dart';
 import 'dart:io';
-
 import 'package:shared_preferences/shared_preferences.dart';
 
 typedef CloseCallback = Function();

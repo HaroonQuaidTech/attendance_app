@@ -288,7 +288,9 @@ class _StatsticsScreenState extends State<StatsticsScreen> {
                   ),
                 ],
               ),
-              SizedBox(height: 15.sp,),
+              SizedBox(
+                height: 15.sp,
+              ),
               Expanded(
                 child: SingleChildScrollView(
                   child: Column(
