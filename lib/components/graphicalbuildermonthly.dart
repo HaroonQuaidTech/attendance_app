@@ -327,7 +327,7 @@ class _GraphicalbuilerState extends State<GraphicalbuilderMonthly> {
                     ),
                     SizedBox(height: 30.sp),
                     SizedBox(
-                      height: 320.sp,
+                      height: 300.sp,
                       child: BarChart(
                         BarChartData(
                           alignment: BarChartAlignment.spaceAround,

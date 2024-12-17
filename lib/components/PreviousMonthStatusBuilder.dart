@@ -786,7 +786,7 @@ class _PreviousMonthlyAttendanceState extends State<PreviousMonthlyAttendance> {
               builder: (context, snapshot) {
                 if (snapshot.connectionState == ConnectionState.waiting) {
                   return Padding(
-                    padding: EdgeInsets.only(top: 60.0.sp),
+                    padding: EdgeInsets.only(top: 150.0.sp),
                     child: const Center(child: CircularProgressIndicator()),
                   );
                 }

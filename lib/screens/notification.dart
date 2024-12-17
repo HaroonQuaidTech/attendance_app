@@ -11,83 +11,100 @@ class NotificationScreen extends StatefulWidget {
 class _NotificationScreenState extends State<NotificationScreen> {
   @override
   Widget build(BuildContext context) {
-    final Size screenSize = MediaQuery.of(context).size;
-    final double screenWidth = screenSize.width;
-
-    double baseFontSize20 = 20;
-    double responsiveFontSize20 = baseFontSize20 * (screenWidth / 375);
-
     return Scaffold(
       backgroundColor: Colors.white,
-      appBar: AppBar(
-        leadingWidth: 60.sp,
-    
-      
-        title: Text(
-          "Notification Screen",
-          style: TextStyle(fontSize: responsiveFontSize20),
-        ),
-        backgroundColor: Colors.transparent,
-        centerTitle: true,
-        leading: Padding(
-          padding: const EdgeInsets.only(left: 10),
-          child: Material(
-            elevation: 5,
-            borderRadius: BorderRadius.circular(12),
-            color: Theme.of(context).colorScheme.tertiary,
-            child: SizedBox(
-              child: Center(
-                child: IconButton(
-                  icon: Icon(
-                    Icons.arrow_back,
-                    size: 25.sp,
-                    color: Colors.black,
-                  ),
-                  onPressed: () {
-                    Navigator.pop(context);
-                  },
-                ),
-              ),
-            ),
-          ),
-        ),
-      ),
       body: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
+        crossAxisAlignment: CrossAxisAlignment.start,
         children: [
+          SizedBox(height: 50.sp),
           Padding(
-            padding: const EdgeInsets.all(8.0),
-            child: Container(
-              padding: const EdgeInsets.symmetric(
-                horizontal: 12,
-              ),
-              margin: EdgeInsets.only(bottom: 10.sp),
-              width: double.infinity,
-              decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(12),
-                color: Colors.white,
-              ),
-              child: Center(
-                child: Column(
-                  children: [
-                    SizedBox(height: 30.sp),
-                    Icon(
-                      Icons.warning,
-                      color: Colors.grey,
-                      size: 44.sp,
-                    ),
-                    SizedBox(height: 5.sp),
-                    Text(
-                      "No Notification Available",
-                      style: TextStyle(
-                        fontWeight: FontWeight.bold,
-                        height: 0.sp,
-                        fontSize: 22.sp,
-                        color: Colors.grey[400],
+            padding: const EdgeInsets.symmetric(horizontal: 16.0),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: [
+                GestureDetector(
+                  onTap: () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => const NotificationScreen(),
+                      ),
+                    );
+                  },
+                  child: Material(
+                    borderRadius: BorderRadius.circular(12),
+                    elevation: 5,
+                    color: Theme.of(context).colorScheme.tertiary,
+                    child: SizedBox(
+                      width: 50.sp,
+                      height: 55.sp,
+                      child: Center(
+                        child: IconButton(
+                          icon: Icon(
+                            Icons.arrow_back,
+                            size: 25.sp,
+                            color: Colors.black,
+                          ),
+                          onPressed: () {
+                            Navigator.pop(context);
+                          },
+                        ),
                       ),
                     ),
-                    SizedBox(height: 30.sp),
-                  ],
+                  ),
+                ),
+                SizedBox(width: 15.sp),
+                Text(
+                  'Notification Screen',
+                  style: TextStyle(
+                    fontSize: 22.sp,
+                    fontWeight: FontWeight.bold,
+                    height: 0,
+                  ),
+                ),
+                SizedBox(
+                  width: 50.sp,
+                )
+              ],
+            ),
+          ),
+          Expanded(
+            child: Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: Container(
+                padding: const EdgeInsets.symmetric(
+                  horizontal: 12,
+                ),
+                margin: EdgeInsets.only(bottom: 10.sp),
+                width: double.infinity,
+                decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(12),
+                  color: Colors.white,
+                ),
+                child: Center(
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      SizedBox(height: 30.sp),
+                      Icon(
+                        Icons.warning,
+                        color: Colors.grey,
+                        size: 44.sp,
+                      ),
+                      SizedBox(height: 5.sp),
+                      Text(
+                        "No Notification Available",
+                        style: TextStyle(
+                          fontWeight: FontWeight.bold,
+                          height: 0.sp,
+                          fontSize: 22.sp,
+                          color: Colors.grey[400],
+                        ),
+                      ),
+                      SizedBox(height: 30.sp),
+                    ],
+                  ),
                 ),
               ),
             ),
