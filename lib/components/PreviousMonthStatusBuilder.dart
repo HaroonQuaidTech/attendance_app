@@ -81,6 +81,13 @@ class _PreviousMonthlyAttendanceState extends State<PreviousMonthlyAttendance> {
 
     return monthlyAttendanceList;
   }
+   @override
+     void initState() {
+    super.initState();
+    final now = DateTime.now();
+    selectedMonth = now.month.toString().padLeft(2, '0'); 
+    selectedYear = now.year.toString();
+  }
 
   String _getMonthDateRange() {
     if (selectedMonth == null || selectedYear == null) {
