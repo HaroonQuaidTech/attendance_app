@@ -540,7 +540,7 @@ class _PreviousMonthlyAttendanceState extends State<PreviousMonthlyAttendance> {
                                         DateFormat('MMMM').format(
                                             DateTime(0, int.parse(month))),
                                         style: TextStyle(
-                                          fontSize: responsiveFontSize15,
+                                          fontSize:16.sp,
                                           color: Colors.black,
                                         ),
                                       ),
@@ -560,7 +560,7 @@ class _PreviousMonthlyAttendanceState extends State<PreviousMonthlyAttendance> {
                               child: Container(
                                 height: 50.sp,
                                 padding:
-                                    const EdgeInsets.symmetric(horizontal: 10),
+                                    EdgeInsets.symmetric(horizontal: 10.sp),
                                 decoration: BoxDecoration(
                                   color: Colors.white,
                                   borderRadius: BorderRadius.circular(12),
