@@ -963,8 +963,8 @@ class _ProfileScreenState extends State<ProfileScreen> {
                 if (_isLoading)
                   Container(
                     width: double.infinity,
-                  height: double.infinity,
-                  color: const Color.fromARGB(55, 0, 0, 0),
+                    height: double.infinity,
+                    color: const Color.fromARGB(55, 0, 0, 0),
                     child: const Align(
                         alignment: Alignment.center,
                         child: CircularProgressIndicator()),
