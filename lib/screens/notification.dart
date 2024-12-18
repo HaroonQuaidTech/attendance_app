@@ -55,9 +55,9 @@ class _NotificationScreenState extends State<NotificationScreen> {
                     ),
                   ),
                 ),
-                SizedBox(width: 15.sp),
+       
                 Text(
-                  'Notification Screen',
+                  'Notification',
                   style: TextStyle(
                     fontSize: 22.sp,
                     fontWeight: FontWeight.bold,
