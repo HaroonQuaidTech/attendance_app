@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'dart:developer';
 import 'dart:io';
 import 'package:cloud_firestore/cloud_firestore.dart';
@@ -39,6 +40,7 @@ class _HomeScreenState extends State<HomeScreen> {
   DateTime _focusedDay = DateTime.now();
   DateTime _selectedDay = DateTime.now();
   DateTime? _firstCheckInDate;
+  StreamSubscription<DocumentSnapshot>? _profileSubscription;
 
   final Map<DateTime, List<Color>> _events = {};
 
@@ -86,8 +88,7 @@ class _HomeScreenState extends State<HomeScreen> {
   void initState() {
     super.initState();
     _onItemTapped(0);
-    _loadUserProfile();
-    _onDaySelected(_selectedDay, _focusedDay);
+    _listenToUserProfile(); _onDaySelected(_selectedDay, _focusedDay);
     _getAttendanceDetails(userId, DateTime.now());
     _fetchFirstCheckInDate(userId);
   }
@@ -195,37 +196,34 @@ class _HomeScreenState extends State<HomeScreen> {
     });
   }
 
-  Future<void> _loadUserProfile() async {
-    final user = _auth.currentUser;
-    if (user != null) {
-      int retries = 3;
-      int delay = 1000;
+ void _listenToUserProfile() {
+  final user = _auth.currentUser;
 
-      for (int i = 0; i < retries; i++) {
-        try {
-          final docSnapshot = await FirebaseFirestore.instance
-              .collection('Users')
-              .doc(user.uid)
-              .get();
-
-          if (docSnapshot.exists) {
-            final data = docSnapshot.data()!;
-            setState(() {
-              _imageUrl = data['profileImageUrl'];
-            });
-          }
-          return;
-        } on FirebaseException catch (e) {
-          if (e.code == 'unavailable' && i < retries - 1) {
-            await Future.delayed(Duration(milliseconds: delay));
-            delay *= 2;
-          } else {
-            rethrow;
-          }
+  if (user != null) {
+    _profileSubscription = FirebaseFirestore.instance
+        .collection('Users')
+        .doc(user.uid)
+        .snapshots()
+        .listen((docSnapshot) {
+      if (docSnapshot.exists) {
+        final data = docSnapshot.data();
+        if (data != null && mounted) {
+          setState(() {
+            _imageUrl = data['profileImageUrl'];
+          });
         }
       }
-    }
+    }, onError: (error) {
+      // Handle errors if necessary
+      debugPrint('Error listening to user profile: $error');
+    });
   }
+}
+  @override
+void dispose() {
+  _profileSubscription?.cancel();
+  super.dispose();
+}
 
   Future<Map<String, int>> fetchMonthlyAttendance(String userId) async {
     final now = DateTime.now();
@@ -453,11 +451,11 @@ class _HomeScreenState extends State<HomeScreen> {
                           horizontal: 12.0.sp, vertical: 16.sp),
                       child: Column(
                         children: [
-                          FutureBuilder<DocumentSnapshot>(
-                              future: FirebaseFirestore.instance
+                          StreamBuilder<DocumentSnapshot>(
+                              stream: FirebaseFirestore.instance
                                   .collection('Users')
                                   .doc(user?.uid)
-                                  .get(),
+                                  .snapshots(),
                               builder: (context, snapshot) {
                                 if (!snapshot.hasData ||
                                     !snapshot.data!.exists) {
