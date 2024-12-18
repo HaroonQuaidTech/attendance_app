@@ -96,7 +96,6 @@ class _ProfileScreenState extends State<ProfileScreen> {
         setState(() {
           _selectedImage = File(image.path);
         });
-        
       }
     } catch (e) {
       Navigator.pop(context);
@@ -165,8 +164,8 @@ class _ProfileScreenState extends State<ProfileScreen> {
     }
   }
 
-  Future<void> updateUserData(
-      String uid, String name, String phone, String password, File image) async {
+  Future<void> updateUserData(String uid, String name, String phone,
+      String password, File image) async {
     if (_formKey.currentState == null || !_formKey.currentState!.validate()) {
       return;
     }
