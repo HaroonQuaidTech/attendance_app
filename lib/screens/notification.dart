@@ -18,7 +18,8 @@ class _NotificationScreenState extends State<NotificationScreen> {
         children: [
           SizedBox(height: 50.sp),
           Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 16.0),
+            padding:
+                EdgeInsets.symmetric(horizontal: 16.0.sp, vertical: 5.0.sp),
             child: Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               crossAxisAlignment: CrossAxisAlignment.center,
