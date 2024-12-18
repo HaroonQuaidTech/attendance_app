@@ -112,10 +112,6 @@ class _ProfileScreenState extends State<ProfileScreen> {
         closeCallback: () {},
       );
       log(e.toString());
-    } finally {
-      setState(() {
-        _isLoading = false;
-      });
     }
   }
 
@@ -164,8 +160,8 @@ class _ProfileScreenState extends State<ProfileScreen> {
     }
   }
 
-  Future<void> updateUserData(String uid, String name, String phone,
-      String password, File image) async {
+  Future<void> updateUserData(
+      String uid, String name, String phone, String password) async {
     if (_formKey.currentState == null || !_formKey.currentState!.validate()) {
       return;
     }
@@ -179,7 +175,6 @@ class _ProfileScreenState extends State<ProfileScreen> {
       log('Current user email: ${user?.email}');
 
       log('The value of $password');
-      await _uploadImageToFirebase(image);
 
       await FirebaseFirestore.instance.collection("Users").doc(uid).update(
         {
@@ -968,13 +963,22 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                         ),
                                       ),
                                       GestureDetector(
-                                        onTap: () => updateUserData(
-                                          _auth.currentUser!.uid,
-                                          _nameController.text,
-                                          _phoneController.text,
-                                          _passwordController.text,
-                                          _selectedImage!,
-                                        ),
+                                        onTap: () async {
+                                          try {
+                                            if (_selectedImage != null) {
+                                              await _uploadImageToFirebase(
+                                                  _selectedImage!);
+                                            }
+                                            await updateUserData(
+                                              _auth.currentUser!.uid,
+                                              _nameController.text,
+                                              _phoneController.text,
+                                              _passwordController.text,
+                                            );
+                                          } catch (e) {
+                                            log("Error while saving changes: $e");
+                                          }
+                                        },
                                         child: Container(
                                           width: screenSize.width * 0.38,
                                           height: screenSize.height * 0.055,
@@ -986,12 +990,14 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                                 BorderRadius.circular(8),
                                           ),
                                           child: Center(
-                                              child: Text(
-                                            'Save Changes',
-                                            style: TextStyle(
+                                            child: Text(
+                                              'Save Changes',
+                                              style: TextStyle(
                                                 color: Colors.white,
-                                                fontSize: responsiveFontSize1),
-                                          )),
+                                                fontSize: responsiveFontSize1,
+                                              ),
+                                            ),
+                                          ),
                                         ),
                                       ),
                                     ],
