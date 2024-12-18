@@ -96,7 +96,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
         setState(() {
           _selectedImage = File(image.path);
         });
-        
+        await _uploadImageToFirebase(image);
       }
     } catch (e) {
       Navigator.pop(context);
@@ -120,7 +120,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
     }
   }
 
-  Future<void> _uploadImageToFirebase(File image) async {
+  Future<void> _uploadImageToFirebase(XFile image) async {
     final user = _auth.currentUser;
     if (user == null) return;
 
@@ -166,7 +166,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
   }
 
   Future<void> updateUserData(
-      String uid, String name, String phone, String password, File image) async {
+      String uid, String name, String phone, String password) async {
     if (_formKey.currentState == null || !_formKey.currentState!.validate()) {
       return;
     }
@@ -180,7 +180,6 @@ class _ProfileScreenState extends State<ProfileScreen> {
       log('Current user email: ${user?.email}');
 
       log('The value of $password');
-      await _uploadImageToFirebase(image);
 
       await FirebaseFirestore.instance.collection("Users").doc(uid).update(
         {
@@ -530,58 +529,6 @@ class _ProfileScreenState extends State<ProfileScreen> {
     double responsiveFontSize2 = baseFontSize2 * (screenWidth / 375);
     return Scaffold(
       backgroundColor: Colors.white,
-      // appBar: AppBar(
-      //   automaticallyImplyLeading: false,
-      //   backgroundColor: Colors.white,
-      //   surfaceTintColor: Colors.white,
-      //   shadowColor: Colors.black,
-      //   title: Row(
-      //     mainAxisAlignment: MainAxisAlignment.center,
-      //     crossAxisAlignment: CrossAxisAlignment.center,
-      //     children: [
-      //       SizedBox(width: screenSize.width * 0.18),
-      //       Text(
-      //         'Profile',
-      //         style: TextStyle(
-      //           fontSize: 22.sp,
-      //           fontWeight: FontWeight.bold,
-      //           height: 0,
-      //         ),
-      //       ),
-      //     ],
-      //   ),
-      //   actions: [
-      //     Padding(
-      //       padding: const EdgeInsets.symmetric(horizontal: 12.0),
-      //       child: GestureDetector(
-      //         onTap: () {
-      //           Navigator.push(
-      //             context,
-      //             MaterialPageRoute(
-      //               builder: (context) => const NotificationScreen(),
-      //             ),
-      //           );
-      //         },
-      //         child: Material(
-      //           borderRadius: BorderRadius.circular(12),
-      //           elevation: 5,
-      //           color: Theme.of(context).colorScheme.tertiary,
-      //           child: SizedBox(
-      //             width: screenSize.width * 0.12,
-      //             height: screenSize.height * 0.06,
-      //             child: Center(
-      //               child: Image.asset(
-      //                 'assets/notification_icon.png',
-      //                 width: screenSize.width * 0.07,
-      //                 height: screenSize.height * 0.07,
-      //               ),
-      //             ),
-      //           ),
-      //         ),
-      //       ),
-      //     ),
-      //   ],
-      // ),
       body: Column(
         children: [
           Padding(
@@ -974,7 +921,6 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                           _nameController.text,
                                           _phoneController.text,
                                           _passwordController.text,
-                                          _selectedImage!,
                                         ),
                                         child: Container(
                                           width: screenSize.width * 0.38,

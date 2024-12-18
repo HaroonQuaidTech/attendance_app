@@ -185,61 +185,7 @@ class _StatsticsScreenState extends State<StatsticsScreen> {
 
     return Scaffold(
       backgroundColor: Colors.white,
-      // appBar: PreferredSize(
-      //   preferredSize: Size.fromHeight(50.0.sp),
-      //   child: AppBar(
-      //     backgroundColor: Colors.white,
-      //     surfaceTintColor: Colors.white,
-      //     shadowColor: Colors.black,
-      //     automaticallyImplyLeading: false,
-      //     title: Row(
-      //       mainAxisAlignment: MainAxisAlignment.center,
-      //       crossAxisAlignment: CrossAxisAlignment.center,
-      //       children: [
-      //         SizedBox(width: 55.sp),
-      //         Text(
-      //           'Statistics',
-      //           style: TextStyle(
-      //             fontSize: 22.sp,
-      //             fontWeight: FontWeight.bold,
-      //             height: 0,
-      //           ),
-      //         ),
-      //       ],
-      //     ),
-      //     actions: [
-      //       Padding(
-      //         padding: const EdgeInsets.symmetric(horizontal: 12.0),
-      //         child: GestureDetector(
-      //           onTap: () {
-      //             Navigator.push(
-      //               context,
-      //               MaterialPageRoute(
-      //                 builder: (context) => const NotificationScreen(),
-      //               ),
-      //             );
-      //           },
-      //           child: Material(
-      //             borderRadius: BorderRadius.circular(12),
-      //             elevation: 5,
-      //             color: Theme.of(context).colorScheme.tertiary,
-      //             child: SizedBox(
-      //               width: 50.sp,
-      //               height: 55.sp,
-      //               child: Center(
-      //                 child: Image.asset(
-      //                   'assets/notification_icon.png',
-      //                   width: 30.sp,
-      //                   height: 35.sp,
-      //                 ),
-      //               ),
-      //             ),
-      //           ),
-      //         ),
-      //       ),
-      //     ],
-      //   ),
-      // ),
+    
       body: SafeArea(
         child: Padding(
           padding: EdgeInsets.symmetric(horizontal: 12.0.sp, vertical: 15.0.sp),
