@@ -84,14 +84,7 @@ class _HomeScreenState extends State<HomeScreen> {
     log('No attendance data available for the selected day');
   }
 
-  @override
-  void initState() {
-    super.initState();
-    _onItemTapped(0);
-    _listenToUserProfile(); _onDaySelected(_selectedDay, _focusedDay);
-    _getAttendanceDetails(userId, DateTime.now());
-    _fetchFirstCheckInDate(userId);
-  }
+
 
   void _onDaySelected(DateTime selectedDay, DateTime focusedDay) async {
     setState(() {
@@ -196,34 +189,7 @@ class _HomeScreenState extends State<HomeScreen> {
     });
   }
 
- void _listenToUserProfile() {
-  final user = _auth.currentUser;
 
-  if (user != null) {
-    _profileSubscription = FirebaseFirestore.instance
-        .collection('Users')
-        .doc(user.uid)
-        .snapshots()
-        .listen((docSnapshot) {
-      if (docSnapshot.exists) {
-        final data = docSnapshot.data();
-        if (data != null && mounted) {
-          setState(() {
-            _imageUrl = data['profileImageUrl'];
-          });
-        }
-      }
-    }, onError: (error) {
-      // Handle errors if necessary
-      debugPrint('Error listening to user profile: $error');
-    });
-  }
-}
-  @override
-void dispose() {
-  _profileSubscription?.cancel();
-  super.dispose();
-}
 
   Future<Map<String, int>> fetchMonthlyAttendance(String userId) async {
     final now = DateTime.now();
@@ -304,6 +270,41 @@ void dispose() {
         'absent': 0,
       };
     }
+  }
+   void _loadUserProfile() {
+  final user = _auth.currentUser;
+
+  if (user != null) {
+    _profileSubscription = FirebaseFirestore.instance
+        .collection('Users')
+        .doc(user.uid)
+        .snapshots()
+        .listen((docSnapshot) {
+      if (docSnapshot.exists) {
+        final data = docSnapshot.data();
+        if (data != null && mounted) {
+          setState(() {
+            _imageUrl = data['profileImageUrl'];
+          });
+        }
+      }
+    }, onError: (error) {
+    });
+  }
+}
+
+    @override
+void dispose() {
+  _profileSubscription?.cancel();
+  super.dispose();
+}
+  @override
+  void initState() {
+    super.initState();
+    _onItemTapped(0);
+    _loadUserProfile(); _onDaySelected(_selectedDay, _focusedDay);
+    _getAttendanceDetails(userId, DateTime.now());
+    _fetchFirstCheckInDate(userId);
   }
 
   @override
