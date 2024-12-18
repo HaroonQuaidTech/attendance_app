@@ -41,11 +41,9 @@ class _ProfileScreenState extends State<ProfileScreen> {
 
   Future<void> _loadUserProfile() async {
     try {
-      if (mounted) {
-        setState(() {
-          _isLoading = true;
-        });
-      }
+      setState(() {
+        _isLoading = true;
+      });
 
       final user = _auth.currentUser;
       if (user != null) {
@@ -81,11 +79,9 @@ class _ProfileScreenState extends State<ProfileScreen> {
       }
       log(e.toString());
     } finally {
-      if (mounted) {
-        setState(() {
-          _isLoading = false;
-        });
-      }
+      setState(() {
+        _isLoading = false;
+      });
     }
   }
 
@@ -578,399 +574,403 @@ class _ProfileScreenState extends State<ProfileScreen> {
             ),
           ),
           SizedBox(height: 15.sp),
-          Stack(
-            children: [
-              SingleChildScrollView(
-                child: Padding(
-                  padding: EdgeInsets.symmetric(
-                    horizontal: 20.0.sp,
-                    vertical: 10.0.sp,
-                  ),
-                  child: Form(
-                    key: _formKey,
-                    child: Column(
-                      children: [
-                        Stack(
-                          alignment: Alignment.center,
-                          children: [
-                            Container(
-                              width: 175.sp,
-                              height: 175.sp,
-                              decoration: BoxDecoration(
-                                shape: BoxShape.circle,
-                                border:
-                                    Border.all(color: Colors.black, width: 1),
+          Expanded(
+            child: Stack(
+              children: [
+                SingleChildScrollView(
+                  child: Padding(
+                    padding: EdgeInsets.symmetric(
+                      horizontal: 20.0.sp,
+                      vertical: 10.0.sp,
+                    ),
+                    child: Form(
+                      key: _formKey,
+                      child: Column(
+                        children: [
+                          Stack(
+                            alignment: Alignment.center,
+                            children: [
+                              Container(
+                                width: 175.sp,
+                                height: 175.sp,
+                                decoration: BoxDecoration(
+                                  shape: BoxShape.circle,
+                                  border:
+                                      Border.all(color: Colors.black, width: 1),
+                                ),
                               ),
-                            ),
-                            _selectedImage != null
-                                ? ClipRRect(
-                                    borderRadius: BorderRadius.circular(900),
-                                    child: Image.file(
-                                      _selectedImage!,
-                                      width: 164.sp,
-                                      height: 164.sp,
-                                      fit: BoxFit.cover,
-                                    ),
-                                  )
-                                : _imageUrl != null && _imageUrl!.isNotEmpty
-                                    ? ClipRRect(
-                                        borderRadius:
-                                            BorderRadius.circular(900),
-                                        child: Image.network(
-                                          _imageUrl!,
-                                          width: 164.sp,
-                                          height: 164.sp,
-                                          fit: BoxFit.cover,
-                                        ),
-                                      )
-                                    : Container(
-                                        width: 165.sp,
-                                        height: 165.sp,
-                                        decoration: const BoxDecoration(),
-                                        child: ClipRRect(
+                              _selectedImage != null
+                                  ? ClipRRect(
+                                      borderRadius: BorderRadius.circular(900),
+                                      child: Image.file(
+                                        _selectedImage!,
+                                        width: 164.sp,
+                                        height: 164.sp,
+                                        fit: BoxFit.cover,
+                                      ),
+                                    )
+                                  : _imageUrl != null && _imageUrl!.isNotEmpty
+                                      ? ClipRRect(
                                           borderRadius:
                                               BorderRadius.circular(900),
-                                          child: Image.asset(
-                                            'assets/ppppp.png',
+                                          child: Image.network(
+                                            _imageUrl!,
                                             width: 164.sp,
                                             height: 164.sp,
                                             fit: BoxFit.cover,
                                           ),
+                                        )
+                                      : Container(
+                                          width: 165.sp,
+                                          height: 165.sp,
+                                          decoration: const BoxDecoration(),
+                                          child: ClipRRect(
+                                            borderRadius:
+                                                BorderRadius.circular(900),
+                                            child: Image.asset(
+                                              'assets/ppppp.png',
+                                              width: 164.sp,
+                                              height: 164.sp,
+                                              fit: BoxFit.cover,
+                                            ),
+                                          ),
                                         ),
-                                      ),
-                            if (isEdited != false)
-                              Positioned(
-                                bottom: 0,
-                                right: 5,
-                                child: IconButton(
-                                  onPressed: _pickImage,
-                                  icon: CircleAvatar(
-                                      radius: 20,
-                                      backgroundColor:
-                                          Theme.of(context).colorScheme.primary,
-                                      child: Image.asset(
-                                        "assets/camera.png",
-                                        width: 20,
-                                        height: 20,
-                                        color: Colors.white,
-                                      )),
+                              if (isEdited != false)
+                                Positioned(
+                                  bottom: 0,
+                                  right: 5,
+                                  child: IconButton(
+                                    onPressed: _pickImage,
+                                    icon: CircleAvatar(
+                                        radius: 20,
+                                        backgroundColor: Theme.of(context)
+                                            .colorScheme
+                                            .primary,
+                                        child: Image.asset(
+                                          "assets/camera.png",
+                                          width: 20,
+                                          height: 20,
+                                          color: Colors.white,
+                                        )),
+                                  ),
                                 ),
-                              ),
-                          ],
-                        ),
-                        const SizedBox(height: 20),
-                        Container(
-                          decoration: BoxDecoration(
-                            color: Theme.of(context).colorScheme.tertiary,
-                            borderRadius: BorderRadius.circular(12),
-                            boxShadow: [
-                              BoxShadow(
-                                color: Colors.black.withOpacity(0.2),
-                                blurRadius: 5,
-                                offset: const Offset(0, 3),
-                              ),
                             ],
                           ),
-                          child: Padding(
-                            padding: const EdgeInsets.all(12.0),
-                            child: Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                Text(
-                                  'Name',
-                                  style: TextStyle(
-                                    fontSize: responsiveFontSize2,
-                                    fontWeight: FontWeight.w500,
-                                    height: 0,
-                                  ),
+                          const SizedBox(height: 20),
+                          Container(
+                            decoration: BoxDecoration(
+                              color: Theme.of(context).colorScheme.tertiary,
+                              borderRadius: BorderRadius.circular(12),
+                              boxShadow: [
+                                BoxShadow(
+                                  color: Colors.black.withOpacity(0.2),
+                                  blurRadius: 5,
+                                  offset: const Offset(0, 3),
                                 ),
-                                SizedBox(
-                                  height: screenSize.height * 0.011,
-                                ),
-                                SizedBox(
-                                  child: TextFormField(
-                                    controller: _nameController,
-                                    enabled: isEdited,
-                                    validator: (value) {
-                                      if (value == null || value.isEmpty) {
-                                        return 'Username cannot be empty';
-                                      }
-                                      if (value.length < 5) {
-                                        return 'Username must be at least 5 characters long';
-                                      }
-                                      return null;
-                                    },
-                                    decoration: InputDecoration(
-                                      filled: true,
-                                      fillColor: Colors.white,
-                                      border: OutlineInputBorder(
-                                        borderRadius:
-                                            BorderRadius.circular(8.0),
-                                        borderSide: BorderSide.none,
-                                      ),
-                                      hintStyle: TextStyle(
-                                        fontSize: responsiveFontSize2,
-                                        color: Colors.grey,
-                                      ),
-                                    ),
-                                    style: TextStyle(
-                                      fontSize: responsiveFontSize2,
-                                      color: Colors.black,
-                                    ),
-                                  ),
-                                ),
-                                if (isEdited != false)
-                                  Column(
-                                    crossAxisAlignment:
-                                        CrossAxisAlignment.start,
-                                    children: [
-                                      SizedBox(
-                                        height: screenSize.height * 0.011,
-                                      ),
-                                      Text(
-                                        'Password',
-                                        style: TextStyle(
-                                          fontSize: responsiveFontSize2,
-                                          fontWeight: FontWeight.w500,
-                                          height: 0,
-                                        ),
-                                      ),
-                                      SizedBox(
-                                        height: screenSize.height * 0.011,
-                                      ),
-                                      SizedBox(
-                                        child: TextFormField(
-                                          controller: _passwordController,
-                                          obscureText: !_isPasswordVisible,
-                                          enabled: isEdited,
-                                          decoration: InputDecoration(
-                                            filled: true,
-                                            fillColor: Colors.white,
-                                            hintText: 'New Password',
-                                            border: OutlineInputBorder(
-                                              borderRadius:
-                                                  BorderRadius.circular(8.0),
-                                              borderSide: BorderSide.none,
-                                            ),
-                                            hintStyle: TextStyle(
-                                              fontSize: responsiveFontSize2,
-                                              color: Colors.grey,
-                                            ),
-                                            suffixIcon: IconButton(
-                                              icon: Icon(
-                                                _isPasswordVisible
-                                                    ? Icons.visibility_off
-                                                    : Icons.visibility,
-                                                color: Colors.black,
-                                                size: responsiveFontSize,
-                                              ),
-                                              onPressed: () {
-                                                setState(() {
-                                                  _isPasswordVisible =
-                                                      !_isPasswordVisible;
-                                                });
-                                              },
-                                            ),
-                                          ),
-                                          style: TextStyle(
-                                            fontSize: responsiveFontSize2,
-                                            color: Colors.black,
-                                          ),
-                                        ),
-                                      ),
-                                    ],
-                                  ),
-                                SizedBox(
-                                  height: screenSize.height * 0.011,
-                                ),
-                                Text(
-                                  'Phone Number',
-                                  style: TextStyle(
-                                    fontSize: responsiveFontSize2,
-                                    fontWeight: FontWeight.w500,
-                                    height: 0,
-                                  ),
-                                ),
-                                SizedBox(
-                                  height: screenSize.height * 0.011,
-                                ),
-                                SizedBox(
-                                  child: TextFormField(
-                                    controller: _phoneController,
-                                    keyboardType: TextInputType.phone,
-                                    enabled: isEdited,
-                                    validator: (value) {
-                                      if (value == null || value.isEmpty) {
-                                        return 'Phone cannot be empty';
-                                      }
-                                      return null;
-                                    },
-                                    decoration: InputDecoration(
-                                      filled: true,
-                                      fillColor: Colors.white,
-                                      border: OutlineInputBorder(
-                                        borderRadius:
-                                            BorderRadius.circular(8.0),
-                                        borderSide: BorderSide.none,
-                                      ),
-                                      hintStyle: TextStyle(
-                                        fontSize: responsiveFontSize2,
-                                        color: Colors.grey,
-                                      ),
-                                    ),
-                                    style: TextStyle(
-                                      fontSize: responsiveFontSize2,
-                                      color: Colors.black,
-                                    ),
-                                  ),
-                                ),
-                                SizedBox(
-                                  height: screenSize.height * 0.02,
-                                ),
-                                if (!isEdited)
-                                  Row(
-                                    mainAxisAlignment:
-                                        MainAxisAlignment.spaceBetween,
-                                    children: [
-                                      GestureDetector(
-                                        onTap: _toggleEdit,
-                                        child: Container(
-                                          width: screenSize.width * 0.38,
-                                          height: screenSize.height * 0.055,
-                                          decoration: BoxDecoration(
-                                            color: Theme.of(context)
-                                                .colorScheme
-                                                .primary,
-                                            borderRadius:
-                                                BorderRadius.circular(8),
-                                          ),
-                                          child: Center(
-                                              child: Text(
-                                            'Edit Profile',
-                                            style: TextStyle(
-                                              color: Colors.white,
-                                              fontSize: responsiveFontSize1,
-                                            ),
-                                          )),
-                                        ),
-                                      ),
-                                      const SizedBox(
-                                        width: 5,
-                                      ),
-                                      GestureDetector(
-                                        onTap: () {
-                                          _showLogoutConfirmationDialog(
-                                              context);
-                                        },
-                                        child: Container(
-                                          width: screenSize.width * 0.38,
-                                          height: screenSize.height * 0.055,
-                                          decoration: BoxDecoration(
-                                            color: Theme.of(context)
-                                                .colorScheme
-                                                .secondary,
-                                            borderRadius:
-                                                BorderRadius.circular(8),
-                                          ),
-                                          child: Center(
-                                              child: Text(
-                                            'Log Out',
-                                            style: TextStyle(
-                                              color: Colors.white,
-                                              fontSize: responsiveFontSize1,
-                                            ),
-                                          )),
-                                        ),
-                                      ),
-                                    ],
-                                  )
-                                else
-                                  Row(
-                                    mainAxisAlignment:
-                                        MainAxisAlignment.spaceAround,
-                                    children: [
-                                      GestureDetector(
-                                        onTap: () {
-                                          if (isEdited) {
-                                            _toggleEdit();
-                                          }
-                                        },
-                                        child: Container(
-                                          width: screenSize.width * 0.38,
-                                          height: screenSize.height * 0.055,
-                                          decoration: BoxDecoration(
-                                            color: Colors.grey[400],
-                                            borderRadius:
-                                                BorderRadius.circular(8),
-                                          ),
-                                          child: Center(
-                                            child: Text(
-                                              'Cancel',
-                                              style: TextStyle(
-                                                  color: Colors.black,
-                                                  fontSize:
-                                                      responsiveFontSize1),
-                                            ),
-                                          ),
-                                        ),
-                                      ),
-                                      GestureDetector(
-                                        onTap: () async {
-                                          try {
-                                            if (_selectedImage != null) {
-                                              await _uploadImageToFirebase(
-                                                  _selectedImage!);
-                                            }
-                                            await updateUserData(
-                                              _auth.currentUser!.uid,
-                                              _nameController.text,
-                                              _phoneController.text,
-                                              _passwordController.text,
-                                            );
-                                          } catch (e) {
-                                            log("Error while saving changes: $e");
-                                          }
-                                        },
-                                        child: Container(
-                                          width: screenSize.width * 0.38,
-                                          height: screenSize.height * 0.055,
-                                          decoration: BoxDecoration(
-                                            color: Theme.of(context)
-                                                .colorScheme
-                                                .primary,
-                                            borderRadius:
-                                                BorderRadius.circular(8),
-                                          ),
-                                          child: Center(
-                                              child: Text(
-                                            'Save Changes',
-                                            style: TextStyle(
-                                                color: Colors.white,
-                                                fontSize: responsiveFontSize1),
-                                          )),
-                                        ),
-                                      ),
-                                    ],
-                                  )
                               ],
                             ),
+                            child: Padding(
+                              padding: const EdgeInsets.all(12.0),
+                              child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  Text(
+                                    'Name',
+                                    style: TextStyle(
+                                      fontSize: responsiveFontSize2,
+                                      fontWeight: FontWeight.w500,
+                                      height: 0,
+                                    ),
+                                  ),
+                                  SizedBox(
+                                    height: screenSize.height * 0.011,
+                                  ),
+                                  SizedBox(
+                                    child: TextFormField(
+                                      controller: _nameController,
+                                      enabled: isEdited,
+                                      validator: (value) {
+                                        if (value == null || value.isEmpty) {
+                                          return 'Username cannot be empty';
+                                        }
+                                        if (value.length < 5) {
+                                          return 'Username must be at least 5 characters long';
+                                        }
+                                        return null;
+                                      },
+                                      decoration: InputDecoration(
+                                        filled: true,
+                                        fillColor: Colors.white,
+                                        border: OutlineInputBorder(
+                                          borderRadius:
+                                              BorderRadius.circular(8.0),
+                                          borderSide: BorderSide.none,
+                                        ),
+                                        hintStyle: TextStyle(
+                                          fontSize: responsiveFontSize2,
+                                          color: Colors.grey,
+                                        ),
+                                      ),
+                                      style: TextStyle(
+                                        fontSize: responsiveFontSize2,
+                                        color: Colors.black,
+                                      ),
+                                    ),
+                                  ),
+                                  if (isEdited != false)
+                                    Column(
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.start,
+                                      children: [
+                                        SizedBox(
+                                          height: screenSize.height * 0.011,
+                                        ),
+                                        Text(
+                                          'Password',
+                                          style: TextStyle(
+                                            fontSize: responsiveFontSize2,
+                                            fontWeight: FontWeight.w500,
+                                            height: 0,
+                                          ),
+                                        ),
+                                        SizedBox(
+                                          height: screenSize.height * 0.011,
+                                        ),
+                                        SizedBox(
+                                          child: TextFormField(
+                                            controller: _passwordController,
+                                            obscureText: !_isPasswordVisible,
+                                            enabled: isEdited,
+                                            decoration: InputDecoration(
+                                              filled: true,
+                                              fillColor: Colors.white,
+                                              hintText: 'New Password',
+                                              border: OutlineInputBorder(
+                                                borderRadius:
+                                                    BorderRadius.circular(8.0),
+                                                borderSide: BorderSide.none,
+                                              ),
+                                              hintStyle: TextStyle(
+                                                fontSize: responsiveFontSize2,
+                                                color: Colors.grey,
+                                              ),
+                                              suffixIcon: IconButton(
+                                                icon: Icon(
+                                                  _isPasswordVisible
+                                                      ? Icons.visibility_off
+                                                      : Icons.visibility,
+                                                  color: Colors.black,
+                                                  size: responsiveFontSize,
+                                                ),
+                                                onPressed: () {
+                                                  setState(() {
+                                                    _isPasswordVisible =
+                                                        !_isPasswordVisible;
+                                                  });
+                                                },
+                                              ),
+                                            ),
+                                            style: TextStyle(
+                                              fontSize: responsiveFontSize2,
+                                              color: Colors.black,
+                                            ),
+                                          ),
+                                        ),
+                                      ],
+                                    ),
+                                  SizedBox(
+                                    height: screenSize.height * 0.011,
+                                  ),
+                                  Text(
+                                    'Phone Number',
+                                    style: TextStyle(
+                                      fontSize: responsiveFontSize2,
+                                      fontWeight: FontWeight.w500,
+                                      height: 0,
+                                    ),
+                                  ),
+                                  SizedBox(
+                                    height: screenSize.height * 0.011,
+                                  ),
+                                  SizedBox(
+                                    child: TextFormField(
+                                      controller: _phoneController,
+                                      keyboardType: TextInputType.phone,
+                                      enabled: isEdited,
+                                      validator: (value) {
+                                        if (value == null || value.isEmpty) {
+                                          return 'Phone cannot be empty';
+                                        }
+                                        return null;
+                                      },
+                                      decoration: InputDecoration(
+                                        filled: true,
+                                        fillColor: Colors.white,
+                                        border: OutlineInputBorder(
+                                          borderRadius:
+                                              BorderRadius.circular(8.0),
+                                          borderSide: BorderSide.none,
+                                        ),
+                                        hintStyle: TextStyle(
+                                          fontSize: responsiveFontSize2,
+                                          color: Colors.grey,
+                                        ),
+                                      ),
+                                      style: TextStyle(
+                                        fontSize: responsiveFontSize2,
+                                        color: Colors.black,
+                                      ),
+                                    ),
+                                  ),
+                                  SizedBox(
+                                    height: screenSize.height * 0.02,
+                                  ),
+                                  if (!isEdited)
+                                    Row(
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.spaceBetween,
+                                      children: [
+                                        GestureDetector(
+                                          onTap: _toggleEdit,
+                                          child: Container(
+                                            width: screenSize.width * 0.38,
+                                            height: screenSize.height * 0.055,
+                                            decoration: BoxDecoration(
+                                              color: Theme.of(context)
+                                                  .colorScheme
+                                                  .primary,
+                                              borderRadius:
+                                                  BorderRadius.circular(8),
+                                            ),
+                                            child: Center(
+                                                child: Text(
+                                              'Edit Profile',
+                                              style: TextStyle(
+                                                color: Colors.white,
+                                                fontSize: responsiveFontSize1,
+                                              ),
+                                            )),
+                                          ),
+                                        ),
+                                        const SizedBox(
+                                          width: 5,
+                                        ),
+                                        GestureDetector(
+                                          onTap: () {
+                                            _showLogoutConfirmationDialog(
+                                                context);
+                                          },
+                                          child: Container(
+                                            width: screenSize.width * 0.38,
+                                            height: screenSize.height * 0.055,
+                                            decoration: BoxDecoration(
+                                              color: Theme.of(context)
+                                                  .colorScheme
+                                                  .secondary,
+                                              borderRadius:
+                                                  BorderRadius.circular(8),
+                                            ),
+                                            child: Center(
+                                                child: Text(
+                                              'Log Out',
+                                              style: TextStyle(
+                                                color: Colors.white,
+                                                fontSize: responsiveFontSize1,
+                                              ),
+                                            )),
+                                          ),
+                                        ),
+                                      ],
+                                    )
+                                  else
+                                    Row(
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.spaceAround,
+                                      children: [
+                                        GestureDetector(
+                                          onTap: () {
+                                            if (isEdited) {
+                                              _toggleEdit();
+                                            }
+                                          },
+                                          child: Container(
+                                            width: screenSize.width * 0.38,
+                                            height: screenSize.height * 0.055,
+                                            decoration: BoxDecoration(
+                                              color: Colors.grey[400],
+                                              borderRadius:
+                                                  BorderRadius.circular(8),
+                                            ),
+                                            child: Center(
+                                              child: Text(
+                                                'Cancel',
+                                                style: TextStyle(
+                                                    color: Colors.black,
+                                                    fontSize:
+                                                        responsiveFontSize1),
+                                              ),
+                                            ),
+                                          ),
+                                        ),
+                                        GestureDetector(
+                                          onTap: () async {
+                                            try {
+                                              if (_selectedImage != null) {
+                                                await _uploadImageToFirebase(
+                                                    _selectedImage!);
+                                              }
+                                              await updateUserData(
+                                                _auth.currentUser!.uid,
+                                                _nameController.text,
+                                                _phoneController.text,
+                                                _passwordController.text,
+                                              );
+                                            } catch (e) {
+                                              log("Error while saving changes: $e");
+                                            }
+                                          },
+                                          child: Container(
+                                            width: screenSize.width * 0.38,
+                                            height: screenSize.height * 0.055,
+                                            decoration: BoxDecoration(
+                                              color: Theme.of(context)
+                                                  .colorScheme
+                                                  .primary,
+                                              borderRadius:
+                                                  BorderRadius.circular(8),
+                                            ),
+                                            child: Center(
+                                                child: Text(
+                                              'Save Changes',
+                                              style: TextStyle(
+                                                  color: Colors.white,
+                                                  fontSize:
+                                                      responsiveFontSize1),
+                                            )),
+                                          ),
+                                        ),
+                                      ],
+                                    )
+                                ],
+                              ),
+                            ),
                           ),
-                        ),
-                      ],
+                        ],
+                      ),
                     ),
                   ),
                 ),
-              ),
-              if (_isLoading)
-                Container(
-                  width: double.infinity,
+                if (_isLoading)
+                  Container(
+                    width: double.infinity,
                   height: double.infinity,
                   color: const Color.fromARGB(55, 0, 0, 0),
-                  child: const Center(
-                    child: CircularProgressIndicator(),
+                    child: const Align(
+                        alignment: Alignment.center,
+                        child: CircularProgressIndicator()),
                   ),
-                ),
-            ],
+              ],
+            ),
           ),
         ],
       ),

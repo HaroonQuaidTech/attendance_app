@@ -84,8 +84,6 @@ class _HomeScreenState extends State<HomeScreen> {
     log('No attendance data available for the selected day');
   }
 
-
-
   void _onDaySelected(DateTime selectedDay, DateTime focusedDay) async {
     setState(() {
       _selectedDay = selectedDay;
@@ -189,8 +187,6 @@ class _HomeScreenState extends State<HomeScreen> {
     });
   }
 
-
-
   Future<Map<String, int>> fetchMonthlyAttendance(String userId) async {
     final now = DateTime.now();
     final startOfMonth = DateTime(now.year, now.month, 1);
@@ -271,38 +267,40 @@ class _HomeScreenState extends State<HomeScreen> {
       };
     }
   }
-   void _loadUserProfile() {
-  final user = _auth.currentUser;
 
-  if (user != null) {
-    _profileSubscription = FirebaseFirestore.instance
-        .collection('Users')
-        .doc(user.uid)
-        .snapshots()
-        .listen((docSnapshot) {
-      if (docSnapshot.exists) {
-        final data = docSnapshot.data();
-        if (data != null && mounted) {
-          setState(() {
-            _imageUrl = data['profileImageUrl'];
-          });
+  void _loadUserProfile() {
+    final user = _auth.currentUser;
+
+    if (user != null) {
+      _profileSubscription = FirebaseFirestore.instance
+          .collection('Users')
+          .doc(user.uid)
+          .snapshots()
+          .listen((docSnapshot) {
+        if (docSnapshot.exists) {
+          final data = docSnapshot.data();
+          if (data != null && mounted) {
+            setState(() {
+              _imageUrl = data['profileImageUrl'];
+            });
+          }
         }
-      }
-    }, onError: (error) {
-    });
+      }, onError: (error) {});
+    }
   }
-}
 
-    @override
-void dispose() {
-  _profileSubscription?.cancel();
-  super.dispose();
-}
+  @override
+  void dispose() {
+    _profileSubscription?.cancel();
+    super.dispose();
+  }
+
   @override
   void initState() {
     super.initState();
     _onItemTapped(0);
-    _loadUserProfile(); _onDaySelected(_selectedDay, _focusedDay);
+    _loadUserProfile();
+    _onDaySelected(_selectedDay, _focusedDay);
     _getAttendanceDetails(userId, DateTime.now());
     _fetchFirstCheckInDate(userId);
   }
