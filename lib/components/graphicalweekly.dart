@@ -359,7 +359,10 @@ class _GraphicalbuilerState extends State<GraphicalbuilderWeekly> {
                       height: 300.sp,
                       child: BarChart(
                         BarChartData(
-                          maxY: 9.sp,
+                          maxY: weeklyHours.values.isNotEmpty
+                              ? weeklyHours.values
+                                  .reduce((a, b) => a > b ? a : b)
+                              : 0.0,
                           barTouchData: BarTouchData(enabled: false),
                           titlesData: FlTitlesData(
                             leftTitles: AxisTitles(
@@ -376,7 +379,7 @@ class _GraphicalbuilerState extends State<GraphicalbuilderWeekly> {
                                     ),
                                   );
                                 },
-                                reservedSize: 25.sp,
+                                reservedSize: 30.sp,
                                 interval: 1.sp,
                               ),
                             ),
@@ -423,13 +426,16 @@ class _GraphicalbuilerState extends State<GraphicalbuilderWeekly> {
                                 x: day - 1,
                                 barRods: [
                                   BarChartRodData(
-                                    toY: (weeklyHours[day] ?? 0).clamp(0, 9),
+                                    toY: (weeklyHours[day] ?? 0),
                                     color:
                                         Theme.of(context).colorScheme.primary,
                                     width: 25.sp,
                                     backDrawRodData: BackgroundBarChartRodData(
                                       show: true,
-                                      toY: 9.sp,
+                                      toY: weeklyHours.values.isNotEmpty
+                                          ? weeklyHours.values
+                                              .reduce((a, b) => a > b ? a : b)
+                                          : 0.0,
                                       color: Colors.white,
                                     ),
                                   ),
