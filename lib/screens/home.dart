@@ -774,6 +774,8 @@ class _HomeScreenState extends State<HomeScreen> {
                                                       : DailyEmptyAttendance(
                                                           selectedDay:
                                                               _selectedDay,
+                                                      
+                                                          // Pass the DateTime or null
                                                         );
                                                 }
 
