@@ -55,7 +55,6 @@ class _NotificationScreenState extends State<NotificationScreen> {
                     ),
                   ),
                 ),
-       
                 Text(
                   'Notification',
                   style: TextStyle(
