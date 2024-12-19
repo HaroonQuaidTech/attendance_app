@@ -307,12 +307,6 @@ class _HomeScreenState extends State<HomeScreen> {
 
   @override
   Widget build(BuildContext context) {
-    final Size screenSize = MediaQuery.of(context).size;
-    final double screenWidth = screenSize.width;
-
-    double baseFontSize = 16;
-    double responsiveFontSize = baseFontSize * (screenWidth / 375);
-
     // ignore: deprecated_member_use
     return WillPopScope(
       onWillPop: () async {
@@ -586,9 +580,11 @@ class _HomeScreenState extends State<HomeScreen> {
                                         if (data['present'] == 0 &&
                                             data['late'] == 0 &&
                                             data['absent'] == 0) {
-                                          return const Center(
-                                            child: Text(
-                                                'No attendance records available for this month.'),
+                                          return const Row(
+                                            children: [
+                                              Text(
+                                                  'No attendance records available for this month.'),
+                                            ],
                                           );
                                         }
 
@@ -609,192 +605,199 @@ class _HomeScreenState extends State<HomeScreen> {
                             ),
                           ),
                           SizedBox(height: 16.sp),
-                          Expanded(
-                            child: SingleChildScrollView(
-                              child: Column(
-                                children: [
-                                  Material(
-                                    elevation: 5,
-                                    borderRadius: BorderRadius.circular(12),
-                                    color:
-                                        Theme.of(context).colorScheme.tertiary,
-                                    child: Column(
-                                      children: [
-                                        TableCalendar(
-                                          headerStyle: HeaderStyle(
-                                              leftChevronIcon: Icon(
-                                                Icons.chevron_left,
-                                                size: 24.sp,
-                                              ),
-                                              rightChevronIcon: Icon(
-                                                Icons.chevron_right,
-                                                size: 24.sp,
-                                              ),
-                                              titleTextStyle: TextStyle(
-                                                fontSize: responsiveFontSize,
-                                              ),
-                                              headerPadding:
-                                                  const EdgeInsets.symmetric(
-                                                      vertical: 0)),
-                                          rowHeight: 50.sp,
-                                          daysOfWeekHeight: 30.sp,
-                                          firstDay: DateTime.utc(2020, 10, 16),
-                                          lastDay: DateTime.utc(2030, 3, 14),
-                                          focusedDay: _focusedDay,
-                                          calendarFormat: _calendarFormat,
-                                          availableCalendarFormats: const {
-                                            CalendarFormat.month: 'Month',
-                                          },
-                                          availableGestures:
-                                              AvailableGestures.horizontalSwipe,
-                                          headerVisible: true,
-                                          selectedDayPredicate: (day) =>
-                                              isSameDay(_selectedDay, day),
-                                          onDaySelected: _onDaySelected,
-                                          onFormatChanged: (format) {
-                                            if (_calendarFormat != format) {
-                                              setState(() {
-                                                _calendarFormat = format;
-                                              });
-                                            }
-                                          },
-                                          onPageChanged: (focusedDay) {
-                                            _focusedDay = focusedDay;
-                                          },
-                                          eventLoader: _getEventsForDay,
-                                          calendarStyle: CalendarStyle(
-                                            todayDecoration: BoxDecoration(
-                                              color: Theme.of(context)
-                                                  .colorScheme
-                                                  .inversePrimary,
-                                              shape: BoxShape.circle,
-                                            ),
-                                            todayTextStyle: TextStyle(
-                                              color: Colors.black,
-                                              height: 0.sp,
-                                            ),
-                                          ),
-                                          calendarBuilders: CalendarBuilders(
-                                            selectedBuilder:
-                                                (context, date, _) {
-                                              return Container(
-                                                margin:
-                                                    const EdgeInsets.all(8.0),
-                                                alignment: Alignment.center,
-                                                decoration: BoxDecoration(
-                                                  color: Theme.of(context)
-                                                      .colorScheme
-                                                      .primary,
-                                                  shape: BoxShape.circle,
-                                                ),
-                                                child: Text(
-                                                  '${date.day}',
-                                                  style: TextStyle(
-                                                    color: Colors.white,
-                                                    height: 0.sp,
-                                                  ),
-                                                ),
-                                              );
-                                            },
-                                            markerBuilder:
-                                                (context, day, events) {
-                                              if (day.weekday ==
-                                                      DateTime.saturday ||
-                                                  day.weekday ==
-                                                      DateTime.sunday) {
-                                                return const SizedBox.shrink();
-                                              }
-                                              if (_firstCheckInDate != null &&
-                                                  (day.isBefore(
-                                                          _firstCheckInDate!) ||
-                                                      day.isAfter(
-                                                          DateTime.now()))) {
-                                                return const SizedBox.shrink();
-                                              }
-                                              Color? eventColor =
-                                                  events.isNotEmpty
-                                                      ? events.first as Color
-                                                      : StatusTheme
-                                                          .theme
-                                                          .colorScheme
-                                                          .secondary;
-                                              return Container(
-                                                margin:
-                                                    const EdgeInsets.symmetric(
-                                                  horizontal: 1.5,
-                                                ),
-                                                width: 6.sp,
-                                                height: 6.sp,
-                                                decoration: BoxDecoration(
-                                                  shape: BoxShape.circle,
-                                                  color: eventColor,
-                                                ),
-                                              );
-                                            },
-                                          ),
-                                        ),
-                                        SizedBox(height: 10.sp),
-                                      ],
-                                    ),
-                                  ),
-                                  SizedBox(height: 16.sp),
-                                  Material(
-                                    elevation: 5,
-                                    color:
-                                        Theme.of(context).colorScheme.tertiary,
-                                    borderRadius: BorderRadius.circular(12),
-                                    child: Padding(
-                                      padding: const EdgeInsets.all(8.0),
+                          if (_firstCheckInDate != null)
+                            Expanded(
+                              child: SingleChildScrollView(
+                                child: Column(
+                                  children: [
+                                    Material(
+                                      elevation: 5,
+                                      borderRadius: BorderRadius.circular(12),
+                                      color: Theme.of(context)
+                                          .colorScheme
+                                          .tertiary,
                                       child: Column(
-                                        mainAxisAlignment:
-                                            MainAxisAlignment.start,
-                                        crossAxisAlignment:
-                                            CrossAxisAlignment.start,
                                         children: [
-                                          SizedBox(height: 10.sp),
-                                          Text(
-                                            'Attendance Details',
-                                            style: TextStyle(
-                                              fontSize: 18.sp,
-                                              height: 0.sp,
-                                              fontWeight: FontWeight.w500,
-                                            ),
-                                            textAlign: TextAlign.start,
-                                          ),
-                                          SizedBox(height: 10.sp),
-                                          Builder(
-                                            builder: (context) {
-                                              if (data == null) {
-                                                return _isLoading
-                                                    ? const Center(
-                                                        child:
-                                                            CircularProgressIndicator())
-                                                    : DailyEmptyAttendance(
-                                                        selectedDay:
-                                                            _selectedDay,
-                                                      );
-                                              }
-
-                                              return _isLoading
-                                                  ? const Center(
-                                                      child:
-                                                          CircularProgressIndicator())
-                                                  : DailyAttendance(
-                                                      data: data!,
-                                                      selectedDay: _selectedDay,
-                                                    );
+                                          TableCalendar(
+                                            headerStyle: HeaderStyle(
+                                                leftChevronIcon: Icon(
+                                                  Icons.chevron_left,
+                                                  size: 24.sp,
+                                                ),
+                                                rightChevronIcon: Icon(
+                                                  Icons.chevron_right,
+                                                  size: 24.sp,
+                                                ),
+                                                titleTextStyle: TextStyle(
+                                                  fontSize: 16.sp,
+                                                ),
+                                                headerPadding:
+                                                    const EdgeInsets.symmetric(
+                                                        vertical: 0)),
+                                            rowHeight: 50.sp,
+                                            daysOfWeekHeight: 30.sp,
+                                            firstDay:
+                                                DateTime.utc(2020, 10, 16),
+                                            lastDay: DateTime.utc(2030, 3, 14),
+                                            focusedDay: _focusedDay,
+                                            calendarFormat: _calendarFormat,
+                                            availableCalendarFormats: const {
+                                              CalendarFormat.month: 'Month',
                                             },
+                                            availableGestures: AvailableGestures
+                                                .horizontalSwipe,
+                                            headerVisible: true,
+                                            selectedDayPredicate: (day) =>
+                                                isSameDay(_selectedDay, day),
+                                            onDaySelected: _onDaySelected,
+                                            onFormatChanged: (format) {
+                                              if (_calendarFormat != format) {
+                                                setState(() {
+                                                  _calendarFormat = format;
+                                                });
+                                              }
+                                            },
+                                            onPageChanged: (focusedDay) {
+                                              _focusedDay = focusedDay;
+                                            },
+                                            eventLoader: _getEventsForDay,
+                                            calendarStyle: CalendarStyle(
+                                              todayDecoration: BoxDecoration(
+                                                color: Theme.of(context)
+                                                    .colorScheme
+                                                    .inversePrimary,
+                                                shape: BoxShape.circle,
+                                              ),
+                                              todayTextStyle: TextStyle(
+                                                color: Colors.black,
+                                                height: 0.sp,
+                                              ),
+                                            ),
+                                            calendarBuilders: CalendarBuilders(
+                                              selectedBuilder:
+                                                  (context, date, _) {
+                                                return Container(
+                                                  margin:
+                                                      const EdgeInsets.all(8.0),
+                                                  alignment: Alignment.center,
+                                                  decoration: BoxDecoration(
+                                                    color: Theme.of(context)
+                                                        .colorScheme
+                                                        .primary,
+                                                    shape: BoxShape.circle,
+                                                  ),
+                                                  child: Text(
+                                                    '${date.day}',
+                                                    style: TextStyle(
+                                                      color: Colors.white,
+                                                      height: 0.sp,
+                                                    ),
+                                                  ),
+                                                );
+                                              },
+                                              markerBuilder:
+                                                  (context, day, events) {
+                                                if (day.weekday ==
+                                                        DateTime.saturday ||
+                                                    day.weekday ==
+                                                        DateTime.sunday) {
+                                                  return const SizedBox
+                                                      .shrink();
+                                                }
+                                                if (_firstCheckInDate != null &&
+                                                    (day.isBefore(
+                                                            _firstCheckInDate!) ||
+                                                        day.isAfter(
+                                                            DateTime.now()))) {
+                                                  return const SizedBox
+                                                      .shrink();
+                                                }
+                                                Color? eventColor =
+                                                    events.isNotEmpty
+                                                        ? events.first as Color
+                                                        : StatusTheme
+                                                            .theme
+                                                            .colorScheme
+                                                            .secondary;
+                                                return Container(
+                                                  margin: const EdgeInsets
+                                                      .symmetric(
+                                                    horizontal: 1.5,
+                                                  ),
+                                                  width: 6.sp,
+                                                  height: 6.sp,
+                                                  decoration: BoxDecoration(
+                                                    shape: BoxShape.circle,
+                                                    color: eventColor,
+                                                  ),
+                                                );
+                                              },
+                                            ),
                                           ),
                                           SizedBox(height: 10.sp),
                                         ],
                                       ),
                                     ),
-                                  ),
-                                  SizedBox(height: 20.sp),
-                                ],
+                                    SizedBox(height: 16.sp),
+                                    Material(
+                                      elevation: 5,
+                                      color: Theme.of(context)
+                                          .colorScheme
+                                          .tertiary,
+                                      borderRadius: BorderRadius.circular(12),
+                                      child: Padding(
+                                        padding: const EdgeInsets.all(8.0),
+                                        child: Column(
+                                          mainAxisAlignment:
+                                              MainAxisAlignment.start,
+                                          crossAxisAlignment:
+                                              CrossAxisAlignment.start,
+                                          children: [
+                                            SizedBox(height: 10.sp),
+                                            Text(
+                                              'Attendance Details',
+                                              style: TextStyle(
+                                                fontSize: 18.sp,
+                                                height: 0.sp,
+                                                fontWeight: FontWeight.w500,
+                                              ),
+                                              textAlign: TextAlign.start,
+                                            ),
+                                            SizedBox(height: 10.sp),
+                                            Builder(
+                                              builder: (context) {
+                                                if (data == null) {
+                                                  return _isLoading
+                                                      ? const Center(
+                                                          child:
+                                                              CircularProgressIndicator())
+                                                      : DailyEmptyAttendance(
+                                                          selectedDay:
+                                                              _selectedDay,
+                                                        );
+                                                }
+
+                                                return _isLoading
+                                                    ? const Center(
+                                                        child:
+                                                            CircularProgressIndicator())
+                                                    : DailyAttendance(
+                                                        data: data!,
+                                                        selectedDay:
+                                                            _selectedDay,
+                                                      );
+                                              },
+                                            ),
+                                            SizedBox(height: 10.sp),
+                                          ],
+                                        ),
+                                      ),
+                                    ),
+                                    SizedBox(height: 20.sp),
+                                  ],
+                                ),
                               ),
-                            ),
-                          ),
+                            )
                         ],
                       ),
                     ),
@@ -969,6 +972,7 @@ class _HomeScreenState extends State<HomeScreen> {
                       ),
                     );
                   }
+
                   return const SizedBox();
                 },
               )
@@ -1016,10 +1020,15 @@ class _HomeScreenState extends State<HomeScreen> {
   Widget _buildSegmentNavigator(
       String text, int index, Image image, String asset) {
     bool isSelected = _selectedIndex == index;
-    if (index == 1) const StatsticsScreen();
-    if (index == 2) const ProfileScreen();
+
     return GestureDetector(
-      onTap: () => _onItemTapped(index),
+      onTap: () {
+        if (index == 1 && _firstCheckInDate == null) {
+          _showAlertDialog(context);
+        } else {
+          _onItemTapped(index);
+        }
+      },
       child: Container(
         height: 52.sp,
         decoration: BoxDecoration(
@@ -1063,6 +1072,90 @@ class _HomeScreenState extends State<HomeScreen> {
           ],
         ),
       ),
+    );
+  }
+
+  void _showAlertDialog(BuildContext context) {
+    showDialog(
+      context: context,
+      barrierDismissible: false,
+      builder: (BuildContext context) {
+        Future.delayed(const Duration(seconds: 2), () {
+          if (mounted) {
+            Navigator.of(context).pop(true);
+          }
+        });
+        final Size screenSize = MediaQuery.of(context).size;
+
+        final double screenWidth = screenSize.width;
+
+        double baseFontSize15 = 15;
+        double responsiveFontSize15 = baseFontSize15 * (screenWidth / 375);
+
+        return Dialog(
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(12),
+          ),
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              Container(
+                height: 10.sp,
+                decoration: BoxDecoration(
+                  gradient: LinearGradient(
+                    colors: [
+                      Theme.of(context).colorScheme.primary,
+                      Theme.of(context).colorScheme.inversePrimary,
+                    ],
+                    begin: Alignment.centerLeft,
+                    end: Alignment.centerRight,
+                  ),
+                  borderRadius: const BorderRadius.vertical(
+                    top: Radius.circular(12),
+                  ),
+                ),
+              ),
+              Container(
+                padding: const EdgeInsets.all(20),
+                child: Column(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    CircleAvatar(
+                      radius: 25.sp,
+                      backgroundColor: const Color(0xff3B3A3C),
+                      child: Image.asset(
+                        'assets/warning.png',
+                        width: 50.sp,
+                        height: 50.sp,
+                      ),
+                    ),
+                    SizedBox(height: 10.sp),
+                    Text(
+                      'Action Restricted',
+                      style: TextStyle(
+                        fontSize: 18.sp,
+                        fontWeight: FontWeight.bold,
+                        height: 0,
+                      ),
+                      textAlign: TextAlign.center,
+                    ),
+                    SizedBox(height: 10.sp),
+                    Text(
+                      'You need to check in first to access statistics',
+                      style: TextStyle(
+                        fontSize: responsiveFontSize15,
+                        color: Colors.grey,
+                        height: 0,
+                      ),
+                      textAlign: TextAlign.center,
+                    ),
+                  ],
+                ),
+              ),
+            ],
+          ),
+        );
+      },
     );
   }
 }

@@ -693,9 +693,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                         if (value == null || value.isEmpty) {
                                           return 'Username cannot be empty';
                                         }
-                                        if (value.length < 5) {
-                                          return 'Username must be at least 5 characters long';
-                                        }
+
                                         return null;
                                       },
                                       decoration: InputDecoration(
@@ -797,15 +795,10 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                       controller: _phoneController,
                                       keyboardType: TextInputType.phone,
                                       enabled: isEdited,
-                                      validator: (value) {
-                                        if (value == null || value.isEmpty) {
-                                          return 'Phone cannot be empty';
-                                        }
-                                        return null;
-                                      },
                                       decoration: InputDecoration(
                                         filled: true,
                                         fillColor: Colors.white,
+                                        hintText: 'Phone #',
                                         border: OutlineInputBorder(
                                           borderRadius:
                                               BorderRadius.circular(8.0),
