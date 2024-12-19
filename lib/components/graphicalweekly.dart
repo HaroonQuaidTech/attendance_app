@@ -432,7 +432,10 @@ class _GraphicalbuilerState extends State<GraphicalbuilderWeekly> {
                                     width: 25.sp,
                                     backDrawRodData: BackgroundBarChartRodData(
                                       show: true,
-                                      toY: 9.sp,
+                                      toY: weeklyHours.values.isNotEmpty
+                                          ? weeklyHours.values
+                                              .reduce((a, b) => a > b ? a : b)
+                                          : 0.0,
                                       color: Colors.white,
                                     ),
                                   ),
