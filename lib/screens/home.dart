@@ -774,6 +774,8 @@ class _HomeScreenState extends State<HomeScreen> {
                                                       : DailyEmptyAttendance(
                                                           selectedDay:
                                                               _selectedDay,
+                                                      
+                                                          // Pass the DateTime or null
                                                         );
                                                 }
 
@@ -1084,12 +1086,6 @@ class _HomeScreenState extends State<HomeScreen> {
             Navigator.of(context).pop(true);
           }
         });
-        final Size screenSize = MediaQuery.of(context).size;
-
-        final double screenWidth = screenSize.width;
-
-        double baseFontSize15 = 15;
-        double responsiveFontSize15 = baseFontSize15 * (screenWidth / 375);
 
         return Dialog(
           shape: RoundedRectangleBorder(
@@ -1142,7 +1138,7 @@ class _HomeScreenState extends State<HomeScreen> {
                     Text(
                       'You need to check in first to access statistics',
                       style: TextStyle(
-                        fontSize: responsiveFontSize15,
+                        fontSize: 15.sp,
                         color: Colors.grey,
                         height: 0,
                       ),
