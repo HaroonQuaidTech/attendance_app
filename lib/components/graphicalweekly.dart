@@ -380,7 +380,7 @@ class _GraphicalbuilerState extends State<GraphicalbuilderWeekly> {
                                   );
                                 },
                                 reservedSize: 30.sp,
-                                interval: 1.sp,
+                                interval: 2.sp,
                               ),
                             ),
                             bottomTitles: AxisTitles(
