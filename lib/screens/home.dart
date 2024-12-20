@@ -517,30 +517,42 @@ class _HomeScreenState extends State<HomeScreen> {
                                     ],
                                   ),
                                   const Spacer(),
-                                  GestureDetector(
-                                    onTap: () {
-                                      Navigator.push(
-                                        context,
-                                        MaterialPageRoute(
-                                          builder: (context) =>
-                                              const NotificationScreen(),
-                                        ),
-                                      );
-                                    },
+                                  SizedBox(
+                                    width: 50.sp,
+                                    height: 50.sp,
                                     child: Material(
-                                      borderRadius: BorderRadius.circular(12),
-                                      elevation: 5,
+                                      elevation: 10,
                                       color: Theme.of(context)
                                           .colorScheme
                                           .tertiary,
-                                      child: SizedBox(
-                                        width: 50.sp,
-                                        height: 55.sp,
-                                        child: Center(
-                                          child: Image.asset(
-                                            'assets/notification_icon.png',
-                                            width: 30.sp,
-                                            height: 35.sp,
+                                      borderRadius: BorderRadius.circular(12),
+                                      child: GestureDetector(
+                                        onTap: () {
+                                          Navigator.push(
+                                            context,
+                                            MaterialPageRoute(
+                                              builder: (context) =>
+                                                  const NotificationScreen(),
+                                            ),
+                                          );
+                                        },
+                                        child: Material(
+                                          borderRadius:
+                                              BorderRadius.circular(12),
+                                          elevation: 5,
+                                          color: Theme.of(context)
+                                              .colorScheme
+                                              .tertiary,
+                                          child: SizedBox(
+                                            width: 50.sp,
+                                            height: 50.sp,
+                                            child: Center(
+                                              child: Image.asset(
+                                                'assets/notification_icon.png',
+                                                width: 30.sp,
+                                                height: 30.sp,
+                                              ),
+                                            ),
                                           ),
                                         ),
                                       ),
@@ -774,7 +786,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                                       : DailyEmptyAttendance(
                                                           selectedDay:
                                                               _selectedDay,
-                                                      
+
                                                           // Pass the DateTime or null
                                                         );
                                                 }
