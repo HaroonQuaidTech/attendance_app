@@ -8,7 +8,6 @@ import 'package:image_picker/image_picker.dart';
 import 'package:quaidtech/screens/login.dart';
 import 'package:quaidtech/screens/notification.dart';
 import 'dart:io';
-
 import 'package:shared_preferences/shared_preferences.dart';
 
 typedef CloseCallback = Function();
@@ -37,6 +36,58 @@ class _ProfileScreenState extends State<ProfileScreen> {
   void initState() {
     super.initState();
     _loadUserProfile();
+  }
+
+  Future<void> _saveLoginDetails(String email, String password) async {
+    final prefs = await SharedPreferences.getInstance();
+
+    await prefs.setString('email', email);
+    await prefs.setString('password', password);
+  }
+
+  Future<void> reauthenticateAndSaveChanges(
+      String password, String email) async {
+    try {
+      User? user = _auth.currentUser;
+
+      if (user == null) {
+        throw FirebaseAuthException(
+          code: 'no-current-user',
+          message: 'No user is currently logged in.',
+        );
+      }
+
+      await _saveLoginDetails(email, password);
+
+      AuthCredential credential = EmailAuthProvider.credential(
+        email: email,
+        password: password,
+      );
+
+      await user.reauthenticateWithCredential(credential);
+      log('Reauthentication successful.');
+
+      await updateUserData(
+        user.uid,
+        _nameController.text,
+        _phoneController.text,
+        _passwordController.text,
+      );
+    } catch (e) {
+      String errorMessage =
+          'Reauthentication failed. Please check your password.';
+      if (e is FirebaseAuthException) {
+        errorMessage = e.message ?? errorMessage;
+      }
+
+      _showAlertDialog(
+        title: 'Error',
+        image: 'assets/failed.png',
+        message: errorMessage,
+        closeCallback: () {},
+      );
+      log(e.toString());
+    }
   }
 
   Future<void> _loadUserProfile() async {
@@ -173,18 +224,15 @@ class _ProfileScreenState extends State<ProfileScreen> {
 
       final user = _auth.currentUser;
       log('Current user email: ${user?.email}');
+      log('Password for update: $password');
 
-      log('The value of $password');
+      await FirebaseFirestore.instance.collection("Users").doc(uid).update({
+        'name': name,
+        'phone': phone,
+      });
 
-      await FirebaseFirestore.instance.collection("Users").doc(uid).update(
-        {
-          'name': name,
-          'phone': phone,
-        },
-      );
-
-      if (password.isNotEmpty && user != null) {
-        await user.updatePassword(password);
+      if (password.isNotEmpty) {
+        await user?.updatePassword(password);
         log('Password updated successfully');
       }
 
@@ -215,32 +263,6 @@ class _ProfileScreenState extends State<ProfileScreen> {
       });
     }
   }
-
-  // Future<void> reauthenticateAndSaveChanges(String password) async {
-  //   try {
-  //     User? user = _auth.currentUser;
-
-  //     AuthCredential credential = EmailAuthProvider.credential(
-  //       email: user!.email!,
-  //       password: password,
-  //     );
-
-  //     log('The value of $password');
-
-  //     await user.reauthenticateWithCredential(credential);
-
-  //     log('Reauth is working');
-
-  //     updateUserData(
-  //       user.uid,
-  //       _nameController.text,
-  //       _phoneController.text,
-  //       _passwordController.text,
-  //     );
-  //   } catch (e) {
-  //     log("Reauthentication failed. Please check your password.");
-  //   }
-  // }
 
   Future<void> _logout(BuildContext context) async {
     try {
@@ -912,12 +934,9 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                                 await _uploadImageToFirebase(
                                                     _selectedImage!);
                                               }
-                                              await updateUserData(
-                                                _auth.currentUser!.uid,
-                                                _nameController.text,
-                                                _phoneController.text,
-                                                _passwordController.text,
-                                              );
+
+                                              // await reauthenticateAndSaveChanges(
+                                              //     );
                                             } catch (e) {
                                               log("Error while saving changes: $e");
                                             }
@@ -933,13 +952,14 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                                   BorderRadius.circular(8),
                                             ),
                                             child: Center(
-                                                child: Text(
-                                              'Save Changes',
-                                              style: TextStyle(
+                                              child: Text(
+                                                'Save Changes',
+                                                style: TextStyle(
                                                   color: Colors.white,
-                                                  fontSize:
-                                                      responsiveFontSize1),
-                                            )),
+                                                  fontSize: responsiveFontSize1,
+                                                ),
+                                              ),
+                                            ),
                                           ),
                                         ),
                                       ],

@@ -38,7 +38,7 @@ class _DailyAttendanceState extends State<DailyEmptyAttendance> {
         message = 'No Data Available';
         containerColor = StatusTheme.theme.colorScheme.secondary;
       } else if (widget.checkInTime == null || widget.checkInTime!.isEmpty) {
-        message = 'Leave/Day off';
+        message = 'No Data Available';
         containerColor = StatusTheme.theme.colorScheme.secondary;
       } else {
         message = 'Checked in at ${widget.checkInTime}';
