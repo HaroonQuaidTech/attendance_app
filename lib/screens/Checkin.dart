@@ -363,9 +363,6 @@ class _CheckinScreenState extends State<CheckinScreen> {
 
   @override
   Widget build(BuildContext context) {
-   
-
-
     DateTime now = DateTime.now();
     String formattedDate = DateFormat('yMMMd').format(now);
     String formattedDay = DateFormat('EEEE').format(now);

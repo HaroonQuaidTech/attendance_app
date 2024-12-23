@@ -567,41 +567,40 @@ class _ProfileScreenState extends State<ProfileScreen> {
                   ),
                 ),
                 SizedBox(
-                        width: 50.sp,
-                        height: 50.sp,
-                        child: Material(
-                          elevation: 10,
-                          color: Theme.of(context).colorScheme.tertiary,
-                          borderRadius: BorderRadius.circular(12),
-                          child: GestureDetector(
-                            onTap: () {
-                              Navigator.push(
-                                context,
-                                MaterialPageRoute(
-                                  builder: (context) =>
-                                      const NotificationScreen(),
-                                ),
-                              );
-                            },
-                            child: Material(
-                              borderRadius: BorderRadius.circular(12),
-                              elevation: 5,
-                              color: Theme.of(context).colorScheme.tertiary,
-                              child: SizedBox(
-                                width: 60.sp,
-                                height: 60.sp,
-                                child: Center(
-                                  child: Image.asset(
-                                    'assets/notification_icon.png',
-                                    width: 30.sp,
-                                    height: 30.sp,
-                                  ),
-                                ),
-                              ),
+                  width: 50.sp,
+                  height: 50.sp,
+                  child: Material(
+                    elevation: 10,
+                    color: Theme.of(context).colorScheme.tertiary,
+                    borderRadius: BorderRadius.circular(12),
+                    child: GestureDetector(
+                      onTap: () {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => const NotificationScreen(),
+                          ),
+                        );
+                      },
+                      child: Material(
+                        borderRadius: BorderRadius.circular(12),
+                        elevation: 5,
+                        color: Theme.of(context).colorScheme.tertiary,
+                        child: SizedBox(
+                          width: 60.sp,
+                          height: 60.sp,
+                          child: Center(
+                            child: Image.asset(
+                              'assets/notification_icon.png',
+                              width: 30.sp,
+                              height: 30.sp,
                             ),
                           ),
                         ),
                       ),
+                    ),
+                  ),
+                ),
               ],
             ),
           ),
@@ -671,7 +670,8 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                           onTap: () {
                                             showDialog(
                                               barrierDismissible: true,
-                                                barrierColor: Colors.black.withOpacity(0.5),
+                                              barrierColor:
+                                                  Colors.black.withOpacity(0.5),
                                               context: context,
                                               builder: (BuildContext context) {
                                                 return Dialog(
@@ -682,8 +682,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                                       ClipRRect(
                                                         borderRadius:
                                                             BorderRadius
-                                                                .circular(
-                                                                    120),
+                                                                .circular(120),
                                                         child: Image.network(
                                                           _imageUrl!,
                                                           width:
@@ -692,7 +691,6 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                                               double.infinity,
                                                         ),
                                                       ),
-                                                     
                                                     ],
                                                   ),
                                                 );
