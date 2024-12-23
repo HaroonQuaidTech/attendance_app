@@ -38,15 +38,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
     _loadUserProfile();
   }
 
-  Future<void> _saveLoginDetails(String email, String password) async {
-    final prefs = await SharedPreferences.getInstance();
-
-    await prefs.setString('email', email);
-    await prefs.setString('password', password);
-  }
-
-  Future<void> reauthenticateAndSaveChanges(
-      String password, String email) async {
+  Future<void> reauthenticateAndSaveChanges() async {
     try {
       User? user = _auth.currentUser;
 
@@ -57,21 +49,54 @@ class _ProfileScreenState extends State<ProfileScreen> {
         );
       }
 
-      await _saveLoginDetails(email, password);
+      final prefs = await SharedPreferences.getInstance();
+      String? email = user.email;
+      String? storedPassword = prefs.getString('password');
+
+      if (email == null || storedPassword == null) {
+        throw FirebaseAuthException(
+          code: 'missing-credentials',
+          message: 'No email or password found in SharedPreferences.',
+        );
+      }
 
       AuthCredential credential = EmailAuthProvider.credential(
         email: email,
-        password: password,
+        password: storedPassword,
       );
 
       await user.reauthenticateWithCredential(credential);
       log('Reauthentication successful.');
 
+      String newPassword = _passwordController.text;
+
+      if (newPassword == storedPassword) {
+        _showAlertDialog(
+          title: 'Error',
+          image: 'assets/failed.png',
+          message: 'Enter a different password.',
+          closeCallback: () {},
+        );
+        return;
+      }
+
+      if (_selectedImage != null) {
+        await _uploadImageToFirebase(_selectedImage!);
+      }
+
+      // Update user data
       await updateUserData(
         user.uid,
         _nameController.text,
         _phoneController.text,
-        _passwordController.text,
+        newPassword,
+      );
+
+      _showAlertDialog(
+        title: 'Success',
+        image: 'assets/success.png',
+        message: 'Profile Updated',
+        closeCallback: () {},
       );
     } catch (e) {
       String errorMessage =
@@ -996,13 +1021,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                         GestureDetector(
                                           onTap: () async {
                                             try {
-                                              if (_selectedImage != null) {
-                                                await _uploadImageToFirebase(
-                                                    _selectedImage!);
-                                              }
-
-                                              // await reauthenticateAndSaveChanges(
-                                              //     );
+                                              await reauthenticateAndSaveChanges();
                                             } catch (e) {
                                               log("Error while saving changes: $e");
                                             }
