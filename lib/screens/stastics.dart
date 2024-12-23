@@ -185,7 +185,6 @@ class _StatsticsScreenState extends State<StatsticsScreen> {
 
     return Scaffold(
       backgroundColor: Colors.white,
-    
       body: SafeArea(
         child: Padding(
           padding: EdgeInsets.symmetric(horizontal: 12.0.sp, vertical: 15.0.sp),
@@ -206,42 +205,41 @@ class _StatsticsScreenState extends State<StatsticsScreen> {
                       height: 0,
                     ),
                   ),
-                   SizedBox(
-                        width: 50.sp,
-                        height: 50.sp,
+                  SizedBox(
+                    width: 50.sp,
+                    height: 50.sp,
+                    child: Material(
+                      elevation: 10,
+                      color: Theme.of(context).colorScheme.tertiary,
+                      borderRadius: BorderRadius.circular(12),
+                      child: GestureDetector(
+                        onTap: () {
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) => const NotificationScreen(),
+                            ),
+                          );
+                        },
                         child: Material(
-                          elevation: 10,
-                          color: Theme.of(context).colorScheme.tertiary,
                           borderRadius: BorderRadius.circular(12),
-                          child: GestureDetector(
-                            onTap: () {
-                              Navigator.push(
-                                context,
-                                MaterialPageRoute(
-                                  builder: (context) =>
-                                      const NotificationScreen(),
-                                ),
-                              );
-                            },
-                            child: Material(
-                              borderRadius: BorderRadius.circular(12),
-                              elevation: 5,
-                              color: Theme.of(context).colorScheme.tertiary,
-                              child: SizedBox(
-                                width: 50.sp,
-                                height: 50.sp,
-                                child: Center(
-                                  child: Image.asset(
-                                    'assets/notification_icon.png',
-                                    width: 30.sp,
-                                    height: 30.sp,
-                                  ),
-                                ),
+                          elevation: 5,
+                          color: Theme.of(context).colorScheme.tertiary,
+                          child: SizedBox(
+                            width: 50.sp,
+                            height: 50.sp,
+                            child: Center(
+                              child: Image.asset(
+                                'assets/notification_icon.png',
+                                width: 30.sp,
+                                height: 30.sp,
                               ),
                             ),
                           ),
                         ),
                       ),
+                    ),
+                  ),
                 ],
               ),
               SizedBox(

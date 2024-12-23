@@ -10,7 +10,6 @@ class DailyAttendance extends StatefulWidget {
     super.key,
     required this.data,
     required this.selectedDay,
-   
   });
   final Map<String, dynamic>? data;
   final DateTime? selectedDay;

@@ -25,36 +25,35 @@ class _NotificationScreenState extends State<NotificationScreen> {
               crossAxisAlignment: CrossAxisAlignment.center,
               children: [
                 SizedBox(
-                        width: 50.sp,
-                        height: 50.sp,
-                        child: Material(
-                          elevation: 10,
-                          color: Theme.of(context).colorScheme.tertiary,
-                          borderRadius: BorderRadius.circular(12),
-                          child: GestureDetector(
-                            onTap: () {
-                       Navigator.pop(context);
-                            },
-                            child: Material(
-                              borderRadius: BorderRadius.circular(12),
-                              elevation: 5,
-                              color: Theme.of(context).colorScheme.tertiary,
-                              child: SizedBox(
-                                width: 50.sp,
-                                height: 50.sp,
-                                child: Center(
-                                  child: Icon(
-                                    Icons.arrow_back,
-                                    size: 20.sp,
-                                    color:
-                                        Theme.of(context).colorScheme.secondary,
-                                  ),
-                                ),
-                              ),
+                  width: 50.sp,
+                  height: 50.sp,
+                  child: Material(
+                    elevation: 10,
+                    color: Theme.of(context).colorScheme.tertiary,
+                    borderRadius: BorderRadius.circular(12),
+                    child: GestureDetector(
+                      onTap: () {
+                        Navigator.pop(context);
+                      },
+                      child: Material(
+                        borderRadius: BorderRadius.circular(12),
+                        elevation: 5,
+                        color: Theme.of(context).colorScheme.tertiary,
+                        child: SizedBox(
+                          width: 50.sp,
+                          height: 50.sp,
+                          child: Center(
+                            child: Icon(
+                              Icons.arrow_back,
+                              size: 20.sp,
+                              color: Theme.of(context).colorScheme.secondary,
                             ),
                           ),
                         ),
                       ),
+                    ),
+                  ),
+                ),
                 Text(
                   'Notification',
                   style: TextStyle(
