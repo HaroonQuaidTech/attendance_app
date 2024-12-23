@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:quaidtech/screens/Checkin.dart';
+import 'package:quaidtech/screens/checkin.dart';
 import 'package:quaidtech/screens/home.dart';
 import 'package:quaidtech/screens/login.dart';
 import 'package:quaidtech/screens/notification.dart';

@@ -10,7 +10,7 @@ import 'package:quaidtech/components/dailyAttendancedetails.dart';
 import 'package:quaidtech/components/dailyNullAttend.dart';
 import 'package:quaidtech/components/monthlyattendance.dart';
 import 'package:quaidtech/main.dart';
-import 'package:quaidtech/screens/Checkin.dart';
+import 'package:quaidtech/screens/checkin.dart';
 import 'package:quaidtech/screens/notification.dart';
 import 'package:quaidtech/screens/profile.dart';
 import 'package:quaidtech/screens/stastics.dart';
