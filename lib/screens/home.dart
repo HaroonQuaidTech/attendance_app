@@ -478,21 +478,26 @@ class _HomeScreenState extends State<HomeScreen> {
                                 String email = userData['email'] ?? ".";
 
                                 return Row(children: [
-                                  if (_imageUrl != null &&
-                                      _imageUrl!.isNotEmpty)
-                                    Padding(
-                                      padding: EdgeInsets.only(right: 10.0.sp),
-                                      child: ClipRRect(
-                                        borderRadius:
-                                            BorderRadius.circular(900),
-                                        child: Image.network(
-                                          _imageUrl!,
-                                          width: 70.sp,
-                                          height: 70.sp,
-                                          fit: BoxFit.cover,
-                                        ),
-                                      ),
+                                  Padding(
+                                    padding: EdgeInsets.only(right: 10.0.sp),
+                                    child: ClipRRect(
+                                      borderRadius: BorderRadius.circular(900),
+                                      child: _imageUrl != null &&
+                                              _imageUrl!.isNotEmpty
+                                          ? Image.network(
+                                              _imageUrl!,
+                                              width: 70.sp,
+                                              height: 70.sp,
+                                              fit: BoxFit.cover,
+                                            )
+                                          : Image.asset(
+                                                  'assets/ppppp.png',
+                                              width: 70.sp,
+                                              height: 70.sp,
+                                              fit: BoxFit.cover,
+                                            ),
                                     ),
+                                  ),
                                   Column(
                                     crossAxisAlignment:
                                         CrossAxisAlignment.start,
