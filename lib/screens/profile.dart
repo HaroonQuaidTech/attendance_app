@@ -50,7 +50,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
       }
 
       final prefs = await SharedPreferences.getInstance();
-      String? email = prefs.getString('email');
+      String? email = user.email;
       String? storedPassword = prefs.getString('password');
 
       if (email == null || storedPassword == null) {
