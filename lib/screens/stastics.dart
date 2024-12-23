@@ -206,32 +206,42 @@ class _StatsticsScreenState extends State<StatsticsScreen> {
                       height: 0,
                     ),
                   ),
-                  GestureDetector(
-                    onTap: () {
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                          builder: (context) => const NotificationScreen(),
-                        ),
-                      );
-                    },
-                    child: Material(
-                      borderRadius: BorderRadius.circular(12),
-                      elevation: 5,
-                      color: Theme.of(context).colorScheme.tertiary,
-                      child: SizedBox(
+                   SizedBox(
                         width: 50.sp,
-                        height: 55.sp,
-                        child: Center(
-                          child: Image.asset(
-                            'assets/notification_icon.png',
-                            width: 30.sp,
-                            height: 35.sp,
+                        height: 50.sp,
+                        child: Material(
+                          elevation: 10,
+                          color: Theme.of(context).colorScheme.tertiary,
+                          borderRadius: BorderRadius.circular(12),
+                          child: GestureDetector(
+                            onTap: () {
+                              Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                  builder: (context) =>
+                                      const NotificationScreen(),
+                                ),
+                              );
+                            },
+                            child: Material(
+                              borderRadius: BorderRadius.circular(12),
+                              elevation: 5,
+                              color: Theme.of(context).colorScheme.tertiary,
+                              child: SizedBox(
+                                width: 50.sp,
+                                height: 50.sp,
+                                child: Center(
+                                  child: Image.asset(
+                                    'assets/notification_icon.png',
+                                    width: 30.sp,
+                                    height: 30.sp,
+                                  ),
+                                ),
+                              ),
+                            ),
                           ),
                         ),
                       ),
-                    ),
-                  ),
                 ],
               ),
               SizedBox(

@@ -24,37 +24,37 @@ class _NotificationScreenState extends State<NotificationScreen> {
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               crossAxisAlignment: CrossAxisAlignment.center,
               children: [
-                GestureDetector(
-                  onTap: () {
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                        builder: (context) => const NotificationScreen(),
-                      ),
-                    );
-                  },
-                  child: Material(
-                    borderRadius: BorderRadius.circular(12),
-                    elevation: 5,
-                    color: Theme.of(context).colorScheme.tertiary,
-                    child: SizedBox(
-                      width: 50.sp,
-                      height: 55.sp,
-                      child: Center(
-                        child: IconButton(
-                          icon: Icon(
-                            Icons.arrow_back,
-                            size: 25.sp,
-                            color: Colors.black,
+                SizedBox(
+                        width: 50.sp,
+                        height: 50.sp,
+                        child: Material(
+                          elevation: 10,
+                          color: Theme.of(context).colorScheme.tertiary,
+                          borderRadius: BorderRadius.circular(12),
+                          child: GestureDetector(
+                            onTap: () {
+                       Navigator.pop(context);
+                            },
+                            child: Material(
+                              borderRadius: BorderRadius.circular(12),
+                              elevation: 5,
+                              color: Theme.of(context).colorScheme.tertiary,
+                              child: SizedBox(
+                                width: 50.sp,
+                                height: 50.sp,
+                                child: Center(
+                                  child: Icon(
+                                    Icons.arrow_back,
+                                    size: 20.sp,
+                                    color:
+                                        Theme.of(context).colorScheme.secondary,
+                                  ),
+                                ),
+                              ),
+                            ),
                           ),
-                          onPressed: () {
-                            Navigator.pop(context);
-                          },
                         ),
                       ),
-                    ),
-                  ),
-                ),
                 Text(
                   'Notification',
                   style: TextStyle(

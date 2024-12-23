@@ -363,10 +363,8 @@ class _CheckinScreenState extends State<CheckinScreen> {
 
   @override
   Widget build(BuildContext context) {
-    final Size screenSize = MediaQuery.of(context).size;
-    final double screenWidth = screenSize.width;
-    double baseFontSize = 20;
-    double responsiveFontSize20 = baseFontSize * (screenWidth / 375);
+   
+
 
     DateTime now = DateTime.now();
     String formattedDate = DateFormat('yMMMd').format(now);
@@ -421,8 +419,8 @@ class _CheckinScreenState extends State<CheckinScreen> {
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
                       SizedBox(
-                        width: screenSize.width * 0.12,
-                        height: screenSize.height * 0.06,
+                        width: 50.sp,
+                        height: 50.sp,
                         child: Material(
                           elevation: 10,
                           color: Theme.of(context).colorScheme.tertiary,
@@ -441,12 +439,12 @@ class _CheckinScreenState extends State<CheckinScreen> {
                               elevation: 5,
                               color: Theme.of(context).colorScheme.tertiary,
                               child: SizedBox(
-                                width: screenSize.width * 0.07,
-                                height: screenSize.height * 0.07,
+                                width: 50.sp,
+                                height: 50.sp,
                                 child: Center(
                                   child: Icon(
                                     Icons.arrow_back,
-                                    size: responsiveFontSize20,
+                                    size: 20.sp,
                                     color:
                                         Theme.of(context).colorScheme.secondary,
                                   ),
@@ -473,8 +471,8 @@ class _CheckinScreenState extends State<CheckinScreen> {
                           ),
                         ),
                       SizedBox(
-                        width: screenSize.width * 0.12,
-                        height: screenSize.height * 0.06,
+                        width: 50.sp,
+                        height: 50.sp,
                         child: Material(
                           elevation: 10,
                           color: Theme.of(context).colorScheme.tertiary,
@@ -494,13 +492,13 @@ class _CheckinScreenState extends State<CheckinScreen> {
                               elevation: 5,
                               color: Theme.of(context).colorScheme.tertiary,
                               child: SizedBox(
-                                width: screenSize.width * 0.07,
-                                height: screenSize.height * 0.07,
+                                width: 50.sp,
+                                height: 50.sp,
                                 child: Center(
                                   child: Image.asset(
                                     'assets/notification_icon.png',
-                                    width: screenSize.width * 0.07,
-                                    height: screenSize.height * 0.07,
+                                    width: 30.sp,
+                                    height: 30.sp,
                                   ),
                                 ),
                               ),

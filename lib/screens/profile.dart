@@ -566,32 +566,42 @@ class _ProfileScreenState extends State<ProfileScreen> {
                     height: 0,
                   ),
                 ),
-                GestureDetector(
-                  onTap: () {
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                        builder: (context) => const NotificationScreen(),
-                      ),
-                    );
-                  },
-                  child: Material(
-                    borderRadius: BorderRadius.circular(12),
-                    elevation: 5,
-                    color: Theme.of(context).colorScheme.tertiary,
-                    child: SizedBox(
-                      width: 50.sp,
-                      height: 55.sp,
-                      child: Center(
-                        child: Image.asset(
-                          'assets/notification_icon.png',
-                          width: 30.sp,
-                          height: 35.sp,
+                SizedBox(
+                        width: 50.sp,
+                        height: 50.sp,
+                        child: Material(
+                          elevation: 10,
+                          color: Theme.of(context).colorScheme.tertiary,
+                          borderRadius: BorderRadius.circular(12),
+                          child: GestureDetector(
+                            onTap: () {
+                              Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                  builder: (context) =>
+                                      const NotificationScreen(),
+                                ),
+                              );
+                            },
+                            child: Material(
+                              borderRadius: BorderRadius.circular(12),
+                              elevation: 5,
+                              color: Theme.of(context).colorScheme.tertiary,
+                              child: SizedBox(
+                                width: 60.sp,
+                                height: 60.sp,
+                                child: Center(
+                                  child: Image.asset(
+                                    'assets/notification_icon.png',
+                                    width: 30.sp,
+                                    height: 30.sp,
+                                  ),
+                                ),
+                              ),
+                            ),
+                          ),
                         ),
                       ),
-                    ),
-                  ),
-                ),
               ],
             ),
           ),
@@ -622,24 +632,82 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                 ),
                               ),
                               _selectedImage != null
-                                  ? ClipRRect(
-                                      borderRadius: BorderRadius.circular(900),
-                                      child: Image.file(
-                                        _selectedImage!,
-                                        width: 164.sp,
-                                        height: 164.sp,
-                                        fit: BoxFit.cover,
+                                  ? GestureDetector(
+                                      onLongPress: () {
+                                        showDialog(
+                                          context: context,
+                                          builder: (BuildContext context) {
+                                            return Dialog(
+                                              backgroundColor:
+                                                  Colors.transparent,
+                                              child: ClipRRect(
+                                                borderRadius: BorderRadius.circular(
+                                                    120), // Optional rounded edges for the dialog
+                                                child: Image.file(
+                                                  _selectedImage!,
+                                                  width: double.infinity,
+                                                  height: double.infinity,
+                                                  fit: BoxFit
+                                                      .contain, // Adjust image display in full view
+                                                ),
+                                              ),
+                                            );
+                                          },
+                                        );
+                                      },
+                                      child: ClipRRect(
+                                        borderRadius:
+                                            BorderRadius.circular(900),
+                                        child: Image.file(
+                                          _selectedImage!,
+                                          width: 164.sp,
+                                          height: 164.sp,
+                                          fit: BoxFit.cover,
+                                        ),
                                       ),
                                     )
                                   : _imageUrl != null && _imageUrl!.isNotEmpty
-                                      ? ClipRRect(
-                                          borderRadius:
-                                              BorderRadius.circular(900),
-                                          child: Image.network(
-                                            _imageUrl!,
-                                            width: 164.sp,
-                                            height: 164.sp,
-                                            fit: BoxFit.cover,
+                                      ? GestureDetector(
+                                          onTap: () {
+                                            showDialog(
+                                              barrierDismissible: true,
+                                                barrierColor: Colors.black.withOpacity(0.5),
+                                              context: context,
+                                              builder: (BuildContext context) {
+                                                return Dialog(
+                                                  backgroundColor:
+                                                      Colors.transparent,
+                                                  child: Stack(
+                                                    children: [
+                                                      ClipRRect(
+                                                        borderRadius:
+                                                            BorderRadius
+                                                                .circular(
+                                                                    120),
+                                                        child: Image.network(
+                                                          _imageUrl!,
+                                                          width:
+                                                              double.infinity,
+                                                          height:
+                                                              double.infinity,
+                                                        ),
+                                                      ),
+                                                     
+                                                    ],
+                                                  ),
+                                                );
+                                              },
+                                            );
+                                          },
+                                          child: ClipRRect(
+                                            borderRadius:
+                                                BorderRadius.circular(900),
+                                            child: Image.network(
+                                              _imageUrl!,
+                                              width: 164.sp,
+                                              height: 164.sp,
+                                              fit: BoxFit.cover,
+                                            ),
                                           ),
                                         )
                                       : Container(
