@@ -40,6 +40,10 @@ class _ProfileScreenState extends State<ProfileScreen> {
 
   Future<void> reauthenticateAndSaveChanges() async {
     try {
+      setState(() {
+        _isLoading = true;
+      });
+
       User? user = _auth.currentUser;
 
       if (user == null) {
@@ -84,7 +88,6 @@ class _ProfileScreenState extends State<ProfileScreen> {
         await _uploadImageToFirebase(_selectedImage!);
       }
 
-      // Update user data
       await updateUserData(
         user.uid,
         _nameController.text,
@@ -112,6 +115,10 @@ class _ProfileScreenState extends State<ProfileScreen> {
         closeCallback: () {},
       );
       log(e.toString());
+    } finally {
+      setState(() {
+        _isLoading = false;
+      });
     }
   }
 
