@@ -298,6 +298,7 @@ class _HomeScreenState extends State<HomeScreen> {
   @override
   void initState() {
     super.initState();
+    final userId = FirebaseAuth.instance.currentUser!.uid;
     _onItemTapped(0);
     _loadUserProfile();
     _onDaySelected(_selectedDay, _focusedDay);
@@ -491,7 +492,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                               fit: BoxFit.cover,
                                             )
                                           : Image.asset(
-                                                  'assets/ppppp.png',
+                                              'assets/ppppp.png',
                                               width: 70.sp,
                                               height: 70.sp,
                                               fit: BoxFit.cover,
@@ -791,8 +792,8 @@ class _HomeScreenState extends State<HomeScreen> {
                                                       : DailyEmptyAttendance(
                                                           selectedDay:
                                                               _selectedDay,
-
-                                                          // Pass the DateTime or null
+                                                          firstCheckInDate:
+                                                              _firstCheckInDate!,
                                                         );
                                                 }
 

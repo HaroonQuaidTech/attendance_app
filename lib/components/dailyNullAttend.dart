@@ -7,10 +7,12 @@ import 'package:quaidtech/main.dart';
 class DailyEmptyAttendance extends StatefulWidget {
   final DateTime? selectedDay;
   final String? checkInTime;
+  final DateTime firstCheckInDate;
 
   const DailyEmptyAttendance({
     super.key,
     required this.selectedDay,
+    required this.firstCheckInDate,
     this.checkInTime,
   });
 
@@ -27,8 +29,13 @@ class _DailyAttendanceState extends State<DailyEmptyAttendance> {
     Color containerColor;
 
     final DateTime currentDate = DateTime.now();
+    final DateTime firstCheckInDate = widget.firstCheckInDate;
 
     if (widget.selectedDay != null &&
+        widget.selectedDay!.isBefore(firstCheckInDate)) {
+      message = 'Data Not Available';
+      containerColor = StatusTheme.theme.colorScheme.secondary;
+    } else if (widget.selectedDay != null &&
         (widget.selectedDay!.weekday == DateTime.saturday ||
             widget.selectedDay!.weekday == DateTime.sunday)) {
       message = 'Weekend Days';
