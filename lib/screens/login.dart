@@ -31,32 +31,39 @@ class _LoginScreenState extends State<LoginScreen> {
     final prefs = await SharedPreferences.getInstance();
     String? savedEmail = prefs.getString('email');
     String? savedPassword = prefs.getString('password');
+    bool isCheck = prefs.getBool('rememberMe') ?? false;
 
-    if (savedEmail != null && savedPassword != null) {
+    if (isCheck && savedEmail != null && savedPassword != null) {
       setState(() {
         _emailController.text = savedEmail;
         _passwordController.text = savedPassword;
         _isCheck = true;
       });
+    } else {
+      setState(() {
+        _emailController.text = '';
+        _passwordController.text = '';
+        _isCheck = false;
+      });
     }
   }
 
-  Future<void> _saveLoginDetails(String email, String password) async {
+  Future<void> _saveLoginDetails(
+      String email, String password, bool rememberMe) async {
     final prefs = await SharedPreferences.getInstance();
 
-    if (_isCheck) {
-      await prefs.setString('email', email);
-      await prefs.setString('password', password);
-    } else {
-      await prefs.remove('email');
-      await prefs.remove('password');
-    }
+    await prefs.setString('email', email);
+    await prefs.setString('password', password);
+    await prefs.setBool('rememberMe', rememberMe);
   }
 
   void _toggleCheckbox(bool? value) {
     setState(() {
       _isCheck = value ?? false;
     });
+
+    _saveLoginDetails(
+        _emailController.text, _passwordController.text, _isCheck);
   }
 
   Future<void> _login(BuildContext context) async {
@@ -82,7 +89,7 @@ class _LoginScreenState extends State<LoginScreen> {
           .signInWithEmailAndPassword(email: email, password: password);
       log(userCredential.toString());
 
-      await _saveLoginDetails(email, password);
+      await _saveLoginDetails(email, password, _isCheck);
       Navigator.pushReplacement(
         context,
         MaterialPageRoute(
