@@ -48,9 +48,6 @@ class _HomeScreenState extends State<HomeScreen> {
     return _events[day] ?? [];
   }
 
-
-
-
   Future<Map<String, dynamic>?> _getAttendanceDetails(
       String uid, DateTime day) async {
     String formattedDate = DateFormat('yMMMd').format(day);
@@ -301,7 +298,7 @@ class _HomeScreenState extends State<HomeScreen> {
   @override
   void initState() {
     super.initState();
-      final userId = FirebaseAuth.instance.currentUser!.uid;
+    final userId = FirebaseAuth.instance.currentUser!.uid;
     _onItemTapped(0);
     _loadUserProfile();
     _onDaySelected(_selectedDay, _focusedDay);
@@ -495,7 +492,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                               fit: BoxFit.cover,
                                             )
                                           : Image.asset(
-                                                  'assets/ppppp.png',
+                                              'assets/ppppp.png',
                                               width: 70.sp,
                                               height: 70.sp,
                                               fit: BoxFit.cover,
@@ -795,9 +792,8 @@ class _HomeScreenState extends State<HomeScreen> {
                                                       : DailyEmptyAttendance(
                                                           selectedDay:
                                                               _selectedDay,
-                                                                 firstCheckInDate: _firstCheckInDate!,
-
-                                                      
+                                                          firstCheckInDate:
+                                                              _firstCheckInDate!,
                                                         );
                                                 }
 
