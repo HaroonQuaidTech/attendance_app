@@ -47,27 +47,13 @@ class _ProfileScreenState extends State<ProfileScreen> {
 
       User? user = _auth.currentUser;
 
-      if (user == null) {
-        throw FirebaseAuthException(
-          code: 'no-current-user',
-          message: 'No user is currently logged in.',
-        );
-      }
-
       final prefs = await SharedPreferences.getInstance();
-      String? email = user.email;
+
       String? storedPassword = prefs.getString('password');
 
-      if (email == null || storedPassword == null) {
-        throw FirebaseAuthException(
-          code: 'missing-credentials',
-          message: 'No email or password found in SharedPreferences.',
-        );
-      }
-
       AuthCredential credential = EmailAuthProvider.credential(
-        email: email,
-        password: storedPassword,
+        email: user!.email!,
+        password: storedPassword!,
       );
 
       await user.reauthenticateWithCredential(credential);
@@ -922,7 +908,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                       decoration: InputDecoration(
                                         filled: true,
                                         fillColor: Colors.white,
-                                        hintText: 'Phone #',
+                                        hintText: '03XX-XXX-XXXX',
                                         border: OutlineInputBorder(
                                           borderRadius:
                                               BorderRadius.circular(8.0),
