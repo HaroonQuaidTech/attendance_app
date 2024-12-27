@@ -7,7 +7,7 @@ import 'package:quaidtech/components/graphicalbuildermonthly.dart';
 import 'package:quaidtech/components/graphicalweekly.dart';
 import 'package:quaidtech/components/filtermonthattendancce.dart';
 import 'package:quaidtech/components/statusbuilderweekly.dart';
-import 'package:quaidtech/components/filterweeklyattenance.dart';
+import 'package:quaidtech/components/filterweeklyattendance.dart';
 import 'package:quaidtech/main.dart';
 import 'package:quaidtech/screens/notification.dart';
 
