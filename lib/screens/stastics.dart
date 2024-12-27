@@ -5,9 +5,9 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:quaidtech/components/PreviousMonthStatusBuilder.dart';
 import 'package:quaidtech/components/graphicalbuildermonthly.dart';
 import 'package:quaidtech/components/graphicalweekly.dart';
-import 'package:quaidtech/components/monthattendancce.dart';
+import 'package:quaidtech/components/filtermonthattendancce.dart';
 import 'package:quaidtech/components/statusbuilderweekly.dart';
-import 'package:quaidtech/components/weeklyattenance.dart';
+import 'package:quaidtech/components/filterweeklyattenance.dart';
 import 'package:quaidtech/main.dart';
 import 'package:quaidtech/screens/notification.dart';
 
