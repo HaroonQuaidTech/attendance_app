@@ -7,7 +7,7 @@ import 'package:quaidtech/components/graphicalbuildermonthly.dart';
 import 'package:quaidtech/components/graphicalweekly.dart';
 import 'package:quaidtech/components/filtermonthattendancce.dart';
 import 'package:quaidtech/components/statusbuilderweekly.dart';
-import 'package:quaidtech/components/filterweeklyattendance.dart';
+import 'package:quaidtech/components/weeklyattenance.dart';
 import 'package:quaidtech/main.dart';
 import 'package:quaidtech/screens/notification.dart';
 
@@ -95,7 +95,8 @@ class _StatsticsScreenState extends State<StatsticsScreen> {
           MonthlyAttendance(
             color: color,
             dropdownValue2: dropdownValue2,
-            uid: uid,
+              uid: uid,
+         
           ),
         ],
       ),
