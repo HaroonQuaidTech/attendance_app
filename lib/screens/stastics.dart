@@ -92,12 +92,21 @@ class _StatsticsScreenState extends State<StatsticsScreen> {
             ),
           ),
           const SizedBox(height: 10),
-          MonthlyAttendance(
-            color: color,
-            dropdownValue2: dropdownValue2,
-              uid: uid,
-         
-          ),
+          selectedMonth == null && selectedYear == null
+              ? MonthlyAttendance(
+                  color: color,
+                  dropdownValue2: dropdownValue2,
+                  uid: uid,
+                  year: DateTime.now().year,
+                  month: DateTime.now().month,
+                )
+              : MonthlyAttendance(
+                  color: color,
+                  dropdownValue2: dropdownValue2,
+                  uid: uid,
+                  year: int.parse(selectedYear!),
+                  month: int.parse(selectedMonth!),
+                ),
         ],
       ),
     );

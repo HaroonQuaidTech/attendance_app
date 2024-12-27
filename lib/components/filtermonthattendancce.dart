@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
@@ -7,14 +9,16 @@ import 'package:intl/intl.dart';
 class MonthlyAttendance extends StatefulWidget {
   final Color color;
   final String? dropdownValue2;
-
+  final int year;
+  final int month;
 
   const MonthlyAttendance({
     super.key,
     required this.color,
     required this.dropdownValue2,
     required String uid,
-   
+    required this.year,
+    required this.month,
   });
 
   @override
@@ -32,6 +36,7 @@ class _MonthlyAttendanceState extends State<MonthlyAttendance> {
   List<Map<String, dynamic>> presents = [];
 
   Future<void> _getMonthlyAttendance(String uid) async {
+    try {
     DateTime today = DateTime.now();
     int lastDayOfMonth = DateTime(today.year, today.month + 1, 0).day;
 
@@ -104,7 +109,10 @@ class _MonthlyAttendanceState extends State<MonthlyAttendance> {
         }
       }
     }
-
+    } catch (e) {
+      log(e.toString());
+      return;
+    }
     setState(() {
       isLoading = false;
     });
