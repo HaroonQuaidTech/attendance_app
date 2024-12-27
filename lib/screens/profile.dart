@@ -47,28 +47,35 @@ class _ProfileScreenState extends State<ProfileScreen> {
 
       User? user = _auth.currentUser;
 
-      final prefs = await SharedPreferences.getInstance();
+      if (user == null) {
+        throw FirebaseAuthException(
+          code: 'user-not-found',
+          message: 'User is not logged in.',
+        );
+      }
 
+      final prefs = await SharedPreferences.getInstance();
       String? storedPassword = prefs.getString('password');
 
-      AuthCredential credential = EmailAuthProvider.credential(
-        email: user!.email!,
-        password: storedPassword!,
-      );
-
-      await user.reauthenticateWithCredential(credential);
-      log('Reauthentication successful.');
+      if (storedPassword == null || storedPassword.isEmpty) {
+        throw Exception('Stored password not found in SharedPreferences.');
+      }
 
       String newPassword = _passwordController.text;
 
-      if (newPassword == storedPassword) {
-        _showAlertDialog(
-          title: 'Error',
-          image: 'assets/failed.png',
-          message: 'Enter a different password.',
-          closeCallback: () {},
+      if (newPassword.isNotEmpty && newPassword != storedPassword) {
+        AuthCredential credential = EmailAuthProvider.credential(
+          email: user.email!,
+          password: storedPassword,
         );
-        return;
+
+        await user.reauthenticateWithCredential(credential);
+        log('Reauthentication successful.');
+
+        await user.updatePassword(newPassword);
+        log('Password updated successfully.');
+
+        await prefs.setString('password', newPassword);
       }
 
       if (_selectedImage != null) {
@@ -79,7 +86,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
         user.uid,
         _nameController.text,
         _phoneController.text,
-        newPassword,
+        newPassword.isNotEmpty ? newPassword : storedPassword,
       );
 
       _showAlertDialog(
@@ -258,7 +265,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
       _showAlertDialog(
         title: 'Success',
         image: 'assets/success.png',
-        message: 'Profile Updated',
+        message: 'Profidated',
         closeCallback: () {},
       );
     } catch (e) {

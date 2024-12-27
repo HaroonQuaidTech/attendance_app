@@ -153,7 +153,13 @@ class _MonthlyAttendanceState extends State<MonthlyAttendance> {
                             .where((element) => (element['statuses'] as List)
                                 .contains('Late Arrival'))
                             .toList()
-                        : monthlyData;
+                        : widget.dropdownValue2 == 'Present'
+                            ? monthlyData
+                                .where((element) =>
+                                    (element['statuses'] as List)
+                                        .contains('Present'))
+                                .toList()
+                            : monthlyData;
     return Column(
       children: [
         if (isLoading)

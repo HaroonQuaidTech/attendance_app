@@ -155,7 +155,14 @@ class _WeeklyAttendanceState extends State<WeeklyAttendance> {
                             .where((element) => (element['statuses'] as List)
                                 .contains('Late Arrival'))
                             .toList()
-                        : weeklyData;
+                        : widget.dropdownValue2 == 'Present'
+                            ? weeklyData
+                                .where((element) =>
+                                    (element['statuses'] as List)
+                                        .contains('Present'))
+                                .toList()
+                            : weeklyData;
+
     return Column(
       children: [
         if (isLoading)
