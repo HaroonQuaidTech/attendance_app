@@ -37,78 +37,80 @@ class _MonthlyAttendanceState extends State<MonthlyAttendance> {
 
   Future<void> _getMonthlyAttendance(String uid) async {
     try {
-    DateTime today = DateTime.now();
-    int lastDayOfMonth = DateTime(today.year, today.month + 1, 0).day;
+      DateTime today = DateTime.now();
+      int lastDayOfMonth = DateTime(today.year, today.month + 1, 0).day;
 
-    for (int day = 1; day <= lastDayOfMonth; day++) {
-      DateTime currentDate = DateTime(today.year, today.month, day);
-      String formattedDate = DateFormat('yMMMd').format(currentDate);
-      String formattedDay = DateFormat('EEE').format(currentDate);
-      if (currentDate.weekday == DateTime.saturday ||
-          currentDate.weekday == DateTime.sunday) {
-        continue;
-      }
-      if (currentDate.isBefore(today) || currentDate.isAtSameMomentAs(today)) {
-        final DocumentSnapshot<Map<String, dynamic>> snapshot =
-            await FirebaseFirestore.instance
-                .collection('AttendanceDetails')
-                .doc(uid)
-                .collection('dailyattendance')
-                .doc(formattedDate)
-                .get();
+      for (int day = 1; day <= lastDayOfMonth; day++) {
+        DateTime currentDate = DateTime(widget.year, widget.month, day);
+        String formattedDate = DateFormat('yMMMd').format(currentDate);
+        String formattedDay = DateFormat('EEE').format(currentDate);
+        if (currentDate.weekday == DateTime.saturday ||
+            currentDate.weekday == DateTime.sunday) {
+          continue;
+        }
+        if (currentDate.isBefore(today) ||
+            currentDate.isAtSameMomentAs(today)) {
+          final DocumentSnapshot<Map<String, dynamic>> snapshot =
+              await FirebaseFirestore.instance
+                  .collection('AttendanceDetails')
+                  .doc(uid)
+                  .collection('dailyattendance')
+                  .doc(formattedDate)
+                  .get();
 
-        if (snapshot.exists) {
-          Map<String, dynamic>? data = snapshot.data();
+          if (snapshot.exists) {
+            Map<String, dynamic>? data = snapshot.data();
 
-          if (data != null) {
-            DateTime? checkInTime = (data['checkIn'] as Timestamp?)?.toDate();
-            DateTime? checkOutTime = (data['checkOut'] as Timestamp?)?.toDate();
+            if (data != null) {
+              DateTime? checkInTime = (data['checkIn'] as Timestamp?)?.toDate();
+              DateTime? checkOutTime =
+                  (data['checkOut'] as Timestamp?)?.toDate();
 
-            List<String> statuses = [];
+              List<String> statuses = [];
 
-            if (checkInTime == null && checkOutTime == null) {
-              statuses.add("Absent");
-            } else {
-              statuses.add("Present");
+              if (checkInTime == null && checkOutTime == null) {
+                statuses.add("Absent");
+              } else {
+                statuses.add("Present");
 
-              if (checkInTime != null &&
-                  checkInTime.isAfter(DateTime(currentDate.year,
-                      currentDate.month, currentDate.day, 8, 15))) {
-                statuses.add("Late Arrival");
+                if (checkInTime != null &&
+                    checkInTime.isAfter(DateTime(currentDate.year,
+                        currentDate.month, currentDate.day, 8, 15))) {
+                  statuses.add("Late Arrival");
+                }
+
+                if (checkOutTime != null &&
+                    checkOutTime.isBefore(DateTime(currentDate.year,
+                        currentDate.month, currentDate.day, 17, 0))) {
+                  statuses.add("Early Out");
+                }
+
+                if (checkInTime != null &&
+                    checkInTime.isAfter(DateTime(currentDate.year,
+                        currentDate.month, currentDate.day, 7, 50)) &&
+                    checkInTime.isBefore(DateTime(currentDate.year,
+                        currentDate.month, currentDate.day, 8, 16))) {
+                  statuses.add("On Time");
+                }
               }
 
-              if (checkOutTime != null &&
-                  checkOutTime.isBefore(DateTime(currentDate.year,
-                      currentDate.month, currentDate.day, 17, 0))) {
-                statuses.add("Early Out");
-              }
+              data['formattedDate'] = formattedDate;
+              data['formattedDay'] = formattedDay;
+              data['statuses'] = statuses;
 
-              if (checkInTime != null &&
-                  checkInTime.isAfter(DateTime(currentDate.year,
-                      currentDate.month, currentDate.day, 7, 50)) &&
-                  checkInTime.isBefore(DateTime(currentDate.year,
-                      currentDate.month, currentDate.day, 8, 16))) {
-                statuses.add("On Time");
-              }
+              monthlyData.add(data);
             }
-
-            data['formattedDate'] = formattedDate;
-            data['formattedDay'] = formattedDay;
-            data['statuses'] = statuses;
-
-            monthlyData.add(data);
+          } else {
+            monthlyData.add({
+              "checkIn": null,
+              "checkOut": null,
+              "statuses": ["Absent"],
+              "formattedDate": formattedDate,
+              "formattedDay": formattedDay,
+            });
           }
-        } else {
-          monthlyData.add({
-            "checkIn": null,
-            "checkOut": null,
-            "statuses": ["Absent"],
-            "formattedDate": formattedDate,
-            "formattedDay": formattedDay,
-          });
         }
       }
-    }
     } catch (e) {
       log(e.toString());
       return;
@@ -212,6 +214,7 @@ class _MonthlyAttendanceState extends State<MonthlyAttendance> {
             ),
           )
         else
+        
           ListView.builder(
               primary: false,
               shrinkWrap: true,

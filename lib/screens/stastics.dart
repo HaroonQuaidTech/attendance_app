@@ -100,7 +100,8 @@ class _StatsticsScreenState extends State<StatsticsScreen> {
                   year: DateTime.now().year,
                   month: DateTime.now().month,
                 )
-              : MonthlyAttendance(
+              : 
+              MonthlyAttendance(
                   color: color,
                   dropdownValue2: dropdownValue2,
                   uid: uid,
