@@ -140,6 +140,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
           }
         }
       }
+      _passwordController.clear();
     } catch (e) {
       String errorMessage = 'Something went wrong';
       if (e is FirebaseAuthException) {
@@ -806,7 +807,6 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                         if (value == null || value.isEmpty) {
                                           return 'Username cannot be empty';
                                         }
-
                                         return null;
                                       },
                                       decoration: InputDecoration(
@@ -850,6 +850,9 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                         SizedBox(
                                           child: TextFormField(
                                             controller: _passwordController,
+                                            onFieldSubmitted: (value) {
+                                              _passwordController.clear();
+                                            },
                                             obscureText: !_isPasswordVisible,
                                             enabled: isEdited,
                                             decoration: InputDecoration(
