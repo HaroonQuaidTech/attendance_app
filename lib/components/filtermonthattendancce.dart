@@ -214,7 +214,6 @@ class _MonthlyAttendanceState extends State<MonthlyAttendance> {
             ),
           )
         else
-        
           ListView.builder(
               primary: false,
               shrinkWrap: true,

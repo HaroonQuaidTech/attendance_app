@@ -666,14 +666,13 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                               backgroundColor:
                                                   Colors.transparent,
                                               child: ClipRRect(
-                                                borderRadius: BorderRadius.circular(
-                                                    120), // Optional rounded edges for the dialog
+                                                borderRadius:
+                                                    BorderRadius.circular(120),
                                                 child: Image.file(
                                                   _selectedImage!,
                                                   width: double.infinity,
                                                   height: double.infinity,
-                                                  fit: BoxFit
-                                                      .contain, // Adjust image display in full view
+                                                  fit: BoxFit.contain,
                                                 ),
                                               ),
                                             );

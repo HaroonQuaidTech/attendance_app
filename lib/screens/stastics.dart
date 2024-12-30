@@ -2,6 +2,7 @@ import 'dart:developer';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:intl/intl.dart';
 import 'package:quaidtech/components/PreviousMonthStatusBuilder.dart';
 import 'package:quaidtech/components/graphicalbuildermonthly.dart';
 import 'package:quaidtech/components/graphicalweekly.dart';
@@ -39,7 +40,6 @@ class _StatsticsScreenState extends State<StatsticsScreen> {
   ) {
     final Size screenSize = MediaQuery.of(context).size;
     final double screenWidth = screenSize.width;
-
     double baseFontSize6 = 18;
     double responsiveFontSize18 = baseFontSize6 * (screenWidth / 375);
     return Material(
@@ -73,6 +73,16 @@ class _StatsticsScreenState extends State<StatsticsScreen> {
 
   Widget _buildMonthlyAttendance(
       String text, Color color, String dropdownValue2) {
+    String month = selectedMonth == null
+        ? DateFormat("MMM").format(DateTime.now())
+        : DateFormat("MMM").format(DateFormat("MM").parse(selectedMonth!));
+
+    DateTime days = selectedMonth == null
+        ? DateFormat("MM").parse(DateTime.now().month.toString())
+        : DateFormat("MM").parse(selectedMonth!);
+    int first = DateTime(days.year, days.month, 1).day;
+    int lastday = DateTime(days.year, days.month + 1, 0).day;
+
     return Container(
       padding: const EdgeInsets.all(12),
       width: double.infinity,
@@ -84,10 +94,10 @@ class _StatsticsScreenState extends State<StatsticsScreen> {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Text(
-            text,
-            style: const TextStyle(
+            '$text  $month ($first - $lastday)',
+            style: TextStyle(
               fontWeight: FontWeight.w600,
-              fontSize: 18,
+              fontSize: 18.sp,
               height: 0,
             ),
           ),
@@ -100,14 +110,29 @@ class _StatsticsScreenState extends State<StatsticsScreen> {
                   year: DateTime.now().year,
                   month: DateTime.now().month,
                 )
-              : 
-              MonthlyAttendance(
-                  color: color,
-                  dropdownValue2: dropdownValue2,
-                  uid: uid,
-                  year: int.parse(selectedYear!),
-                  month: int.parse(selectedMonth!),
-                ),
+              : selectedMonth != null && selectedYear == null
+                  ? MonthlyAttendance(
+                      color: color,
+                      dropdownValue2: dropdownValue2,
+                      uid: uid,
+                      year: DateTime.now().year,
+                      month: int.parse(selectedMonth!),
+                    )
+                  : selectedMonth == null && selectedYear != null
+                      ? MonthlyAttendance(
+                          color: color,
+                          dropdownValue2: dropdownValue2,
+                          uid: uid,
+                          year: int.parse(selectedYear!),
+                          month: DateTime.now().month,
+                        )
+                      : MonthlyAttendance(
+                          color: color,
+                          dropdownValue2: dropdownValue2,
+                          uid: uid,
+                          year: int.parse(selectedYear!),
+                          month: int.parse(selectedMonth!),
+                        ),
         ],
       ),
     );
@@ -306,7 +331,6 @@ class _StatsticsScreenState extends State<StatsticsScreen> {
                                               ),
                                               child: DropdownButton<String>(
                                                 value: dropdownValue1,
-                                                // ignore: prefer_const_constructors
                                                 icon: const Icon(
                                                     Icons.arrow_drop_down),
                                                 iconSize: responsiveFontSize20,
@@ -321,11 +345,12 @@ class _StatsticsScreenState extends State<StatsticsScreen> {
                                                 onChanged: (String? newValue) {
                                                   setState(() {
                                                     dropdownValue1 = newValue!;
+                                                    dropdownValue2 = 'Select';
                                                   });
                                                 },
                                                 items: <String>[
                                                   'Weekly',
-                                                  'Monthly',
+                                                  'Monthly'
                                                 ].map<DropdownMenuItem<String>>(
                                                     (String value) {
                                                   return DropdownMenuItem<
