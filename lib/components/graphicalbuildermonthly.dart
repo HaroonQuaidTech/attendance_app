@@ -283,6 +283,13 @@ class _GraphicalbuilerState extends State<GraphicalbuilderMonthly> {
           'Late Arrival': getLateArrivalCount(snapshot.data!).toDouble(),
         };
 
+        String month = DateFormat("MMM")
+            .format(DateFormat("MM").parse(widget.month.toString()));
+
+        DateTime days = DateFormat("MM").parse(widget.month.toString());
+        int first = DateTime(days.year, days.month, 1).day;
+        int lastday = DateTime(days.year, days.month + 1, 0).day;
+
         return Column(
           children: [
             SizedBox(height: 20.sp),
@@ -296,7 +303,7 @@ class _GraphicalbuilerState extends State<GraphicalbuilderMonthly> {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Text(
-                      'Monthly',
+                      'Monthly ($month $first - $lastday)',
                       style: TextStyle(
                         fontWeight: FontWeight.w600,
                         fontSize: 20.sp,
@@ -430,7 +437,7 @@ class _GraphicalbuilerState extends State<GraphicalbuilderMonthly> {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Text(
-                      'Monthly',
+                      'Monthly ($month $first - $lastday)',
                       style: TextStyle(
                         fontSize: 20.sp,
                         fontWeight: FontWeight.w600,
